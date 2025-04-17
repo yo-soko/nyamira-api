@@ -235,9 +235,11 @@ Route::get('/leaves-employee', function () {
     return view('leaves-employee');
 })->name('leaves-employee'); 
 
-Route::get('/leave-types', function () {                         
-    return view('leave-types');
-})->name('leave-types'); 
+use App\Http\Controllers\LeaveTypeController;
+Route::get('/leave-types', [LeaveTypeController::class, 'index'])->name('leave-types');
+Route::post('/leave-types', [LeaveTypeController::class, 'store'])->name('leave-types.store');
+Route::put('/leave-types/{id}', [LeaveTypeController::class, 'update'])->name('leave-types.update');
+Route::post('/leave-types/delete', [LeaveTypeController::class, 'destroy'])->name('leave-types.delete');
 
 Route::get('/holidays', function () {                         
     return view('holidays');

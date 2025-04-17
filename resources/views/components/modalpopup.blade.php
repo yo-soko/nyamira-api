@@ -12764,26 +12764,27 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<form action="{{url('leave-types')}}">
+					<form action="{{ route('leave-types.store') }}" method="POST">
+                         @csrf
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Leave Type <span class="text-danger">*</span></label>
-										<input type="text" class="form-control">
+										<input type="text" name="type" class="form-control">
 									</div>
 								</div>
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Leave Quota <span class="text-danger">*</span></label>
-										<input type="text" class="form-control">
+										<input type="text" name="quota" class="form-control" placeholder="Days">
 									</div>
 								</div>
 								<div class="input-blocks m-0">
 									<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
 										<span class="status-label">Status</span>
-										<input type="checkbox" id="user3" class="check" checked>
-										<label for="user3" class="checktoggle">	</label>
+										<input type="checkbox" name="status" id="status" class="check" checked>
+										<label for="status" class="checktoggle">	</label>
 									</div>
 								</div>
 							</div>
@@ -12810,26 +12811,29 @@
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
-					<form action="{{url('leave-types')}}">
+					<form action="{{url('leave-types/update')}}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" id="edit-id" name="id"> 
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Leave Type <span class="text-danger">*</span></label>
-										<input type="text" class="form-control" value="Sick Leave">
+										<input type="text" class="form-control" name="type" id="type">
 									</div>
 								</div>
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Leave Quota <span class="text-danger">*</span></label>
-										<input type="text" class="form-control" value="12">
+										<input type="text" class="form-control" name="quota" id="quota">
 									</div>
 								</div>
 								<div class="mb-0">
 									<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
 										<span class="status-label">Status</span>
-										<input type="checkbox" id="user4" class="check" checked>
-										<label for="user4" class="checktoggle">	</label>
+										<input type="checkbox" id="edit-status" name="status" class="check">
+										<label for="edit-status" class="checktoggle"></label>
 									</div>
 								</div>
 							</div>
@@ -12848,17 +12852,21 @@
 		<div class="modal fade" id="delete-modal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
-					<div class="page-wrapper-new p-0">
-						<div class="content p-5 px-3 text-center">
-							<span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
-							<h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Leave Type</h4>
-							<p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete leave type?</p>
-							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
-								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
-								<button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
-						</div>
-					</div>
+                    <form method="POST" action="{{ route('leave-types.delete') }}">
+                        @csrf
+                        <input type="hidden" id="delete-id" name="id"> 
+                        <div class="page-wrapper-new p-0">
+                            <div class="content p-5 px-3 text-center">
+                                <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
+                                <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Leave Type</h4>
+                                <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete leave type?</p>
+                                <div class="modal-footer-btn mt-3 d-flex justify-content-center">
+                                    <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
+                                </div>						
+                            </div>
+                        </div>
+                    </form>
 				</div>
 			</div>
 		</div>

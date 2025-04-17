@@ -1,6 +1,7 @@
 <?php $page = 'leave-types'; ?>
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
     <div class="page-wrapper d-flex flex-column">
         <div class="content flex-grow-1">
             <div class="page-header">
@@ -49,183 +50,88 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($leaveTypes as $leave)
                                 <tr>
                                     <td>
                                         <label class="checkboxs">
-                                            <input type="checkbox">
+                                            <input type="checkbox" name="selected_ids[]" value="{{ $leave->id }}">
                                             <span class="checkmarks"></span>
                                         </label>
                                     </td>
+                                    <td>{{ $leave->type }}</td>
+                                    <td>{{ $leave->quota }}</td>
+                                    <td>{{ $leave->created_at->format('M d, Y') }}</td>
                                     <td>
-                                        Sick Leave
-                                    </td>
-                                    <td>05</td>
-                                    <td>02 Aug 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
+                                        <span class="badge {{ $leave->status ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $leave->status ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
+                                            <a class="me-2 p-2 edit-btn" href="#" 
+                                            data-id="{{ $leave->id }}"
+                                            data-type="{{ $leave->type }}"
+                                            data-quota="{{ $leave->quota }}"
+                                            data-status="{{ $leave->status }}"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#edit-leave">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                             </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-target="#delete-modal" data-bs-toggle="modal">
+                                            <a href="javascript:void(0);" 
+                                             class="delete-btn" 
+                                            data-id="{{ $leave->id }}"
+                                            data-bs-target="#delete-modal" data-bs-toggle="modal">
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
+                                @empty
                                 <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        Maternity
-                                    <td>05</td>
-                                    <td>03 Aug 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-target="#delete-modal" data-bs-toggle="modal">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    <td colspan="6" class="text-center text-muted">No leave types found.</td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        Paternity
-                                    </td>
-                                    <td>05</td>
-                                    <td>04 Aug 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-target="#delete-modal" data-bs-toggle="modal">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        Casual Leave
-                                    </td>
-                                    <td>05</td>
-                                    <td>07 Aug 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-target="#delete-modal" data-bs-toggle="modal">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        Emergency
-                                    </td>
-                                    <td>05</td>
-                                    <td>08 Aug 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-target="#delete-modal" data-bs-toggle="modal">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        Vacation
-                                    </td>
-                                    <td>05</td>
-                                    <td>10 Aug 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-target="#delete-modal" data-bs-toggle="modal">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforelse
                             </tbody>
+
                         </table>
                     </div>
                 </div>
             </div>
+        
             <!-- /product list -->
         </div>
         <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-            <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-            <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+            <p class="mb-0"> &copy; JavaPA. All Right Reserved</p>
+            <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.dataset.id;
+                const type = this.dataset.type;
+                const quota = this.dataset.quota;
+                const status = this.dataset.status;
+        
+                document.getElementById('edit-id').value = id;
+                document.getElementById('type').value = type;
+                document.getElementById('quota').value = quota;
+                document.getElementById('edit-status').checked = status == 1;
+
+                // Set form action dynamically
+                document.getElementById('editForm').action = `/leave-type/${id}`;
+            });
+        });
+    });
+document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const id = this.dataset.id;
+                        document.getElementById('delete-id').value = id;
+                    });
+                });
+            });
+</script>
+
 @endsection
