@@ -14711,7 +14711,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="POST" id="editForm" action="{{ url('shift/update') }}">
+                        <form method="POST" action="{{ url('shift/update') }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" id="edit-id" name="id"> 
@@ -14779,8 +14779,8 @@
                                                             <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days1" name="days[]" value="Monday" class="check">
-                                                                    <label for="days1" class="checktoggle"></label>
+                                                                    <input type="checkbox" id="day-Monday" name="days[]" value="Monday" class="check">
+                                                                    <label for="day-Monday" class="checktoggle"></label>
                                                                     <span class="status-label ms-2">Monday</span>
                                                                     </div>
                                                                 </td>
@@ -14790,8 +14790,8 @@
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days2" name="days[]" value="Tuesday" class="check">
-                                                                    <label for="days2" class="checktoggle"></label>
+                                                                    <input type="checkbox" id="day-Tuesday" name="days[]" value="Tuesday" class="check">
+                                                                    <label for="day-Tuesday" class="checktoggle"></label>
                                                                     <span class="status-label ms-2">Tuesday</span>
                                                                     </div>
                                                                 </td>
@@ -14801,8 +14801,8 @@
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days3" name="days[]" value="Wednesday" class="check">
-                                                                    <label for="days3" class="checktoggle"></label>
+                                                                    <input type="checkbox" id="day-Wednesday" name="days[]" value="Wednesday" class="check">
+                                                                    <label for="day-Wednesday" class="checktoggle"></label>
                                                                     <span class="status-label ms-2">Wednesday</span>
                                                                     </div>
                                                                 </td>
@@ -14812,8 +14812,8 @@
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days4" name="days[]" value="Thursday" class="check">
-                                                                    <label for="days4" class="checktoggle"></label>
+                                                                    <input type="checkbox" id="day-Thursday" name="days[]" value="Thursday" class="check">
+                                                                    <label for="day-Thursday" class="checktoggle"></label>
                                                                     <span class="status-label ms-2">Thursday</span>
                                                                     </div>
                                                                 </td>
@@ -14823,8 +14823,8 @@
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days5" name="days[]" value="Friday" class="check">
-                                                                    <label for="days5" class="checktoggle"></label>
+                                                                    <input type="checkbox" id="day-Friday" name="days[]" value="Friday" class="check">
+                                                                    <label for="day-Friday" class="checktoggle"></label>
                                                                     <span class="status-label ms-2">Friday</span>
                                                                     </div>
                                                                 </td>
@@ -14832,24 +14832,26 @@
                                                                 <!-- Repeat for other days -->
 
                                                                 <tr>
-                                                                <td>
-                                                                    <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days6" name="days[]" value="Saturday" class="check">
-                                                                    <label for="days6" class="checktoggle"></label>
-                                                                    <span class="status-label ms-2">Saturday</span>
-                                                                    </div>
-                                                                </td>
+                                                                    <td>
+                                                                        <div class="status-toggle modal-status d-flex align-items-center">
+                                                                            <input type="checkbox" id="day-Saturday" name="days[]" value="Saturday" class="check">
+                                                                            <label for="day-Saturday" class="checktoggle"></label>
+                                                                            <span class="status-label ms-2">Saturday</span>
+                                                                        </div>
+                                                                    </td>
                                                                 </tr>
+
                                                                 <!-- Repeat for other days -->
 
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
-                                                                    <input type="checkbox" id="days7" name="days[]" value="Sunday" class="check">
-                                                                    <label for="days7" class="checktoggle"></label>
-                                                                    <span class="status-label ms-2">Sunday</span>
+                                                                        <input type="checkbox" id="day-Sunday" name="days[]" value="Sunday" class="check">
+                                                                        <label for="day-Sunday" class="checktoggle"></label>
+                                                                        <span class="status-label ms-2">Sunday</span>
                                                                     </div>
                                                                 </td>
+
                                                                 </tr>
                                                             </tbody>
                                                         </table>
@@ -14965,17 +14967,21 @@
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="page-wrapper-new p-0">
-                    <div class="content p-5 px-3 text-center">
-                        <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
-                        <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Shift</h4>
-                        <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete shift?</p>
-                        <div class="modal-footer-btn mt-3 d-flex justify-content-center">
-                            <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                <form method="POST" action="{{ route('shift.delete') }}">
+                    @csrf
+                    <input type="hidden" name="id" id="delete-id">
+                    <div class="page-wrapper-new p-0">
+                        <div class="content p-5 px-3 text-center">
+                            <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
+                            <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Shift</h4>
+                            <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete shift?</p>
+                            <div class="modal-footer-btn mt-3 d-flex justify-content-center">
+                                <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
+                            </div>						
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

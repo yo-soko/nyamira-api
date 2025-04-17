@@ -11,25 +11,26 @@ class ShiftController extends Controller
     {
         $time = trim($time);
     
-        // Remove AM/PM if time is already in 24-hour format
-        if (preg_match('/^[0-2][0-9]:[0-5][0-9]/', $time) && (str_contains($time, 'AM') || str_contains($time, 'PM'))) {
-            $time = preg_replace('/\s?(AM|PM)/i', '', $time);
-        }
+        // Remove AM/PM if time has it
+        $time = preg_replace('/\s?(AM|PM)/i', '', $time);
     
         try {
-            // Try parsing 12-hour time with AM/PM
             return Carbon::createFromFormat('h:i A', $time)->format('H:i:s');
         } catch (\Exception $e1) {
             try {
-                // Try 24-hour time format
                 return Carbon::createFromFormat('H:i', $time)->format('H:i:s');
             } catch (\Exception $e2) {
-                \Log::error("Time parsing failed for input: '$time'");
-                return null;
+                try {
+                    return Carbon::createFromFormat('H:i:s', $time)->format('H:i:s'); // <-- add this
+                } catch (\Exception $e3) {
+                    \Log::error("Time parsing failed for input: '$time'");
+                    return null;
+                }
             }
         }
     }
     
+
 
     public function index()
     {
@@ -61,32 +62,69 @@ class ShiftController extends Controller
             'days' => implode(',', $request->days),
             'recurring' => $request->has('recurring'),
             'status' => $request->has('status'),
-            'morning_from' =>$this->parseTime($request->morning_from),
+            'morning_from' => $this->parseTime($request->morning_from),
             'morning_to' => $this->parseTime($request->morning_to),
-            'lunch_from' =>  $this->parseTime($request->lunch_from),
-            'lunch_to' =>  $this->parseTime($request->lunch_to),
-            'evening_from' =>  $this->parseTime($request->evening_from),
-            'evening_to' =>  $this->parseTime($request->evening_to),
+            'lunch_from' => $this->parseTime($request->lunch_from) ,
+            'lunch_to' => $this->parseTime($request->lunch_to),
+            'evening_from' => $this->parseTime($request->evening_from),
+            'evening_to' => $this->parseTime($request->evening_to),
+
             'description' => $request->description,
         ]);
     
         return redirect()->back()->with('success', 'Shift added successfully!');
     }
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $shift = Shift::findOrFail($id);
+        $shift = Shift::findOrFail($request->id);
+    
+        $data = $request->all();
+    
+        $validated = $request->validate([
+            'shift_name' => 'sometimes|required|string',
+            'start_time' => 'sometimes|required',
+            'end_time' => 'sometimes|required',
+            'day_off' => 'nullable|string',
+            'days' => 'sometimes|required|array',
+            'morning_from' => 'nullable',
+            'morning_to' => 'nullable',
+            'lunch_from' => 'nullable',
+            'lunch_to' => 'nullable',
+            'evening_from' => 'nullable',
+            'evening_to' => 'nullable',
+            'description' => 'nullable|string',
+        ]);
 
-        $shift->shift_name = $request->input('shift_name');
-        $shift->start_time = $request->input('start_time');
-        $shift->end_time = $request->input('end_time');
-        $shift->day_off = $request->input('day_off');
-        $shift->morning_from = $request->input('morning_from');
-        $shift->morning_to = $request->input('morning_to');
-        // Continue for lunch, evening break, and any other fields...
+        if ($request->has('shift_name')) $shift->shift_name = $request->shift_name;
+        if ($request->has('start_time')) $shift->start_time = $this->parseTime($request->start_time);
+        if ($request->has('end_time')) $shift->end_time = $this->parseTime($request->end_time);
+        if ($request->has('days')) $shift->days = implode(',', $request->days);
+        if ($request->has('day_off')) $shift->day_off = $request->day_off;
+
+        $shift->recurring = $request->has('recurring');
+        $shift->status = $request->has('status');
+
+        // Optional fields - wrap in null-checking parseTime
+        $shift->morning_from = $request->morning_from ? $this->parseTime($request->morning_from) : null;
+        $shift->morning_to = $request->morning_to ? $this->parseTime($request->morning_to) : null;
+        $shift->lunch_from = $request->lunch_from ? $this->parseTime($request->lunch_from) : null;
+        $shift->lunch_to = $request->lunch_to ? $this->parseTime($request->lunch_to) : null;
+        $shift->evening_from = $request->evening_from ? $this->parseTime($request->evening_from) : null;
+        $shift->evening_to = $request->evening_to ? $this->parseTime($request->evening_to) : null;
+        $shift->description = $request->description;
+
 
         $shift->save();
-
-        return redirect()->route('shift.index')->with('success', 'Shift updated successfully!');
+    
+        return redirect()->route('shift')->with('success', 'Shift updated successfully!');
     }
+    
 
+    public function destroy(Request $request)
+    {
+        $shift = Shift::findOrFail($request->id);
+        $shift->delete();
+    
+        return redirect()->back()->with('success', 'Shift deleted successfully!');
+    }
 }

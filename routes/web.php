@@ -216,6 +216,8 @@ use App\Http\Controllers\ShiftController;
 Route::get('/shift', [ShiftController::class, 'index'])->name('shift');
 Route::post('/shift/store', [ShiftController::class, 'store'])->name('shift.store');
 Route::put('/shift/update', [ShiftController::class, 'update']);
+Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
+
 
 Route::get('/attendance-employee', function () {                         
     return view('attendance-employee');
@@ -863,9 +865,7 @@ Route::get('/activities', function () {
 Route::get('/add-employee', function () {
     return view('add-employee');
 })->name('add-employee');
-// POST route to handle the form submission
-Route::post('add-employee', [EmployeeController::class, 'store'])->name('employee.store');
-Route::get('employees', [EmployeeController::class, 'index'])->name('employee.index');
+
 
 Route::get('/bank-settings-list', function () {
     return view('bank-settings-list');

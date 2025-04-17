@@ -1,31 +1,7 @@
 <?php $page = Route::is(['department-list', 'department-grid']) ? 'department-grid' : ''; ?>
 @extends('layout.mainlayout')
 @section('content')
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999">
-    @foreach (['success', 'error', 'warning', 'info'] as $msg)
-        @if(session($msg))
-            @php
-                $bgColor = match($msg) {
-                    'success' => 'bg-success text-white',
-                    'error' => 'bg-danger text-white',
-                    'warning' => 'bg-warning text-dark',
-                    'info' => 'bg-info text-dark',
-                    default => 'bg-secondary text-white'
-                };
-            @endphp
-            <div class="toast align-items-center {{ $bgColor }} border-0 show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session($msg) }}
-                    </div>
-                    <button type="button" class="btn-close {{ $msg == 'warning' || $msg == 'info' ? '' : 'btn-close-white' }} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
-    @endforeach
-</div>  
-
-
+@include('layout.toast')
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -316,8 +292,8 @@
 
 
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-        <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+        <p class="mb-0"> &copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
 @endsection

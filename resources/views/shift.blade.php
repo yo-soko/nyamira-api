@@ -1,29 +1,7 @@
 <?php $page = 'shift'; ?>
 @extends('layout.mainlayout')
 @section('content')
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999">
-    @foreach (['success', 'error', 'warning', 'info'] as $msg)
-        @if(session($msg))
-            @php
-                $bgColor = match($msg) {
-                    'success' => 'bg-success text-white',
-                    'error' => 'bg-danger text-white',
-                    'warning' => 'bg-warning text-dark',
-                    'info' => 'bg-info text-dark',
-                    default => 'bg-secondary text-white'
-                };
-            @endphp
-            <div class="toast align-items-center {{ $bgColor }} border-0 show mb-2" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ session($msg) }}
-                    </div>
-                    <button type="button" class="btn-close {{ $msg == 'warning' || $msg == 'info' ? '' : 'btn-close-white' }} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-        @endif
-    @endforeach
-</div>
+@include('layout.toast')
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -98,7 +76,7 @@
                 </div>
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive no-pagination">
+                <div class="table-responsive">
                     <table class="table datatable">
                         <thead class="thead-light">
                             <tr>
@@ -108,7 +86,7 @@
                                         <span class="checkmarks"></span>
                                     </label>
                                 </th>
-                                <th>Shift Name</th>
+                                <th>Shift Name</th> 
                                 <th>Timing</th>
                                 <th>Work days</th>
                                 <th>Off Day</th>
@@ -138,9 +116,15 @@
                                     </td>
                                     <td>{{ \Carbon\Carbon::parse($shiftItem->created_at)->format('d M Y') }}</td>
                                     <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>{{ $shiftItem->status ? 'Active' : 'Inactive' }}
-                                        </span>
+                                        @if($shiftItem->status)
+                                            <span class="badge badge-success d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Active
+                                            </span>
+                                        @else
+                                            <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Inactive
+                                            </span>
+                                        @endif
                                     </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
@@ -149,15 +133,27 @@
                                                 data-shift_name="{{ $shiftItem->shift_name }}"
                                                 data-start_time="{{ $shiftItem->start_time }}"
                                                 data-end_time="{{ $shiftItem->end_time }}"
+                                                data-morning_from="{{ $shiftItem->morning_from }}"
+                                                data-lunch_from="{{ $shiftItem->lunch_from }}"
+                                                data-evening_from="{{ $shiftItem->evening_from }}"
+                                                data-morning_to="{{ $shiftItem->morning_to}}"
+                                                data-lunch_to="{{ $shiftItem->lunch_to}}"
+                                                data-evening_to="{{ $shiftItem->evening_to}}"
                                                 data-day_off="{{ $shiftItem->day_off }}"
+                                                data-days="{{ $shiftItem->days }}"
                                                 data-description="{{ $shiftItem->description }}"
                                                 data-status="{{ $shiftItem->status }}"
+                                                data-recurring="{{ $shiftItem->recurring }}"
                                                 data-bs-toggle="modal" data-bs-target="#edit-shift">
                                                     <i data-feather="edit" class="feather-edit"></i>
                                             </a>
-                                            <a class="p-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
+                                            <a href="javascript:void(0);" 
+                                            class="delete-btn" 
+                                            data-id="{{ $shiftItem->id }}"  
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#delete-modal">
+                                                <i data-feather="trash-2" class="feather-trash"></i>
+                                        </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -170,8 +166,8 @@
         <!-- /product list -->
     </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-        <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+        <p class="mb-0">&copy; JavaPA</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div> 
 <script>
@@ -246,24 +242,48 @@
             const shift_name = this.dataset.shift_name;
             const start_time = this.dataset.start_time;
             const end_time = this.dataset.end_time;
+            const morning_from = this.dataset.morning_from;
+            const morning_to = this.dataset.morning_to;
+            const evening_from = this.dataset.evening_from;
+            const evening_to = this.dataset.evening_to;
+            const lunch_from = this.dataset.lunch_from;
+            const lunch_to = this.dataset.lunch_to;
             const day_off = this.dataset.day_off;
             const description = this.dataset.description;
             const status = this.dataset.status;
-            
+            const recurring = this.dataset.recurring;
+            const days = this.dataset.days.split(','); // Make sure you're using `this.dataset.days`
+
+            document.querySelectorAll('.check').forEach(cb => {
+                cb.checked = days.includes(cb.value); });
             document.getElementById('edit-id').value = id;
             document.getElementById('shift_name').value = shift_name;
             document.getElementById('start_time').value = start_time;
             document.getElementById('end_time').value = end_time;
             document.getElementById('day_off').value = day_off;
+            document.getElementById('morning_from').value = morning_from;
+            document.getElementById('lunch_from').value = lunch_from;
+            document.getElementById('evening_from').value = evening_from;
+            document.getElementById('morning_to').value = morning_to;
+            document.getElementById('lunch_to').value = lunch_to;
+            document.getElementById('evening_to').value = evening_to;
             document.getElementById('description').value = description;
             document.getElementById('status').checked = status == 1;
+            document.getElementById('recurring').checked = recurring == 1;
 
             // Set form action dynamically
             document.getElementById('editForm').action = `/shift/${id}`;
         });
     });
 });
-
+document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const id = this.dataset.id;
+                        document.getElementById('delete-id').value = id;
+                    });
+                });
+            });
 </script>
 
 
