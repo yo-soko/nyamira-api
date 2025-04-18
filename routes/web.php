@@ -241,9 +241,11 @@ Route::post('/leave-types', [LeaveTypeController::class, 'store'])->name('leave-
 Route::put('/leave-types/{id}', [LeaveTypeController::class, 'update'])->name('leave-types.update');
 Route::post('/leave-types/delete', [LeaveTypeController::class, 'destroy'])->name('leave-types.delete');
 
-Route::get('/holidays', function () {                         
-    return view('holidays');
-})->name('holidays'); 
+use App\Http\Controllers\HolidayController;
+Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays');
+Route::post('/holidays', [HolidayController::class, 'store'])->name('holidays.store');
+Route::put('/holidays/{id}', [HolidayController::class, 'update'])->name('holidays.update');
+Route::post('/holidays/delete', [HolidayController::class, 'destroy'])->name('holidays.delete');
 
 Route::get('/payroll-list', function () {                         
     return view('payroll-list');

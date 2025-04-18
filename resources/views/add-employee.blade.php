@@ -23,7 +23,7 @@
                 </div>
             </div>
             <!-- /product list -->
-            <form action="{{route('employee.store')}}" method="POST" enctype="multipart/form-data">
+            <form action="" method="POST" enctype="multipart/form-data">
                @csrf
                 <div class="accordions-items-seperate" id="accordionExample">
                     <div class="accordion-item border mb-4">
@@ -37,19 +37,24 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body border-top">
                             <div class="new-employee-field">
-                                <div class="profile-pic-upload">
-                                    <div class="profile-pic">
-                                        <span><i data-feather="plus-circle" class="plus-down-add"></i> Profile Photo</span>
-                                    </div>
-                                    <div class="input-blocks mb-0">
-                                        <div class="image-upload mb-0">
-                                            <input type="file">
-                                            <div class="image-uploads">
-                                                <h4>Change Image</h4>
-                                            </div>
+                            <div class="profile-pic-upload">
+                                <div class="profile-pic text-center">
+                                    <img id="preview-image">
+                                    <span style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
+                                        
+                                    </span>
+                                </div>
+
+                                <div class="input-blocks mb-0">
+                                    <div class="image-upload mb-0">
+                                        <input type="file" name="profile_photo" id="profilePhoto" accept="image/*" onchange="previewImage(this)" hidden>
+                                        <div class="image-uploads" style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
+                                            <h4>Add Image</h4>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+
                                 <div class="row">
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
@@ -243,8 +248,7 @@
                             </div>
                         </div>
                         </div>
-                    </div>
-                    
+                    </div>    
                     <div class="accordion-item border mb-4">
                         <div class="accordion-header" id="heading4">
                             <div class="accordion-button bg-white" data-bs-toggle="collapse" data-bs-target="#collapseFour"  aria-controls="collapseFour">
@@ -388,4 +392,17 @@
             <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
         </div>
     </div>
+    <script>
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                document.getElementById('preview-image').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+
 @endsection

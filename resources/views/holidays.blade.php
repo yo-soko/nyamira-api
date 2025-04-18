@@ -1,7 +1,7 @@
 <?php $page = 'holidays'; ?>
 @extends('layout.mainlayout')
 @section('content')
-    
+@include('layout.toast')   
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -75,318 +75,64 @@
                             </tr>
                         </thead>
                         <tbody>
+                        @forelse($holidays as $holiday)
                             <tr>
                                 <td>
                                     <label class="checkboxs">
                                         <input type="checkbox">
                                         <span class="checkmarks"></span>
                                     </label>
-                                </td>	
+                                </td>
                                 <td class="text-gray-9">
-                                    New Year
+                                    {{ $holiday->holiday_name }}
                                 </td>
                                 <td>
-                                    01 Jan 202								
+                                    {{ \Carbon\Carbon::parse($holiday->from_date)->format('d M Y') }}
+                                    @if($holiday->from_date != $holiday->to_date)
+                                        - {{ \Carbon\Carbon::parse($holiday->to_date)->format('d M Y') }}
+                                    @endif
                                 </td>
-                                <td>First day of the new year </td>
+                                <td>{!! $holiday->description !!}</td>
                                 <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
+                                    @if($holiday->status)
+                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>Active
+                                        </span>
+                                    @else
+                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>Inactive
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="action-table-data">
                                     <div class="edit-delete-action">
-                                        
-                                        <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
+                                    <a class="me-2 p-2 edit-btn" href="#" 
+                                            data-id="{{ $holiday->id }}"
+                                            data-holiday_name="{{ $holiday->holiday_name}}"
+                                            data-from_date="{{ $holiday->from_date }}"
+                                            data-to_date="{{ $holiday->to_date }}"
+                                            data-days_count="{{ $holiday->days_count }}"
+                                            data-description="{{ htmlentities($holiday->description) }}"
+                                            data-status="{{ $holiday->status }}"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#edit-holiday">
+                                                <i data-feather="edit" class="feather-edit"></i>
+                                            </a>
+                                            <a href="javascript:void(0);" 
+                                             class="delete-btn" 
+                                            data-id="{{ $holiday->id }}"
+                                            data-bs-target="#delete-modal" data-bs-toggle="modal">
+                                                <i data-feather="trash-2" class="feather-trash-2"></i>
+                                            </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                           
+                        @endforelse
+                    </tbody>
 
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Martin Luther King Jr. Day
-                                </td>
-                                <td>
-                                    15 Jan 2025						
-                                </td>
-                                <td>Celebrating the civil rights leader</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Presidents' Day
-                                </td>
-                                <td>
-                                    19 Feb 2025				
-                                </td>
-                                <td>Honoring past US Presidents</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Good Friday
-                                </td>
-                                <td>
-                                    29 Mar 2025		
-                                </td>
-                                <td>Holiday before Easter</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Easter Monday
-                                </td>
-                                <td>
-                                    01 Apr 2025	
-                                </td>
-                                <td>Holiday after Easter</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Memorial Day
-                                </td>
-                                <td>
-                                    27 May 2025
-                                </td>
-                                <td>Honors military personnel</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Independence Day
-                                </td>
-                                <td>
-                                    04 Jul 2025
-                                </td>
-                                <td>Celebrates Independence</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Labour Day
-                                </td>
-                                <td>
-                                    02 Sep 2025
-                                </td>
-                                <td>Honors working people</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Veterans Day
-                                </td>
-                                <td>
-                                    11 Nov 2025
-                                </td>
-                                <td>Honors working people</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>	
-                                <td class="text-gray-9">
-                                    Christmas Day
-                                </td>
-                                <td>
-                                    25 Dec 2025
-                                </td>
-                                <td>Celebration of Christmas</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Active
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        
-                                    <a data-bs-toggle="modal" data-bs-target="#edit-holiday" class="me-2 p-2" href="javascript:void(0);">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
+
                     </table>
                 </div>
             </div>
@@ -394,8 +140,42 @@
         <!-- /product list -->
     </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-        <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+        <p class="mb-0">2014 - 2025 &copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.dataset.id;
+                const holiday_name = this.dataset.holiday_name;
+                const from_date = this.dataset.from_date;
+                const to_date = this.dataset.to_date;
+                const days_count = this.dataset.days_count;
+                const description = this.dataset.description;
+                const status = this.dataset.status;
+        
+                document.getElementById('edit-id').value = id;
+                document.getElementById('holiday_name').value = holiday_name;
+                document.getElementById('from_date').value = from_date;
+                document.getElementById('to_date').value = to_date;
+                document.getElementById('days_count').value = days_count;
+                $('#summernote2').summernote('code', description);
+                document.getElementById('edit-status').checked = status == 1;
+
+                // Set form action dynamically
+                document.getElementById('editForm').action = `/holiday/${id}`;
+            });
+        });
+    });
+document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const id = this.dataset.id;
+                        document.getElementById('delete-id').value = id;
+                    });
+                });
+            });
+</script>
 @endsection

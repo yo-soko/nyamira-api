@@ -12604,20 +12604,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{url('holidays')}}">
+                <form method="POST" action="{{ route('holidays.store') }}">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Holiday <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="holiday_name" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">From <span class="text-danger"> *</span></label>
                                     <div class="input-addon-right position-relative">
-                                        <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="dd/mm/yyyy">
+                                        <input type="text" name="from_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="dd/mm/yyyy">
                                         <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                     </div>
                                 </div>
@@ -12626,7 +12627,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">To <span class="text-danger"> *</span></label>
                                     <div class="input-addon-right position-relative">
-                                        <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="dd/mm/yyyy">
+                                        <input type="text" class="form-control datetimepicker" name="to_date" placeholder="dd/mm/yyyy" value="dd/mm/yyyy">
                                         <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                     </div>
                                 </div>
@@ -12634,20 +12635,20 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">No of Days</label>
-                                    <input type="text" class="form-control">
+                                    <input type="text" name="days_count" class="form-control">
                                 </div>
                             </div>	
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-3">
                                     <label class="form-label">Description <span class="text-danger"> *</span></label>
-                                    <div id="summernote3"></div>
+                                    <textarea id="summernote2" name="description"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="m-0">
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
-                                <input type="checkbox" id="user5" class="check" checked>
+                                <input type="checkbox" name="status" id="user5" class="check" checked>
                                 <label for="user5" class="checktoggle">	</label>
                             </div>								
                         </div>							
@@ -12674,20 +12675,23 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{url('holidays')}}">
+                <form action="{{url('holidays/update')}}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="edit-id" name="id"> 
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Holiday <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="New Year">
+                                    <input type="text" name="holiday_name" id="holiday_name" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">From <span class="text-danger"> *</span></label>
                                     <div class="input-addon-right position-relative">
-                                        <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="dd/mm/yyyy">
+                                        <input type="text" name="from_date" id="from_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                         <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                     </div>
                                 </div>
@@ -12696,7 +12700,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">To <span class="text-danger"> *</span></label>
                                     <div class="input-addon-right position-relative">
-                                        <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="dd/mm/yyyy">
+                                        <input type="text" name="to_date" id="to_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                         <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                     </div>
                                 </div>
@@ -12704,20 +12708,20 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">No of Days</label>
-                                    <input type="text" class="form-control" value="01">
+                                    <input type="text" name="days_count" id="days_count" class="form-control">
                                 </div>
                             </div>	
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-3">
                                     <label class="form-label">Description <span class="text-danger"> *</span></label>
-                                    <div id="summernote2"></div>
+                                    <textarea id="summernote2" name="description"></textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="m-0">
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
-                                <input type="checkbox" id="user6" class="check" value="First day of the new year" checked>
+                                <input type="checkbox" id="edit-status" name="status" class="check" checked>
                                 <label for="user6" class="checktoggle">	</label>
                             </div>								
                         </div>							
@@ -12736,15 +12740,19 @@
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-5">
-                <div class="modal-body text-center p-0">
-                    <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
-                    <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Holiday</h4>
-                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete holiday?</p>	
-                    <div class="d-flex justify-content-center mt-3">
-                        <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
-                        <a href="{{url('holidays')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                    </div>											
-                </div>					
+                <form method="POST" action="{{ route('holidays.delete') }}">
+                    @csrf
+                    <input type="hidden" id="delete-id" name="id"> 
+                    <div class="modal-body text-center p-0">
+                        <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
+                        <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Holiday</h4>
+                        <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete holiday?</p>	
+                        <div class="d-flex justify-content-center mt-3">
+                            <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
+                            <button type="submit" name="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
+                        </div>											
+                    </div>
+                </form>					
             </div>
         </div>
     </div>
