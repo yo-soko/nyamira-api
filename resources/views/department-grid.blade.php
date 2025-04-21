@@ -14,8 +14,8 @@
             <ul class="table-top-head">
                 <li>
                     <div class="d-flex me-2 pe-2 border-end">
-                        <a href="{{url('department-list')}}" class="btn-list me-2"><i data-feather="list" class="feather-user"></i></a>
-                        <a href="{{url('department-grid')}}" class="btn-grid active bg-primary me-2"><i data-feather="grid" class="feather-user text-white"></i></a>
+                        <a href="{{url('department-list')}}" class="btn-list bg-primary me-2"><i data-feather="list" class="feather-user"></i></a>
+                        <a href="{{url('department-grid')}}" class="btn-grid bg-primary me-2"><i data-feather="grid" class="feather-user text-white"></i></a>
                     </div>
                 </li>
                 <li class="me-2">
@@ -42,10 +42,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
                     <div class="search-set mb-0">
-                        <div class="search-input">
-                            <span class="btn-searchset"><i class="ti ti-search fs-14 feather-search"></i></span>
-                            <input type="search" class="form-control" placeholder="Search">
-                        </div>
+                        
                         
                     </div>
                     <div class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3">

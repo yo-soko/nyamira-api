@@ -1,6 +1,7 @@
 <?php $page = 'edit-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">
@@ -23,8 +24,9 @@
                 </div>
             </div>
 
-            <!-- /product list -->
-            <form action="{{url('edit-employee')}}">
+            <form action="{{ route('update-employee', $employee->id) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
                 <div class="accordion-card-one accordion" id="accordionExample">
                     <div class="accordion-item">
                         <div class="accordion-header p-3" id="headingOne">
@@ -38,48 +40,55 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <div class="new-employee-field">
-                                <div class="profile-pic-upload edit-pic">
-                                    <div class="profile-pic">
-                                        <span><img src="{{URL::asset('build/img/users/user-01.jpg')}}" alt="Img"></span>
+                               <div class="profile-pic-upload edit-pic">
+                                    <div class="profile-pic text-center">
+                                        <img id="preview-image"
+                                            src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('default-avatar.png') }}"
+                                            alt="Profile Image"
+                                            style="max-width: 120px; border-radius: 50%;">
+                                        <span style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
+                                        </span>
                                     </div>
-                                    <div class="me-3 mb-0">
+
+                                    <div class="input-blocks mb-0">
                                         <div class="image-upload mb-0">
-                                            <input type="file">
-                                            <div class="image-uploads">
+                                            <input type="file" name="profile_photo" id="profilePhoto" accept="image/*" onchange="previewImage(this)" hidden>
+                                            <div class="image-uploads" style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
                                                 <h4>Change Image</h4>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control" value="Mitchum">
+                                            <input type="text" class="form-control" name="first_name" value="{{ old('first_name', $employee->first_name) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control" value="Daniel">
+                                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name', $employee->last_name) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                            <input type="email" class="form-control" value="mir34345@example.com">
+                                            <input type="email" class="form-control" name="email" value="{{ old('email', $employee->email) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Contact Number<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control" value="+1 54554 54788">
+                                            <input type="text" class="form-control" name="contact_number" value="{{ old('contact_number', $employee->contact_number) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Emp Code<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control" value="POS001">
+                                            <input type="text" class="form-control" name="emp_code" value="{{ old('emp_code', $employee->emp_code) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
@@ -87,25 +96,26 @@
                                             <label class="form-label">Date of Birth<span class="text-danger ms-1">*</span></label>
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
-                                                <input type="text" class="datetimepicker form-control ps-2" placeholder="Select Date" value="13 Aug 1992">
+                                                <input type="text" class="datetimepicker form-control ps-2" name="dob" value="{{ old('dob') ? \Carbon\Carbon::parse(old('dob'))->format('d-m-Y') : \Carbon\Carbon::parse($employee->dob)->format('d-m-Y') }}">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Gender<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
-                                                <option>Male</option>
-                                                <option>Female</option>
+                                            <select class="select" name="gender">
+                                                <option value="Male" {{ old('gender', $employee->gender) == 'Male' ? 'selected' : '' }}>Male</option>
+                                                <option value="Female" {{ old('gender', $employee->gender) == 'Female' ? 'selected' : '' }}>Female</option>
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Nationality<span class="text-danger ms-1">*</span></label>
                                             <select class="select">
-                                                <option>United Kingdom</option>
-                                                <option>India</option>
+                                                <option value="Kenya" {{ old('nationality', $employee->nationality) == 'Kenya' ? 'selected' : '' }}>Kenya</option>
+                                                <option value="Other" {{ old('nationality', $employee->nationality) == 'Other' ? 'selected' : '' }}>Other</option>
                                             </select>
                                         </div>
                                     </div>
@@ -114,57 +124,96 @@
                                             <label class="form-label">Joining Date<span class="text-danger ms-1">*</span></label>
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
-                                                <input type="text" class="datetimepicker form-control ps-2" placeholder="Select Date" >
-                                            </div>
+                                                <input type="text" class="datetimepicker form-control ps-2" name="joining_date" value="{{ old('joining_date') ? \Carbon\Carbon::parse(old('joining_date'))->format('d-m-Y') : \Carbon\Carbon::parse($employee->joining_date)->format('d-m-Y') }}">
+                                                </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <div class="add-newplus">
                                                 <label class="form-label">Shift<span class="text-danger ms-1">*</span></label>
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#add_customer"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
+                                                <a href="{{ url('shift') }}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select">
-                                                <option>Regular</option>
+                                            <select class="select" name="shift">
+                                                <option value="">Select</option>
+                                                @foreach($shifts as $shift)
+                                                    <option value="{{ $shift->shift_name }}" 
+                                                        {{ old('shift', $employee->shift) == $shift->shift_name ? 'selected' : '' }}>
+                                                        {{ $shift->shift_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="mb-3">
+                                            <div class="add-newplus">
+                                                <label class="form-label">Department<span class="text-danger ms-1">*</span></label>
+                                                <a href="{{ url('department-grid') }}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
+                                            </div>
+                                            <select class="select" name="department">
+                                                <option value="">Select</option>
+                                                @foreach($departments as $department)
+                                                    <option value="{{ $department->name }}" 
+                                                        {{ old('department', $employee->department) == $department->name ? 'selected' : '' }}>
+                                                        {{ $department->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Department<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
-                                                <option>UI/UX</option>
-                                                <option>Support</option>
-                                                <option>HR</option>
-                                                <option>Engineering</option>
+                                            <div class="add-newplus">
+                                                <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
+                                                <a href="{{ url('designation') }}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
+                                            </div>
+                                            <select class="select" name="designation">
+                                                <option value="">Select</option>
+                                                @foreach($designations as $designation)
+                                                    <option value="{{ $designation->designation }}" 
+                                                        {{ old('designation', $employee->designation) == $designation->designation ? 'selected' : '' }}>
+                                                        {{ $designation->designation }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
-                                                <option>Designer</option>
-                                                <option>Developer</option>
-                                                <option>Tester</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Blood Group<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
-                                                <option>O positive</option>
-                                                <option>A positive</option>
-                                                <option>B negative</option>
+                                            <select class="select" name="blood_group">
+                                                <option value="">Select</option>
+                                                <option value="N/A" {{ old('blood_group', $employee->blood_group) == 'N/A' ? 'selected' : '' }}>N/A</option>
+                                                <option value="A+" {{ old('blood_group', $employee->blood_group) == 'A+' ? 'selected' : '' }}>A+</option>
+                                                <option value="A-" {{ old('blood_group', $employee->blood_group) == 'A-' ? 'selected' : '' }}>A-</option>
+                                                <option value="B+" {{ old('blood_group', $employee->blood_group) == 'B+' ? 'selected' : '' }}>B+</option>
+                                                <option value="B-" {{ old('blood_group', $employee->blood_group) == 'B-' ? 'selected' : '' }}>B-</option>
+                                                <option value="O+" {{ old('blood_group', $employee->blood_group) == 'O+' ? 'selected' : '' }}>O+</option>
+                                                <option value="O-" {{ old('blood_group', $employee->blood_group) == 'O-' ? 'selected' : '' }}>O-</option>
+                                                <option value="AB+" {{ old('blood_group', $employee->blood_group) == 'AB+' ? 'selected' : '' }}>AB+</option>
+                                                <option value="AB-" {{ old('blood_group', $employee->blood_group) == 'AB-' ? 'selected' : '' }}>AB-</option>
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Status<span class="text-danger ms-1">*</span></label>
+                                            <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
+                                                <span class="status-label">Status</span>
+                                                <input type="checkbox" id="user6" class="check" name="status" value="1" {{ $employee->status ? 'checked' : '' }}>
+                                                <label for="user6" class="checktoggle mb-0"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <!-- Editor -->
                                     <div class="col-lg-12">
                                         <div class="input-blocks summer-description-box transfer mb-3">
                                             <label>About</label>
-                                            <div id="summernote">As an award winning designer, I deliver exceptional quality work and bring value to your brand! With 10 years of experience and 350+ projects completed worldwide with satisfied customers, I developed the 360° brand approach, which helped me to create numerous brands that are relevant, meaningful and loved.Phone</div>
+                                            <textarea id="summernote" name="about">{{ old('about', $employee->about) }}</textarea>
                                             <p class="mt-1">Maximum 60 Characters</p>
                                         </div>
                                     </div>
@@ -190,43 +239,22 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Address</label>
-                                            <input type="text" class="form-control" value="1861 Bayonne Ave, Manchester">
+                                            <input type="text" class="form-control" name="address" value="{{ old('address', $employee->address) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Country</label>
                                             <select class="select">
-                                                <option>Select</option>
-                                                <option selected>United Kingdom</option>
-                                                <option>USA</option>			
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">State</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option selected>California</option>
-                                                <option>Paris</option>			
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">City</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option selected>Los Angeles</option>
-                                                <option>New Jersey</option>			
+                                                <option value="Kenya" {{ old('country', $employee->country) == 'Kenya' ? 'selected' : '' }}>Kenya</option>
+                                                <option value="Other" {{ old('country', $employee->country) == 'Other' ? 'selected' : '' }}>Other</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Zipcode</label>
-                                            <input type="text" class="form-control" value="90001">
+                                            <input type="text" class="form-control" name="zipcode" value="{{ old('zipcode', $employee->zipcode) }}">
                                         </div>
                                     </div>
                                 </div>
@@ -250,37 +278,37 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Emergency Contact Number 1</label>
-                                            <input type="text" class="form-control" value="+1 43566 67788">
+                                            <input type="text" class="form-control" name="emergency_contact1" value="{{ old('emergency_contact1', $employee->emergency_contact1) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Relation</label>
-                                            <input type="text" class="form-control" value="Mother">
+                                            <input type="text" class="form-control" name="emergency_relation1" value="{{ old('emergency_relation1', $employee->emergency_relation1) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control" value="Andrea Jermiah">
+                                            <input type="text" class="form-control" name="emergency_name1" value="{{ old('emergency_name1', $employee->emergency_name1) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Emergency Contact Number 2</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" name="emergency_contact2" value="{{ old('emergency_contact2', $employee->emergency_contact2) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Relation</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" name="emergency_relation2" value="{{ old('emergency_relation2', $employee->emergency_relation2) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" class="form-control" name="emergency_name1" value="{{ old('emergency_name2', $employee->emergency_name2) }}">
                                         </div>
                                     </div>
                                     
@@ -305,25 +333,19 @@
                                     <div class="col-lg-3 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Bank Name</label>
-                                            <input type="text" class="form-control" value="Swizz International">
+                                            <input type="text" class="form-control" name="bank_name" value="{{ old('bank_name', $employee->bank_name) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Account Number</label>
-                                            <input type="text" class="form-control" value="350501501690">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">IFSC</label>
-                                            <input type="text" class="form-control" value="SW7994">
+                                            <input type="text" class="form-control" name="account_number" value="{{ old('account_number', $employee->account_number) }}">
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Branch</label>
-                                            <input type="text" class="form-control" value="Alabama USA">
+                                            <input type="text" class="form-control" name="branch" value="{{ old('branch', $employee->branch) }}">
                                         </div>
                                     </div>
                                 </div>
@@ -348,7 +370,7 @@
                                         <div class="input-blocks mb-md-0 mb-sm-3">
                                             <label>Password</label>
                                             <div class="pass-group">
-                                                <input type="password" class="pass-input" value="12345678">
+                                                <input type="password" class="pass-input">
                                                 <span class="fas toggle-password fa-eye-slash"></span>
                                             </div>
                                         </div>
@@ -357,7 +379,7 @@
                                         <div class="input-blocks mb-0">
                                             <label>Confirm Password</label>
                                             <div class="pass-group">
-                                                <input type="password" class="pass-inputa" value="12345678">
+                                                <input type="password" class="pass-inputa">
                                                 <span class="fas toggle-passworda fa-eye-slash"></span>
                                             </div>
                                         </div>
@@ -367,7 +389,6 @@
                         </div>
                         </div>
                     </div>
-
 
                 </div>
                 <!-- /product list -->
@@ -384,4 +405,16 @@
             <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
         </div>
     </div>
+    <script>
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                document.getElementById('preview-image').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 @endsection

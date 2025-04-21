@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table border">
+                        <table class="table datatable">
                             <thead class="thead-light">
                                 <tr>
                                     <th class="no-sort">

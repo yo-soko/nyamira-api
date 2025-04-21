@@ -186,16 +186,9 @@ Route::get('/expense-category', function () {
 Route::get('/purchase-report', function () {                         
     return view('purchase-report');
 })->name('purchase-report');     
+  
+    
 
-Route::get('/employees-grid', function () {                         
-    return view('employees-grid');
-})->name('employees-grid');     
-
-Route::get('/edit-employee', function () {                         
-    return view('edit-employee');
-})->name('edit-employee');     
-
- 
 use App\Http\Controllers\DepartmentController;
 Route::get('/department-grid', [DepartmentController::class, 'index'])->name('department-grid');
 Route::post('/departments/store', [DepartmentController::class, 'store'])->name('departments.store');
@@ -866,9 +859,22 @@ Route::get('/activities', function () {
     return view('activities');
 })->name('activities'); 
 
-Route::get('/add-employee', function () {
-    return view('add-employee');
-})->name('add-employee');
+
+use App\Http\Controllers\EmployeeController;
+Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');
+Route::get('add-employee', [EmployeeController::class, 'create']);
+Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');
+Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');
+Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');
+Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');
+Route::put('update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');
+Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+
+use App\Http\Controllers\EmployeeSalaryController;
+Route::post('/employee-salary', [EmployeeSalaryController::class, 'store']);
+Route::get('/employee-salary', [EmployeeSalaryController::class, 'index'])->name('employee-salary');
+Route::get('/payslip/{id}', [EmployeeSalaryController::class, 'showPayslip']);
+Route::put('/employee-salary/update', [ClassController::class, 'update'])->name('employee-salary.update');
 
 
 Route::get('/bank-settings-list', function () {
@@ -883,9 +889,6 @@ Route::get('/department-list', function () {
 
 
 
-Route::get('/employees-list', function () {
-    return view('employees-list');
-})->name('employees-list');
 
 Route::get('/language-settings-web', function () {
     return view('language-settings-web');
@@ -1124,9 +1127,6 @@ Route::get('/email-reply', function () {
 Route::get('/sales-tax', function () {
     return view('sales-tax');
 })->name('sales-tax');
-Route::get('/employee-details', function () {
-    return view('employee-details');
-})->name('employee-details');
 
 
 
@@ -1137,9 +1137,7 @@ Route::get('/employee-details', function () {
 
 
 
-Route::get('/employee-salary', function () {
-    return view('employee-salary');
-})->name('employee-salary');
+
 
 Route::get('/pages', function () {
     return view('pages');

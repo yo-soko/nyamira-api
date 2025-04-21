@@ -1,6 +1,7 @@
 <?php $page = 'add-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
     <div class="page-wrapper">
         <div class="content">
             <div class="page-header">
@@ -23,8 +24,8 @@
                 </div>
             </div>
             <!-- /product list -->
-            <form action="" method="POST" enctype="multipart/form-data">
-               @csrf
+            <form action="{{ route('employees.store') }}" method="POST" enctype="multipart/form-data">
+                 @csrf
                 <div class="accordions-items-seperate" id="accordionExample">
                     <div class="accordion-item border mb-4">
                         <h2 class="accordion-header" id="headingOne">
@@ -37,53 +38,53 @@
                         <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                         <div class="accordion-body border-top">
                             <div class="new-employee-field">
-                            <div class="profile-pic-upload">
-                                <div class="profile-pic text-center">
-                                    <img id="preview-image">
-                                    <span style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
-                                        
-                                    </span>
-                                </div>
+                                <div class="profile-pic-upload">
+                                    <div class="profile-pic text-center">
+                                        <img id="preview-image">
+                                        <span style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
+                                            
+                                        </span>
+                                    </div>
 
-                                <div class="input-blocks mb-0">
-                                    <div class="image-upload mb-0">
-                                        <input type="file" name="profile_photo" id="profilePhoto" accept="image/*" onchange="previewImage(this)" hidden>
-                                        <div class="image-uploads" style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
-                                            <h4>Add Image</h4>
+                                    <div class="input-blocks mb-0">
+                                        <div class="image-upload mb-0">
+                                            <input type="file" name="profile_photo" id="profilePhoto" accept="image/*" onchange="previewImage(this)" hidden>
+                                            <div class="image-uploads" style="cursor:pointer;" onclick="document.getElementById('profilePhoto').click();">
+                                                <h4>Add Image</h4>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
                                 <div class="row">
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="first_name" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="last_name" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                            <input type="email" class="form-control">
+                                            <input type="email" name="email" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Contact Number<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="contact_number" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Emp Code<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emp_code" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
@@ -91,27 +92,27 @@
                                             <label class="form-label">Date of Birth<span class="text-danger ms-1">*</span></label>
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
-                                                <input type="text" class="datetimepicker form-control" placeholder="Select Date">
+                                                <input type="text" name="dob" class="datetimepicker form-control" placeholder="Select Date">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Gender<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
+                                            <select class="select" name="gender">
                                                 <option>Select</option>
-                                                <option>Male</option>
-                                                <option>Female</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Nationality<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
+                                            <select class="select" name="nationality">
                                                 <option>Select</option>
-                                                <option>United Kingdom</option>
-                                                <option>India</option>
+                                                <option value="Kenya">Kenya</option>
+                                                <option value="Other">Other</option>
                                             </select>
                                         </div>
                                     </div>
@@ -120,7 +121,7 @@
                                             <label>Joining Date<span class="text-danger ms-1">*</span></label>
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
-                                                <input type="text" class="datetimepicker form-control" placeholder="Select Date" >
+                                                <input type="text" name="joining_date" class="datetimepicker form-control" placeholder="Select Date" >
                                             </div>
                                         </div>
                                     </div>
@@ -128,51 +129,68 @@
                                         <div class="mb-3">
                                             <div class="add-newplus">
                                                 <label class="form-label">Shift<span class="text-danger ms-1">*</span></label>
-                                                <a href="#"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
+                                                <a href="{{url('shift')}}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select">
+                                            <select class="select" name="shift">
                                                 <option>Select</option>
-                                                <option>Regular</option>
+                                                @foreach($shifts as $shift)
+                                                    <option value="{{ $shift->shift_name }}">{{ $shift->shift_name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Department<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option>UI/UX</option>
-                                                <option>Support</option>
-                                                <option>HR</option>
-                                                <option>Engineering</option>
+                                          <div class="add-newplus">
+                                            <label class="form-label" for="department">Department<span class="text-danger ms-1">*</span></label>
+                                            <a href="{{url('department-grid')}}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
+                                            </div>
+                                            <select class="select" name="department" required>
+                                                <option value="">Select Department</option>
+                                                @foreach($departments as $dept)
+                                                    <option value="{{ $dept->name }}">{{ $dept->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option>Designer</option>
-                                                <option>Developer</option>
-                                                <option>Tester</option>
+                                            <div class="add-newplus">
+                                                <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
+                                                <a href="{{url('designation')}}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
+                                            </div>
+                                            <select class="select" name="designation">
+                                            @foreach($designations as $designation)
+                                                <option value="{{ $designation->designation }}">{{ $designation->designation }}</option>
+                                            @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Blood Group<span class="text-danger ms-1">*</span></label>
-                                            <select class="select">
+                                            <select class="select" name="blood_group">
                                                 <option>Select</option>
-                                                <option>A+</option>
-                                                <option>A-</option>
-                                                <option>B+</option>
-                                                <option>B-</option>
-                                                <option>O+</option>
-                                                <option>O-</option>
-                                                <option>AB+</option>
-                                                <option>AB-</option>
+                                                <option value="N/A">N/A</option>
+                                                <option value="A+">A+</option>
+                                                <option value="A-">A-</option>
+                                                <option value="B+">B+</option>
+                                                <option value="B-">B-</option>
+                                                <option value="O+">O+</option>
+                                                <option value="O-">O-</option>
+                                                <option value="AB+">AB+</option>
+                                                <option value="AB-">AB-</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Status<span class="text-danger ms-1">*</span></label>
+                                        <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
+                                            <span class="status-label">Status</span>
+                                            <input type="checkbox" id="user6" class="check" name="status" value="1" checked>
+                                            <label for="user6" class="checktoggle mb-0"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -180,7 +198,7 @@
                                 <div class="col-lg-12">
                                     <div class="input-blocks summer-description-box transfer mb-3">
                                         <label>About</label>
-                                        <div id="summernote"></div>
+                                        <textarea id="summernote" name="about"></textarea>
                                         <p class="mt-1">Maximum 60 Characters</p>
                                     </div>
                                 </div>
@@ -205,43 +223,23 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Address</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="address" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Country</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option>United Kingdom</option>
-                                                <option>USA</option>			
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">State</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option>California</option>
-                                                <option>Paris</option>			
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-4 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">City</label>
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option>Los Angeles</option>
-                                                <option>New Jersey</option>			
+                                            <select class="select" name="country">
+                                                <option></option>
+                                                <option value="Kenya">Kenya</option>
+                                                <option value="Other">Other</option>			
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Zipcode</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="zipcode" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -264,37 +262,37 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Emergency Contact Number 1</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emergency_contact1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Relation</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emergency_relation1" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emergency_name1"  class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Emergency Contact Number 2</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emergency_contact2" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Relation</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emergency_relation2" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="emergency_name2" class="form-control">
                                         </div>
                                     </div>
                                     
@@ -319,25 +317,20 @@
                                     <div class="col-lg-3 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Bank Name</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="bank_name" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Account Number</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="account_number" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-lg-3 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">IFSC</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                    </div>
+                                  
                                     <div class="col-lg-3 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Branch</label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="branch" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -361,13 +354,13 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="input-blocks mb-md-0 mb-sm-3">
                                             <label>Password</label>
-                                            <input type="password" class="form-control">
+                                            <input type="password" name="password" id="password" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-6">
                                         <div class="input-blocks mb-0">
                                             <label>Confirm Password</label>
-                                            <input type="password" class="form-control">
+                                            <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
                                         </div>
                                     </div>
                                 </div>

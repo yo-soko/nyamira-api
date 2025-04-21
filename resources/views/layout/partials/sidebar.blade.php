@@ -79,7 +79,7 @@
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">HRM</h6>
                                                 <ul>
-                                                        <li class="{{ Request::is('index','employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('index')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
+                                                        <li class="{{ Request::is('index','employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('employees-list')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
                                                         <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
                                                         <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                                                         <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
@@ -104,7 +104,6 @@
                                                                 <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
                                                                 <ul>
                                                                         <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
-                                                                        <li><a href="{{url('payslip')}}" class="{{ Request::is('payslip') ? 'active' : '' }}">Payslip</a></li>
                                                                 </ul>
                                                         </li>
                                                 </ul>

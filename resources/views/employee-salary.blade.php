@@ -1,7 +1,7 @@
 <?php $page = 'employee-salary'; ?>
 @extends('layout.mainlayout')
 @section('content')
-   
+@include('layout.toast') 
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -30,7 +30,7 @@
                 </li>
             </ul>
             <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-department"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-payroll"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
             </div>
         </div>
             <!-- product list -->
@@ -80,6 +80,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($employees_view as $employeeSalary)
                                 <tr>
                                     <td>
                                         <label class="checkboxs">
@@ -88,39 +89,52 @@
                                         </label>
                                     </td>	
                                     <td>
-                                        EMP001
+                                    {{ $employeeSalary->employee->emp_code}}
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-33.png')}}" class="img-fluid" alt="img"></a>
+                                            <a href="{{ url('employee-details/' . $employeeSalary->id) }}" class="avatar avatar-md">
+                                                <img 
+                                                    src="{{ $employeeSalary->employee->profile_photo ? asset('storage/' . $employeeSalary->employee->profile_photo) : asset('build/img/users/user-33.png') }}" 
+                                                    class="img-fluid" 
+                                                    alt="Profile"
+                                                >
+                                            </a>
                                             <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Carl Evans</a></p>
-                                                <p><a>Designer</a></p>
-                                              
+                                                <p class="text-dark mb-0">
+                                                    <a href="{{url('employee-details')}}">
+                                                        {{ $employeeSalary->employee->first_name . ' ' . $employeeSalary->employee->last_name }}
+                                                    </a>
+                                                </p>
+                                                <p><a>{{ $employeeSalary->employee->designation ?? 'N/A' }}</a></p>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        carlevans@example.com
+                                        {{ $employeeSalary->employee->email ?? 'N/A' }}
                                     </td>
                                     <td>
-                                        $30,000						
+                                        Ksh {{ number_format($employeeSalary->net_salary, 2) }}						
                                     </td>
                                     
                                     <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
+                                        <span class="badge badge-{{ $employeeSalary->status == 'paid' ? 'success' : 'danger' }} d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>{{ ucfirst($employeeSalary->status) }}
                                         </span>
                                     </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
+                                            <a class="p-2 me-2" href="{{ url('payslip/' . $employeeSalary->id) }}">
                                                 <i data-feather="eye" class="feather-eye"></i>
                                             </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
+                                            <a data-bs-toggle="modal" 
+                                            data-bs-target="#edit-department" 
+                                            data-id="{{ $employeeSalary->id }}"
+                                            data-name="{{$employeeSalary->employee->name}}"
+                                            data-image="{{ $employeeSalary->employee->profile_picture ? asset('storage/' . $user->profile_picture) : asset('build/img/users/default.png') }}"
+                                            data-basic_salary="{{ $employeeSalary->employee->email }}"
+                                            data-status="{{ $employeeSalary->status }}"
+                                            class="p-2 me-2" href="javascript:void(0);">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                             </a>
                                             <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
@@ -129,447 +143,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP002
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-02.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Minerva Rameriz</a></p>
-                                                <p><a>Administrator</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        rameriz@example.com
-                                    </td>
-                                    <td>
-                                        $20,000				
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP003
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-34.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Robert Lamon</a></p>
-                                                <p><a>Developer</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        robert@example.com
-                                    </td>
-                                    <td>
-                                        $35,000				
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP004
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-35.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Patricia Lewis</a></p>
-                                                <p><a>HR Manager</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        robert@example.com
-                                    </td>
-                                    <td>
-                                        $35,000				
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP005
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-36.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Mark Joslyn</a></p>
-                                                <p><a>Designer</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        markjoslyn@example.com
-                                    </td>
-                                    <td>
-                                        $32,000	
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP006
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-37.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Marsha Betts</a></p>
-                                                <p><a>Developer</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        marshabetts@example.com
-                                    </td>
-                                    <td>
-                                        $28,000
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP007
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-28.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Daniel Jude</a></p>
-                                                <p><a>Administrator</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        daieljude@example.com
-                                    </td>
-                                    <td>
-                                        $25,000
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP008
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-38.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Emma Bates</a></p>
-                                                <p><a>HR Assistant</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        emmabates@example.com
-                                    </td>
-                                    <td>
-                                        $21,000
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP009
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-39.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Richard Fralick</a></p>
-                                                <p><a>Designer</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        richard@example.com
-                                    </td>
-                                    <td>
-                                        $34,000
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Paid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label class="checkboxs">
-                                            <input type="checkbox">
-                                            <span class="checkmarks"></span>
-                                        </label>
-                                    </td>	
-                                    <td>
-                                        EMP010
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <a href="{{url('employee-details')}}" class="avatar avatar-md"><img src="{{URL::asset('build/img/users/user-21.jpg')}}" class="img-fluid" alt="img"></a>
-                                            <div class="ms-2">
-                                                <p class="text-dark mb-0"><a href="{{url('employee-details')}}">Michelle Robison</a></p>
-                                                <p><a>HR Manager</a></p>
-                                              
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        robinson@example.com
-                                    </td>
-                                    <td>
-                                        $28,000
-                                    </td>
-                                    
-                                    <td>
-                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>UnPaid
-                                        </span>
-                                    </td>
-                                    <td class="action-table-data">
-                                        <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
-                                            <a class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="download" class="feather-eye"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#edit-department" class="p-2 me-2" href="javascript:void(0);">
-                                                <i data-feather="edit" class="feather-edit"></i>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
-                                                <i data-feather="trash-2" class="feather-trash-2"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -578,8 +152,242 @@
             <!-- /product list -->
     </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-        <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
+<script>
+    function parseCurrency(input) {
+        const value = parseFloat(input.value.replace(/[^0-9.-]+/g,""));
+        return isNaN(value) ? 0 : value;
+    }
+
+    function calculateTotals() {
+        // Get all allowances
+        let totalAllowance = 0;
+        document.querySelectorAll('.allowance').forEach(input => {
+            totalAllowance += parseCurrency(input);
+        });
+
+        // Get all deductions
+        let totalDeduction = 0;
+        document.querySelectorAll('.deduction').forEach(input => {
+            totalDeduction += parseCurrency(input);
+        });
+
+        // Get basic salary
+        let basicSalary = parseCurrency(document.getElementById('basic_salary'));
+
+        // Update totals
+        document.getElementById('total_allowance').value = totalAllowance.toFixed(2);
+        document.getElementById('total_deduction').value = totalDeduction.toFixed(2);
+
+        // Calculate net salary
+        const netSalary = basicSalary + totalAllowance - totalDeduction;
+        document.getElementById('net_salary').value = netSalary.toFixed(2);
+    }
+
+    // Trigger calculation on input
+    document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', calculateTotals);
+    });
+    document.querySelector('.btn-reset').addEventListener('click', () => {
+        document.querySelectorAll('input').forEach(input => input.value = '');
+    });
+
+</script>
+
+<!-- add payroll modal -->
+<div class="modal fade" id="add-payroll">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="page-title">
+                    <h4>Add Payroll</h4>
+                </div>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{route('employee-salary')}}" method="POST">
+                @csrf 
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Select Employee <span>*</span></label>
+                                <select name="employee_id" class="select select2">
+                                    <option value="">Select Employee</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">
+                                            {{ $employee->first_name . ' ' . $employee->last_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="input-blocks">
+                                <label>Payment Date<span class="text-danger ms-1">*</span></label>
+                                <div class="input-groupicon calender-input">
+                                    <i data-feather="calendar" class="info-img"></i>
+                                    <input type="text" name="payment_date" class="datetimepicker form-control" placeholder="Select Date" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-title">
+                            <h5 class="mb-2">Salary Information</h5>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Basic Salary <span>*</span></label>
+                                <input type="text" name="basic_salary" class="text-form form-control">
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Payment Method <span>*</span></label>
+                                <select class="select" name="payment_method">
+                                    <option>Select</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Mpesa">Mpesa</option>
+                                    <option value="Bank">Bank</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Reference Code<span>*</span></label>
+                                <input type="text" name="reference_code" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Notes / Add. Info<span></span></label>
+                                <textarea class="form-control" name="notes" rows="3"></textarea>									
+                            </div>
+                        </div>
+                        <div class="mb-3 pb-3 border-bottom">
+                            <p class="fw-semibold text-gray-9 mb-2">Status</p>
+                            <div class="d-flex align-items-center">
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="radio" name="status" value="paid" id="Radio-sm1" checked>
+                                    <label class="form-check-label" for="Radio-sm1">
+                                        Paid
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="status" value="unpaid" id="Radio-sm2">
+                                    <label class="form-check-label" for="Radio-sm2">
+                                        Unpaid
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payroll-title">
+                            <p class="fw-semibold text-gray-9 mb-2">Allowances</p>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">House Allowance <span>*</span></label>
+                                <input type="text" name="allowance1" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Conveyance <span>*</span></label>
+                                <input type="text" name="allowance2" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Medical Allowance <span>*</span></label>
+                                <input type="text" name="allowance3" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Bonus <span>*</span></label>
+                                <input type="text" name="bonus" class="form-control">
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-end border-bottom mb-3">
+                            <div class="mb-3 flex-grow-1">
+                                <label class="form-label">Others</label>
+                                <input type="text" name="others1" class="text-form form-control">
+                            </div>
+                            <div class="subadd-btn mb-3 ms-3">
+                                <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
+                            </div>
+                        </div>
+                        <div class="payroll-title">
+                            <p class="fw-semibold text-gray-9 mb-2">Deductions</p>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">PF <span>*</span></label>
+                                <input type="text" name="deduction1" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Professional Tax <span>*</span></label>
+                                <input type="text" name="deduction2" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">TDS <span>*</span></label>
+                                <input type="text" name="deduction3" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Loans & Others <span>*</span></label>
+                                <input type="text" name="deduction4" class="form-control">
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-end border-bottom mb-3">
+                            <div class="mb-3 flex-grow-1">
+                                <label class="form-label">Others</label>
+                                <input type="text" name="others" class="text-form form-control">
+                            </div>
+                            <div class="subadd-btn mb-3 ms-3">
+                                <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
+                            </div>
+                        </div>
+                        <div class="payroll-title">
+                            <p class="fw-semibold text-gray-9 mb-2">Deductions</p>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Total Allowance <span>*</span></label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Total Deduction <span>*</span></label>
+                                <input type="text" name="total_deduction" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6 col-12">
+                            <div class="mb-3">
+                                <label class="form-label">Net Salary <span>*</span></label>
+                                <input type="text" name="net_salary" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="d-flex align-items-center justify-content-end">
+                                <button type="button" class="btn btn-previw me-2">Preview</button>
+                                <button type="button" class="btn btn-reset me-2">Reset</button>
+                                <button type="submit" class="btn btn-save">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+ 
 @endsection

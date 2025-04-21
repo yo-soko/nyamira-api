@@ -2,35 +2,245 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
+use App\Models\Department;
+use App\Models\Designation;
+use App\Models\Shift;
+
 use Illuminate\Http\Request;
-use App\Models\Employee; 
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
-    // Store method to handle the POST request from the form
+    public function index()
+    {
+
+        $employees = Employee::latest()->get();
+        return view('add-employee', compact('employees',));
+    }
+
+    public function list()
+    {
+        $totalEmployees = Employee::count();
+        $activeEmployees = Employee::where('status', 1)->count(); // assuming 1 = active
+        $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
+        $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
+
+        $employees = Employee::latest()->get();
+        return view('employees-list', compact('employees','totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
+    }
+
+    public function show($id)
+    {
+        // Retrieve the employee by ID
+        $employee = Employee::findOrFail($id);
+
+        // Pass the employee to the view
+        return view('employee-details', compact('employee'));
+    }
+
+    public function edit($id)
+    {
+        // Find the employee by ID
+        $employee = Employee::findOrFail($id);
+
+        $departments = Department::all();
+        $designations = Designation::all();
+        $shifts = Shift::all();
+        // Pass the employee data to the view
+        return view('edit-employee', compact('employee', 'designations', 'shifts', 'departments'));
+    }
+
+    public function create()
+    {
+        $departments = Department::all();
+        $designations = Designation::all();
+        $shifts = Shift::all();
+
+        return view('add-employee', compact('departments', 'designations', 'shifts'));
+    }
+
     public function store(Request $request)
     {
-        // Validate the incoming data
-        $validated = $request->validate([
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:employees',
-            'contact_number' => 'required|string|max:15',
-            // Add more validation rules as needed
+        // Convert first before validation
+        $request->merge([
+            'dob' => Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d'),
+            'joining_date' => Carbon::createFromFormat('d-m-Y', $request->joining_date)->format('Y-m-d'),
         ]);
 
-        // Create a new employee record
-        $employee = new Employee();
-        $employee->first_name = $request->first_name;
-        $employee->last_name = $request->last_name;
-        $employee->email = $request->email;
-        $employee->contact_number = $request->contact_number;
-        // Add other fields as necessary
+        $data = $request->validate([
+            'profile_photo' => 'nullable|image|max:2048',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+            'contact_number' => 'required',
+            'emp_code' => 'required|unique:employees,emp_code',
+            'dob' => 'required|date_format:Y-m-d',
+            'gender' => 'required',
+            'nationality' => 'required|string',
+            'joining_date' => 'required|date_format:Y-m-d',
+            'shift' => 'required|string',
+            'department' => 'required|string',
+            'designation' => 'required|string',
+            'blood_group' => 'nullable|string',
+            'about' => 'nullable|string|max:60',
+            'address' => 'nullable|string',
+            'country' => 'nullable|string',
+            'zipcode' => 'nullable|string',
+            'emergency_contact1' => 'nullable|string',
+            'emergency_relation1' => 'nullable|string',
+            'emergency_name1' => 'nullable|string',
+            'emergency_contact2' => 'nullable|string',
+            'emergency_relation2' => 'nullable|string',
+            'emergency_name2' => 'nullable|string',
+            'bank_name' => 'nullable|string',
+            'account_number' => 'nullable|string',
+            'branch' => 'nullable|string',
+            'password' => 'required|confirmed|min:4',
+        ]);
 
-        // Save to the database
-        $employee->save();
+        $nullableFields = [
+            'profile_photo',
+            'blood_group',
+            'about',
+            'address',
+            'country',
+            'zipcode',
+            'emergency_contact1',
+            'emergency_relation1',
+            'emergency_name1',
+            'emergency_contact2',
+            'emergency_relation2',
+            'emergency_name2',
+            'bank_name',
+            'account_number',
+            'branch',
+        ];
 
-        // Redirect back with a success message
-        return redirect()->route('employee.index')->with('success', 'Employee added successfully!');
+        foreach ($nullableFields as $field) {
+            if (!array_key_exists($field, $data)) {
+                $data[$field] = null;
+            }
+        }
+
+        // Handle profile photo
+        if ($request->hasFile('profile_photo')) {
+            $data['profile_photo'] = $request->file('profile_photo')->store('profile_photos', 'public');
+        }
+
+        $data['status'] = $request->has('status') ? 1 : 0;
+
+        // Hash the password
+        $data['password'] = Hash::make($data['password']);
+
+        try {
+            // Save the employee
+            if (Employee::create($data)) {
+                return redirect()->back()->with('success', 'Employee added successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Failed to add employee. Please try again.');
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Employee could not be added. Email or Employee Code already exists.');
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $employee = Employee::findOrFail($id);
+
+        // Convert date formats before validation
+        $request->merge([
+            'dob' => Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d'),
+            'joining_date' => Carbon::createFromFormat('d-m-Y', $request->joining_date)->format('Y-m-d'),
+        ]);
+
+        $data = $request->validate([
+            'profile_photo' => 'nullable|image|max:2048',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email',
+            'contact_number' => 'required',
+            'emp_code' => 'required|unique:employees,emp_code,' . $id . ',id',
+            'dob' => 'required|date_format:Y-m-d',
+            'gender' => 'required',
+            'nationality' => 'nullable|string',
+            'joining_date' => 'required|date_format:Y-m-d',
+            'shift' => 'required|string',
+            'department' => 'required|string',
+            'designation' => 'required|string',
+            'blood_group' => 'nullable|string',
+            'about' => 'nullable|string|max:60',
+            'address' => 'nullable|string',
+            'country' => 'nullable|string',
+            'zipcode' => 'nullable|string',
+            'emergency_contact1' => 'nullable|string',
+            'emergency_relation1' => 'nullable|string',
+            'emergency_name1' => 'nullable|string',
+            'emergency_contact2' => 'nullable|string',
+            'emergency_relation2' => 'nullable|string',
+            'emergency_name2' => 'nullable|string',
+            'bank_name' => 'nullable|string',
+            'account_number' => 'nullable|string',
+            'branch' => 'nullable|string',
+            'password' => 'nullable|confirmed|min:4',
+        ]);
+
+        $nullableFields = [
+            'profile_photo', 'blood_group', 'about', 'address', 'country', 'zipcode',
+            'emergency_contact1', 'emergency_relation1', 'emergency_name1',
+            'emergency_contact2', 'emergency_relation2', 'emergency_name2',
+            'bank_name', 'account_number', 'branch',
+        ];
+        foreach ($nullableFields as $field) {
+            if (!array_key_exists($field, $data)) {
+                $data[$field] = null;
+            }
+        }
+
+        // Handle profile photo update
+        if ($request->hasFile('profile_photo')) {
+            $data['profile_photo'] = $request->file('profile_photo')->store('profile_photos', 'public');
+        } else {
+            unset($data['profile_photo']); // keep existing one
+        }
+
+        $data['status'] = $request->has('status') ? 1 : 0;
+
+        // Only hash and update password if provided
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        // Perform the update
+        if ($employee->update($data)) {
+            return redirect()->route('edit-employee', $id)->with('success', 'Employee updated successfully!');
+        } else {
+            return redirect()->route('edit-employee', $id)->with('error', 'Failed to update employee. Please try again.');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $employee = Employee::findOrFail($id);
+
+        // Delete profile photo if exists
+        if ($employee->profile_photo && Storage::disk('public')->exists($employee->profile_photo)) {
+            Storage::disk('public')->delete($employee->profile_photo);
+        }
+
+        if ($employee->delete()) {
+            return redirect()->back()->with('success', 'Employee deleted successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete employee. Please try again.');
+        }
     }
 }
