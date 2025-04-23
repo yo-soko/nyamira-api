@@ -30,7 +30,7 @@
                 </li>
             </ul>
             <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-payroll"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
+                <a href="#" class="btn btn-primary" id="add-payroll-btn" data-bs-toggle="modal" data-bs-target="#add-payroll"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
             </div>
         </div>
             <!-- product list -->
@@ -127,17 +127,39 @@
                                             <a class="p-2 me-2" href="{{ url('payslip/' . $employeeSalary->id) }}">
                                                 <i data-feather="eye" class="feather-eye"></i>
                                             </a>
-                                            <a data-bs-toggle="modal" 
-                                            data-bs-target="#edit-department" 
+                                            <a class="p-2 me-2 edit-btn" href="javascript:void(0);" 
+                                            
                                             data-id="{{ $employeeSalary->id }}"
-                                            data-name="{{$employeeSalary->employee->name}}"
-                                            data-image="{{ $employeeSalary->employee->profile_picture ? asset('storage/' . $user->profile_picture) : asset('build/img/users/default.png') }}"
-                                            data-basic_salary="{{ $employeeSalary->employee->email }}"
+                                            data-name="{{ $employeeSalary->employee->first_name . ' ' . $employeeSalary->employee->last_name }}"
+                                            data-payment_date="{{ $employeeSalary->payment_date }}"
+                                            data-basic_salary="{{ $employeeSalary->basic_salary }}"
+                                            data-payment_method="{{ $employeeSalary->payment_method }}"
+                                            data-reference_code="{{ $employeeSalary->reference_code }}"
+                                            data-notes="{{ $employeeSalary->notes }}"
                                             data-status="{{ $employeeSalary->status }}"
-                                            class="p-2 me-2" href="javascript:void(0);">
+                                            data-allowance1="{{ $employeeSalary->allowance1 }}"
+                                            data-allowance2="{{ $employeeSalary->allowance2 }}"
+                                            data-allowance3="{{ $employeeSalary->allowance3 }}"
+                                            data-bonus="{{ $employeeSalary->bonus }}"
+                                            data-others1="{{ $employeeSalary->others1 }}"
+                                            data-deduction1="{{ $employeeSalary->deduction1 }}"
+                                            data-deduction2="{{ $employeeSalary->deduction2 }}"
+                                            data-deduction3="{{ $employeeSalary->deduction3 }}"
+                                            data-deduction4="{{ $employeeSalary->deduction4 }}"
+                                            data-others="{{ $employeeSalary->others }}"
+                                            data-total_deduction="{{ $employeeSalary->total_deduction }}"
+                                            data-total_allowance="{{ $employeeSalary->total_allowance }}"
+                                            data-net_salary="{{ $employeeSalary->net_salary }}"
+
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#edit-employee-salary">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                             </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);">
+                                            <a data-bs-toggle="modal"
+                                             data-bs-target="#delete-modal"
+                                             data-id="{{ $employeeSalary->id }}"
+                                             class="p-2 delete-btn" 
+                                             href="javascript:void(0);">
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
                                         </div>
@@ -157,45 +179,210 @@
     </div>
 </div>
 <script>
-    function parseCurrency(input) {
-        const value = parseFloat(input.value.replace(/[^0-9.-]+/g,""));
-        return isNaN(value) ? 0 : value;
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const employeeName = this.dataset.name;
 
-    function calculateTotals() {
-        // Get all allowances
-        let totalAllowance = 0;
-        document.querySelectorAll('.allowance').forEach(input => {
-            totalAllowance += parseCurrency(input);
+                // Set the employee name in the display field
+                document.getElementById('selected-employee-name').textContent = employeeName;
+                // Grab the data attributes
+                const id = this.dataset.id;
+                const payment_date = this.dataset.payment_date;
+                const basic_salary = this.dataset.basic_salary;
+                const payment_method = this.dataset.payment_method;
+                const reference_code = this.dataset.reference_code;
+                const status = this.dataset.status;
+                const others = this.dataset.others;
+                const others1 = this.dataset.others1;
+                const net_salary = this.dataset.net_salary;
+                const notes = this.dataset.notes;
+
+                // Get allowance and deduction values
+                let allowance1 = parseFloat(this.dataset.allowance1) || 0;
+                let allowance2 = parseFloat(this.dataset.allowance2) || 0;
+                let allowance3 = parseFloat(this.dataset.allowance3) || 0;
+                let bonus = parseFloat(this.dataset.bonus) || 0;
+                let deduction1 = parseFloat(this.dataset.deduction1) || 0;
+                let deduction2 = parseFloat(this.dataset.deduction2) || 0;
+                let deduction3 = parseFloat(this.dataset.deduction3) || 0;
+                let deduction4 = parseFloat(this.dataset.deduction4) || 0;
+
+                // Calculate totals
+                const calculateTotals = () => {
+                    const totalAllowance = allowance1 + allowance2 + allowance3 + bonus;
+                    const totalDeduction = deduction1 + deduction2 + deduction3 + deduction4;
+                    const calculatedNetSalary = parseFloat(basic_salary) + totalAllowance - totalDeduction;
+
+                    // Update totals dynamically
+                    document.getElementById('total_allowance').value = totalAllowance;
+                    document.getElementById('total_deduction').value = totalDeduction;
+                    document.getElementById('net_salary').value = calculatedNetSalary;
+                };
+
+                // Format payment date (d-m-Y to Y-m-d)
+                const formattedPaymentDate = payment_date.split('-').reverse().join('-'); 
+
+                // Assign values to the modal fields
+                document.getElementById('salary_id').value = id;
+                document.getElementById('payment_date').value = formattedPaymentDate;
+                document.getElementById('basic_salary').value = basic_salary;
+                document.getElementById('payment_method').value = payment_method;
+                document.getElementById('reference_code').value = reference_code;
+                document.getElementById('notes').value = notes;
+
+                // Radio buttons for status
+                if (status === 'paid') {
+                    document.getElementById('status_paid').checked = true;
+                } else {
+                    document.getElementById('status_unpaid').checked = true;
+                }
+
+                // Allowances
+                document.getElementById('allowance1').value = allowance1;
+                document.getElementById('allowance2').value = allowance2;
+                document.getElementById('allowance3').value = allowance3;
+                document.getElementById('bonus').value = this.dataset.bonus;
+                document.getElementById('others1').value = others1;
+
+                // Deductions
+                document.getElementById('deduction1').value = deduction1;
+                document.getElementById('deduction2').value = deduction2;
+                document.getElementById('deduction3').value = deduction3;
+                document.getElementById('deduction4').value = this.dataset.deduction4;
+                document.getElementById('others').value = others;
+
+                // Call initial calculation
+                calculateTotals();
+
+                // Event listeners for dynamic changes
+                document.getElementById('allowance1').addEventListener('input', function () {
+                    allowance1 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('allowance2').addEventListener('input', function () {
+                    allowance2 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('allowance3').addEventListener('input', function () {
+                    allowance3 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('bonus').addEventListener('input', function () {
+                    bonus = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('deduction1').addEventListener('input', function () {
+                    deduction1 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('deduction2').addEventListener('input', function () {
+                    deduction2 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('deduction3').addEventListener('input', function () {
+                    deduction3 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+                document.getElementById('deduction4').addEventListener('input', function () {
+                    deduction4 = parseFloat(this.value) || 0;
+                    calculateTotals();
+                });
+            });
+        });
+        // Add to Payroll (New Record)
+        document.getElementById('add-payroll-btn').addEventListener('click', function () {
+            // Reset all fields for new payroll entry
+            document.getElementById('salary_id').value = '';
+            document.getElementById('payment_date').value = '';
+            document.getElementById('basic_salary').value = '';
+            document.getElementById('payment_method').value = '';
+            document.getElementById('reference_code').value = '';
+            document.getElementById('notes').value = '';
+
+            // Clear the allowance and deduction fields
+            document.getElementById('allowance11').value = '';
+            document.getElementById('allowance22').value = '';
+            document.getElementById('allowance33').value = '';
+            document.getElementById('bonus1').value = '';
+            document.getElementById('others11').value = '';
+
+            document.getElementById('deduction11').value = '';
+            document.getElementById('deduction22').value = '';
+            document.getElementById('deduction33').value = '';
+            document.getElementById('deduction44').value = '';
+            document.getElementById('others').value = '';
+
+            // Reset totals
+            document.getElementById('total_allowance1').value = '';
+            document.getElementById('total_deduction1').value = '';
+            document.getElementById('net_salary1').value = '';
+
+            // Set radio buttons to default (unpaid)
+            document.getElementById('status_unpaid').checked = true;
+
+            // Add dynamic event listeners for the new entry
+            let allowance1 = 0, allowance2 = 0, allowance3 = 0, bonus = 0;
+            let deduction1 = 0, deduction2 = 0, deduction3 = 0, deduction4 = 0;
+
+            const calculateTotals = () => {
+                const totalAllowance = allowance1 + allowance2 + allowance3 + bonus;
+                const totalDeduction = deduction1 + deduction2 + deduction3 + deduction4;
+                const calculatedNetSalary = parseFloat(document.getElementById('basic_salary').value) + totalAllowance - totalDeduction;
+
+                // Update totals dynamically
+                document.getElementById('total_allowance1').value = totalAllowance;
+                document.getElementById('total_deduction1').value = totalDeduction;
+                document.getElementById('net_salary1').value = calculatedNetSalary;
+            };
+
+            document.getElementById('allowance11').addEventListener('input', function () {
+                allowance1 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('allowance22').addEventListener('input', function () {
+                allowance2 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('allowance33').addEventListener('input', function () {
+                allowance3 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('bonus1').addEventListener('input', function () {
+                bonus = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('deduction11').addEventListener('input', function () {
+                deduction1 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('deduction22').addEventListener('input', function () {
+                deduction2 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('deduction33').addEventListener('input', function () {
+                deduction3 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
+            document.getElementById('deduction44').addEventListener('input', function () {
+                deduction4 = parseFloat(this.value) || 0;
+                calculateTotals();
+            });
         });
 
-        // Get all deductions
-        let totalDeduction = 0;
-        document.querySelectorAll('.deduction').forEach(input => {
-            totalDeduction += parseCurrency(input);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.dataset.id;
+                document.getElementById('delete-id').value = id;
+            });
         });
-
-        // Get basic salary
-        let basicSalary = parseCurrency(document.getElementById('basic_salary'));
-
-        // Update totals
-        document.getElementById('total_allowance').value = totalAllowance.toFixed(2);
-        document.getElementById('total_deduction').value = totalDeduction.toFixed(2);
-
-        // Calculate net salary
-        const netSalary = basicSalary + totalAllowance - totalDeduction;
-        document.getElementById('net_salary').value = netSalary.toFixed(2);
-    }
-
-    // Trigger calculation on input
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('input', calculateTotals);
     });
-    document.querySelector('.btn-reset').addEventListener('click', () => {
-        document.querySelectorAll('input').forEach(input => input.value = '');
-    });
+ </script>
 
-</script>
+
 
 <!-- add payroll modal -->
 <div class="modal fade" id="add-payroll">
@@ -289,25 +476,25 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">House Allowance <span>*</span></label>
-                                <input type="text" name="allowance1" class="form-control">
+                                <input type="text" name="allowance1" id="allowance11" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Conveyance <span>*</span></label>
-                                <input type="text" name="allowance2" class="form-control">
+                                <input type="text" name="allowance2" id="allowance22" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Medical Allowance <span>*</span></label>
-                                <input type="text" name="allowance3" class="form-control">
+                                <input type="text" name="allowance3" id="allowance33" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Bonus <span>*</span></label>
-                                <input type="text" name="bonus" class="form-control">
+                                <input type="text" name="bonus" id="bonus1" class="form-control">
                             </div>
                         </div>
                         <div class="d-flex align-items-end border-bottom mb-3">
@@ -325,25 +512,25 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">PF <span>*</span></label>
-                                <input type="text" name="deduction1" class="form-control">
+                                <input type="text" name="deduction1" id="deduction11" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Professional Tax <span>*</span></label>
-                                <input type="text" name="deduction2" class="form-control">
+                                <input type="text" name="deduction2" id="deduction22" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">TDS <span>*</span></label>
-                                <input type="text" name="deduction3" class="form-control">
+                                <input type="text" name="deduction3" id="deduction33" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Loans & Others <span>*</span></label>
-                                <input type="text" name="deduction4" class="form-control">
+                                <input type="text" name="deduction4" id="deduction44" class="form-control">
                             </div>
                         </div>
                         <div class="d-flex align-items-end border-bottom mb-3">
@@ -361,25 +548,24 @@
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Total Allowance <span>*</span></label>
-                                <input type="text" class="form-control">
+                                <input type="text" name="total_allowance" id="total_allowance1" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Total Deduction <span>*</span></label>
-                                <input type="text" name="total_deduction" class="form-control">
+                                <input type="text" name="total_deduction" id="total_deduction1" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Net Salary <span>*</span></label>
-                                <input type="text" name="net_salary" class="form-control">
+                                <input type="text" name="net_salary" id="net_salary1" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-12">
                             <div class="d-flex align-items-center justify-content-end">
-                                <button type="button" class="btn btn-previw me-2">Preview</button>
-                                <button type="button" class="btn btn-reset me-2">Reset</button>
+                                <button type="button" class="btn btn-reset me-2"data-bs-dismiss="modal">Back</button>
                                 <button type="submit" class="btn btn-save">Save</button>
                             </div>
                         </div>

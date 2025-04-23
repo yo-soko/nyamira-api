@@ -32149,8 +32149,8 @@
 @endif
 @if (Route::is(['employee-salary']))
 
-		<!-- Edit Department -->
-		<div class="modal fade" id="edit-department">
+		<!-- Edit Payroll -->
+		<div class="modal fade" id="edit-employee-salary">
 			<div class="modal-dialog modal-dialog-centered modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -32164,12 +32164,15 @@
                     <form action="{{ route('employee-salary.update') }}" method="POST">
                         @csrf
                         @method('PUT')
+                        <input type="hidden" name="salary_id" id="salary_id">
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-12">
                                     <div class="mb-3">
                                         <label class="form-label">Select Employee <span>*</span></label>
-                                       
+                                        <div id="selected-employee-name" class="form-control" readonly>
+                                            <!-- This will be populated dynamically with the selected employee's name -->
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-6">
@@ -32177,7 +32180,7 @@
                                         <label>Payment Date<span class="text-danger ms-1">*</span></label>
                                         <div class="input-groupicon calender-input">
                                             <i data-feather="calendar" class="info-img"></i>
-                                            <input type="text" name="payment_date" id="payment_date" class="datetimepicker form-control" placeholder="Select Date" >
+                                            <input type="text" name="payment_date" id="payment_date" class="datetimepicker form-control" >
                                         </div>
                                     </div>
                                 </div>
@@ -32216,13 +32219,13 @@
                                     <p class="fw-semibold text-gray-9 mb-2">Status</p>
                                     <div class="d-flex align-items-center">
                                         <div class="form-check me-3">
-                                            <input class="form-check-input" type="radio" name="status" id="status" value="paid" id="Radio-sm1" checked>
+                                            <input class="form-check-input" type="radio" name="status" id="status_paid" value="paid" id="Radio-sm1" checked>
                                             <label class="form-check-label" for="Radio-sm1">
                                                 Paid
                                             </label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="status" id="status" value="unpaid" id="Radio-sm2">
+                                            <input class="form-check-input" type="radio" name="status" id="status_unpaid" value="unpaid" id="Radio-sm2">
                                             <label class="form-check-label" for="Radio-sm2">
                                                 Unpaid
                                             </label>
@@ -32307,7 +32310,7 @@
                                 <div class="col-lg-4 col-sm-6 col-12">
                                     <div class="mb-3">
                                         <label class="form-label">Total Allowance <span>*</span></label>
-                                        <input type="text" name="total_allowance" class="form-control">
+                                        <input type="text" name="total_allowance" id="total_allowance" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-sm-6 col-12">
@@ -32324,7 +32327,7 @@
                                 </div>
                                 <div class="col-lg-12">
                                     <div class="d-flex align-items-center justify-content-end">
-                                        <button type="button" class="btn btn-reset me-2">Reset</button>
+                                        <button type="button" class="btn btn-reset me-2" data-bs-dismiss="modal">Back</button>
                                         <button type="submit" class="btn btn-save">Save</button>
                                     </div>
                                 </div>
@@ -32334,23 +32337,27 @@
 				</div>
 			</div>
 		</div>
-		<!-- /Edit Department -->
+		<!-- /Edit Payroll -->
 
 		<!-- delete modal -->
 		<div class="modal fade" id="delete-modal">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content">
-					<div class="page-wrapper-new p-0">
-						<div class="content p-5 px-3 text-center">
-							<span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
-							<h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Employee Salary</h4>
-							<p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete employee salary?</p>
-							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
-								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
-								<button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
-						</div>
-					</div>
+                    <form id="delete-form" method="POST" action="{{ route('employee-salary.delete') }}">
+                        @csrf
+                        <input type="hidden" name="id" id="delete-id"></input>
+                        <div class="page-wrapper-new p-0">
+                            <div class="content p-5 px-3 text-center">
+                                <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
+                                <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Employee Salary</h4>
+                                <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete employee salary?</p>
+                                <div class="modal-footer-btn mt-3 d-flex justify-content-center">
+                                    <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
+                                </div>						
+                            </div>
+                        </div>
+                    </form>
 				</div>
 			</div>
 		</div>

@@ -14,9 +14,7 @@ class DepartmentController extends Controller
     public function index()
     {
         $departments = Department::all();
-        $hods = User::where('role', 'Manager') // or whatever role qualifies as HOD
-                    ->orWhere('role', 'hods')  // optional extra filter
-                    ->get();
+        $hods = User::all();
     
         return view('department-grid', compact('departments', 'hods'));
         dd($hods);

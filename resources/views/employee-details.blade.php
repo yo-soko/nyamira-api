@@ -24,7 +24,7 @@
                                 <img src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/user-32.jpg') }}" alt="Img"> <!-- Assuming the avatar is stored in storage -->
                             </span>
                             <div class="me-3">
-                                <h6 class="text-white mb-1">{{ $employee->name }}</h6> 
+                                <h6 class="text-white mb-1">{{ $employee->first_name .' ' . $employee->last_name }}</h6> 
                                 <span class="badge bg-purple-transparent text-purple">{{ $employee->designation }}</span>
                             </div>
                             <div>

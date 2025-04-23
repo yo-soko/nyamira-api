@@ -85,7 +85,7 @@ class ShiftController extends Controller
             'start_time' => 'sometimes|required',
             'end_time' => 'sometimes|required',
             'day_off' => 'nullable|string',
-            'days' => 'sometimes|required|array',
+            'days' => 'sometimes|required|string',
             'morning_from' => 'nullable',
             'morning_to' => 'nullable',
             'lunch_from' => 'nullable',

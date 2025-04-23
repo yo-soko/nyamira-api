@@ -874,7 +874,20 @@ use App\Http\Controllers\EmployeeSalaryController;
 Route::post('/employee-salary', [EmployeeSalaryController::class, 'store']);
 Route::get('/employee-salary', [EmployeeSalaryController::class, 'index'])->name('employee-salary');
 Route::get('/payslip/{id}', [EmployeeSalaryController::class, 'showPayslip']);
-Route::put('/employee-salary/update', [ClassController::class, 'update'])->name('employee-salary.update');
+Route::put('/employee-salary/update', [EmployeeSalaryController::class, 'update'])->name('employee-salary.update');
+Route::post('/employee-salary/delete', [EmployeeSalaryController::class, 'destroy'])->name('employee-salary.delete');
+
+
+use App\Http\Controllers\AttendanciesController;
+
+Route::get('attendance-admin/', [AttendanciesController::class, 'index'])->name('attendance-admin.index');
+Route::get('attendance-employee/{id}', [AttendanciesController::class, 'markAttendance'])->name('attendance-employee');
+Route::post('/attendance-employee/clock-in', [AttendanciesController::class, 'clockIn'])->name('attendance-employee.clockIn');
+Route::post('/attendance-employee/clock-out', [AttendanciesController::class, 'clockOut'])->name('attendance-employee.clockOut');
+Route::post('/attendance-employee/break', [AttendanciesController::class, 'break'])->name('attendance-employee.break');
+Route::post('/attendance-employee/backFromBreak', [AttendanciesController::class, 'backFromBreak'])->name('attendance-employee.backFromBreak');
+
+
 
 
 Route::get('/bank-settings-list', function () {

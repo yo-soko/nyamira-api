@@ -40,4 +40,12 @@ class Employee extends Authenticatable
     ];
 
     protected $hidden = ['password'];
+
+    public function attendances() {
+        return $this->hasMany(Attendance::class);
+    }
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'shift', 'shift_name');
+    }
 }

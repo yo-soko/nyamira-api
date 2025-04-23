@@ -1,12 +1,23 @@
 <?php $page = 'attendance-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
+@php
+    $hour = date('H');
+    if ($hour < 12) {
+        $greeting = 'Good Morning';
+    } elseif ($hour < 18) {
+        $greeting = 'Good Afternoon';
+    } else {
+        $greeting = 'Good Evening';
+    }
+@endphp
     <div class="page-wrapper">
         <div class="content">
             <div class="attendance-header">
                 <div class="attendance-content">
                 <img src="{{URL::asset('build/img/icons/hand01.svg')}}" class="hand-img" alt="img">
-                <h3>Good Morning, <span>John Smilga</span></h3>
+                  <h3>{{ $greeting }},<span> {{ $employee->first_name .' '. $employee->last_name }}</span></h3>
                 </div>
                 <div>
                     <ul class="table-top-head">	
@@ -29,61 +40,90 @@
                 <div class="col-xl-4 col-lg-12 d-flex">
                     <div class="card w-100">
                         <div class="card-body">
-                            <h5 class="mb-3 pb-3 border-bottom d-flex justify-content-between align-items-center fs-18">Attendance<span class="text-purple fs-14">22 Aug 2023</span></h5>
+                            <h5 class="mb-3 pb-3 border-bottom d-flex justify-content-between align-items-center fs-18">Attendance <span class="text-purple fs-14">{{ \Carbon\Carbon::now()->format('d F Y') }}</span></h5>
                             <div class="d-flex align-items-center mb-3">
                                 <div class="me-2">
                                     <img src="{{URL::asset('build/img/icons/time-big.svg')}}" alt="time-img">
                                 </div>
                                 <div>
-                                    <h2>05:45:22</h2>
+                                    <h2 id="clock">--:--:--</h2>
                                     <p>Current Time</p>
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
-                                <a href="javascript:void(0);" class="btn btn-primary w-100 me-2">Clock Out</a>
-                                <a href="javascript:void(0);" class="btn btn-secondary me-2 w-100">Break</a>
+                                @if (!$alreadyClockedIn)
+                                    <!-- CLOCK IN -->
+                                    <form action="{{ route('attendance-employee.clockIn') }}" method="POST" class="w-100 me-2">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" class="btn btn-primary w-100 me-2">Clock In</button>
+                                    </form>
+                                @elseif ($onBreak)
+                                    <!-- BACK FROM BREAK -->
+                                    <form action="{{ route('attendance-employee.backFromBreak') }}" method="POST" class="w-100 me-2">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
+                                    </form>
+                                @else
+                                    @if (is_null($attendance->break_end))
+                                    <!-- BREAK -->
+                                    <form action="{{ route('attendance-employee.break') }}" method="POST" class="w-100 me-2">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" class="btn btn-secondary w-100 me-2">Break</button>
+                                    </form>
+                                    @endif
+                                    <!-- CLOCK OUT -->
+                                    <form action="{{ route('attendance-employee.clockOut') }}" method="POST" class="w-100 me-2">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
+                                    </form>
+                                @endif
                             </div>
+
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-8 col-lg-12 d-flex">
                     <div class="card w-100">
                         <div class="card-body">
-                            <h5 class="border-bottom pb-3 mb-3">Days Overview This Month</h5>
+                            <h5 class="border-bottom pb-3 mb-3">Days Overview for {{ $previousMonth }}</h5>
                             <div class="row gy-3">
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-primary-transparent fw-bold fs-20 mb-2 mx-auto">31</span>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-primary-transparent fw-bold fs-20 mb-2 mx-auto">{{ $totalWorkingDays }}</span>
                                         <p class="fs-14">Total Working <br> Days</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-danger-transparent fw-bold fs-20 mb-2 mx-auto">05</span>
-                                        <p class="fs-14">Abesent <br>Days</p>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-danger-transparent fw-bold fs-20 mb-2 mx-auto">{{ $absentDays }}</span>
+                                        <p class="fs-14">Absent <br> Days</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-purple-transparent text-purple fw-bold fs-20 mb-2 mx-auto">28</span>
-                                        <p class="fs-14">Present <br>Days</p>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-purple-transparent text-purple fw-bold fs-20 mb-2 mx-auto">{{ $presentDays }}</span>
+                                        <p class="fs-14">Present <br> Days</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-warning-transparent fw-bold fs-20 mb-2 mx-auto">02</span>
-                                        <p class="fs-14">Half<br> Days</p>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-warning-transparent fw-bold fs-20 mb-2 mx-auto">{{ $halfDays }}</span>
+                                        <p class="fs-14">Half <br> Days</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-cyan-transparent text-cyan fw-bold fs-20 mb-2 mx-auto">01</span>
-                                        <p class="fs-14">Late <br>Days</p>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-cyan-transparent text-cyan fw-bold fs-20 mb-2 mx-auto">0</span>
+                                        <p class="fs-14">Late <br> Days</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-success-transparent text-success fw-bold fs-20 mb-2 mx-auto">02</span>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-success-transparent text-success fw-bold fs-20 mb-2 mx-auto">{{ $holidayDays }}</span>
                                         <p class="fs-14">Holidays</p>
                                     </div>
                                 </div>
@@ -91,6 +131,7 @@
                         </div>
                     </div>
                 </div>
+
 
             </div>
             <!-- /product list -->
@@ -151,240 +192,48 @@
                                     <th>Status</th>
                                     <th>Clock In</th>
                                     <th>Clock Out</th>
-                                    <th>Production</th>
-                                    <th>Break</th>
+                                    <th>Hours Worked</th>
+                                    <th>Break Duration</th>
                                     <th>Overtime</th>
                                     <th>Progress</th>
-                                    <th>Total Hours</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($attendanceRecords as $attendance)
                                 <tr>
-                                    <td>01 Jan 2025</td>
+                                    <td>{{ \Carbon\Carbon::parse($attendance->date)->format('d M Y') }}</td>
                                     <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Present
+                                        <span class="badge badge-{{ $attendance->clock_in ? 'success' : 'danger' }} d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>
+                                            {{ $attendance->clock_in ? 'Present' : 'Absent' }}
                                         </span>
                                     </td>
-                                    <td>09:15 AM</td>
-                                    <td>08:55 PM</td>
-                                    <td>9h 00m</td>
-                                    <td>1h 13m</td>
-                                    <td>00h 50m</td>
+                                    <td>{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('h:i A') : '-' }}</td>
+                                    <td>{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('h:i A') : '-' }}</td>
+                                    <td>{{ $attendance->total_hours }} hrs</td>
+
+
+                                    @php
+                                        $breakDuration = \Carbon\Carbon::parse($attendance->break_start)
+                                                        ->diffInSeconds(\Carbon\Carbon::parse($attendance->break_end));
+                                    @endphp
+
+                                    <td>{{ gmdate("H:i:s", $breakDuration) }} hrs</td>
+
+                                    <td>{{ (float)$attendance->overtime }}h</td>
+
                                     <td>
                                         <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:{{ ((float)$attendance->total_hours / 8) * 100 }}%">
                                             </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
+                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:{{ ((float)$attendance->overtime / 8) * 100 }}%">
                                             </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:10%">
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{{ ((float)$attendance->break / 8) * 100 }}%">
                                             </div>
                                         </div>
                                     </td>
-                                    <td>09h 50m</td>
                                 </tr>
-                                <tr>
-                                    <td>02 Jan 2025</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Present
-                                        </span>
-                                    </td>
-                                    <td>09:07 AM</td>
-                                    <td>08:40 PM</td>
-                                    <td>9h 10m</td>
-                                    <td>1h 07m</td>
-                                    <td>01h 13m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:25%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:5%">
-                                            </div>
-                                            </div>
-                                    </td>
-                                    <td>10h 23m</td>
-                                </tr>
-                                <tr>
-                                    <td>03 Jan 2025</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Present
-                                        </span>
-                                    </td>
-                                    <td>09:04 AM</td>
-                                    <td>08:52 PM</td>
-                                    <td>8h 47m</td>
-                                    <td>1h 04m</td>
-                                    <td>01h 07m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width: 60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
-                                            </div>
-                                            </div>
-                                    </td>
-                                    <td>10h 04m</td>
-                                </tr>
-                                <tr>
-                                    <td>04 Jan 2025</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Present
-                                        </span>
-                                    </td>
-                                    <td>09:45 AM</td>
-                                    <td>08:10 PM</td>
-                                    <td>09h 12m</td>
-                                    <td>00h 50m</td>
-                                    <td>00 14m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:10%">
-                                            </div>
-                                            </div>
-                                    </td>
-                                    <td>09h 14m</td>
-                                </tr>
-                                <tr>
-                                    <td>06 Jan 2025</td>
-                                    <td>
-                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Absent
-                                        </span>
-                                    </td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">	
-                                        </div>
-                                    </td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>07 Jan 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Prescent
-                                        </span>
-                                    </td>
-                                    <td>09:03 AM</td>
-                                    <td>08:57 PM</td>
-                                    <td>8h 50m</td>
-                                    <td>1h 26m</td>
-                                    <td>0h 43m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:10%">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>08h 33m</td>
-                                </tr>
-                                <tr>
-                                    <td>04 Jan 2023</td>
-                                    <td>
-                                        <span class="badge badge-purple d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Holiday
-                                        </span>
-                                    </td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            </div>
-                                    </td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>07 Jan 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Prescent
-                                        </span>
-                                    </td>
-                                    <td>09:42 AM</td>
-                                    <td>07:20 PM</td>
-                                    <td>09h 17m</td>
-                                    <td>01h 00m</td>
-                                    <td>00h 17m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:10%">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>09h 17m</td>
-                                </tr>
-                                <tr>
-                                    <td>07 Jan 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Prescent
-                                        </span>
-                                    </td>
-                                    <td>09:18 AM</td>
-                                    <td>07:11 PM</td>
-                                    <td>09h 32m</td>
-                                    <td>01h 15m</td>
-                                    <td>00h 32m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:10%">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>09h 32m</td>
-                                </tr>
-                                <tr>
-                                    <td>07 Jan 2023</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Prescent
-                                        </span>
-                                    </td>
-                                    <td>09:30 AM</td>
-                                    <td>08:10 PM</td>
-                                    <td>09h 00m</td>
-                                    <td>00h 34m</td>
-                                    <td>00h 20m</td>
-                                    <td>
-                                        <div class="progress attendance bg-secondary-transparent">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" style="width:60%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" style="width:20%">
-                                            </div>
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" style="width:10%">
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>09h 32m</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -394,8 +243,15 @@
 
         </div>
         <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-            <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-            <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+            <p class="mb-0"> &copy; JavaPA. All Right Reserved</p>
+            <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
         </div>
     </div>
+    <script>
+    setInterval(() => {
+        const now = new Date();
+        const formatted = now.toLocaleTimeString();
+        document.getElementById('clock').innerText = formatted;
+    }, 1000);
+</script>
 @endsection
