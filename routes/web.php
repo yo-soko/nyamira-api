@@ -212,13 +212,6 @@ Route::put('/shift/update', [ShiftController::class, 'update']);
 Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
 
-Route::get('/attendance-employee', function () {                         
-    return view('attendance-employee');
-})->name('attendance-employee'); 
-
-Route::get('/attendance-admin', function () {                         
-    return view('attendance-admin');
-})->name('attendance-admin'); 
 
 Route::get('/leaves-admin', function () {                         
     return view('leaves-admin');
