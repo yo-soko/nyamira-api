@@ -21,7 +21,7 @@ Route::post('custom-register', [CustomAuthController::class, 'customRegister'])-
 Route::get('signout', [CustomAuthController::class, 'signOut'])->name('signout');
 
 Route::get('/', function () {
-    return view('index');
+    return view('employees-list');
 })->name('index');
 
 Route::get('/index', function () {

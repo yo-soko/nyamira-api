@@ -293,12 +293,12 @@
         // Add to Payroll (New Record)
         document.getElementById('add-payroll-btn').addEventListener('click', function () {
             // Reset all fields for new payroll entry
-            document.getElementById('salary_id').value = '';
-            document.getElementById('payment_date').value = '';
-            document.getElementById('basic_salary').value = '';
-            document.getElementById('payment_method').value = '';
-            document.getElementById('reference_code').value = '';
-            document.getElementById('notes').value = '';
+            document.getElementById('salary_id1').value = '';
+            document.getElementById('payment_date1').value = '';
+            document.getElementById('basic_salary1').value = '';
+            document.getElementById('payment_method1').value = '';
+            document.getElementById('reference_code1').value = '';
+            document.getElementById('notes1').value = '';
 
             // Clear the allowance and deduction fields
             document.getElementById('allowance11').value = '';
@@ -311,24 +311,23 @@
             document.getElementById('deduction22').value = '';
             document.getElementById('deduction33').value = '';
             document.getElementById('deduction44').value = '';
-            document.getElementById('others').value = '';
+            document.getElementById('others22').value = '';
 
             // Reset totals
             document.getElementById('total_allowance1').value = '';
             document.getElementById('total_deduction1').value = '';
             document.getElementById('net_salary1').value = '';
 
-            // Set radio buttons to default (unpaid)
-            document.getElementById('status_unpaid').checked = true;
+            
 
             // Add dynamic event listeners for the new entry
-            let allowance1 = 0, allowance2 = 0, allowance3 = 0, bonus = 0;
-            let deduction1 = 0, deduction2 = 0, deduction3 = 0, deduction4 = 0;
+            let allowance11 = 0, allowance22 = 0, allowance33 = 0, bonus1 = 0;
+            let deduction11 = 0, deduction22 = 0, deduction33 = 0, deduction44 = 0;
 
             const calculateTotals = () => {
-                const totalAllowance = allowance1 + allowance2 + allowance3 + bonus;
-                const totalDeduction = deduction1 + deduction2 + deduction3 + deduction4;
-                const calculatedNetSalary = parseFloat(document.getElementById('basic_salary').value) + totalAllowance - totalDeduction;
+                const totalAllowance = allowance11 + allowance22 + allowance33 + bonus1;
+                const totalDeduction = deduction11 + deduction22 + deduction33 + deduction44;
+                const calculatedNetSalary = parseFloat(document.getElementById('basic_salary1').value) + totalAllowance - totalDeduction;
 
                 // Update totals dynamically
                 document.getElementById('total_allowance1').value = totalAllowance;
@@ -398,6 +397,8 @@
             </div>
             <form action="{{route('employee-salary')}}" method="POST">
                 @csrf 
+                <input type="hodden" id="Salary_id1" >
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6 col-12">
@@ -418,7 +419,7 @@
                                 <label>Payment Date<span class="text-danger ms-1">*</span></label>
                                 <div class="input-groupicon calender-input">
                                     <i data-feather="calendar" class="info-img"></i>
-                                    <input type="text" name="payment_date" class="datetimepicker form-control" placeholder="Select Date" >
+                                    <input type="text" name="payment_date" id="payment_date1" class="datetimepicker form-control" placeholder="Select Date" >
                                 </div>
                             </div>
                         </div>
@@ -427,7 +428,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Basic Salary <span>*</span></label>
-                                <input type="text" name="basic_salary" class="text-form form-control">
+                                <input type="text" name="basic_salary" id="basic_salary1" class="text-form form-control">
                         </div>
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
@@ -444,7 +445,7 @@
                         <div class="col-lg-3 col-sm-6 col-12">
                             <div class="mb-3">
                                 <label class="form-label">Reference Code<span>*</span></label>
-                                <input type="text" name="reference_code" class="form-control">
+                                <input type="text" name="reference_code" id="reference_code1" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-6 col-12">
@@ -500,7 +501,7 @@
                         <div class="d-flex align-items-end border-bottom mb-3">
                             <div class="mb-3 flex-grow-1">
                                 <label class="form-label">Others</label>
-                                <input type="text" name="others1" class="text-form form-control">
+                                <input type="text" name="others1" id="others11" class="text-form form-control">
                             </div>
                             <div class="subadd-btn mb-3 ms-3">
                                 <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
@@ -536,7 +537,7 @@
                         <div class="d-flex align-items-end border-bottom mb-3">
                             <div class="mb-3 flex-grow-1">
                                 <label class="form-label">Others</label>
-                                <input type="text" name="others" class="text-form form-control">
+                                <input type="text" name="others" id="others22" class="text-form form-control">
                             </div>
                             <div class="subadd-btn mb-3 ms-3">
                                 <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>

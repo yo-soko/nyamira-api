@@ -69,23 +69,22 @@ class AttendanciesController extends Controller
         $totalWorkingDays = $totalDays - $sundays;
     
         // 2. Count days present (at least one clock-in record)
-        $presentDays = Attendancies::whereBetween('date', [$start, $end])
-        ->whereNotNull('clock_in')
-        ->distinct('date')
-        ->count('date');
+        $presentDays = Attendancies::where('employee_id', $employee->id)
+            ->whereBetween('date', [$start, $end])
+            ->whereNotNull('clock_in')
+            ->distinct('date')
+            ->count('date');
 
         // 3. Absent = working days – present days
         $absentDays = $totalWorkingDays - $presentDays;
     
     
         // Fetch total half days in the current month
-        $halfDays = Attendancies::whereBetween('date', [$start, $end])
-        ->whereNotNull('clock_in')
-        ->whereNotNull('clock_out')
-        ->whereRaw('TIME_TO_SEC(total_hours) < ?', [4 * 3600])
-        ->distinct('date')
-        ->count('date');
-    
+        $halfDays = Attendancies::where('employee_id', $employee->id)
+            ->whereBetween('date', [$start, $end])
+            ->whereRaw('TIME_TO_SEC(total_hours) < ?', [4*3600])
+            ->distinct('date')
+            ->count('date');
     
 
             $period = new \DatePeriod(
