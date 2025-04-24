@@ -87,9 +87,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted">No leave types found.</td>
-                                </tr>
+                               
                                 @endforelse
                             </tbody>
 
