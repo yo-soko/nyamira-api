@@ -20,9 +20,6 @@ Route::get('register', [CustomAuthController::class, 'registration'])->name('reg
 Route::post('custom-register', [CustomAuthController::class, 'customRegister'])->name('register.custom'); 
 Route::get('signout', [CustomAuthController::class, 'signOut'])->name('signout');
 
-Route::get('/', function () {
-    return view('employees-list');
-})->name('index');
 
 Route::get('/index', function () {
     return view('index');
@@ -857,6 +854,7 @@ use App\Http\Controllers\EmployeeController;
 Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');
 Route::get('add-employee', [EmployeeController::class, 'create']);
 Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');
+Route::get('/', [EmployeeController::class, 'list'])->name('employees-list');
 Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');
 Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');
 Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');
