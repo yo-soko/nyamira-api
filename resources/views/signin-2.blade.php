@@ -1,6 +1,7 @@
 <?php $page = 'signin-2'; ?>
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
     <div class="account-content">
         <div class="row login-wrapper m-0">
             <div class="col-lg-6 p-0">

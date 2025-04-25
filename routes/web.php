@@ -13,12 +13,15 @@ use App\Http\Controllers\CustomAuthController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('index', [CustomAuthController::class, 'dashboard']); 
-Route::get('signin', [CustomAuthController::class, 'index'])->name('signin');
-Route::post('custom-login', [CustomAuthController::class, 'customSignin'])->name('signin.custom'); 
-Route::get('register', [CustomAuthController::class, 'registration'])->name('register');
-Route::post('custom-register', [CustomAuthController::class, 'customRegister'])->name('register.custom'); 
-Route::get('signout', [CustomAuthController::class, 'signOut'])->name('signout');
+
+
+Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
+Route::post('custom-login',     [CustomAuthController::class, 'customSignin'])->name('signin.custom');
+Route::get('register',          [CustomAuthController::class, 'registration'])->name('register');
+Route::post('custom-register',  [CustomAuthController::class, 'customRegister'])->name('register.custom');
+
+Route::get('index',             [CustomAuthController::class, 'dashboard'])->middleware('auth');
+Route::get('signout',           [CustomAuthController::class, 'signOut'])->name('signout');
 
 
 Route::get('/index', function () {

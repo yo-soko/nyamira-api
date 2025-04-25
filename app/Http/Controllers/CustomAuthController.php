@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Hash;
 use Session;
 use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
 
 class CustomAuthController extends Controller
@@ -13,37 +14,40 @@ class CustomAuthController extends Controller
 
     public function index()
     {
-        
-        return view('signin');
-    }  
-      
+        return view('signin-2');   // your Blade file
+    }
 
     public function customSignin(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
-        ],
-        [
-            'email.required' => 'Email is required',
-            'password.required' => 'Password is required',
+        ]);
 
-        ]
-
-    );
         $credentials = $request->only('email', 'password');
-          if ($credentials['email']=='admin@example.com' && $credentials['password']=='123456'){
-        return redirect()->intended('index')
-                        ->withSuccess('Signed in');
+        $remember    = $request->boolean('remember');
+
+        /* ---------- 1) try normal users table ---------------- */
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+            return redirect()->intended('index');
         }
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('index')
-                        ->withSuccess('Signed in');
+
+        /* ---------- 2) try employee table manually ----------- */
+        $employee = Employee::where('email', $credentials['email'])->first();
+
+        if ($employee && Hash::check($credentials['password'], $employee->password)) {
+            // Log him in using a dedicated guard or the default guard with id + provider swap
+            Auth::login($employee, $remember);   // works if Employee implements Authenticatable
+            $request->session()->regenerate();
+            return redirect()->intended('index');
         }
-         
-      
-        return redirect("signin")->withErrors('These credentials do not match our records.');
+
+        return back()
+            ->withErrors(['email' => 'These credentials do not match our records.'])
+            ->withInput($request->only('email'));
     }
+
     public function registration()
     {
         return view('register');
