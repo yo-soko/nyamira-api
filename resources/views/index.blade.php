@@ -1,7 +1,7 @@
 <?php $page = 'index'; ?>
 @extends('layout.mainlayout')
 @section('content')
-
+@include('layout.toast')
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -9,6 +9,13 @@
                 <div class="page-title">
                     <h4>Employees</h4>
                     <h6>Manage your employees</h6>
+
+                    @if (isset($user))
+                        <p>Welcome, {{ $user->name }}</p>
+                    @elseif (isset($employee))
+                        <p>Welcome, {{ $employee->first_name }} {{ $employee->last_name }}</p>
+                    @endif
+                        
                 </div>
             </div>
             <ul class="table-top-head">

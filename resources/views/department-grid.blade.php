@@ -9,6 +9,13 @@
                 <div class="page-title">
                     <h4>Departments</h4>
                     <h6>Manage your departments</h6>
+                    @if (isset($employee))
+    <h1>Welcome, {{ $employee->first_name }} {{ $employee->last_name }}</h1>
+    <p>Email: {{ $employee->email }}</p>
+    <p>Position: {{ $employee->designation }}</p>
+    <p>Department: {{ $employee->department }}</p>
+    <!-- Add any other employee-specific details you want to display -->
+@endif
                 </div>
             </div>
             <ul class="table-top-head">

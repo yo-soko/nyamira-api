@@ -1,4 +1,4 @@
-<?php $page = 'signin-2'; ?>
+<?php $page = 'login'; ?>
 @extends('layout.mainlayout')
 @section('content')
 @include('layout.toast')
@@ -6,22 +6,23 @@
         <div class="row login-wrapper m-0">
             <div class="col-lg-6 p-0">
                 <div class="login-content">
-                    <form action="{{url('index')}}">
+                    <form method="POST" action="{{ route('signin.custom') }}">
+                        @csrf 
                         <div class="login-userset">
                             <div class="login-logo logo-normal">
                             <img src="{{URL::asset('build/img/logo.svg')}}" alt="img">
                         </div>
-                        <a href="{{url('index')}}" class="login-logo logo-white">
+                        <a href="#" class="login-logo logo-white">
                             <img src="{{URL::asset('build/img/logo-white.svg')}}"  alt="Img">
                         </a>
                         <div class="login-userheading">
                             <h3>Sign In</h3>
-                            <h4>Access the Dreamspos panel using your email and passcode.</h4>
+                            <h4>Access using your email and password.</h4>
                         </div>
                         <div class="mb-3">
-                                <label class="form-label">Email Address</label>
+                                <label class="form-label">Username</label>
                                 <div class="input-group">
-                                    <input type="text" value="" class="form-control border-end-0">
+                                    <input type="text" value="" name="email" class="form-control border-end-0">
                                     <span class="input-group-text border-start-0">
                                         <i class="ti ti-mail"></i>
                                     </span>
@@ -30,7 +31,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Password</label>
                                 <div class="pass-group">
-                                    <input type="password" class="pass-input form-control">
+                                    <input type="password" name="password" class="pass-input form-control">
                                     <span class="ti toggle-password ti-eye-off text-gray-9"></span>
                                 </div>
                             </div>
@@ -80,7 +81,7 @@
                                 </div>
                             </div>
                             <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
-                                <p>Copyright &copy; 2025 DreamsPOS</p>
+                                <p>Copyright &copy; JavaPA</p>
                             </div>
                         </div>
                     </div>

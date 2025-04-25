@@ -1,8 +1,4 @@
 <?php
-
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomAuthController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +9,18 @@ use App\Http\Controllers\CustomAuthController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AttendanciesController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\EmployeeSalaryController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -24,9 +32,74 @@ Route::get('index',             [CustomAuthController::class, 'dashboard'])->mid
 Route::get('signout',           [CustomAuthController::class, 'signOut'])->name('signout');
 
 
-Route::get('/index', function () {
-    return view('index');
-})->name('index');
+
+
+Route::get('/', function () {
+    return view('login');
+})->name('login');
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/index', function () {
+        return view('index');
+    })->name('index');
+
+    Route::get('/department-grid', [DepartmentController::class, 'index'])->name('department-grid');
+    Route::post('/departments/store', [DepartmentController::class, 'store'])->name('departments.store');
+    Route::put('/department/{id}', [DepartmentController::class, 'update'])->name('department.update');
+    Route::post('/department/delete', [DepartmentController::class, 'destroy'])->name('department.delete');
+
+    Route::post('/designation', [DesignationController::class, 'store'])->name('designation.store');
+    Route::get('/designation', [DesignationController::class, 'index'])->name('designation');
+    Route::post('/designation/update', [DesignationController::class, 'update']);
+    Route::post('/designation/delete', [DesignationController::class, 'destroy'])->name('designation.delete');
+
+    Route::get('/shift', [ShiftController::class, 'index'])->name('shift');
+    Route::post('/shift/store', [ShiftController::class, 'store'])->name('shift.store');
+    Route::put('/shift/update', [ShiftController::class, 'update']);
+    Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
+
+    Route::get('/leave-types', [LeaveTypeController::class, 'index'])->name('leave-types');
+    Route::post('/leave-types', [LeaveTypeController::class, 'store'])->name('leave-types.store');
+    Route::put('/leave-types/{id}', [LeaveTypeController::class, 'update'])->name('leave-types.update');
+    Route::post('/leave-types/delete', [LeaveTypeController::class, 'destroy'])->name('leave-types.delete');
+
+    Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays');
+    Route::post('/holidays', [HolidayController::class, 'store'])->name('holidays.store');
+    Route::put('/holidays/{id}', [HolidayController::class, 'update'])->name('holidays.update');
+    Route::post('/holidays/delete', [HolidayController::class, 'destroy'])->name('holidays.delete');
+
+    Route::post('/employee-salary', [EmployeeSalaryController::class, 'store']);
+    Route::get('/employee-salary', [EmployeeSalaryController::class, 'index'])->name('employee-salary');
+    Route::get('/payslip/{id}', [EmployeeSalaryController::class, 'showPayslip']);
+    Route::put('/employee-salary/update', [EmployeeSalaryController::class, 'update'])->name('employee-salary.update');
+    Route::post('/employee-salary/delete', [EmployeeSalaryController::class, 'destroy'])->name('employee-salary.delete');
+
+    Route::get('attendance-admin/', [AttendanciesController::class, 'index'])->name('attendance-admin.index');
+    Route::get('attendance-employee/{id}', [AttendanciesController::class, 'markAttendance'])->name('attendance-employee');
+    Route::post('/attendance-employee/clock-in', [AttendanciesController::class, 'clockIn'])->name('attendance-employee.clockIn');
+    Route::post('/attendance-employee/clock-out', [AttendanciesController::class, 'clockOut'])->name('attendance-employee.clockOut');
+    Route::post('/attendance-employee/break', [AttendanciesController::class, 'break'])->name('attendance-employee.break');
+    Route::post('/attendance-employee/backFromBreak', [AttendanciesController::class, 'backFromBreak'])->name('attendance-employee.backFromBreak');
+
+    Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');
+    Route::get('add-employee', [EmployeeController::class, 'create']);
+    Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');
+    Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');
+    Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');
+    Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');
+    Route::put('update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');
+    Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+});
+
 Route::get('/admin-dashboard', function () {
     return view('admin-dashboard');
 })->name('admin-dashboard');
@@ -189,27 +262,12 @@ Route::get('/purchase-report', function () {
   
     
 
-use App\Http\Controllers\DepartmentController;
-Route::get('/department-grid', [DepartmentController::class, 'index'])->name('department-grid');
-Route::post('/departments/store', [DepartmentController::class, 'store'])->name('departments.store');
-Route::put('/department/{id}', [DepartmentController::class, 'update'])->name('department.update');
-Route::post('/department/delete', [DepartmentController::class, 'destroy'])->name('department.delete');
+
 
 Route::get('/designation', function () {                         
     return view('designation');
 })->name('designation');   
-use App\Http\Controllers\DesignationController;
 
-Route::post('/designation', [DesignationController::class, 'store'])->name('designation.store');
-Route::get('/designation', [DesignationController::class, 'index'])->name('designation');
-Route::post('/designation/update', [DesignationController::class, 'update']);
-Route::post('/designation/delete', [DesignationController::class, 'destroy'])->name('designation.delete');
-
-use App\Http\Controllers\ShiftController;
-Route::get('/shift', [ShiftController::class, 'index'])->name('shift');
-Route::post('/shift/store', [ShiftController::class, 'store'])->name('shift.store');
-Route::put('/shift/update', [ShiftController::class, 'update']);
-Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
 
 
@@ -221,17 +279,6 @@ Route::get('/leaves-employee', function () {
     return view('leaves-employee');
 })->name('leaves-employee'); 
 
-use App\Http\Controllers\LeaveTypeController;
-Route::get('/leave-types', [LeaveTypeController::class, 'index'])->name('leave-types');
-Route::post('/leave-types', [LeaveTypeController::class, 'store'])->name('leave-types.store');
-Route::put('/leave-types/{id}', [LeaveTypeController::class, 'update'])->name('leave-types.update');
-Route::post('/leave-types/delete', [LeaveTypeController::class, 'destroy'])->name('leave-types.delete');
-
-use App\Http\Controllers\HolidayController;
-Route::get('/holidays', [HolidayController::class, 'index'])->name('holidays');
-Route::post('/holidays', [HolidayController::class, 'store'])->name('holidays.store');
-Route::put('/holidays/{id}', [HolidayController::class, 'update'])->name('holidays.update');
-Route::post('/holidays/delete', [HolidayController::class, 'destroy'])->name('holidays.delete');
 
 Route::get('/payroll-list', function () {                         
     return view('payroll-list');
@@ -502,12 +549,6 @@ Route::get('/icon-flag', function () {
     return view('icon-flag');
 })->name('icon-flag');
 
-use App\Http\Controllers\UserController;
-Route::get('/users', [UserController::class, 'index'])->name('users');
-Route::post('/users', [UserController::class, 'store']);
-Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
-Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
 
 
 
@@ -724,9 +765,7 @@ Route::get('/signin-3', function () {
     return view('signin-3');
 })->name('signin-3');
 
-Route::get('/signin-2', function () {
-    return view('signin-2');
-})->name('signin-2');
+
 
 Route::get('/signin', function () {
     return view('signin');
@@ -853,33 +892,10 @@ Route::get('/activities', function () {
 })->name('activities'); 
 
 
-use App\Http\Controllers\EmployeeController;
-Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');
-Route::get('add-employee', [EmployeeController::class, 'create']);
-Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');
-Route::get('/', [EmployeeController::class, 'list'])->name('employees-list');
-Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');
-Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');
-Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');
-Route::put('update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');
-Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
-
-use App\Http\Controllers\EmployeeSalaryController;
-Route::post('/employee-salary', [EmployeeSalaryController::class, 'store']);
-Route::get('/employee-salary', [EmployeeSalaryController::class, 'index'])->name('employee-salary');
-Route::get('/payslip/{id}', [EmployeeSalaryController::class, 'showPayslip']);
-Route::put('/employee-salary/update', [EmployeeSalaryController::class, 'update'])->name('employee-salary.update');
-Route::post('/employee-salary/delete', [EmployeeSalaryController::class, 'destroy'])->name('employee-salary.delete');
 
 
-use App\Http\Controllers\AttendanciesController;
 
-Route::get('attendance-admin/', [AttendanciesController::class, 'index'])->name('attendance-admin.index');
-Route::get('attendance-employee/{id}', [AttendanciesController::class, 'markAttendance'])->name('attendance-employee');
-Route::post('/attendance-employee/clock-in', [AttendanciesController::class, 'clockIn'])->name('attendance-employee.clockIn');
-Route::post('/attendance-employee/clock-out', [AttendanciesController::class, 'clockOut'])->name('attendance-employee.clockOut');
-Route::post('/attendance-employee/break', [AttendanciesController::class, 'break'])->name('attendance-employee.break');
-Route::post('/attendance-employee/backFromBreak', [AttendanciesController::class, 'backFromBreak'])->name('attendance-employee.backFromBreak');
+
 
 
 

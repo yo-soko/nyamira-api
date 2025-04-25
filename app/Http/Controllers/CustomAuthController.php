@@ -8,13 +8,14 @@ use Session;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CustomAuthController extends Controller
 {
 
     public function index()
     {
-        return view('signin-2');   // your Blade file
+        return view('login');   // your Blade file
     }
 
     public function customSignin(Request $request)
@@ -23,29 +24,68 @@ class CustomAuthController extends Controller
             'email'    => 'required|email',
             'password' => 'required',
         ]);
-
+        
         $credentials = $request->only('email', 'password');
         $remember    = $request->boolean('remember');
-
-        /* ---------- 1) try normal users table ---------------- */
-        if (Auth::attempt($credentials, $remember)) {
-            $request->session()->regenerate();
-            return redirect()->intended('index');
+        Log::info('Attempted credentials:', $credentials);
+        
+        // Check if the user is already authenticated and log them out to prevent conflicts
+        if (Auth::check()) {
+            Auth::logout(); // Log out any authenticated user
+            session()->flush(); // Clear the session
         }
 
-        /* ---------- 2) try employee table manually ----------- */
+        // Try to authenticate a normal user first (using users table)
+        $user = User::where('email', $credentials['email'])->first();
+
+        if ($user && Hash::check($credentials['password'], $user->password)) {
+            // User login successful
+            Log::info('User found:', $user ? $user->toArray() : null);
+
+            Auth::login($user, $remember);
+            $request->session()->regenerate();
+
+            session([
+                'user_type' => 'user',
+                'user_id'   => $user->id,
+                'user_email'=> $user->email,
+            ]);
+
+            return redirect()->intended('index')->with('success', 'It\'s nice to see you!');
+        }
+
+        // If user login fails, try the employee table (employees table)
         $employee = Employee::where('email', $credentials['email'])->first();
-
+        
         if ($employee && Hash::check($credentials['password'], $employee->password)) {
-            // Log him in using a dedicated guard or the default guard with id + provider swap
-            Auth::login($employee, $remember);   // works if Employee implements Authenticatable
+            // Employee login successful
+            Log::info('Employee found:', $employee ? $employee->toArray() : null);
+
+            Auth::login($employee, $remember);
             $request->session()->regenerate();
-            return redirect()->intended('index');
+
+            session([
+                'user_type' => 'employee',
+                'user_id'   => $employee->id,
+                'user_email'=> $employee->email,
+            ]);
+
+            return redirect()->intended('index')->with('success', 'It\'s nice to see you!');
         }
 
-        return back()
-            ->withErrors(['email' => 'These credentials do not match our records.'])
+        // If neither login succeeds, return an error
+        return redirect()->back()
+            ->with('error', 'These credentials do not match our records.')
             ->withInput($request->only('email'));
+    }
+
+    
+
+    
+    
+    public function showLoginForm()
+    {
+        return view('login');
     }
 
     public function registration()
@@ -69,7 +109,7 @@ class CustomAuthController extends Controller
             'confirmpassword.required' => 'Confirm Password is required',
 
         ]
-    );
+        );
            
         $data = $request->all();
         $check = $this->create($data);
@@ -99,10 +139,22 @@ class CustomAuthController extends Controller
     }
     
 
-    public function signOut() {
-        Session::flush();
+    public function signOut(Request $request)
+    {
+        // Clear the custom session data
+        $request->session()->forget('user_type');
+        $request->session()->forget('user_id');
+        $request->session()->forget('user_email');
+
+        // Optionally clear all session data
+        $request->session()->flush();
+
+        // Log the user out
         Auth::logout();
-  
-        return Redirect('signin');
+
+        // Redirect to the login page
+        return redirect()->route('login');
     }
+ 
+
 }

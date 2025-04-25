@@ -42,7 +42,7 @@
                             <button type="submit" class="btn btn-login">Change Password</button>
                         </div>
                         <div class="signinform text-center">
-                            <h4>Return to <a href="{{url('signin-2')}}" class="hover-a"> login </a></h4>
+                            <h4>Return to <a href="{{url('login')}}" class="hover-a"> login </a></h4>
                         </div>
                         <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
                             <p>Copyright &copy; 2025 DreamsPOS</p>

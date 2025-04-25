@@ -116,14 +116,16 @@
                         </span>
                         <div>
                             <h6 class="fw-medium">##</h6>
-                            <p>Admin</p>
+
+                            <p>{{ Auth::user()->name }}</p>
+                            <p>{{ Auth::user()->first_name }}</p>
                         </div>
                     </div>
                     <a class="dropdown-item" href="#"><i class="ti ti-user-circle me-2"></i>MyProfile</a>
                     <a class="dropdown-item" href="#"><i class="ti ti-file-text me-2"></i>Reports</a>
                     <!-- <a class="dropdown-item" href="{{url('general-settings')}}"><i class="ti ti-settings-2 me-2"></i>Settings</a> -->
                     <hr class="my-2">
-                    <a class="dropdown-item logout pb-0" href="#"><i class="ti ti-logout me-2"></i>Logout</a>
+                    <a class="dropdown-item logout pb-0" href="{{ route('signout') }}"><i class="ti ti-logout me-2"></i>Logout</a>
                 </div>
             </li>
         </ul>
@@ -136,7 +138,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item" href="{{url('profile')}}">My Profile</a>
                 <a class="dropdown-item" href="{{url('general-settings')}}">Settings</a>
-                <a class="dropdown-item" href="{{url('signin')}}">Logout</a>
+                <a class="dropdown-item" href="{{ route('signout') }}">Logout</a>
             </div>
         </div>
         <!-- /Mobile Menu -->
@@ -259,11 +261,11 @@
                         </div>
                     </div>
                     <hr class="m-0">
-                    <a class="dropdown-item" href="{{url('profile')}}"><i class="me-2" data-feather="user"></i>My
+                    <a class="dropdown-item" href="#"><i class="me-2" data-feather="user"></i>My
                         Profile</a>
-                    <a class="dropdown-item" href="{{url('general-settings')}}"><i class="me-2" data-feather="settings"></i>Settings</a>
+                    <a class="dropdown-item" href="#"><i class="me-2" data-feather="settings"></i>Settings</a>
                     <hr class="m-0">
-                    <a class="dropdown-item logout pb-0" href="{{url('signin')}}"><img src="{{URL::asset('build/img/icons/log-out.svg')}}" class="me-2" alt="img">Logout</a>
+                    <a class="dropdown-item logout pb-0" href="{{ route('signout') }}"><img src="{{URL::asset('build/img/icons/log-out.svg')}}" class="me-2" alt="img">Logout</a>
                 </div>
             </div>
         </li>
@@ -276,7 +278,7 @@
         <div class="dropdown-menu dropdown-menu-right">
             <a class="dropdown-item" href="#">My Profile</a>
             <a class="dropdown-item" href="#">Settings</a>
-            <a class="dropdown-item" href="#">Logout</a>
+            <a class="dropdown-item" href="{{ route('signout') }}">Logout</a>
         </div>
     </div>
     <!-- /Mobile Menu -->
