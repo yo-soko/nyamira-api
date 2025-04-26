@@ -9,13 +9,6 @@
                 <div class="page-title">
                     <h4>Departments</h4>
                     <h6>Manage your departments</h6>
-                    @if (isset($employee))
-    <h1>Welcome, {{ $employee->first_name }} {{ $employee->last_name }}</h1>
-    <p>Email: {{ $employee->email }}</p>
-    <p>Position: {{ $employee->designation }}</p>
-    <p>Department: {{ $employee->department }}</p>
-    <!-- Add any other employee-specific details you want to display -->
-@endif
                 </div>
             </div>
             <ul class="table-top-head">
@@ -40,9 +33,11 @@
             </ul>
          
             <x-modalpopup :hods="$hods" />
+            @useronly
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-department"><i class="ti ti-circle-plus me-1"></i>Add Department</a>
             </div>
+            @enduseronly
         </div>
 
         <div class="card">
@@ -112,6 +107,7 @@
                                     <i data-feather="more-vertical" class="feather-user"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
+                                    @useronly
                                     <li>
                                     <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit-department" 
                                         data-department-id="{{ $department->id }}" 
@@ -129,7 +125,8 @@
                                         data-bs-target="#delete-modal">
                                             <i data-feather="trash-2" class="info-img me-2"></i>Delete
                                     </a>
-                                    </li>								
+                                    </li>
+                                    @enduseronly								
                                 </ul>
                             </div>
                         </div>
@@ -188,7 +185,9 @@
                                 <th>Total Members</th>
                                 <th>Created On</th>
                                 <th>Status</th>
+                                @useronly
                                 <th class="no-sort"></th>
+                                @enduseronly
                             </tr>
                         </thead>
                         <tbody>
@@ -234,6 +233,7 @@
                                             <i class="ti ti-point-filled me-1"></i>Active
                                         </span>
                                     </td>
+                                    @useronly
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
                                             <a class="me-2 p-2" href="javascript:void(0);"
@@ -249,6 +249,7 @@
                                             </a>
                                         </div>
                                     </td>
+                                    @enduseronly
                                 </tr>                                     
                             @endforeach
                         </tbody>

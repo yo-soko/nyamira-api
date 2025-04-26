@@ -14419,7 +14419,7 @@
                     <div class="modal-body">
                             <div class="mb-3">
                                 <label class="form-label">Role Name</label>
-                                <input type="text" class="form-control" value="sales Man">
+                                <input type="text" class="form-control" value="Admin">
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <label class="form-label">Status</label>

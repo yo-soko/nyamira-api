@@ -79,7 +79,8 @@
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">HRM</h6>
                                                 <ul>
-                                                        <li class="{{ Request::is('index','employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('employees-list')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
+                                                        <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}"><a href="{{url('index')}}"><i class="ti ti-dashboard fs-16 me-2"></i><span>Dashboard</span></a></li>
+                                                        <li class="{{ Request::is('employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('employees-list')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
                                                         <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
                                                         <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                                                         <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
@@ -102,6 +103,7 @@
                                                         </li>
                                                 </ul>
                                         </li>
+                                        @useronly
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">User Management</h6>
                                                 <ul>
@@ -110,77 +112,11 @@
                                                         <li class="{{ Request::is('delete-account') ? 'active' : '' }}"><a href="{{url('delete-account')}}"><i class="ti ti-trash-x fs-16 me-2"></i><span>Delete Account Request</span></a></li>
                                                 </ul>
                                         </li>
+                                        @enduseronly
                                         <li class="submenu-open">
-                                                <h6 class="submenu-hdr">Pages</h6>
+                                                <h6 class="submenu-hdr">Accounts</h6>
                                                 <ul>
                                                         <li class="{{ Request::is('profile') ? 'active' : '' }}"><a href="{{url('profile')}}"><i class="ti ti-user-circle fs-16 me-2"></i><span>Profile</span></a></li>
-                                                        <li class="submenu">
-                                                                <a href="javascript:void(0);"><i class="ti ti-shield fs-16 me-2"></i><span>Authentication</span><span class="menu-arrow"></span></a>
-                                                                <ul>
-                                                                        <li class="submenu submenu-two"><a href="javascript:void(0);">Login<span class="menu-arrow inside-submenu"></span></a>
-                                                                                <ul>
-                                                                                        <li><a href="{{url('signin')}}" class="{{ Request::is('signin') ? 'active' : '' }}">Cover</a></li>
-                                                                                        <li><a href="{{url('signin-2')}}" class="{{ Request::is('signin-2') ? 'active' : '' }}">Illustration</a></li>
-                                                                                        <li><a href="{{url('signin-3')}}" class="{{ Request::is('signin-3') ? 'active' : '' }}">Basic</a></li>
-                                                                                </ul>
-                                                                        </li>
-                                                                        <li class="submenu submenu-two"><a href="javascript:void(0);">Register<span class="menu-arrow inside-submenu"></span></a>
-                                                                                <ul>
-                                                                                        <li><a href="{{url('register')}}" class="{{ Request::is('register') ? 'active' : '' }}">Cover</a></li>
-                                                                                        <li><a href="{{url('register-2')}}" class="{{ Request::is('register-2') ? 'active' : '' }}">Illustration</a></li>
-                                                                                        <li><a href="{{url('register-3')}}" class="{{ Request::is('register-3') ? 'active' : '' }}">Basic</a></li>
-                                                                                </ul>
-                                                                        </li>
-                                                                        <li class="submenu submenu-two"><a href="javascript:void(0);">Forgot Password<span class="menu-arrow inside-submenu"></span></a>
-                                                                                <ul>
-                                                                                        <li><a href="{{url('forgot-password')}}" class="{{ Request::is('forgot-password') ? 'active' : '' }}">Cover</a></li>
-                                                                                        <li><a href="{{url('forgot-password-2')}}" class="{{ Request::is('forgot-password-2') ? 'active' : '' }}">Illustration</a></li>
-                                                                                        <li><a href="{{url('forgot-password-3')}}" class="{{ Request::is('forgot-password-3') ? 'active' : '' }}">Basic</a></li>
-                                                                                </ul>
-                                                                        </li>
-                                                                        <li class="submenu submenu-two"><a href="javascript:void(0);">Reset Password<span class="menu-arrow inside-submenu"></span></a>
-                                                                                <ul>
-                                                                                        <li><a href="{{url('reset-password')}}" class="{{ Request::is('reset-password') ? 'active' : '' }}">Cover</a></li>
-                                                                                        <li><a href="{{url('reset-password-2')}}" class="{{ Request::is('reset-password-2') ? 'active' : '' }}">Illustration</a></li>
-                                                                                        <li><a href="{{url('reset-password-3')}}" class="{{ Request::is('reset-password-3') ? 'active' : '' }}">Basic</a></li>
-                                                                                </ul>
-                                                                        </li>
-                                                                        <li class="submenu submenu-two"><a href="javascript:void(0);">Email Verification<span class="menu-arrow inside-submenu"></span></a>
-                                                                                <ul>
-                                                                                        <li><a href="{{url('email-verification')}}" class="{{ Request::is('email-verification') ? 'active' : '' }}">Cover</a></li>
-                                                                                        <li><a href="{{url('email-verification-2')}}" class="{{ Request::is('email-verification-2') ? 'active' : '' }}">Illustration</a></li>
-                                                                                        <li><a href="{{url('email-verification-3')}}" class="{{ Request::is('email-verification-3') ? 'active' : '' }}">Basic</a></li>
-                                                                                </ul>
-                                                                        </li>
-                                                                        <li class="submenu submenu-two"><a href="javascript:void(0);">2 Step Verification<span class="menu-arrow inside-submenu"></span></a>
-                                                                                <ul>
-                                                                                        <li><a href="{{url('two-step-verification')}}" class="{{ Request::is('two-step-verification') ? 'active' : '' }}">Cover</a></li>
-                                                                                        <li><a href="{{url('two-step-verification-2')}}" class="{{ Request::is('two-step-verification-2') ? 'active' : '' }}">Illustration</a></li>
-                                                                                        <li><a href="{{url('two-step-verification-3')}}" class="{{ Request::is('two-step-verification-3') ? 'active' : '' }}">Basic</a></li>
-                                                                                </ul>
-                                                                        </li>
-                                                                        <li class="{{ Request::is('lock-screen') ? 'active' : '' }}"><a href="{{url('lock-screen')}}">Lock Screen</a></li>
-                                                                </ul>
-                                                        </li>
-                                                        <li class="submenu">
-                                                                <a href="javascript:void(0);"><i class="ti ti-file-x fs-16 me-2"></i><span>Error Pages</span><span class="menu-arrow"></span></a>
-                                                                <ul>
-                                                                        <li><a href="{{url('error-404')}}" class="{{ Request::is('error-404') ? 'active' : '' }}">404 Error </a></li>
-                                                                        <li><a href="{{url('error-500')}}" class="{{ Request::is('error-500') ? 'active' : '' }}">500 Error </a></li>
-                                                                </ul>
-                                                        </li>
-                                                        <li class="{{ Request::is('blank-page') ? 'active' : '' }}">
-                                                                <a href="{{url('blank-page')}}" ><i class="ti ti-file fs-16 me-2"></i><span>Blank Page</span> </a>
-                                                        </li>
-                                                        <li class="{{ Request::is('pricing') ? 'active' : '' }}">
-                                                                <a href="{{url('pricing')}}" ><i class="ti ti-currency-dollar fs-16 me-2"></i><span>Pricing</span> </a>
-                                                        </li>
-                                                        <li class="{{ Request::is('coming-soon') ? 'active' : '' }}">
-                                                                <a href="{{url('coming-soon')}}" ><i class="ti ti-send fs-16 me-2"></i><span>Coming Soon</span> </a>
-                                                        </li>
-                                                        <li class="{{ Request::is('under-maintenance') ? 'active' : '' }}">
-                                                                <a href="{{url('under-maintenance')}}"><i class="ti ti-alert-triangle fs-16 me-2"></i><span>Under Maintenance</span> </a>
-                                                        </li>
                                                 </ul>
                                         </li>    
                                 </ul>

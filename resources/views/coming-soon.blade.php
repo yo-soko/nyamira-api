@@ -6,10 +6,10 @@
             <div class="pos-logo">
                 <img src="{{URL::asset('build/img/logo-small.png')}}" alt="Img">
             </div>
-            <span>Our Website is</span>
+            <!-- <span>Our Website is</span> -->
             <h1><span> COMING </span> SOON </h1>
             <p>Please check back later, We are working hard  to get everything  just  right.</p>
-            <ul class="coming-soon-timer">
+            <!-- <ul class="coming-soon-timer">
                 <li><span class="days">54</span>days</li>
                 <li class="seperate-dot">:</li>
                 <li><span class="hours">10</span>Hrs</li>
@@ -17,7 +17,7 @@
                 <li><span class="minutes">47</span>Min</li>
                 <li class="seperate-dot">:</li>
                 <li><span class="seconds">00</span>Sec</li>
-            </ul>
+            </ul> -->
             <div class="subscribe-form">
                 <div class="mb-3">
                     <label class="form-label">Subscribe to get notified!</label>
@@ -25,13 +25,13 @@
                     <a href="#" class="btn btn-primary subscribe-btn">Subscribe</a>
                 </div>
             </div>
-            <ul class="social-media-icons">
+            <!-- <ul class="social-media-icons">
                 <li><a href="javascript:void(0);"><i class="fab fa-facebook-f"></i></a></li>
                 <li><a href="javascript:void(0);"><i class="fab fa-instagram"></i></a></li>
                 <li><a href="javascript:void(0);"><i class="fab fa-twitter"></i></a></li>
                 <li><a href="javascript:void(0);"><i class="fab fa-pinterest-p"></i></a></li>
                 <li><a href="javascript:void(0);"><i class="fab fa-linkedin"></i></a></li>
-            </ul>
+            </ul> -->
         </div>
     </div>
 @endsection

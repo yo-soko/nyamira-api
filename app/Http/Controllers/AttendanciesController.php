@@ -22,6 +22,27 @@ class AttendanciesController extends Controller
         return view('attendance-admin', compact('employees','totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 
+    public function indexx()
+    {
+        $hour = Carbon::now()->format('H');
+
+        if ($hour < 12) {
+            $greeting = 'Good Morning';
+        } elseif ($hour < 18) {
+            $greeting = 'Good Afternoon';
+        } else {
+            $greeting = 'Good Evening';
+        }
+        $totalEmployees = Employee::count();
+        $activeEmployees = Employee::where('status', 1)->count(); // assuming 1 = active
+        $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
+        $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
+        // Fetch all employees
+        $employees = Employee::all(); // If you have a large dataset, you can use pagination instead
+        
+        return view('index', compact('employees', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
+    }
+
     public function markAttendance($id)
     {
         $hour = Carbon::now()->format('H');

@@ -1,18 +1,14 @@
 <?php $page = 'forgot-password-2'; ?>
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
     <div class="account-content">
         <div class="row login-wrapper m-0">
             <div class="col-lg-6 p-0">
                 <div class="login-content">
-                    <form action="{{url('signin')}}">
+                    <form action="{{url('login')}}">
                         <div class="login-userset">
-                            <div class="login-logo logo-normal">
-                            <img src="{{URL::asset('build/img/logo.svg')}}" alt="img">
-                        </div>
-                        <a href="{{url('index')}}" class="login-logo logo-white">
-                            <img src="{{URL::asset('build/img/logo-white.svg')}}"  alt="Img">
-                        </a>
+                          
                         <div class="login-userheading">
                             <h3>Forgot password?</h3>
                             <h4>If you forgot your password, well, then we’ll email you instructions to reset your password.</h4>
@@ -30,13 +26,13 @@
                                 <button type="submit" class="btn btn-login">Sign Up</button>
                         </div>
                         <div class="signinform text-center">
-                            <h4>Return to<a href="{{url('signin-2')}}" class="hover-a"> login </a></h4>
+                            <h4>Return to<a href="{{url('login')}}" class="hover-a"> login </a></h4>
                         </div>
                         <div class="form-setlogin or-text">
                             <h4>OR</h4>
                         </div>
                         <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
-                            <p>Copyright &copy; 2025 DreamsPOS</p>
+                            <p>Copyright &copy; 2025 JavaPA</p>
                         </div>
                     </div>
                     </form>      

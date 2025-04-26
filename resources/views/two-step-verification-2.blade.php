@@ -7,12 +7,7 @@
                 <div class="login-content">
                     <form action="{{url('reset-password')}}" class="digit-group">
                         <div class="login-userset">
-                            <div class="login-logo logo-normal">
-                                <img src="{{URL::asset('build/img/logo.svg')}}" alt="img">
-                            </div>
-                            <a href="{{url('index')}}" class="login-logo logo-white">
-                                <img src="{{URL::asset('build/img/logo-white.svg')}}"  alt="Img">
-                            </a>
+                            
                             <div>
                                 <div class="login-userheading">
                                     <h3>Email OTP Verification</h3>

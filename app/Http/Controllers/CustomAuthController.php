@@ -49,6 +49,9 @@ class CustomAuthController extends Controller
                 'user_type' => 'user',
                 'user_id'   => $user->id,
                 'user_email'=> $user->email,
+                'user_name'=> $user->name,
+                'user_phone'=> $user->phone,
+                'user_image' => $user->profile_picture,
             ]);
 
             return redirect()->intended('index')->with('success', 'It\'s nice to see you!');
@@ -68,6 +71,10 @@ class CustomAuthController extends Controller
                 'user_type' => 'employee',
                 'user_id'   => $employee->id,
                 'user_email'=> $employee->email,
+                'user_phone'=> $employee->contact_number,
+                'user_name'=> $employee->first_name. ' ' . $employee->last_name,
+                'user_image' => $employee->profile_photo,
+
             ]);
 
             return redirect()->intended('index')->with('success', 'It\'s nice to see you!');
@@ -90,31 +97,14 @@ class CustomAuthController extends Controller
 
     public function registration()
     {
-        return view('register');
+        Session::flash('error', 'Please contact the administrator to create an account.');
+        return redirect()->route('register-2'); // assuming your login route is named 'login'
     }
       
 
     public function customRegister(Request $request)
-    {  
-        $request->validate([
-            'name' => 'required|min:5',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'confirmpassword' => 'required|min:6',
-        ],
-         [
-            'name.required' => 'Userame is required',
-            'email.required' => 'Email is required',
-            'password.required' => 'Password is required',
-            'confirmpassword.required' => 'Confirm Password is required',
-
-        ]
-        );
-           
-        $data = $request->all();
-        $check = $this->create($data);
-         
-        return redirect("signin")->withSuccess('You have signed-in');
+    {
+        
     }
 
 

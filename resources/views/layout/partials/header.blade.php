@@ -105,25 +105,22 @@
                 <a href="javascript:void(0);" class="nav-link userset" data-bs-toggle="dropdown">
                     <span class="user-info p-0">
                         <span class="user-letter">
-                            <img src="{{URL::asset('build/img/profiles/avator1.jpg')}}" alt="Img" class="img-fluid">
+                            <img src="{{ asset('storage/' . session('user_image', 'default.png')) }}" alt="Img" class="img-fluid">
                         </span>
                     </span>
                 </a>
                 <div class="dropdown-menu menu-drop-user">
                     <div class="profileset d-flex align-items-center">
                         <span class="user-img me-2">
-                            <img src="{{URL::asset('build/img/profiles/avator1.jpg')}}" alt="Img">
+                            <img src="{{ asset('storage/' . session('user_image', 'default.png')) }}" alt="Img">
                         </span>
                         <div>
-                            <h6 class="fw-medium">##</h6>
-
-                            <p>{{ Auth::user()->name }}</p>
-                            <p>{{ Auth::user()->first_name }}</p>
+                            <h6 class="fw-medium">{{ session('user_name') }}</h6>
                         </div>
                     </div>
-                    <a class="dropdown-item" href="#"><i class="ti ti-user-circle me-2"></i>MyProfile</a>
+                    <a class="dropdown-item" href="{{url('profile')}}"><i class="ti ti-user-circle me-2"></i>MyProfile</a>
                     <a class="dropdown-item" href="#"><i class="ti ti-file-text me-2"></i>Reports</a>
-                    <!-- <a class="dropdown-item" href="{{url('general-settings')}}"><i class="ti ti-settings-2 me-2"></i>Settings</a> -->
+                    <a class="dropdown-item" href="{{url('general-settings')}}"><i class="ti ti-settings-2 me-2"></i>Settings</a>
                     <hr class="my-2">
                     <a class="dropdown-item logout pb-0" href="{{ route('signout') }}"><i class="ti ti-logout me-2"></i>Logout</a>
                 </div>
