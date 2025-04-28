@@ -224,10 +224,10 @@ class EmployeeController extends Controller
 
         $data['status'] = $request->has('status') ? 1 : 0;
 
-        // Only hash and update password if provided
-        if (!empty($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
+        if (!empty($request->password)) {
+            $data['password'] = Hash::make($request->password);
         } else {
+            // Ensure the password is not updated if not provided
             unset($data['password']);
         }
 

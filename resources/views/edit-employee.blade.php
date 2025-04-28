@@ -28,6 +28,7 @@
             <form action="{{ route('update-employee', $employee->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="employee_id" value="{{ $employee->id }}">
                 <div class="accordion-card-one accordion" id="accordionExample">
                     <div class="accordion-item">
                         <div class="accordion-header p-3" id="headingOne">
@@ -402,8 +403,8 @@
         </div>
 
         <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-            <p class="mb-0">2014 - 2025 &copy; DreamsPOS. All Right Reserved</p>
-            <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">Dreams</a></p>
+            <p class="mb-0"> &copy; JavaPA. All Right Reserved</p>
+            <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
         </div>
     </div>
     <script>
