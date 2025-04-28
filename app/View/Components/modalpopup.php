@@ -14,9 +14,9 @@ class modalpopup extends Component
     public $hods;
 
     public function __construct($hods = null)
-{
-    $this->hods = $hods ?? collect(); // Default to empty collection if none passed
-}
+    {
+        $this->hods = $hods ?? collect(); // Default to empty collection if none passed
+    }
     
     /**
      * Get the view / contents that represent the component.

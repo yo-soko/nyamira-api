@@ -17,8 +17,15 @@ class AttendanciesController extends Controller
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
         // Fetch all employees
-        $employees = Employee::all(); // If you have a large dataset, you can use pagination instead
-        
+        if (session('user_type') == 'employee') {
+            $employees = Employee::where('id', session('user_id'))->get(); // Only this employee
+        } 
+        else if (session('user_type') == 'user') {
+            $employees = Employee::all(); // All employees
+        }
+        else{
+            $employees = collect();
+        }
         return view('attendance-admin', compact('employees','totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 

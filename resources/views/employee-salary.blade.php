@@ -127,6 +127,7 @@
                                             <a class="p-2 me-2" href="{{ url('payslip/' . $employeeSalary->id) }}">
                                                 <i data-feather="eye" class="feather-eye"></i>
                                             </a>
+                                            @useronly
                                             <a class="p-2 me-2 edit-btn" href="javascript:void(0);" 
                                             
                                             data-id="{{ $employeeSalary->id }}"
@@ -162,6 +163,7 @@
                                              href="javascript:void(0);">
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
+                                            @enduseronly
                                         </div>
                                     </td>
                                 </tr>
@@ -384,197 +386,198 @@
 
 
 <!-- add payroll modal -->
-<div class="modal fade" id="add-payroll">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="page-title">
-                    <h4>Add Payroll</h4>
+ @useronly
+    <div class="modal fade" id="add-payroll">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="page-title">
+                        <h4>Add Payroll</h4>
+                    </div>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form action="{{route('employee-salary')}}" method="POST">
-                @csrf 
-                <input type="hodden" id="Salary_id1" >
+                <form action="{{route('employee-salary')}}" method="POST">
+                    @csrf 
+                    <input type="hodden" id="Salary_id1" >
 
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Select Employee <span>*</span></label>
-                                <select name="employee_id" class="select select2">
-                                    <option value="">Select Employee</option>
-                                    @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}">
-                                            {{ $employee->first_name . ' ' . $employee->last_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="input-blocks">
-                                <label>Payment Date<span class="text-danger ms-1">*</span></label>
-                                <div class="input-groupicon calender-input">
-                                    <i data-feather="calendar" class="info-img"></i>
-                                    <input type="text" name="payment_date" id="payment_date1" class="datetimepicker form-control" placeholder="Select Date" >
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Select Employee <span>*</span></label>
+                                    <select name="employee_id" class="select select2">
+                                        <option value="">Select Employee</option>
+                                        @foreach($employees as $employee)
+                                            <option value="{{ $employee->id }}">
+                                                {{ $employee->first_name . ' ' . $employee->last_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="text-title">
-                            <h5 class="mb-2">Salary Information</h5>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Basic Salary <span>*</span></label>
-                                <input type="text" name="basic_salary" id="basic_salary1" class="text-form form-control">
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Payment Method <span>*</span></label>
-                                <select class="select" name="payment_method">
-                                    <option>Select</option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="Mpesa">Mpesa</option>
-                                    <option value="Bank">Bank</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Reference Code<span>*</span></label>
-                                <input type="text" name="reference_code" id="reference_code1" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Notes / Add. Info<span></span></label>
-                                <textarea class="form-control" name="notes" rows="3"></textarea>									
-                            </div>
-                        </div>
-                        <div class="mb-3 pb-3 border-bottom">
-                            <p class="fw-semibold text-gray-9 mb-2">Status</p>
-                            <div class="d-flex align-items-center">
-                                <div class="form-check me-3">
-                                    <input class="form-check-input" type="radio" name="status" value="paid" id="Radio-sm1" checked>
-                                    <label class="form-check-label" for="Radio-sm1">
-                                        Paid
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="status" value="unpaid" id="Radio-sm2">
-                                    <label class="form-check-label" for="Radio-sm2">
-                                        Unpaid
-                                    </label>
+                            <div class="col-lg-4 col-md-6">
+                                <div class="input-blocks">
+                                    <label>Payment Date<span class="text-danger ms-1">*</span></label>
+                                    <div class="input-groupicon calender-input">
+                                        <i data-feather="calendar" class="info-img"></i>
+                                        <input type="text" name="payment_date" id="payment_date1" class="datetimepicker form-control" placeholder="Select Date" >
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="payroll-title">
-                            <p class="fw-semibold text-gray-9 mb-2">Allowances</p>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
+                            <div class="text-title">
+                                <h5 class="mb-2">Salary Information</h5>
+                            </div>
                             <div class="mb-3">
-                                <label class="form-label">House Allowance <span>*</span></label>
-                                <input type="text" name="allowance1" id="allowance11" class="form-control">
+                                <label class="form-label">Basic Salary <span>*</span></label>
+                                    <input type="text" name="basic_salary" id="basic_salary1" class="text-form form-control">
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Conveyance <span>*</span></label>
-                                <input type="text" name="allowance2" id="allowance22" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Payment Method <span>*</span></label>
+                                    <select class="select" name="payment_method">
+                                        <option>Select</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Mpesa">Mpesa</option>
+                                        <option value="Bank">Bank</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Medical Allowance <span>*</span></label>
-                                <input type="text" name="allowance3" id="allowance33" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Reference Code<span>*</span></label>
+                                    <input type="text" name="reference_code" id="reference_code1" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Bonus <span>*</span></label>
-                                <input type="text" name="bonus" id="bonus1" class="form-control">
+                            <div class="col-lg-6 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Notes / Add. Info<span></span></label>
+                                    <textarea class="form-control" name="notes" rows="3"></textarea>									
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex align-items-end border-bottom mb-3">
-                            <div class="mb-3 flex-grow-1">
-                                <label class="form-label">Others</label>
-                                <input type="text" name="others1" id="others11" class="text-form form-control">
+                            <div class="mb-3 pb-3 border-bottom">
+                                <p class="fw-semibold text-gray-9 mb-2">Status</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check me-3">
+                                        <input class="form-check-input" type="radio" name="status" value="paid" id="Radio-sm1" checked>
+                                        <label class="form-check-label" for="Radio-sm1">
+                                            Paid
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="status" value="unpaid" id="Radio-sm2">
+                                        <label class="form-check-label" for="Radio-sm2">
+                                            Unpaid
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="subadd-btn mb-3 ms-3">
-                                <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
+                            <div class="payroll-title">
+                                <p class="fw-semibold text-gray-9 mb-2">Allowances</p>
                             </div>
-                        </div>
-                        <div class="payroll-title">
-                            <p class="fw-semibold text-gray-9 mb-2">Deductions</p>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">PF <span>*</span></label>
-                                <input type="text" name="deduction1" id="deduction11" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">House Allowance <span>*</span></label>
+                                    <input type="text" name="allowance1" id="allowance11" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Professional Tax <span>*</span></label>
-                                <input type="text" name="deduction2" id="deduction22" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Conveyance <span>*</span></label>
+                                    <input type="text" name="allowance2" id="allowance22" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">TDS <span>*</span></label>
-                                <input type="text" name="deduction3" id="deduction33" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Medical Allowance <span>*</span></label>
+                                    <input type="text" name="allowance3" id="allowance33" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Loans & Others <span>*</span></label>
-                                <input type="text" name="deduction4" id="deduction44" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Bonus <span>*</span></label>
+                                    <input type="text" name="bonus" id="bonus1" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="d-flex align-items-end border-bottom mb-3">
-                            <div class="mb-3 flex-grow-1">
-                                <label class="form-label">Others</label>
-                                <input type="text" name="others" id="others22" class="text-form form-control">
+                            <div class="d-flex align-items-end border-bottom mb-3">
+                                <div class="mb-3 flex-grow-1">
+                                    <label class="form-label">Others</label>
+                                    <input type="text" name="others1" id="others11" class="text-form form-control">
+                                </div>
+                                <div class="subadd-btn mb-3 ms-3">
+                                    <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
+                                </div>
                             </div>
-                            <div class="subadd-btn mb-3 ms-3">
-                                <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
+                            <div class="payroll-title">
+                                <p class="fw-semibold text-gray-9 mb-2">Deductions</p>
                             </div>
-                        </div>
-                        <div class="payroll-title">
-                            <p class="fw-semibold text-gray-9 mb-2">Deductions</p>
-                        </div>
-                        <div class="col-lg-4 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Total Allowance <span>*</span></label>
-                                <input type="text" name="total_allowance" id="total_allowance1" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">PF <span>*</span></label>
+                                    <input type="text" name="deduction1" id="deduction11" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Total Deduction <span>*</span></label>
-                                <input type="text" name="total_deduction" id="total_deduction1" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Professional Tax <span>*</span></label>
+                                    <input type="text" name="deduction2" id="deduction22" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-6 col-12">
-                            <div class="mb-3">
-                                <label class="form-label">Net Salary <span>*</span></label>
-                                <input type="text" name="net_salary" id="net_salary1" class="form-control">
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">TDS <span>*</span></label>
+                                    <input type="text" name="deduction3" id="deduction33" class="form-control">
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="d-flex align-items-center justify-content-end">
-                                <button type="button" class="btn btn-reset me-2"data-bs-dismiss="modal">Back</button>
-                                <button type="submit" class="btn btn-save">Save</button>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Loans & Others <span>*</span></label>
+                                    <input type="text" name="deduction4" id="deduction44" class="form-control">
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end border-bottom mb-3">
+                                <div class="mb-3 flex-grow-1">
+                                    <label class="form-label">Others</label>
+                                    <input type="text" name="others" id="others22" class="text-form form-control">
+                                </div>
+                                <div class="subadd-btn mb-3 ms-3">
+                                    <a href="#" class="btn btn-icon btn-secondary btn-add"><i class="ti ti-circle-plus fs-16"></i></a>
+                                </div>
+                            </div>
+                            <div class="payroll-title">
+                                <p class="fw-semibold text-gray-9 mb-2">Deductions</p>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Total Allowance <span>*</span></label>
+                                    <input type="text" name="total_allowance" id="total_allowance1" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Total Deduction <span>*</span></label>
+                                    <input type="text" name="total_deduction" id="total_deduction1" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-sm-6 col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Net Salary <span>*</span></label>
+                                    <input type="text" name="net_salary" id="net_salary1" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <button type="button" class="btn btn-reset me-2"data-bs-dismiss="modal">Back</button>
+                                    <button type="submit" class="btn btn-save">Save</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
- 
+ @enduseronly
 @endsection

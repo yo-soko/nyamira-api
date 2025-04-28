@@ -1,3 +1,4 @@
+@useronly
 <?php $page = 'edit-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -370,7 +371,7 @@
                                         <div class="input-blocks mb-md-0 mb-sm-3">
                                             <label>Password</label>
                                             <div class="pass-group">
-                                                <input type="password" class="pass-input">
+                                                <input type="password" name="password" class="pass-input">
                                                 <span class="fas toggle-password fa-eye-slash"></span>
                                             </div>
                                         </div>
@@ -379,7 +380,7 @@
                                         <div class="input-blocks mb-0">
                                             <label>Confirm Password</label>
                                             <div class="pass-group">
-                                                <input type="password" class="pass-inputa">
+                                                <input type="password" name="password_confirmation" class="pass-inputa">
                                                 <span class="fas toggle-passworda fa-eye-slash"></span>
                                             </div>
                                         </div>
@@ -418,3 +419,4 @@
         }
     </script>
 @endsection
+@enduseronly

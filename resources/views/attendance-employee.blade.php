@@ -50,39 +50,40 @@
                                     <p>Current Time</p>
                                 </div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                @if (!$alreadyClockedIn)
-                                    <!-- CLOCK IN -->
-                                    <form action="{{ route('attendance-employee.clockIn') }}" method="POST" class="w-100 me-2">
-                                        @csrf
-                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn btn-primary w-100 me-2">Clock In</button>
-                                    </form>
-                                @elseif ($onBreak)
-                                    <!-- BACK FROM BREAK -->
-                                    <form action="{{ route('attendance-employee.backFromBreak') }}" method="POST" class="w-100 me-2">
-                                        @csrf
-                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
-                                    </form>
-                                @else
-                                    @if (is_null($attendance->break_end))
-                                    <!-- BREAK -->
-                                    <form action="{{ route('attendance-employee.break') }}" method="POST" class="w-100 me-2">
-                                        @csrf
-                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn btn-secondary w-100 me-2">Break</button>
-                                    </form>
+                            @useronly
+                                <div class="d-flex align-items-center">
+                                    @if (!$alreadyClockedIn)
+                                        <!-- CLOCK IN -->
+                                        <form action="{{ route('attendance-employee.clockIn') }}" method="POST" class="w-100 me-2">
+                                            @csrf
+                                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                            <button type="submit" class="btn btn-primary w-100 me-2">Clock In</button>
+                                        </form>
+                                    @elseif ($onBreak)
+                                        <!-- BACK FROM BREAK -->
+                                        <form action="{{ route('attendance-employee.backFromBreak') }}" method="POST" class="w-100 me-2">
+                                            @csrf
+                                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                            <button type="submit" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
+                                        </form>
+                                    @else
+                                        @if (is_null($attendance->break_end))
+                                        <!-- BREAK -->
+                                        <form action="{{ route('attendance-employee.break') }}" method="POST" class="w-100 me-2">
+                                            @csrf
+                                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                            <button type="submit" class="btn btn-secondary w-100 me-2">Break</button>
+                                        </form>
+                                        @endif
+                                        <!-- CLOCK OUT -->
+                                        <form action="{{ route('attendance-employee.clockOut') }}" method="POST" class="w-100 me-2">
+                                            @csrf
+                                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                            <button type="submit" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
+                                        </form>
                                     @endif
-                                    <!-- CLOCK OUT -->
-                                    <form action="{{ route('attendance-employee.clockOut') }}" method="POST" class="w-100 me-2">
-                                        @csrf
-                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
-                                    </form>
-                                @endif
-                            </div>
-
+                                </div>
+                            @enduseronly
                         </div>
                     </div>
                 </div>

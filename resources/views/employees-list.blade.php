@@ -25,9 +25,11 @@
                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                     </li>
                 </ul>
+                @useronly
                 <div class="page-btn">
                     <a href="{{url('add-employee')}}" class="btn btn-primary"><i class="ti ti-circle-plus me-1"></i>Add Employee</a>
                 </div>
+                @enduseronly
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-6">
@@ -109,7 +111,9 @@
                                     <th>Phone</th>
                                     <th>Shift</th>
                                     <th>Status</th>
+                                    @useronly
                                     <th class="no-sort"></th>
+                                    @enduseronly
                                 </tr>
                             </thead>
                             <tbody>
@@ -147,6 +151,7 @@
                                                 <i class="ti ti-point-filled me-1"></i>{{ $employee->status === 1 ? 'Active' : 'Inactive' }}
                                             </span>
                                         </td>
+                                        @useronly
                                         <td>
                                             <div class="edit-delete-action d-flex align-items-center">
                                                 <a class="me-2 d-flex align-items-center border rounded p-2" href="{{ url('employee-details/' . $employee->id) }}">
@@ -165,6 +170,7 @@
 
                                             </div>
                                         </td>
+                                        @enduseronly
                                     </tr>
                                 @empty
                                    

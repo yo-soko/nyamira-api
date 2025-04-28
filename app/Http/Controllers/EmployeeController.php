@@ -30,7 +30,18 @@ class EmployeeController extends Controller
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
 
-        $employees = Employee::latest()->get();
+        if (session('user_type') == 'employee') {
+            // Fetch only the logged-in employee's details
+            $employees = Employee::where('id', session('user_id'))->get();
+        } 
+        else if (session('user_type') == 'user') {
+            $employees = Employee::latest()->get();
+
+        }
+        else {
+            // return an empty collection)
+            $employees = collect(); 
+        }
         return view('employees-list', compact('employees','totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 
