@@ -19,7 +19,7 @@ class Employee extends Authenticatable
         'gender',
         'nationality',
         'joining_date',
-        'shift',
+        'shift_id',
         'department',
         'designation',
         'blood_group',
@@ -42,11 +42,11 @@ class Employee extends Authenticatable
 
     protected $hidden = ['password'];
 
-    public function attendances() {
-        return $this->hasMany(Attendance::class);
+    public function attendancies() {
+        return $this->hasMany(Attendancies::class);
     }
     public function shift()
     {
-        return $this->belongsTo(Shift::class, 'shift', 'shift_name');
+        return $this->belongsTo(Shift::class);
     }
 }

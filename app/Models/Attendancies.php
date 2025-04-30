@@ -8,6 +8,7 @@ class Attendancies extends Model
 {
     protected $fillable = [
         'employee_id',
+        'shift_id',
         'date',
         'clock_in',
         'clock_out',
@@ -23,4 +24,8 @@ class Attendancies extends Model
         return $this->belongsTo(Employee::class);
     }
     
+    public function shift()
+    {
+        return $this->belongsTo(Shift::class, 'shift_id');  // Ensure 'shift_id' is the correct foreign key
+    }
 }

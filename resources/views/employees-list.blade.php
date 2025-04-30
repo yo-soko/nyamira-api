@@ -145,7 +145,7 @@
                                         <td>{{ $employee->designation }}</td>
                                         <td>{{ $employee->email }}</td>
                                         <td>{{ $employee->contact_number }}</td>
-                                        <td>{{ $employee->shift }}</td>
+                                        <td>{{ $employee->shift->shift_name }}</td>
                                         <td>
                                             <span class="badge {{ $employee->status === 1 ? 'badge-success' : 'badge-danger' }} d-inline-flex align-items-center badge-xs">
                                                 <i class="ti ti-point-filled me-1"></i>{{ $employee->status === 1 ? 'Active' : 'Inactive' }}

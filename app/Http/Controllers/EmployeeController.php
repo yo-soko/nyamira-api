@@ -94,7 +94,7 @@ class EmployeeController extends Controller
             'gender' => 'required',
             'nationality' => 'required|string',
             'joining_date' => 'required|date_format:Y-m-d',
-            'shift' => 'required|string',
+            'shift_id' => 'required',
             'department' => 'required|string',
             'designation' => 'required|string',
             'blood_group' => 'nullable|string',
@@ -164,7 +164,8 @@ class EmployeeController extends Controller
 
     public function update(Request $request, $id)
     {
-        $employee = Employee::findOrFail($id);
+        $employeeId = $request->input('employee_id', $id);
+        $employee = Employee::findOrFail($employeeId);
 
         // Convert date formats before validation
         $request->merge([
@@ -183,7 +184,7 @@ class EmployeeController extends Controller
             'gender' => 'required',
             'nationality' => 'nullable|string',
             'joining_date' => 'required|date_format:Y-m-d',
-            'shift' => 'required|string',
+            'shift_id' => 'required',
             'department' => 'required|string',
             'designation' => 'required|string',
             'blood_group' => 'nullable|string',
@@ -225,9 +226,11 @@ class EmployeeController extends Controller
         $data['status'] = $request->has('status') ? 1 : 0;
 
         if (!empty($request->password)) {
+            // Log the password before hashing it
+            \Log::info('Password before hashing:', ['password' => $request->password]);
+            
             $data['password'] = Hash::make($request->password);
         } else {
-            // Ensure the password is not updated if not provided
             unset($data['password']);
         }
 

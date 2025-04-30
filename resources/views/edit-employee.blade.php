@@ -136,11 +136,11 @@
                                                 <label class="form-label">Shift<span class="text-danger ms-1">*</span></label>
                                                 <a href="{{ url('shift') }}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select" name="shift">
+                                            <select class="select" name="shift_id">
                                                 <option value="">Select</option>
                                                 @foreach($shifts as $shift)
-                                                    <option value="{{ $shift->shift_name }}" 
-                                                        {{ old('shift', $employee->shift) == $shift->shift_name ? 'selected' : '' }}>
+                                                    <option value="{{ $shift->id }}" 
+                                                        {{ old('shift', $employee->shift_id) == $shift->id ? 'selected' : '' }}>
                                                         {{ $shift->shift_name }}
                                                     </option>
                                                 @endforeach
@@ -372,7 +372,7 @@
                                         <div class="input-blocks mb-md-0 mb-sm-3">
                                             <label>Password</label>
                                             <div class="pass-group">
-                                                <input type="password" name="password" class="pass-input">
+                                                <input type="password" name="password" id="password" class="pass-input">
                                                 <span class="fas toggle-password fa-eye-slash"></span>
                                             </div>
                                         </div>
@@ -381,7 +381,7 @@
                                         <div class="input-blocks mb-0">
                                             <label>Confirm Password</label>
                                             <div class="pass-group">
-                                                <input type="password" name="password_confirmation" class="pass-inputa">
+                                                <input type="password" name="password_confirmation" id="password_confirmation" class="pass-inputa">
                                                 <span class="fas toggle-passworda fa-eye-slash"></span>
                                             </div>
                                         </div>

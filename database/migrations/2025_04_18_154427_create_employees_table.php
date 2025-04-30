@@ -23,7 +23,7 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female', 'Other']);
             $table->string('nationality');
             $table->date('joining_date');
-            $table->string('shift');
+            $table->unsignedBigInteger('shift_id');
             $table->string('department');
             $table->string('designation');
             $table->string('blood_group')->nullable();

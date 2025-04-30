@@ -132,10 +132,10 @@
                                                 <label class="form-label">Shift<span class="text-danger ms-1">*</span></label>
                                                 <a href="{{url('shift')}}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select" name="shift">
+                                            <select class="select" name="shift_id">
                                                 <option>Select</option>
                                                 @foreach($shifts as $shift)
-                                                    <option value="{{ $shift->shift_name }}">{{ $shift->shift_name }}</option>
+                                                    <option value="{{ $shift->id }}">{{ $shift->shift_name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

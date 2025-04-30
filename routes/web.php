@@ -65,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/shift', [ShiftController::class, 'index'])->name('shift');
     Route::post('/shift/store', [ShiftController::class, 'store'])->name('shift.store');
-    Route::put('/shift/update', [ShiftController::class, 'update']);
+    Route::put('/shift/update', [ShiftController::class, 'update'])->name('shift.update');
     Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
     Route::get('/users', [UserController::class, 'index'])->name('users');
@@ -97,14 +97,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance-employee/break', [AttendanciesController::class, 'break'])->name('attendance-employee.break');
     Route::post('/attendance-employee/backFromBreak', [AttendanciesController::class, 'backFromBreak'])->name('attendance-employee.backFromBreak');
 
-    Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');
-    Route::get('add-employee', [EmployeeController::class, 'create']);
-    Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');
-    Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');
-    Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');
-    Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');
-    Route::put('update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');
-    Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
+    Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');  // List all employees
+    Route::get('/employee/create', [EmployeeController::class, 'create'])->name('employee.create');  // Add new employee
+    Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');  // Store employee
+    Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');  // List of employees
+    Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');  // View employee details
+    Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');  // Edit employee
+    Route::put('/update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');  // Update employee
+    Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');  // Delete employee
+
 });
 
 

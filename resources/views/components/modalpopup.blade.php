@@ -14734,7 +14734,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form method="POST" action="{{ url('shift/update') }}">
+                        <form method="POST" action="{{ route('shift.update') }}">
                             @csrf
                             @method('PUT')
                             <input type="hidden" id="edit-id" name="id"> 

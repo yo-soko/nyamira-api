@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('attendancies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
+            $table->unsignedBigInteger('shift_id')->nullable();
             $table->date('date');
             $table->dateTime('clock_in')->nullable();
             $table->dateTime('clock_out')->nullable();

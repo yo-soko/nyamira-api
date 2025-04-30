@@ -118,7 +118,7 @@
                                 </div>
                                 <div class="col-lg-2 col-md-3 col-sm-4 text-center">
                                     <div>
-                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-cyan-transparent text-cyan fw-bold fs-20 mb-2 mx-auto">0</span>
+                                        <span class="d-flex align-items-center justify-content-center avatar avatar-xl bg-cyan-transparent text-cyan fw-bold fs-20 mb-2 mx-auto">{{ $lateDays }}</span>
                                         <p class="fs-14">Late <br> Days</p>
                                     </div>
                                 </div>
