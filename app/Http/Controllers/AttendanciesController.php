@@ -127,21 +127,22 @@ class AttendanciesController extends Controller
         $attendanceRecords = Attendancies::where('employee_id', $employee->id)
             ->whereBetween('date', [$start, $end])
             ->get();
-
+        
         foreach ($attendanceRecords as $record) {
             if ($record->clock_in && $record->shift_id) {
                 $shift = Shift::find($record->shift_id);
-
+        
                 if ($shift && $shift->start_time) {
-                    $clockInTime = Carbon::parse($record->clock_in)->format('H:i:s');
-                    $shiftStartTime = Carbon::parse($shift->start_time)->format('H:i:s');
-
-                    if ($clockInTime > $shiftStartTime) {
+                    $clockInTime = Carbon::parse($record->clock_in);
+                    $shiftStartTimeWithGrace = Carbon::parse($shift->start_time)->addHours(2); // 2-hour grace
+        
+                    if ($clockInTime->gt($shiftStartTimeWithGrace)) {
                         $lateDays++;
                     }
                 }
             }
         }
+        
         // Fetch total half days in the current month
         $halfDays = Attendancies::where('employee_id', $employee->id)
             ->whereBetween('date', [$start, $end])
