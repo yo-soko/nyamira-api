@@ -205,8 +205,10 @@ class AttendanciesController extends Controller
 
         // Build shift window
         $now = now();
-        $shiftStart = Carbon::createFromTimeString($shift->start_time);
-        $shiftEnd = Carbon::createFromTimeString($shift->end_time);
+         // Set shift start and end times with today's date
+        $shiftStart = Carbon::parse(Carbon::today()->toDateString() . ' ' . $shift->start_time);
+        $shiftEnd = Carbon::parse(Carbon::today()->toDateString() . ' ' . $shift->end_time);
+
 
         // Handle overnight shifts (e.g. 10PM - 6AM)
         if ($shiftEnd->lessThanOrEqualTo($shiftStart)) {
