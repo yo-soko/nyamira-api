@@ -205,30 +205,26 @@ class AttendanciesController extends Controller
 
         // Build shift window
         $now = now();
-         // Set shift start and end times with today's date
-        $shiftStart = Carbon::parse(Carbon::today()->toDateString() . ' ' . $shift->start_time);
-        $shiftEnd = Carbon::parse(Carbon::today()->toDateString() . ' ' . $shift->end_time);
 
-
-        // Handle overnight shifts (e.g. 10PM - 6AM)
+        // Step 1: Set shift start and end on today’s date
+        $today = Carbon::today();
+        $shiftStart = Carbon::parse($today->toDateString() . ' ' . $shift->start_time);
+        $shiftEnd = Carbon::parse($today->toDateString() . ' ' . $shift->end_time);
+        
+        // Step 2: Handle overnight shift (e.g., 10PM to 6AM)
         if ($shiftEnd->lessThanOrEqualTo($shiftStart)) {
-            $shiftEnd->addDay();
+            $shiftEnd->addDay(); // end time is tomorrow
         }
-
-        // Adjust shift start to match today's context
-        if ($now->format('H:i:s') < $shift->start_time) {
-            $shiftStart->subDay();
-            $shiftEnd->subDay();
-        }
-
-        // Apply grace window
+        
+        // Step 3: Calculate grace window (start 30 mins before, end 7.5 hrs after shift start)
         $startWindow = $shiftStart->copy()->subMinutes($graceBefore);
         $endWindow = $shiftStart->copy()->addMinutes($graceAfter);
-
+        
+        // Step 4: Check if now is within clock-in window
         if (!$now->between($startWindow, $endWindow)) {
             return back()->with('error', 'Clock-in not allowed outside shift grace period.');
         }
-
+        
         // Prevent duplicate clock-in for the same shift window
         $alreadyClocked = Attendancies::where('employee_id', $employeeId)
             ->where('shift_id', $shift->id)
