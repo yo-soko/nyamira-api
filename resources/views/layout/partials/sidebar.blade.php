@@ -95,12 +95,14 @@
                                                         </li>
                                                         <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
                                                         </li>
+                                                        @useronly
                                                         <li class="submenu">
                                                                 <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
                                                                 <ul>
                                                                         <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
                                                                 </ul>
                                                         </li>
+                                                        @enduseronly
                                                 </ul>
                                         </li>
                                         @useronly
@@ -118,7 +120,11 @@
                                                 <ul>
                                                         <li class="{{ Request::is('profile') ? 'active' : '' }}"><a href="{{url('profile')}}"><i class="ti ti-user-circle fs-16 me-2"></i><span>Profile</span></a></li>
                                                 </ul>
-                                        </li>    
+                                                <ul>
+                                                        <li class="{{ Request::is('signout') ? 'active' : '' }}"><a href="{{ route('signout') }}"><i class="ti ti-logout me-2"></i><span>log out</span></a></li>
+                                                </ul>
+                                        </li>  
+                                         
                                 </ul>
                         </div>
                 </div>

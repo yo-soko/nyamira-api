@@ -1,3 +1,4 @@
+@useronly
 <?php $page = 'employee-salary'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -29,9 +30,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
+            @useronly
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" id="add-payroll-btn" data-bs-toggle="modal" data-bs-target="#add-payroll"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
             </div>
+            @enduseronly
         </div>
             <!-- product list -->
             <div class="card">
@@ -581,3 +584,4 @@
     </div>
  @enduseronly
 @endsection
+@enduseronly

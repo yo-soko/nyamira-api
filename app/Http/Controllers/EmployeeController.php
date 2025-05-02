@@ -18,9 +18,11 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-
+        $shifts = Shift::all();
         $employees = Employee::latest()->get();
-        return view('add-employee', compact('employees',));
+        $departments = Department::all();
+        $designations = Designation::all();
+        return view('add-employee', compact('employees','shifts','departments','designations'));
     }
 
     public function list()
