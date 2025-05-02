@@ -95,7 +95,7 @@
                                 </div>
                                 <div>
                                     <a href="{{ url('attendance-employee/'.$employee->id) }}" class="avatar avatar-xl avatar-rounded border p-1 rounded-circle">
-                                        <img src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/user-33.png') }}" class="img-fluid h-auto w-auto" alt="img">
+                                        <img src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/profile.jpg') }}" class="img-fluid h-auto w-auto" alt="img">
                                     </a>
                                 </div>
                                 <div class="dropdown">
