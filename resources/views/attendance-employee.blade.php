@@ -50,7 +50,6 @@
                                     <p>Current Time</p>
                                 </div>
                             </div>
-                            @useronly
                                 <div class="d-flex align-items-center">
                                     @if (!$alreadyClockedIn)
                                         <!-- CLOCK IN -->
@@ -83,7 +82,6 @@
                                         </form>
                                     @endif
                                 </div>
-                            @enduseronly
                         </div>
                     </div>
                 </div>
