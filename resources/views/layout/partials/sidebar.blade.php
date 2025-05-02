@@ -4,13 +4,13 @@
                 <!-- Logo -->
                 <div class="sidebar-logo active">
                         <a href="{{url('index')}}" class="logo logo-normal">
-                                <img src="{{URL::asset('build/img/logo-white.png')}}" alt="Img">
+                                <img src="{{URL::asset('build/img/logo-whit.png')}}" alt="Img">
                         </a>
                         <a href="{{url('index')}}" class="logo logo-white">
                                 <img src="{{URL::asset('build/img/logo.png')}}" alt="Img">
                         </a>
                         <a href="{{url('index')}}" class="logo-small">
-                                <img src="{{URL::asset('build/img/logo-small.png')}}" alt="Img">
+                                <img src="{{URL::asset('#')}}" alt="Img">
                         </a>
                         <a id="toggle_btn" href="javascript:void(0);">
                                 <i data-feather="chevrons-left" class="feather-16"></i>

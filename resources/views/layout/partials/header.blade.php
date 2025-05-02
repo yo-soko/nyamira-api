@@ -4,15 +4,7 @@
     <div class="main-header">
         <!-- Logo -->
         <div class="header-left active">
-            <a href="{{url('index')}}" class="logo logo-normal">
-                <img src="{{URL::asset('build/img/logo.svg')}}" alt="Img">
-            </a>
-            <a href="{{url('index')}}" class="logo logo-white">
-                <img src="{{URL::asset('build/img/logo-white.svg')}}" alt="Img">
-            </a>
-            <a href="{{url('index')}}" class="logo-small">
-                <img src="{{URL::asset('build/img/logo-small.png')}}" alt="Img">
-            </a>
+           
         </div>
         <!-- /Logo -->
         <a id="mobile_btn" class="mobile_btn" href="#sidebar">
@@ -151,15 +143,7 @@
 			
     <!-- Logo -->
      <div class="header-left active">
-        <a href="{{url('index')}}" class="logo logo-normal">
-            <img src="{{URL::asset('build/img/logo.svg')}}"  alt="Img">
-        </a>
-        <a href="{{url('index')}}" class="logo logo-white">
-            <img src="{{URL::asset('build/img/logo-white.svg')}}"  alt="Img">
-        </a>
-        <a href="{{url('index')}}" class="logo-small">
-            <img src="{{URL::asset('build/img/logo-small.png')}}"  alt="Img">
-        </a>
+       
     </div>
     <!-- /Logo -->
     
