@@ -64,7 +64,8 @@ class CustomAuthController extends Controller
             // Employee login successful
             Log::info('Employee found:', $employee ? $employee->toArray() : null);
 
-            Auth::guard('employee')->login($employee, $remember); // Use the custom guard
+            Auth::login($employee, $remember);
+
             $request->session()->regenerate();
 
             session([
