@@ -97,14 +97,14 @@
                 <a href="javascript:void(0);" class="nav-link userset" data-bs-toggle="dropdown">
                     <span class="user-info p-0">
                         <span class="user-letter">
-                            <img src="{{ asset('storage/' . session('user_image', 'default.png')) }}" alt="Img" class="img-fluid">
+                           <img src="{{ session('user_image') ? asset('storage/' . session('user_image')) : asset('images/default.png') }}" alt="Img">
                         </span>
                     </span>
                 </a>
                 <div class="dropdown-menu menu-drop-user">
                     <div class="profileset d-flex align-items-center">
                         <span class="user-img me-2">
-                            <img src="{{ asset('storage/' . session('user_image', 'default.png')) }}" alt="Img">
+                           <img src="{{ session('user_image') ? asset('storage/' . session('user_image')) : asset('images/default.png') }}" alt="Img">
                         </span>
                         <div>
                             <h6 class="fw-medium">{{ session('user_name') }}</h6>

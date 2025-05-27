@@ -16242,6 +16242,7 @@
 												<input type="text" name="name" class="form-control">
 											</div>
 										</div>
+                                    
 										<div class="col-lg-12">
 											<div class="mb-3">
 												<label class="form-label">Role<span class="text-danger ms-1">*</span></label>
@@ -16251,6 +16252,12 @@
 													<option>Manager</option>
 													<option>Salesman</option>
 												</select>
+											</div>
+										</div>
+                                        <div class="col-lg-12">
+											<div class="mb-3">
+												<label class="form-label">User Code<span class="text-danger ms-1">*</span></label>
+												<input type="text" name="code" class="form-control">
 											</div>
 										</div>
 										<div class="col-lg-12">
@@ -16360,6 +16367,12 @@
 													<option>Manager</option>
 													<option>Salesman</option>
 												</select>
+											</div>
+										</div>
+                                        <div class="col-lg-12">
+											<div class="mb-3">
+												<label class="form-label">User Code<span class="text-danger ms-1"></span></label>
+												<input type="text" class="form-control" name="code">
 											</div>
 										</div>
 										<div class="col-lg-12">
