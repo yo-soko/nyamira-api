@@ -105,6 +105,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');  // Edit employee
     Route::put('/update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');  // Update employee
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');  // Delete employee
+    
+    Route::get('/migrate-employees', [EmployeeController::class, 'migrateEmployeesToUsers']);
 
 });
 

@@ -79,7 +79,7 @@ class EmployeeController extends Controller
         return view('add-employee', compact('departments', 'designations', 'shifts'));
     }
 
-   public function store(Request $request)
+    public function store(Request $request)
     {
         $request->merge([
             'dob' => Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d'),
@@ -265,4 +265,44 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error', 'Failed to delete employee. Please try again.');
         }
     }
+    public function migrateEmployeesToUsers()
+    {
+    
+        $employees = Employee::whereNull('user_id')->get();
+
+        $count = 0;
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($employees as $employee) {
+                if (User::where('email', $employee->email)->exists()) {
+                    continue;
+                }
+
+                $user = User::create([
+                    'name' => $employee->first_name . ' ' . $employee->last_name,
+                    'email' => $employee->email,
+                    'phone' => $employee->contact_number,
+                    'code' => $employee->emp_code,
+                    'role' => 'Employee',
+                    'profile_picture' => $employee->profile_photo,
+                    'password' => Hash::make('password123'),
+                    'status' => 1,
+                ]);
+
+                $employee->user_id = $user->id;
+                $employee->save();
+
+                $count++;
+            }
+
+            DB::commit();
+            return "✅ Migrated {$count} employees successfully!";
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return "❌ Migration failed: " . $e->getMessage();
+        }
+    }
+
 }
