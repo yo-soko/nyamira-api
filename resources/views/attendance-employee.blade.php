@@ -34,6 +34,14 @@
                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                         </li>
                     </ul>
+                    @role('Admin')
+                        <div class="page-btn">
+                            <a href="{{ route('auto-clockout') }}" class="btn btn-primary"
+                                onclick="return confirm('Are you sure you want to auto-clock out employees who forgot?');">
+                                <i class="ti ti-circle-plus me-1"></i>Clock out forgotten
+                            </a>
+                        </div>
+                    @endrole
                 </div>
             </div>
             <div class="row">

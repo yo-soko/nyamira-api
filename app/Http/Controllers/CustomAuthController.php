@@ -71,7 +71,7 @@ class CustomAuthController extends Controller
             'user_image'  => $user->profile_picture,
         ]);
 
-        return redirect()->intended('index')->with('success', 'Welcome back!');
+        return redirect()->intended('index')->with('success', 'Very nice to have you back!');
     }
 
 

@@ -107,6 +107,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');  // Delete employee
     
     Route::get('/migrate-employees', [EmployeeController::class, 'migrateEmployeesToUsers']);
+    Route::get('/auto-clockout', [AttendanciesController::class, 'autoClockOutForgottenEmployees']);
 
 });
 

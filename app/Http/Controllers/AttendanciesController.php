@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Models\Attendancies;
 use App\Models\Employee;
@@ -383,4 +384,67 @@ class AttendanciesController extends Controller
     
         return back()->with('success', 'Clock Out time recorded successfully!');
     }   
+
+
+    public function autoClockOutForgottenEmployees()
+    {
+        // Get all attendance records where employee forgot to clock out
+        // and the attendance date is before today
+        $attendances = Attendancies::whereNull('clock_out')
+            ->whereDate('date', '<', now()->toDateString())
+            ->get();
+
+        foreach ($attendances as $attendance) {
+            try {
+                // Skip if there's no shift info
+                if (!$attendance->shift) {
+                    Log::warning("No shift found for attendance ID: {$attendance->id}");
+                    continue;
+                }
+
+                // Get shift end and subtract 5 hours
+                $shiftEnd = Carbon::parse($attendance->shift->end_time);
+                $shiftStart = Carbon::parse($attendance->shift->start_time);
+
+                // Handle overnight shift (e.g., 10 PM - 6 AM)
+                if ($shiftEnd->lessThan($shiftStart)) {
+                    $shiftEnd->addDay();
+                }
+
+                // Set clock_out as shift_end - 5 hours
+                $clockOutTime = $shiftEnd->copy()->subHours(5);
+
+                // Parse clock-in time
+                $clockInTime = Carbon::parse($attendance->clock_in);
+
+                // Calculate work duration in seconds
+                $workDuration = $clockInTime->diffInSeconds($clockOutTime);
+
+                // Subtract break duration if available
+                $breakDuration = 0;
+                if ($attendance->break_start && $attendance->break_end) {
+                    $breakStart = Carbon::parse($attendance->break_start);
+                    $breakEnd = Carbon::parse($attendance->break_end);
+                    if ($breakEnd->greaterThan($breakStart)) {
+                        $breakDuration = $breakEnd->diffInSeconds($breakStart);
+                    }
+                }
+
+                $workDuration -= $breakDuration;
+
+                // Final updates
+                $attendance->clock_out = $clockOutTime;
+                $attendance->total_hours = gmdate("H:i:s", $workDuration);
+                $attendance->save();
+
+                Log::info("Auto clocked-out employee ID {$attendance->employee_id} with 5hr adjusted time on attendance ID {$attendance->id}");
+
+            } catch (\Exception $e) {
+                Log::error("Failed to auto clock out attendance ID {$attendance->id}: " . $e->getMessage());
+            }
+        }
+
+       return redirect()->intended('index')->with('success', 'clock out recorded for every employee!');
+    }
+
 }
