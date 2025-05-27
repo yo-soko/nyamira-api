@@ -224,31 +224,52 @@ class EmployeeController extends Controller
             }
         }
 
-        // Handle profile photo update
+        // Handle profile photo
         if ($request->hasFile('profile_photo')) {
             $data['profile_photo'] = $request->file('profile_photo')->store('profile_photos', 'public');
         } else {
-            unset($data['profile_photo']); // keep existing one
+            unset($data['profile_photo']);
         }
 
         $data['status'] = $request->has('status') ? 1 : 0;
 
         if (!empty($request->password)) {
-            // Log the password before hashing it
-            \Log::info('Password before hashing:', ['password' => $request->password]);
-            
             $data['password'] = Hash::make($request->password);
         } else {
             unset($data['password']);
         }
 
-        // Perform the update
-        if ($employee->update($data)) {
-            return redirect()->route('edit-employee', $id)->with('success', 'Employee updated successfully!');
-        } else {
-            return redirect()->route('edit-employee', $id)->with('error', 'Failed to update employee. Please try again.');
+        DB::beginTransaction();
+
+        try {
+            // Update Employee
+            $employee->update($data);
+
+            // If linked to a user, update user too
+            if ($employee->user_id) {
+                $user = User::find($employee->user_id);
+                if ($user) {
+                    $user->update([
+                        'name' => $data['first_name'] . ' ' . $data['last_name'],
+                        'email' => $data['email'],
+                        'phone' => $data['contact_number'],
+                        'code' => $data['emp_code'],
+                        'profile_picture' => $data['profile_photo'] ?? $user->profile_picture,
+                        'status' => $data['status'],
+                        'password' => $data['password'] ?? $user->password, // Only update if present
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('edit-employee', $id)->with('success', 'Employee and user updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('edit-employee', $id)->with('error', 'Update failed: ' . $e->getMessage());
         }
     }
+
 
     public function destroy($id)
     {
