@@ -36,7 +36,7 @@ class EmployeeController extends Controller
 
         if (session('user_type') == 'Employee') {
             // Fetch only the logged-in employee's details
-            $employees = Employee::where('id', session('user_id'))->get();
+            $employees = Employee::where('user_id', session('user_id'))->get();
         } 
         else if (session('user_type') == 'Admin') {
             $employees = Employee::latest()->get();

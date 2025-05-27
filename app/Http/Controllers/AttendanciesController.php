@@ -19,7 +19,7 @@ class AttendanciesController extends Controller
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
         // Fetch all employees
         if (session('user_type') == 'Employee') {
-            $employees = Employee::where('id', session('user_id'))->get(); // Only this employee
+            $employees = Employee::where('user_id', session('user_id'))->get(); // Only this employee
         } 
         else if (session('user_type') == 'Admin') {
             $employees = Employee::all(); // All employees
