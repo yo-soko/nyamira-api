@@ -21,8 +21,8 @@ class Employee extends Authenticatable
         'nationality',
         'joining_date',
         'shift_id',
-        'department',
-        'designation',
+        'department_id',
+        'designation_id',
         'blood_group',
         'status',
         'about',
@@ -53,6 +53,14 @@ class Employee extends Authenticatable
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+     public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+     public function designation()
+    {
+        return $this->belongsTo(Designation::class);
     }
 
 }

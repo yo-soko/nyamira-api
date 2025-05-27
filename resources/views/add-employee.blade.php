@@ -143,13 +143,13 @@
                                     <div class="col-lg-4 col-md-6">
                                         <div class="mb-3">
                                           <div class="add-newplus">
-                                            <label class="form-label" for="department">Department<span class="text-danger ms-1">*</span></label>
+                                            <label class="form-label" for="department_id">Department<span class="text-danger ms-1">*</span></label>
                                             <a href="{{url('department-grid')}}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select" name="department" required>
+                                            <select class="select" name="department_id" required>
                                                 <option value="">Select Department</option>
                                                 @foreach($departments as $dept)
-                                                    <option value="{{ $dept->name }}">{{ $dept->name }}</option>
+                                                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -160,9 +160,9 @@
                                                 <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
                                                 <a href="{{url('designation')}}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select" name="designation">
+                                            <select class="select" name="designation_id">
                                             @foreach($designations as $designation)
-                                                <option value="{{ $designation->designation }}">{{ $designation->designation }}</option>
+                                                <option value="{{ $designation->id }}">{{ $designation->designation }}</option>
                                             @endforeach
                                             </select>
                                         </div>

@@ -25,7 +25,7 @@
                             </span>
                             <div class="me-3">
                                 <h6 class="text-white mb-1">{{ $employee->first_name .' ' . $employee->last_name }}</h6> 
-                                <span class="badge bg-purple-transparent text-purple">{{ $employee->designation }}</span>
+                                <span class="badge bg-purple-transparent text-purple">{{ $employee->designation->name }}</span>
                             </div>
                             <div>
                                 <a href="#" class="btn btn-white">Edit Profile</a>
@@ -44,7 +44,7 @@
                                     <i class="ti ti-star me-2"></i>
                                     Team
                                 </span>
-                                <p class="text-dark">{{ $employee->department }}</p>
+                                <p class="text-dark">{{ $employee->department->name }}</p>
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <span class="d-inline-flex align-items-center">

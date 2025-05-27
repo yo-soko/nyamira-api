@@ -171,11 +171,11 @@
                                                 <label class="form-label">Designation<span class="text-danger ms-1">*</span></label>
                                                 <a href="{{ url('designation') }}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select" name="designation">
+                                            <select class="select" name="designation_id">
                                                 <option value="">Select</option>
                                                 @foreach($designations as $designation)
-                                                    <option value="{{ $designation->designation }}" 
-                                                        {{ old('designation', $employee->designation) == $designation->designation ? 'selected' : '' }}>
+                                                    <option value="{{ $designation->id }}" 
+                                                        {{ old('designation', $employee->designation) == $designation->id ? 'selected' : '' }}>
                                                         {{ $designation->designation }}
                                                     </option>
                                                 @endforeach

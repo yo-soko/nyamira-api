@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('nationality');
             $table->date('joining_date');
             $table->unsignedBigInteger('shift_id');
-            $table->string('department');
-            $table->string('designation');
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('designation_id');
             $table->string('blood_group')->nullable();
             $table->boolean('status')->default(1);
             $table->string('about', 60)->nullable();
