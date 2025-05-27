@@ -174,7 +174,7 @@
                                         <a href="javascript:void(0);" class="edit-btn" 
                                             data-id="{{ $designation->id }}"
                                             data-designation="{{ $designation->designation }}"
-                                            data-department="{{ $designation->department }}"
+                                            data-department="{{ $designation->department->id }}"
                                             data-status="{{ $designation->status }}"
                                             data-bs-toggle="modal" 
                                             data-bs-target="#edit-department">

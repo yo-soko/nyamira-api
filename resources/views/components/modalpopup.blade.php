@@ -12051,13 +12051,12 @@
                                     <div class="mb-3">
                                         <label class="form-label">Department <span class="text-danger"> *</span></label>
                                         <select class="select" name="department_id">
-                                            <option>Select</option>
-                                            <option>Sales</option>
-                                            <option>Inventory</option>
-                                            <option>Finance</option>
+                                            @foreach ($departments as $department)
+                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
-                                </div>		
+                                </div>			
                                 <div class="input-blocks m-0">
                                     <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                         <span class="status-label">Status</span>
