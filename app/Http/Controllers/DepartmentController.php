@@ -13,7 +13,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::all();
+        $departments = Department::with(['employees.user'])->get();
         $hods = User::all();
     
         return view('department-grid', compact('departments', 'hods'));

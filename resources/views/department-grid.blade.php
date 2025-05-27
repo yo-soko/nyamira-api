@@ -141,23 +141,30 @@
                         </div>
 
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="mb-0">Total Members: 08</p> {{-- Replace this with actual count if needed --}}
+                            @php
+                                $staffMembers = $department->employees->filter(fn($e) => $e->user && $e->user->role === 'Staff');
+                            @endphp
+
+                            <p class="mb-0">Total Members: {{ $staffMembers->count() }}</p>
                             <div class="avatar-list-stacked avatar-group-sm">
-                                {{-- Optional: You could loop real members here --}}
-                                <span class="avatar avatar-rounded">
-                                    <img class="border border-white" src="{{URL::asset('build/img/profiles/avatar-15.jpg')}}" alt="img">
-                                </span>
-                                <span class="avatar avatar-rounded">
-                                    <img class="border border-white" src="{{URL::asset('build/img/profiles/avatar-16.jpg')}}" alt="img">
-                                </span>
-                                <span class="avatar avatar-rounded">
-                                    <img class="border border-white" src="{{URL::asset('build/img/profiles/avatar-18.jpg')}}" alt="img">
-                                </span>
-                                <a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);">
-                                    <img src="{{URL::asset('build/img/profiles/avatar-17.jpg')}}" alt="img">
-                                    <span class="position-absolute top-50 start-50 translate-middle text-center">+2</span>
-                                </a>
+                                @foreach($staffMembers->take(3) as $employee)
+                                    <span class="avatar avatar-rounded" title="{{ $employee->user->name }}">
+                                        <img class="border border-white" 
+                                            src="{{ $employee->user->profile_picture ? asset('storage/' . $employee->user->profile_picture) : asset('build/img/users/default.png') }}" 
+                                            alt="{{ $employee->user->name }}">
+                                    </span>
+                                @endforeach
+
+                                @if($staffMembers->count() > 3)
+                                    <a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);" title="More members">
+                                        <img src="{{ asset('build/img/users/default.png') }}" alt="+">
+                                        <span class="position-absolute top-50 start-50 translate-middle text-center">
+                                            +{{ $staffMembers->count() - 3 }}
+                                        </span>
+                                    </a>
+                                @endif
                             </div>
+
                         </div>
                     </div>
                 </div>
