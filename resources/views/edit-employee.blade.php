@@ -158,7 +158,7 @@
                                                 <option value="">Select</option>
                                                 @foreach($departments as $department)
                                                     <option value="{{ $department->name }}" 
-                                                        {{ old('department', $employee->department) == $department->name ? 'selected' : '' }}>
+                                                        {{ old('department', $employee->department_id) == $department->name ? 'selected' : '' }}>
                                                         {{ $department->name }}
                                                     </option>
                                                 @endforeach
@@ -175,7 +175,7 @@
                                                 <option value="">Select</option>
                                                 @foreach($designations as $designation)
                                                     <option value="{{ $designation->id }}" 
-                                                        {{ old('designation', $employee->designation) == $designation->id ? 'selected' : '' }}>
+                                                        {{ old('designation', $employee->designation_id) == $designation->id ? 'selected' : '' }}>
                                                         {{ $designation->designation }}
                                                     </option>
                                                 @endforeach

@@ -25,7 +25,7 @@
                             </span>
                             <div class="me-3">
                                 <h6 class="text-white mb-1">{{ $employee->first_name .' ' . $employee->last_name }}</h6> 
-                                <span class="badge bg-purple-transparent text-purple">{{ $employee->designation->name }}</span>
+                                <span class="badge bg-purple-transparent text-purple">{{ $employee->designation->designation }}</span>
                             </div>
                             <div>
                                 <a href="#" class="btn btn-white">Edit Profile</a>
