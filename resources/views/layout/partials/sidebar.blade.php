@@ -95,17 +95,17 @@
                                                         </li>
                                                         <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
                                                         </li>
-                                                        @useronly
+                                                        @role('Admin')
                                                         <li class="submenu">
                                                                 <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
                                                                 <ul>
                                                                         <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
                                                                 </ul>
                                                         </li>
-                                                        @enduseronly
+                                                        @endrole
                                                 </ul>
                                         </li>
-                                        @useronly
+                                        @role('Admin')
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">User Management</h6>
                                                 <ul>
@@ -114,7 +114,7 @@
                                                         <li class="{{ Request::is('delete-account') ? 'active' : '' }}"><a href="{{url('delete-account')}}"><i class="ti ti-trash-x fs-16 me-2"></i><span>Delete Account Request</span></a></li>
                                                 </ul>
                                         </li>
-                                        @enduseronly
+                                        @endrole
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">Accounts</h6>
                                                 <ul>
