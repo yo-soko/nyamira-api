@@ -34,11 +34,11 @@ class EmployeeController extends Controller
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
 
-        if (session('user_type') == 'employee') {
+        if (session('user_type') == 'Employee') {
             // Fetch only the logged-in employee's details
             $employees = Employee::where('id', session('user_id'))->get();
         } 
-        else if (session('user_type') == 'user') {
+        else if (session('user_type') == 'Admin') {
             $employees = Employee::latest()->get();
 
         }
