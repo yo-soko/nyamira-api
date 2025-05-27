@@ -15,21 +15,22 @@
                             <h4>Access using your email and password.</h4>
                         </div>
                         <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                <div class="input-group">
-                                    <input type="text" value="" name="email" class="form-control border-end-0">
-                                    <span class="input-group-text border-start-0">
-                                        <i class="ti ti-mail"></i>
-                                    </span>
-                                </div>
+                            <label class="form-label">Username</label>
+                            <div class="input-group">
+                                <input type="text" id="loginInput" name="login" class="form-control border-end-0">
+                                <span class="input-group-text border-start-0">
+                                    <i class="ti ti-mail"></i>
+                                </span>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Password</label>
-                                <div class="pass-group">
-                                    <input type="password" name="password" class="pass-input form-control">
-                                    <span class="ti toggle-password ti-eye-off text-gray-9"></span>
-                                </div>
+                        </div>
+
+                        <div class="mb-3" id="passwordField" style="display: none;">
+                            <label class="form-label">Password</label>
+                            <div class="pass-group">
+                                <input type="password" name="password" id="passwordInput" class="pass-input form-control">
+                                <span class="ti toggle-password ti-eye-off text-gray-9"></span>
                             </div>
+                        </div>
                         <div class="form-login authentication-check">
                             <div class="row">
                                 <div class="col-6">
@@ -90,4 +91,24 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const loginInput = document.getElementById("loginInput");
+            const passwordField = document.getElementById("passwordField");
+
+            loginInput.addEventListener("input", function () {
+                const value = loginInput.value.trim();
+
+                // Simple email pattern
+                const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+                if (isEmail) {
+                    passwordField.style.display = "block";
+                } else {
+                    passwordField.style.display = "none";
+                }
+            });
+        });
+    </script>
+
 @endsection

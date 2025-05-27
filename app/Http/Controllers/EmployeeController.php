@@ -6,7 +6,9 @@ use App\Models\Employee;
 use App\Models\Department;
 use App\Models\Designation;
 use App\Models\Shift;
+use App\Models\User;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -77,9 +79,8 @@ class EmployeeController extends Controller
         return view('add-employee', compact('departments', 'designations', 'shifts'));
     }
 
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        // Convert first before validation
         $request->merge([
             'dob' => Carbon::createFromFormat('d-m-Y', $request->dob)->format('Y-m-d'),
             'joining_date' => Carbon::createFromFormat('d-m-Y', $request->joining_date)->format('Y-m-d'),
@@ -89,7 +90,7 @@ class EmployeeController extends Controller
             'profile_photo' => 'nullable|image|max:2048',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'contact_number' => 'required',
             'emp_code' => 'required|unique:employees,emp_code',
             'dob' => 'required|date_format:Y-m-d',
@@ -113,25 +114,14 @@ class EmployeeController extends Controller
             'bank_name' => 'nullable|string',
             'account_number' => 'nullable|string',
             'branch' => 'nullable|string',
-            'password' => 'required|confirmed|min:4',
+            'password' => 'required|confirmed',
         ]);
 
         $nullableFields = [
-            'profile_photo',
-            'blood_group',
-            'about',
-            'address',
-            'country',
-            'zipcode',
-            'emergency_contact1',
-            'emergency_relation1',
-            'emergency_name1',
-            'emergency_contact2',
-            'emergency_relation2',
-            'emergency_name2',
-            'bank_name',
-            'account_number',
-            'branch',
+            'profile_photo', 'blood_group', 'about', 'address', 'country', 'zipcode',
+            'emergency_contact1', 'emergency_relation1', 'emergency_name1',
+            'emergency_contact2', 'emergency_relation2', 'emergency_name2',
+            'bank_name', 'account_number', 'branch',
         ];
 
         foreach ($nullableFields as $field) {
@@ -140,27 +130,43 @@ class EmployeeController extends Controller
             }
         }
 
-        // Handle profile photo
         if ($request->hasFile('profile_photo')) {
             $data['profile_photo'] = $request->file('profile_photo')->store('profile_photos', 'public');
         }
 
         $data['status'] = $request->has('status') ? 1 : 0;
-
-        // Hash the password
         $data['password'] = Hash::make($data['password']);
 
+        DB::beginTransaction();
+
         try {
-            // Save the employee
-            if (Employee::create($data)) {
-                return redirect()->back()->with('success', 'Employee added successfully!');
-            } else {
-                return redirect()->back()->with('error', 'Failed to add employee. Please try again.');
-            }
-        } catch (\Illuminate\Database\QueryException $e) {
+            // Step 1: Create user
+            $user = User::create([
+                'name' => $data['first_name'] . ' ' . $data['last_name'],
+                'email' => $data['email'],
+                'phone' => $data['contact_number'],
+                'code' => $data['emp_code'],
+                'password' => $data['password'], // already hashed
+                'role' => 'Employee',
+                'status' => true,
+                'profile_picture' => $data['profile_photo'] ?? null,
+            ]);
+
+            // Step 2: Attach user_id to employee data
+            $data['user_id'] = $user->id;
+
+            // Step 3: Create employee with user_id
+            Employee::create($data);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Employee and user account added successfully!');
+        } 
+        catch (\Exception $e) {
+            DB::rollBack();
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Employee could not be added. Email or Employee Code already exists.');
+                ->with('error', 'Error creating employee/user: ' . $e->getMessage());
         }
     }
 

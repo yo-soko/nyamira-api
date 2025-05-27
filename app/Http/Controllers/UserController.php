@@ -34,7 +34,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'phone' => 'nullable|string',
             'role' => 'required',
-            'password' => 'required|confirmed|min:6',
+            'code' => 'required',
+            'password' => 'required|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
@@ -47,6 +48,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
+            'phone' => $request->code,
             'role' => $request->role,
             'status' => $request->has('status'),
             'profile_picture' => $imagePath,

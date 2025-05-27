@@ -21,76 +21,61 @@ class CustomAuthController extends Controller
     public function customSignin(Request $request)
     {
         $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required',
+            'login'    => 'required', // email or code
+            'password' => 'nullable', // only required if email is used
         ]);
-        
-        $credentials = $request->only('email', 'password');
-        $remember    = $request->boolean('remember');
-        Log::info('Attempted credentials:', $credentials);
-        
-        // Check if the user is already authenticated and log them out to prevent conflicts
+
+        $loginValue = $request->input('login');
+        $password   = $request->input('password');
+        $remember   = $request->boolean('remember');
+
+        // Log out existing session
         if (Auth::check()) {
-            Auth::logout(); // Log out any authenticated user
-            session()->flush(); // Clear the session
+            Auth::logout();
+            session()->flush();
         }
 
-        // Try to authenticate a normal user first (using users table)
-        $user = User::where('email', $credentials['email'])->first();
+        $user = null;
 
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            // User login successful
-            Log::info('User found:', $user ? $user->toArray() : null);
+        if (filter_var($loginValue, FILTER_VALIDATE_EMAIL)) {
+            // Login using email and password
+            $user = User::where('email', $loginValue)->first();
 
-            Auth::login($user, $remember);
-            $request->session()->regenerate();
+            if (!$user || !Hash::check($password, $user->password)) {
+                return back()
+                    ->with('error', 'Invalid email or password.')
+                    ->withInput($request->only('login'));
+            }
+        }
+        else {
+            // Login using code (no password required)
+            $user = User::where('code', $loginValue)->first();
 
-            session([
-                'user_type' => 'user',
-                'user_id'   => $user->id,
-                'user_email'=> $user->email,
-                'user_name'=> $user->name,
-                'user_phone'=> $user->phone,
-                'user_image' => $user->profile_picture,
-            ]);
-
-            return redirect()->intended('index')->with('success', 'It\'s nice to see you!');
+            if (!$user) {
+                return back()
+                    ->with('error', 'Invalid code.')
+                    ->withInput($request->only('login'));
+            }
         }
 
-        // If user login fails, try the employee table (employees table)
-        $employee = Employee::where('email', $credentials['email'])->first();
-        
-        if ($employee && Hash::check($credentials['password'], $employee->password)) {
-            // Employee login successful
-            Log::info('Employee found:', $employee ? $employee->toArray() : null);
+        // Login the user
+        Auth::login($user, $remember);
+        $request->session()->regenerate();
 
-            Auth::login($employee, $remember);
+        session([
+            'user_type'   => $user->role, // e.g. 'Employee', 'Admin', etc.
+            'user_id'     => $user->id,
+            'user_email'  => $user->email,
+            'user_name'   => $user->name,
+            'user_phone'  => $user->phone,
+            'user_image'  => $user->profile_picture,
+        ]);
 
-            $request->session()->regenerate();
-
-            session([
-                'user_type' => 'employee',
-                'user_id'   => $employee->id,
-                'user_email'=> $employee->email,
-                'user_phone'=> $employee->contact_number,
-                'user_name'=> $employee->first_name. ' ' . $employee->last_name,
-                'user_image' => $employee->profile_photo,
-
-            ]);
-
-            return redirect()->intended('index')->with('success', 'It\'s nice to see you!');
-        }
-
-        // If neither login succeeds, return an error
-        return redirect()->back()
-            ->with('error', 'These credentials do not match our records.')
-            ->withInput($request->only('email'));
+        return redirect()->intended('index')->with('success', 'Welcome back!');
     }
 
-    
 
-    
-    
+
     public function showLoginForm()
     {
         return view('login');

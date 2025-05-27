@@ -119,7 +119,7 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <p class="fs-13 mb-2">Shift</p>
-                                        <span class="text-gray-900 fs-13">{{ $employee->shift }}</span>
+                                        <span class="text-gray-900 fs-13">{{ $employee->shift->shift_name }}</span>
                                     </div>
                                 </div>
                             </div>

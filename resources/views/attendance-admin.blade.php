@@ -18,6 +18,7 @@
                     <div class="card-body d-flex align-items-center justify-content-between">
                         <div>
                             <p class="mb-1 text-white">Total Employee</p>
+                       
                             <h4 class="text-white">{{ $totalEmployees }}</h4>
                         </div>
                         <div>

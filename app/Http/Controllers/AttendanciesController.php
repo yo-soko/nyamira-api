@@ -169,9 +169,21 @@ class AttendanciesController extends Controller
                 $holidayDays++;
             }
         }
+        $today = Carbon::today();
+
+        if ($today->day <= 5) {
+            $start = $today->copy()->subMonth()->startOfMonth();
+            $end = $today->copy()->subMonth()->endOfMonth();
+        } else {
+            $start = $today->copy()->startOfMonth();
+            $end = $today->copy()->endOfMonth();
+        }
+
         $attendanceRecords = Attendancies::where('employee_id', $employee->id)
-        ->latest('date') // This will order by date descending
-        ->get();
+            ->whereBetween('date', [$start, $end])
+            ->latest('date')
+            ->get();
+
 
 
         return view('attendance-employee', compact('employee', 'greeting', 'alreadyClockedIn',
