@@ -142,7 +142,7 @@
 
                         <div class="d-flex align-items-center justify-content-between">
                             @php
-                                $staffMembers = $department->employees->filter(fn($e) => $e->user && $e->user->role === 'Staff');
+                                $staffMembers = $department->employees->filter(fn($e) => $e->user && $e->user->role === 'Employee');
                             @endphp
 
                             <p class="mb-0">Total Members: {{ $staffMembers->count() }}</p>
