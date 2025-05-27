@@ -47,7 +47,8 @@ class AttendanciesController extends Controller
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
         // Fetch all employees
-        $employees = Employee::all(); // If you have a large dataset, you can use pagination instead
+        $employees = Employee::with(['department', 'designation'])->get();
+         // If you have a large dataset, you can use pagination instead
         
         return view('index', compact('employees', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
