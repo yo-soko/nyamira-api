@@ -46,11 +46,11 @@
             <div class="d-flex align-items-center flex-wrap mb-1">
                 <a href="{{url('profile')}}" class="btn btn-dark btn-md me-2 mb-2">Profile</a>
                  @role('Admin')
-                            <a href="{{ route('auto-clockout') }}" class="btn btn-dark btn-md me-2 mb-2"
-                                onclick="return confirm('Are you sure you want to auto-clock out employees who forgot?');">
-                                <i class="ti ti-circle-plus me-1"></i>Clock out forgotten
-                            </a>
-                    @endrole
+                        <a href="{{ url('auto-clockout') }}" class="btn btn-dark btn-md me-2 mb-2"
+                            onclick="return confirm('Are you sure you want to auto-clock out employees who forgot?');">
+                            <i class="ti ti-circle-plus me-1"></i>Clock out forgotten
+                        </a>
+                @endrole
                 <a href="{{url('general-settings')}}" class="btn btn-light btn-md mb-2">Settings</a>
             </div>
         </div>
