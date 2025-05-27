@@ -120,7 +120,7 @@
                                 <h6 class="mb-1">
                                     <a href="{{ url('attendance-employee/'.$employee->id) }}">{{ $employee->first_name .' '. $employee->last_name }}</a>
                                 </h6>
-                                <span class="badge bg-secondary-gradient text-gray-9 fs-10 fw-medium">{{ $employee->designation }}</span>
+                                <span class="badge bg-secondary-gradient text-gray-9 fs-10 fw-medium">{{ $employee->designation->name ?? '-' }}</span>
                                 <br class="mb-2">
                                 <span class="badge {{ $employee->status === 1 ? 'badge-success' : 'badge-danger' }} d-inline-flex align-items-center badge-xs">
                                     <i class="ti ti-point-filled me-1"></i>{{ $employee->status === 1 ? 'Active' : 'Inactive' }}
@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="text-start">
                                     <h6 class="mb-1">Department</h6>
-                                    <p>{{ $employee->department }}</p>
+                                    <p>{{ $employee->department->name ?? '-' }}</p>
                                 </div>
                             </div>
                         </div>
