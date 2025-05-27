@@ -1,4 +1,4 @@
-@useronly
+@role('Admin')
 <?php $page = 'edit-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -420,4 +420,4 @@
         }
     </script>
 @endsection
-@enduseronly
+@endrole

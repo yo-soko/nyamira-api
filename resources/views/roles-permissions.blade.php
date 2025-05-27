@@ -1,4 +1,4 @@
-@useronly
+@role('Admin')
 <?php $page = 'roles-permissions'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -127,4 +127,4 @@
         </div>
     </div>
 @endsection
-@enduseronly
+@endrole

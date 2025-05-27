@@ -25,11 +25,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @useronly
+            @role('Admin')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-department"><i class="ti ti-circle-plus me-1"></i>Add Designation</a>
             </div>
-            @enduseronly
+            @endrole
         </div>
         <!-- /product list -->
         <div class="card">
@@ -110,9 +110,9 @@
                                 <th>Total Members</th>
                                 <th>Created On</th>
                                 <th>Status</th>
-                                @useronly
+                                @role('Admin')
                                 <th class="no-sort"></th>
-                                @enduseronly
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -158,7 +158,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                @useronly
+                                @role('Admin')
                                 <td class="action-table-data">
                                     <div class="edit-delete-action">
                                         <a href="javascript:void(0);" class="edit-btn" 
@@ -179,7 +179,7 @@
                                         </a>
                                     </div>
                                 </td>
-                                @enduseronly
+                                @endrole
                             </tr>
                         @endforeach
                         </tbody>

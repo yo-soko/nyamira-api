@@ -1,4 +1,4 @@
-@useronly
+@role('Admin')
 <?php $page = 'delete-account'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -101,4 +101,4 @@
         </div>
     </div>
 @endsection
-@enduseronly
+@endrole

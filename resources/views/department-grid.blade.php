@@ -33,11 +33,11 @@
             </ul>
          
             <x-modalpopup :hods="$hods" />
-            @useronly
+            @role('Admin')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-department"><i class="ti ti-circle-plus me-1"></i>Add Department</a>
             </div>
-            @enduseronly
+            @endrole
         </div>
 
         <div class="card">
@@ -107,7 +107,7 @@
                                     <i data-feather="more-vertical" class="feather-user"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    @useronly
+                                    @role('Admin')
                                     <li>
                                     <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit-department" 
                                         data-department-id="{{ $department->id }}" 
@@ -126,7 +126,7 @@
                                             <i data-feather="trash-2" class="info-img me-2"></i>Delete
                                     </a>
                                     </li>
-                                    @enduseronly								
+                                    @endrole								
                                 </ul>
                             </div>
                         </div>
@@ -185,9 +185,9 @@
                                 <th>Total Members</th>
                                 <th>Created On</th>
                                 <th>Status</th>
-                                @useronly
+                                @role('Admin')
                                 <th class="no-sort"></th>
-                                @enduseronly
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -233,7 +233,7 @@
                                             <i class="ti ti-point-filled me-1"></i>Active
                                         </span>
                                     </td>
-                                    @useronly
+                                    @role('Admin')
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
                                             <a class="me-2 p-2" href="javascript:void(0);"
@@ -249,7 +249,7 @@
                                             </a>
                                         </div>
                                     </td>
-                                    @enduseronly
+                                    @endrole
                                 </tr>                                     
                             @endforeach
                         </tbody>

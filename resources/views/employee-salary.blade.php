@@ -1,4 +1,4 @@
-@useronly
+@role('Admin')
 <?php $page = 'employee-salary'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -30,11 +30,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @useronly
+            @role('Admin')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" id="add-payroll-btn" data-bs-toggle="modal" data-bs-target="#add-payroll"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
             </div>
-            @enduseronly
+            @endrole
         </div>
             <!-- product list -->
             <div class="card">
@@ -130,7 +130,7 @@
                                             <a class="p-2 me-2" href="{{ url('payslip/' . $employeeSalary->id) }}">
                                                 <i data-feather="eye" class="feather-eye"></i>
                                             </a>
-                                            @useronly
+                                            @role('Admin')
                                             <a class="p-2 me-2 edit-btn" href="javascript:void(0);" 
                                             
                                             data-id="{{ $employeeSalary->id }}"
@@ -166,7 +166,7 @@
                                              href="javascript:void(0);">
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
-                                            @enduseronly
+                                            @endrole
                                         </div>
                                     </td>
                                 </tr>
@@ -389,7 +389,7 @@
 
 
 <!-- add payroll modal -->
- @useronly
+ @role('Admin')
     <div class="modal fade" id="add-payroll">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -582,6 +582,6 @@
             </div>
         </div>
     </div>
- @enduseronly
+ @endrole
 @endsection
-@enduseronly
+@endrole

@@ -25,11 +25,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @useronly
+            @role('Admin')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-shift"><i class="ti ti-circle-plus me-1"></i>Add Shift</a>
             </div>
-            @enduseronly
+            @endrole
         </div>
         <!-- /product list -->
         <div class="card">
@@ -94,9 +94,9 @@
                                 <th>Off Day</th>
                                 <th>Created On</th>
                                 <th>Status</th>
-                                @useronly
+                                @role('Admin')
                                 <th class="no-sort"></th>
-                                @enduseronly
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -130,7 +130,7 @@
                                             </span>
                                         @endif
                                     </td>
-                                    @useronly
+                                    @role('Admin')
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
                                             <a class="me-2 p-2 edit-btn" href="#" 
@@ -161,7 +161,7 @@
                                         </a>
                                         </div>
                                     </td>
-                                    @enduseronly
+                                    @endrole
                                 </tr>
                             @endforeach
                         </tbody>
