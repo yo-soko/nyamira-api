@@ -130,20 +130,31 @@
                                 <td>{{ $designation->department }}</td>
                                 <td>
                                     <div class="d-flex align-items-center justify-content-between">
+                                        @php
+                                            $designationStaff = $designation->employees->filter(fn($e) => $e->user && $e->user->role === 'Employee');
+                                        @endphp
+
+                                        <p class="mb-0">Total Members: {{ $designationStaff->count() }}</p>
+
                                         <div class="avatar-list-stacked avatar-group-sm">
-                                            {{-- Placeholder avatars, you can link actual employees later --}}
-                                            <span class="avatar avatar-rounded">
-                                                <img class="border border-white" src="{{URL::asset('build/img/profiles/avatar-15.jpg')}}" alt="img">
-                                            </span>
-                                            <span class="avatar avatar-rounded">
-                                                <img class="border border-white" src="{{URL::asset('build/img/profiles/avatar-16.jpg')}}" alt="img">
-                                            </span>
-                                            <a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);">
-                                                <img src="{{URL::asset('build/img/profiles/avatar-17.jpg')}}" alt="img">
-                                                <span class="position-absolute top-50 start-50 translate-middle text-center">+2</span>
-                                            </a>
+                                            @foreach($designationStaff->take(3) as $employee)
+                                                <span class="avatar avatar-rounded" title="{{ $employee->user->name }}">
+                                                    <img class="border border-white" 
+                                                        src="{{ $employee->user->profile_picture ? asset('storage/' . $employee->user->profile_picture) : asset('build/img/users/default.png') }}" 
+                                                        alt="{{ $employee->user->name }}">
+                                                </span>
+                                            @endforeach
+
+                                            @if($designationStaff->count() > 3)
+                                                <a class="avatar avatar-rounded text-fixed-white fs-10 fw-medium position-relative" href="javascript:void(0);" title="More members">
+                                                    <img src="{{ asset('build/img/users/default.png') }}" alt="+">
+                                                    <span class="position-absolute top-50 start-50 translate-middle text-center">
+                                                        +{{ $designationStaff->count() - 3 }}
+                                                    </span>
+                                                </a>
+                                            @endif
                                         </div>
-                                    </div>						
+                                    </div>
                                 </td>
                                 <td>{{ rand(5, 10) }}</td> {{-- Random for now, can replace with actual count --}}
                                 <td>{{ \Carbon\Carbon::parse($designation->created_at)->format('d M Y') }}</td>

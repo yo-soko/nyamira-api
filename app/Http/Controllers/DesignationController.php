@@ -12,7 +12,7 @@ class DesignationController extends Controller
      */
     public function index()
     {
-        $designations = Designation::all(); 
+        $designations = Designation::with('employees')->get();
         return view('designation', compact('designations'));
     }
 

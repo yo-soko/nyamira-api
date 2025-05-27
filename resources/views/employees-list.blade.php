@@ -142,7 +142,7 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{ $employee->designation->name }}</td>
+                                        <td>{{ $employee->designation->designation }}</td>
                                         <td>{{ $employee->email }}</td>
                                         <td>{{ $employee->contact_number }}</td>
                                         <td>{{ $employee->shift->shift_name }}</td>

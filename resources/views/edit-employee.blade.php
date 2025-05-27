@@ -157,7 +157,7 @@
                                             <select class="select" name="department">
                                                 <option value="">Select</option>
                                                 @foreach($departments as $department)
-                                                    <option value="{{ $department->name }}" 
+                                                    <option value="{{ $department->id }}" 
                                                         {{ old('department', $employee->department_id) == $department->name ? 'selected' : '' }}>
                                                         {{ $department->name }}
                                                     </option>
