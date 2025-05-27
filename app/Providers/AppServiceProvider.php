@@ -26,5 +26,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::if('roles', function ($roles) {
             return in_array(session('user_type'), $roles);
         });
+        View::share('departments', \App\Models\Department::where('status', 1)->get());
+        
     }
 }

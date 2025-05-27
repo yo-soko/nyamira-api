@@ -107,7 +107,6 @@
                                 <th>Designation</th>
                                 <th>Department</th>
                                 <th>Members</th>
-                                <th>Total Members</th>
                                 <th>Created On</th>
                                 <th>Status</th>
                                 @role('Admin')
@@ -127,7 +126,7 @@
                                 <td>
                                     <span class="text-gray-900">{{ $designation->designation }}</span>
                                 </td>
-                                <td>{{ $designation->department }}</td>
+                                <td>{{ $designation->department->name }}</td>
                                 <td>
                                     <div class="d-flex align-items-center justify-content-between">
                                         @php
@@ -156,7 +155,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ rand(5, 10) }}</td> {{-- Random for now, can replace with actual count --}}
+                               
                                 <td>{{ \Carbon\Carbon::parse($designation->created_at)->format('d M Y') }}</td>
                                 <td>
                                     @if($designation->status)

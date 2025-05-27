@@ -12050,7 +12050,7 @@
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <label class="form-label">Department <span class="text-danger"> *</span></label>
-                                        <select class="select" name="department">
+                                        <select class="select" name="department_id">
                                             <option>Select</option>
                                             <option>Sales</option>
                                             <option>Inventory</option>
@@ -12108,11 +12108,10 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Department <span class="text-danger"> *</span></label>
-                                    <select class="select" id="edit-depart" name="department">
-                                        <option value="">Select</option>
-                                        <option value="Sales">Sales</option>
-                                        <option value="Inventory">Inventory</option>
-                                        <option value="Finance">Finance</option>
+                                    <select class="select" id="edit-depart" name="department_id">
+                                        @foreach ($departments as $department)
+                                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>		

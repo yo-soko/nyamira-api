@@ -12,7 +12,7 @@ class DesignationController extends Controller
      */
     public function index()
     {
-        $designations = Designation::with('employees')->get();
+        $designations = Designation::with('employees','departments')->get();
         return view('designation', compact('designations'));
     }
 
@@ -31,12 +31,12 @@ class DesignationController extends Controller
     {
         $request->validate([
             'designation' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
+            'department_id' => 'required',
         ]);
 
         Designation::create([
             'designation' => $request->designation,
-            'department' => $request->department,
+            'department_id' => $request->department_id,
             'status' => $request->has('status') ? 1 : 0,
         ]);
 
@@ -66,13 +66,13 @@ class DesignationController extends Controller
     {
         $request->validate([
             'designation' => 'required|string|max:255',
-            'department' => 'required|string|max:255',
+            'department_id' => 'required',
         ]);
 
         $designation = Designation::findOrFail($request->id);
         $designation->update([
             'designation' => $request->designation,
-            'department' => $request->department,
+            'department_id' => $request->department_id,
             'status' => $request->has('status') ? 1 : 0,
         ]);
 
