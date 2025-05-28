@@ -154,7 +154,7 @@
                                                 <label class="form-label">Department<span class="text-danger ms-1">*</span></label>
                                                 <a href="{{ url('department-grid') }}"><span><i data-feather="plus-circle" class="plus-down-add"></i>Add new</span></a>
                                             </div>
-                                            <select class="select" name="department">
+                                            <select class="select" name="department_id">
                                                 <option value="">Select</option>
                                                 @foreach($departments as $department)
                                                     <option value="{{ $department->id }}" 
