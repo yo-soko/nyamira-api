@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('shift_name');
             $table->string('start_time');
             $table->string('end_time');
-            $table->json('days')->nullable();
+            $table->text('days')->nullable();
             $table->string('day_off')->nullable();
             $table->boolean('recurring')->default(false);
             $table->boolean('status')->default(true);

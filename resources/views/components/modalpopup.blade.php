@@ -11976,7 +11976,7 @@
                                     <div class="input-blocks m-0">
                                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                             <span class="status-label">Status</span>
-                                            <input type="checkbox" id="edit-status" class="check" name="status">
+                                            <input type="checkbox" id="edit-status" class="check" name="status" checked>
                                             <label for="edit-status" class="checktoggle"></label>
                                         </div>
                                     </div>

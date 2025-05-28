@@ -247,7 +247,8 @@
                                             data-department-id="{{ $department->id }}" 
                                             data-department-name="{{ $department->name }}"
                                             data-hod-id="{{ $department->hod_id }}" 
-                                            data-department-description="{{ $department->description }}"
+                                            data-hod-id="{{ $department->hod_id }}" 
+                                            data-department-status="{{ $department->status}}"
                                             data-bs-toggle="modal" data-bs-target="#edit-department">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                             </a>
