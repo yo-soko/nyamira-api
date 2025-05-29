@@ -214,7 +214,7 @@ class AttendanciesController extends Controller
         }
 
         // Define grace periods (in minutes)
-        $graceBefore = 30; // e.g., 30 mins before shift start
+        $graceBefore = 90; // e.g., 30 mins before shift start
         $graceAfter = 450;  // e.g., 450 mins after shift start
 
         // Build shift window
