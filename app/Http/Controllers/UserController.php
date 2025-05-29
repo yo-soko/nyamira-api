@@ -48,7 +48,7 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'phone' => $request->code,
+            'code' => $request->code,
             'role' => $request->role,
             'status' => $request->has('status'),
             'profile_picture' => $imagePath,
@@ -91,6 +91,7 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'phone' => 'nullable|string',
+            'code' => 'required',
             'role' => 'required',
             'password' => 'nullable|confirmed|min:6',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -99,6 +100,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->code = $request->code;
         $user->role = $request->role;
         $user->status = $request->has('status');
     
@@ -111,7 +113,7 @@ class UserController extends Controller
             $user->password = Hash::make($request->password);
         }
     
-        $user->save();
+        $user->update();
     
         return redirect()->back()->with('success', 'User updated successfully!');
     }
