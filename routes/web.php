@@ -114,13 +114,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/leaves', [LeavesController::class, 'store'])->name('leaves.store');
     Route::put('/leaves/{id}', [LeavesController::class, 'update'])->name('leaves.update');
     Route::post('/leaves/delete', [LeavesController::class, 'destroy'])->name('leaves.delete');
+    Route::get('/leaves-admin', [LeavesController::class, 'allLeaves'])->name('leaves-admin');
+    Route::get('/leave/{id}/approve', [LeavesController::class, 'approve'])->name('leave.approve');
+    Route::get('/leave/{id}/reject', [LeavesController::class, 'reject'])->name('leave.reject');
 });
 
-
-
-Route::get('/leaves-admin', function () {                         
-    return view('leaves-admin');
-})->name('leaves-admin'); 
 
 Route::get('/payslip', function () {                         
     return view('payslip');

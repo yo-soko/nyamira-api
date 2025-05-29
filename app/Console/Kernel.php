@@ -19,4 +19,8 @@ class Kernel extends ConsoleKernel
         // Run daily at 11:55 PM (or change time as needed)
         $schedule->command('attendance:autoclockout')->dailyAt('23:55');
     }
+    protected $routeMiddleware = [
+    // other middleware...
+    'admin' => \App\Http\Middleware\Admin::class,
+    ];
 }

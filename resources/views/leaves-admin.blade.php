@@ -1,8 +1,8 @@
+@role('Admin')
 <?php $page = 'leaves-admin'; ?>
 @extends('layout.mainlayout')
 @section('content')
-
-
+@include('layout.toast')
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header">
@@ -26,9 +26,6 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-leave">Apply Leave</a>
-            </div>
         </div>
         <!-- /product list -->
         <div class="card">
@@ -71,102 +68,78 @@
                                         <span class="checkmarks"></span>
                                     </label>
                                 </th>
-                                <th>ID</th>
-                                <th>Employee</th>
+                                <th>User</th>
                                 <th>Type</th>
                                 <th>From Date</th>
                                 <th>To Date</th>
-                                <th>Days/Hours</th>
+                                <th>Days</th>
                                 <th>Applied  On</th>
-                                <th>Shift</th>
+                                <th>Mode</th>
                                 <th>Status</th>
                                 <th class="no-sort"></th>
                             </tr>
                         </thead>
                         <tbody>	
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td>EMP005</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="#" class="avatar avatar-md me-2">
-                                            <img src="{{URL::asset('build/img/users/user-05.jpg')}}" alt="product">
-                                        </a>
-                                        <div>
-                                            <h6><a href="#">Mark Joslyn</a></h6>
-                                            <span>Designer</span>
+                            @forelse($leaves as $leave)
+                                <tr>
+                                    <td>
+                                        @if($leave->status === 'Pending')
+                                            <label class="checkboxs">
+                                                <input type="checkbox">
+                                                <span class="checkmarks"></span>
+                                            </label>
+                                        @else
+                                            <span class="text-muted">—</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                       <div class="d-flex align-items-center">
+                                            <a href="#" class="avatar avatar-md me-2">
+                                                <img src="{{ $leave->user->profile_picture ? asset('storage/' . $leave->user->profile_picture) : asset('build/img/users/default.png') }}" alt="user">
+                                            </a>
+                                            <div>
+                                                <h6><a href="#">{{ $leave->user->name }}</a></h6>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>Casual Leave</td>
-                                <td>06 Nov 2024</td>
-                                <td>08 Nov 2024</td>
-                                <td>03 Days</td>
-                                <td>05 Nov 2024</td>
-                                <td>Regular</td>
-                                <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Approved
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a class="p-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>	
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td>EMP006</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="#" class="avatar avatar-md me-2">
-                                            <img src="{{URL::asset('build/img/users/user-05.jpg')}}" alt="product">
-                                        </a>
-                                        <div>
-                                            <h6><a href="#">Marsha Betts</a></h6>
-                                            <span>Developer</span>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>Sick Leave</td>
-                                <td>25 Oct 2024</td>
-                                <td>25 Oct 2024</td>
-                                <td>01 Days</td>
-                                <td>24 Oct 2024</td>
-                                <td>Regular</td>
-                                <td>
-                                    <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Rejected
-                                    </span>
-                                </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a class="p-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>	
-                        	
+                                    </td>
+                                    <td>{{ $leave->leaveType->type ?? 'N/A' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($leave->from_date)->format('d M Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($leave->to_date)->format('d M Y') }}</td>
+                                    <td>{{ $leave->days ?? 'N/A' }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($leave->created_at)->format('d M Y') }}</td>
+                                    <td>{{ $leave->leave_mode ?? 'Full Day' }}</td>
+                                    <td>
+                                        @if($leave->status === 'Approved')
+                                            <span class="badge badge-success d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Approved
+                                            </span>
+                                        @elseif($leave->status === 'Rejected')
+                                            <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Rejected
+                                            </span>
+                                        @else
+                                            <span class="badge badge-teal d-inline-flex align-items-center badge-xs">
+                                                <i class="ti ti-point-filled me-1"></i>Pending
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="action-table-data">
+                                        @if($leave->status === 'Pending')
+                                            <div class="edit-delete-action">
+                                                <a class="me-2 p-2 bg-success" href="{{ route('leave.approve', $leave->id) }}">
+                                                    <i class="feather-check"></i>
+                                                </a>
+                                                <a class="p-2 bg-danger" href="{{ route('leave.reject', $leave->id) }}">
+                                                    <i class="feather-x"></i>
+                                                </a>
+                                            </div>
+                                        @else
+                                            <span class="text-muted"></span>
+                                        @endif
+                                    </td>
+                                </tr>	
+                            @empty
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -181,3 +154,4 @@
 </div>
 
 @endsection
+@endrole

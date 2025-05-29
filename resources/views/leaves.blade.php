@@ -116,6 +116,7 @@
                                     @endif
                                 </td>
                                 <td class="action-table-data justify-content-end">
+                                    @if($leave->status === 'Pending')
                                     <div class="edit-delete-action">
                                        <a class="me-2 p-2 edit-btn"
                                         href="#"
@@ -139,6 +140,9 @@
                                         </a>
                                     </div>
                                 </td>
+                                @else
+                                    <span class="text-muted">No Actions</span>
+                                @endif
                             </tr>
                             @empty	
 

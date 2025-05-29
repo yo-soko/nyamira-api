@@ -27,15 +27,24 @@ class LeavesController extends Controller
                     ->latest()
                     ->get();
 
-        return view('leaves', compact('leaves'));
+        return view('leaves-admin', compact('leaves'));
     }
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+     public function approve($id)
     {
-       
+        $leave = Leaves::findOrFail($id);
+        $leave->status = 'Approved';
+        $leave->save();
 
+        return redirect()->route('leaves-admin')->with('success', 'Leave approved.');
+    }
+
+    public function reject($id)
+    {
+        $leave = Leaves::findOrFail($id);
+        $leave->status = 'Rejected';
+        $leave->save();
+
+        return redirect()->route('leaves-admin')->with('success', 'Leave rejected.');
     }
 
     /**
