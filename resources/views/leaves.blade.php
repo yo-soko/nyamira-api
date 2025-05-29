@@ -1,7 +1,7 @@
 <?php $page = 'leaves-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
-    
+@include('layout.toast') 
 
 <div class="page-wrapper">
     <div class="content">
@@ -75,12 +75,14 @@
                                 <th>From Date</th>
                                 <th>To Date</th>
                                 <th>Days/Hours</th>
+                                <th>Reason</th>
                                 <th>Applied On</th>
                                 <th>Status</th>
                                 <th class="no-sort"></th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse ($leaves as $leave)
                             <tr>
                                 <td>
                                     <label class="checkboxs">
@@ -88,104 +90,59 @@
                                         <span class="checkmarks"></span>
                                     </label>
                                 </td>
-                                <td>Sick Leave</td>
+                                <td>{{ $leave->leaveType->type ?? 'N/A' }}</td>
                                 <td>
-                                    24 Dec 2024							
+                                    {{ \Carbon\Carbon::parse($leave->from_date)->format('d M Y') }}						
                                 </td>
-                                <td>24 Dec 2024</td>
+                                <td>{{ \Carbon\Carbon::parse($leave->to_date)->format('d M Y') }}</td>
                                 <td>
-                                    01 Day
+                                   {{ $leave->days == 0.5 ? 'Half Day' : number_format($leave->days, 1) . ' Day' }}
                                 </td>
-                                <td>23 Dec 2024</td>
+                                 <td>{{ $leave->reason ?? 'N/A' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($leave->created_at)->format('d M Y') }}</td>
                                 <td>
-                                    <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Approved
-                                    </span>
+                                    @if($leave->status == 'Pending')
+                                        <span class="badge badge-teal d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>Pending
+                                        </span>
+                                    @elseif($leave->status == 'Approved')
+                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>Approved
+                                        </span>
+                                    @else
+                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
+                                            <i class="ti ti-point-filled me-1"></i>Rejected
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="action-table-data justify-content-end">
                                     <div class="edit-delete-action">
-                                        <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
+                                       <a class="me-2 p-2 edit-btn"
+                                        href="#"
+                                        data-id="{{ $leave->id }}"
+                                        data-leave="{{ $leave->leave_type_id }}"
+                                        data-from_date="{{ $leave->from_date }}"
+                                        data-to_date="{{ $leave->to_date }}"
+                                        data-days_count="{{ $leave->days }}"
+                                        data-description="{{ htmlentities($leave->reason) }}"
+                                        data-leave_mode="{{ $leave->leave_mode }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#edit-leave">
                                             <i data-feather="edit" class="feather-edit"></i>
                                         </a>
-                                        <a class="p-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
+
+                                        <a href="javascript:void(0);" 
+                                            class="delete-btn" 
+                                            data-id="{{ $leave->id }}"
+                                            data-bs-target="#delete-modal" data-bs-toggle="modal">
+                                                <i data-feather="trash-2" class="feather-trash-2"></i>
                                         </a>
                                     </div>
                                 </td>
-                            </tr>						
-                        						
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td>Casual Leave</td>
-                                <td>
-                                    27 Nov 2024			
-                                </td>
-                                <td>28 Nov 2024</td>
-                                <td>
-                                    02 Day
-                                </td>
-                                <td>26 Nov 2024</td>
-                                <td>
-                                    <span class="badge badge-purple d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Applied
-                                    </span>
-                                </td>
-                                <td class="action-table-data justify-content-end">
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2" href="#">
-                                            <i data-feather="x-circle" class="feather-edit"></i>
-                                        </a>
-                                        <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a class="p-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>	
-                          	
-                            <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td>Sick Leave</td>
-                                <td>
-                                    25 Oct 2024		
-                                </td>
-                                <td>25 Oct 2024</td>
-                                <td>
-                                    01 Day
-                                </td>
-                                <td>24 Oct 2024</td>
-                                <td>
-                                    <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
-                                        <i class="ti ti-point-filled me-1"></i>Rejected
-                                    </span>
-                                </td>
-                                <td class="action-table-data justify-content-end">
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2" href="#">
-                                            <i data-feather="info" class="feather-edit"></i>
-                                        </a>
-                                        <a class="me-2 p-2" href="#" data-bs-toggle="modal" data-bs-target="#edit-leave">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a class="p-2" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#delete-modal">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>				
-                           				
+                            </tr>
+                            @empty	
+
+                        	@endforelse			
                         </tbody>
                     </table>
                 </div>
@@ -198,5 +155,39 @@
         <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
+<script>
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            function formatToYMD(dateStr) {
+                const parts = dateStr.split('-'); //  d-m-Y format
+                return `${parts[2]}-${parts[1]}-${parts[0]}`; // Returns Y-m-d
+            }
+            const id = this.dataset.id;
+            const leave_type_id = this.dataset.leave;
+            const from_date = formatToYMD(this.dataset.from_date);
+            const to_date = formatToYMD(this.dataset.to_date);
+            const days_count = this.dataset.days_count;
+            const description = this.dataset.description;
+            const leave_mode = this.dataset.leave_mode;
 
+            document.getElementById('edit-id').value = id;
+            document.getElementById('leave_type_id').value = leave_type_id;
+            document.getElementById('from_date').value = from_date;
+            document.getElementById('to_date').value = to_date;
+            document.getElementById('days').value = days_count;
+            document.getElementById('description').value = description;
+            document.getElementById('leave_mode').value = leave_mode;
+
+            document.getElementById('editForm').action = `/leaves/${id}`;
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.dataset.id;
+                document.getElementById('delete-id').value = id;
+            });
+        });
+    });
+</script>
 @endsection

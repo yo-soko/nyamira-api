@@ -12886,7 +12886,7 @@
 		<!-- /delete modal -->
 @endif
 
-@if(Route::is(['leaves-employee']))
+@if(Route::is(['leaves']))
 	<!-- Add Leave -->
     <div class="modal fade" id="add-leave">
         <div class="modal-dialog modal-dialog-centered">
@@ -12899,27 +12899,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{url('leaves-admin')}}">
+                <form method="POST" action="{{ route('leaves.store') }}">
+                    @csrf
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Employee <span class="text-danger">*</span></label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option>Carl Evans</option>
-                                        <option>Minerva Rameriz</option>
-                                        <option>Robert Lamon</option>
-                                    </select>
-                                </div>
-                            </div>
+                           
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Leave Type <span class="text-danger">*</span></label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option>Sick Leave</option>
-                                        <option>Casual Leave</option>
+                                    <select name="leave_type_id" class="select">
+                                        @foreach($leaveTypess as $type)
+                                            <option value="{{ $type->id }}">{{ $type->type }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -12929,7 +12920,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">From <span class="text-danger"> *</span></label>
                                             <div class="input-addon-right position-relative">
-                                                <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+                                                <input type="text" name="from_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                                 <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                             </div>
                                         </div>
@@ -12938,52 +12929,27 @@
                                         <div class="mb-3">
                                             <label class="form-label">To <span class="text-danger"> *</span></label>
                                             <div class="input-addon-right position-relative">
-                                                <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+                                                <input type="text" name="to_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
                                                 <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <div class="input-addon-right position-relative">
-                                                <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
-                                                <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <select class="select">
+                                            <select class="select" name="leave_mode">
                                                 <option>Select</option>
-                                                <option>Full Day</option>
-                                                <option>Half Day</option>
+                                                <option value="Full Day">Full Day</option>
+                                                <option value="Half Day">Half Day</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12">
-                                <div class="bg-light rounded p-3 pb-0">
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">No of Days</label>
-                                                <input type="text" class="form-control bg-light " readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Remaining Leaves</label>
-                                                <input type="text" class="form-control bg-light " readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-0">
                                     <label class="form-label">Reason</label>
-                                    <div id="summernote2"></div>
+                                    <textarea class="form-control" rows="3" name="reason"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -13010,27 +12976,20 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{url('leaves-admin')}}">
+                <form id="editForm" method="POST" action="">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="edit-id">
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <label class="form-label">Employee <span class="text-danger">*</span></label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option selected>Carl Evans</option>
-                                        <option>Minerva Rameriz</option>
-                                        <option>Robert Lamon</option>
-                                    </select>
-                                </div>
-                            </div>
+                          
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Leave Type <span class="text-danger">*</span></label>
-                                    <select class="select">
-                                        <option>Select</option>
-                                        <option selected>Sick Leave</option>
-                                        <option>Casual Leave</option>
+                                    <select class="select" name="leave_type_id" id="leave_type_id">
+                                        @foreach($leaveTypess as $type)
+                                            <option value="{{ $type->id }}">{{ $type->type }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -13040,7 +12999,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">From <span class="text-danger"> *</span></label>
                                             <div class="input-addon-right position-relative">
-                                                <input type="text" class="form-control datetimepicker" value="24 Dec 2024">
+                                                <input type="text" class="form-control datetimepicker" id="from_date" name="from_date">
                                                 <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                             </div>
                                         </div>
@@ -13049,25 +13008,18 @@
                                         <div class="mb-3">
                                             <label class="form-label">To <span class="text-danger"> *</span></label>
                                             <div class="input-addon-right position-relative">
-                                                <input type="text" class="form-control datetimepicker" value="24 Dec 2024">
+                                                <input type="text" class="form-control datetimepicker" id="to_date" name="to_date">
                                                 <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                             </div>
                                         </div>
                                     </div>
+                                  
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <div class="input-addon-right position-relative">
-                                                <input type="text" class="form-control datetimepicker" value="24 Dec 2024">
-                                                <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <select class="select">
-                                                <option>Select</option>
-                                                <option selected>Full Day</option>
-                                                <option>Half Day</option>
+                                            <select class="select" name="leave_mode" id="leave_mode">
+                                                <option value="">Select</option>
+                                                <option value="Full Day">Full Day</option>
+                                                <option value="Half Day">Half Day</option>
                                             </select>
                                         </div>
                                     </div>
@@ -13079,13 +13031,7 @@
                                         <div class="col-lg-6">
                                             <div class="mb-3">
                                                 <label class="form-label">No of Days</label>
-                                                <input type="text" class="form-control bg-light " value="01" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Remaining Leaves</label>
-                                                <input type="text" class="form-control bg-light " value="08" readonly>
+                                                <input type="text" class="form-control bg-light" id="days" name="days" readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -13094,7 +13040,7 @@
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-0">
                                     <label class="form-label">Reason</label>
-                                    <div id="summernote"></div>
+                                    <textarea class="form-control" rows="3" name="reason" id="description"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -13113,17 +13059,21 @@
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="page-wrapper-new p-0">
-                    <div class="content p-5 px-3 text-center">
-                        <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
-                        <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Leave</h4>
-                        <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete leave?</p>
-                        <div class="modal-footer-btn mt-3 d-flex justify-content-center">
-                            <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                <form method="POST" action="{{ route('leaves.delete') }}">
+                    @csrf
+                    <input type="hidden" id="delete-id" name="id">
+                    <div class="page-wrapper-new p-0">
+                        <div class="content p-5 px-3 text-center">
+                            <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
+                            <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Leave</h4>
+                            <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete leave?</p>
+                            <div class="modal-footer-btn mt-3 d-flex justify-content-center">
+                                <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
+                            </div>						
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

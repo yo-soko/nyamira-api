@@ -21,6 +21,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\EmployeeSalaryController;
+use App\Http\Controllers\LeavesController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -109,6 +110,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/migrate-employees', [EmployeeController::class, 'migrateEmployeesToUsers']);
     Route::get('/auto-clockout', [AttendanciesController::class, 'autoClockOutForgottenEmployees']);
 
+    Route::get('/leaves', [LeavesController::class, 'index'])->name('leaves');
+    Route::post('/leaves', [LeavesController::class, 'store'])->name('leaves.store');
+    Route::put('/leaves/{id}', [LeavesController::class, 'update'])->name('leaves.update');
+    Route::post('/leaves/delete', [LeavesController::class, 'destroy'])->name('leaves.delete');
 });
 
 
@@ -116,12 +121,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/leaves-admin', function () {                         
     return view('leaves-admin');
 })->name('leaves-admin'); 
-
-Route::get('/leaves-employee', function () {                         
-    return view('leaves-employee');
-})->name('leaves-employee'); 
-
-
 
 Route::get('/payslip', function () {                         
     return view('payslip');

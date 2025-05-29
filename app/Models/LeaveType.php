@@ -14,5 +14,9 @@ class LeaveType extends Model
         'quota',
         'status',
     ];
+    public function leaves()
+    {
+        return $this->hasMany(Leave::class);
+    }
 }
 

@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::share('departments', \App\Models\Department::where('status', 1)->get());
+        View::share('leaveTypess', \App\Models\LeaveType::where('status', 1)->get());
         
     }
 }
