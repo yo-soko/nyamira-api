@@ -48,7 +48,7 @@ return new class extends Migration
             $table->string('bank_name')->nullable();
             $table->string('account_number')->nullable();
             $table->string('branch')->nullable();
-    
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             // Auth
             $table->string('password');
             $table->timestamps();
