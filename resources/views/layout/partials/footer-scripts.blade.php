@@ -10,6 +10,20 @@
  <!-- Bootstrap Core JS -->
  <script src="{{ URL::asset('build/js/bootstrap.bundle.min.js') }}"></script>
 
+ <!-- Select2 JS -->
+ <script src="{{ URL::asset('build/plugins/select2/js/select2.full.js') }}"></script>
+ <script src="{{ URL::asset('build/plugins/select2/js/select2.full.min.js') }}"></script>
+ <script src="{{ URL::asset('build/plugins/select2/js/select2.js') }}"></script>
+ <script src="{{ URL::asset('build/plugins/select2/js/select2.min.js') }}"></script>
+ <!-- select-2 -->
+ <script src="{{ URL::asset('build/js/custom-select2.js') }}"></script>
+ <script>
+ $('.modal').on('shown.bs.modal', function () {
+    $(this).find('.select2').select2({
+        dropdownParent: $(this)
+    });
+});
+</script>
  @if (Route::is(['admin-dashboard','barcode','calendar','chart-apex','companies','email-reply','dashboard','email','file-manager','form-elements','icon-feather','icon-flag','icon-fontawesome','icon-ionic','icon-material','icon-pe7','icon-remix','icon-simpleline', 'icon-tabler','icon-themify', 'icon-typicon','icon-weather','index','layout-boxed','layout-dark','layout-detached','layout-horizontal','layout-hovered','layout-rtl','layout-two-column','notes','pos','pos-2','pos-3','pos-4','pos-5','qrcode','sales-dashboard','todo-list','todo']))
     <!-- Chart JS -->
     <script src="{{ URL::asset('build/plugins/apexchart/apexcharts.min.js') }}"></script>
@@ -30,8 +44,7 @@
     <script src="{{ URL::asset('build/plugins/fancybox/jquery.fancybox.min.js') }}"></script>
  @endif
 
- <!-- Select2 JS -->
- <script src="{{ URL::asset('build/plugins/select2/js/select2.min.js') }}"></script>
+
 
  <!-- Datetimepicker JS -->
  <script src="{{ URL::asset('build/js/moment.min.js') }}"></script>
@@ -79,7 +92,7 @@
 <script src="{{URL::asset('build/plugins/owlcarousel/owl.carousel.min.js')}}"></script>
 @endif
 
-@if (Route::is(['add-product','all-blog','blog-tag','domain','edit-product','email-reply','localization-settings','otp-settings','packages','product-list','purchase-transaction','reviews','subscription','varriant-attributes']))
+@if (Route::is(['add-product','all-blog','blog-tag','domain','edit-product','email-reply','localization-settings','otp-settings','packages','product-list','purchase-transaction','reviews','subscription','beds']))
  <!-- Bootstrap Tagsinput JS -->
  <script src="{{ URL::asset('build/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js') }}"></script>
  @endif
@@ -248,9 +261,8 @@
      <script src="{{ URL::asset('build/plugins/peity/chart-data.js') }}"></script>
  @endif
 
- @if (Route::is(['form-select2']))
-     <script src="{{ URL::asset('build/js/custom-select2.js') }}"></script>
- @endif
+
+
 
  @if (Route::is(['form-fileupload']))
      <!-- Fileupload JS -->
