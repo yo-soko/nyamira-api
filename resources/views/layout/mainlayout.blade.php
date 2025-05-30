@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 @if (!Route::is(['layout-horizontal','layout-detached','layout-modern','layout-two-column','layout-hovered','layout-boxed','layout-rtl','layout-dark']))
-<html lang="en">
+<html lang="en" data-theme="dark">
 @endif
 @if (Route::is(['layout-horizontal']))
 <html lang="en" data-layout="horizontal">
