@@ -182,18 +182,16 @@ class AttendanciesController extends Controller
         }
         $today = Carbon::today();
 
-        if ($today->day <= 5) {
-            // Combine: previous month + current month up to today
-            $previousStart = $today->copy()->subMonth()->startOfMonth();
-            $currentEnd = $today->copy(); // today is up to date 5
+       if ($today->day <= 5) {
+            $previousStart = $today->copy()->subMonth()->startOfMonth()->toDateString();
+            $currentEnd = $today->copy()->toDateString(); // Ensure it's date-only
 
             $attendanceRecords = Attendancies::where('employee_id', $employee->id)
-                ->where(function ($query) use ($previousStart, $currentEnd) {
-                    $query->whereBetween('date', [$previousStart, $currentEnd]);
-                })
+                ->whereBetween('date', [$previousStart, $currentEnd])
                 ->latest('date')
                 ->get();
-        } else {
+        }
+        else {
             // Current month only
             $currentStart = $today->copy()->startOfMonth();
             $currentEnd = $today->copy()->endOfMonth();
