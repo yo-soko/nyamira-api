@@ -22,6 +22,8 @@ use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\HolidayController;
 use App\Http\Controllers\EmployeeSalaryController;
 use App\Http\Controllers\LeavesController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -46,9 +48,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('index/', [AttendanciesController::class, 'indexx'])->name('index.index');
 
-    Route::get('/profile', function () {
-        return view('profile');
-    })->name('profile');
 
     Route::get('/general-settings', function () {
         return view('general-settings');
@@ -74,6 +73,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
+
+    Route::get('/profile', function () {return view('profile');})->name('profile');
+    Route::put('/profile', [UserController::class, 'update'])->name('profile.update');
 
     Route::get('/leave-types', [LeaveTypeController::class, 'index'])->name('leave-types');
     Route::post('/leave-types', [LeaveTypeController::class, 'store'])->name('leave-types.store');
@@ -117,6 +119,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/leaves-admin', [LeavesController::class, 'allLeaves'])->name('leaves-admin');
     Route::get('/leave/{id}/approve', [LeavesController::class, 'approve'])->name('leave.approve');
     Route::get('/leave/{id}/reject', [LeavesController::class, 'reject'])->name('leave.reject');
+
+    Route::get('/roles-permissions', [RoleController::class, 'index'])->name('roles-permissions');
+    Route::post('/roles-permissions', [RoleController::class, 'store'])->name('roles-permissions.store');
+    Route::delete('/roles-permissions/{id}', [RoleController::class, 'destroy'])->name('roles-permissions.destroy');
+    Route::patch('/roles-permissions/{id}/toggle', [RoleController::class, 'toggleStatus'])->name('roles-permissions.toggle');
+    Route::delete('/users/destroy', [UserController::class, 'destroy'])->name('users.destroy');
+
+    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions');
+    Route::post('/permissions/set-role', [PermissionController::class, 'setRole'])->name('permissions.setRole');
+    Route::put('/roles-permissions/{role}', [PermissionController::class, 'update'])->name('roles.permissions.update');
 });
 
 

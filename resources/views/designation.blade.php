@@ -25,11 +25,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @role('Admin')
+            @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-department"><i class="ti ti-circle-plus me-1"></i>Add Designation</a>
             </div>
-            @endrole
+            @endhasanyrole
         </div>
         <!-- /product list -->
         <div class="card">
@@ -109,9 +109,9 @@
                                 <th>Members</th>
                                 <th>Created On</th>
                                 <th>Status</th>
-                                @role('Admin')
+                                @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                 <th class="no-sort"></th>
-                                @endrole
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -130,7 +130,7 @@
                                 <td>
                                     <div class="d-flex align-items-center justify-content-between">
                                         @php
-                                            $designationStaff = $designation->employees->filter(fn($e) => $e->user && $e->user->role === 'Employee');
+                                            $designationStaff = $designation->employees->filter(fn($e) => $e->user && $e->user->role === 'employee');
                                         @endphp
 
                                         <p class="mb-0">Total Members: {{ $designationStaff->count() }}</p>
@@ -168,7 +168,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                @role('Admin')
+                                @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                 <td class="action-table-data">
                                     <div class="edit-delete-action">
                                         <a href="javascript:void(0);" class="edit-btn" 
@@ -189,7 +189,7 @@
                                         </a>
                                     </div>
                                 </td>
-                                @endrole
+                                @endhasanyrole
                             </tr>
                         @endforeach
                         </tbody>

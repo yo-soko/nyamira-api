@@ -1,4 +1,4 @@
-@role('Admin')
+@hasanyrole('admin|superadmin|manager|supervisor|director|developer')
 <?php $page = 'employee-salary'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -30,11 +30,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @role('Admin')
+            @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" id="add-payroll-btn" data-bs-toggle="modal" data-bs-target="#add-payroll"><i class="ti ti-circle-plus me-1"></i>Add Payroll</a>
             </div>
-            @endrole
+            @endhasanyrole
         </div>
             <!-- product list -->
             <div class="card">
@@ -109,7 +109,7 @@
                                                         {{ $employeeSalary->employee->first_name . ' ' . $employeeSalary->employee->last_name }}
                                                     </a>
                                                 </p>
-                                                <p><a>{{ $employeeSalary->employee->designation ?? 'N/A' }}</a></p>
+                                                <p><a>{{ $employeeSalary->employee->designation->designation ?? 'N/A' }}</a></p>
                                             </div>
                                         </div>
                                     </td>
@@ -130,7 +130,7 @@
                                             <a class="p-2 me-2" href="{{ url('payslip/' . $employeeSalary->id) }}">
                                                 <i data-feather="eye" class="feather-eye"></i>
                                             </a>
-                                            @role('Admin')
+                                            @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                             <a class="p-2 me-2 edit-btn" href="javascript:void(0);" 
                                             
                                             data-id="{{ $employeeSalary->id }}"
@@ -166,7 +166,7 @@
                                              href="javascript:void(0);">
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
-                                            @endrole
+                                            @endhasanyrole
                                         </div>
                                     </td>
                                 </tr>
@@ -389,7 +389,7 @@
 
 
 <!-- add payroll modal -->
- @role('Admin')
+ @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
     <div class="modal fade" id="add-payroll">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
@@ -403,8 +403,6 @@
                 </div>
                 <form action="{{route('employee-salary')}}" method="POST">
                     @csrf 
-                    <input type="hodden" id="Salary_id1" >
-
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-sm-6 col-12">
@@ -439,7 +437,7 @@
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="mb-3">
                                     <label class="form-label">Payment Method <span>*</span></label>
-                                    <select class="select" name="payment_method">
+                                    <select class="form-select" name="payment_method">
                                         <option>Select</option>
                                         <option value="Cash">Cash</option>
                                         <option value="Mpesa">Mpesa</option>
@@ -582,6 +580,6 @@
             </div>
         </div>
     </div>
- @endrole
+ @endhasanyrole
 @endsection
-@endrole
+@endhasanyrole

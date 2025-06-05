@@ -19,7 +19,7 @@
              
                 <h2 class="mb-1">
                 <img src="{{URL::asset('build/img/icons/hand01.svg')}}" class="hand-img" alt="img">
-                    {{ $greeting }} <span class="text-primary fw-bold">{{ session('user_name') }}</span>
+                    {{ $greeting }} <span class="text-primary fw-bold"> {{ auth()->user()->name }}</span>
                  </h2>
                 <p>Its nice  to see you <span class="text-primary fw-bold">Today</span></p>
             </div>
@@ -41,16 +41,16 @@
     <div class="welcome-wrap mb-4">
         <div class=" d-flex align-items-center justify-content-between flex-wrap">
             <div class="mb-3">
-                <h2 class="mb-1 text-white">Welcome Back, {{ session('user_name') }}</h2>
+                <h2 class="mb-1 text-white">Welcome Back,  {{ auth()->user()->name }}</h2>
             </div>
             <div class="d-flex align-items-center flex-wrap mb-1">
                 <a href="{{url('profile')}}" class="btn btn-dark btn-md me-2 mb-2">Profile</a>
-                 @role('Admin')
+                @hasanyrole('admin|developer|manager|director|supervisor')
                         <a href="{{ url('auto-clockout') }}" class="btn btn-dark btn-md me-2 mb-2"
                             onclick="return confirm('Are you sure you want to auto-clock out employees who forgot?');">
                             <i class="ti ti-circle-plus me-1"></i>Clock out forgotten
                         </a>
-                @endrole
+                @endhasanyrole
                 <a href="{{url('general-settings')}}" class="btn btn-light btn-md mb-2">Settings</a>
             </div>
         </div>

@@ -14327,16 +14327,17 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{url('roles-permissions')}}">
+                <form action="{{ route('roles-permissions.store') }}" method="POST">
+                    @csrf
                     <div class="modal-body">
                             <div class="mb-3">
                                 <label class="form-label">Role Name</label>
-                                <input type="text" class="form-control">
+                                <input type="text" name="name" class="form-control">
                             </div>
                             <div class="d-flex align-items-center justify-content-between">
                                 <label class="form-label">Status</label>
                                 <label class="switch">
-                                    <input type="checkbox" checked>
+                                    <input type="checkbox" name="status" checked>
                                     <span class="slider round"></span>
                                 </label>
                             </div>
@@ -16147,259 +16148,259 @@
 @endif
 
 @if(Route::is(['users']))
-		<!-- Add User -->
-		<div class="modal fade" id="add-user">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="page-wrapper-new p-0">
-						<div class="content">
-							<div class="modal-header">
-								<div class="page-title">
-									<h4>Add User</h4>
-								</div>
-								<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<form action="{{ url('users') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-								<div class="modal-body">
-									<div class="row">
-										<div class="col-lg-12">
-											<div class="new-employee-field">
-												
-												<div class="profile-pic-upload mb-2">
-													<div class="profile-pic">
-														<span><i data-feather="plus-circle" class="plus-down-add"></i>Add Image</span>
-													</div>
-													<div class="mb-0">
-														<div class="image-upload mb-0">
-															<input type="file" name="profile_picture">
-															<div class="image-uploads">
-																<h4>Upload Image</h4>
-															</div>
-														</div>
-														<p class="fs-13 mt-2">JPEG, PNG up to 2 MB</p>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">User Name<span class="text-danger ms-1">*</span></label>
-												<input type="text" name="name" class="form-control">
-											</div>
-										</div>
-                                    
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">Role<span class="text-danger ms-1">*</span></label>
-												<select class="select" name="role">
-													<option>Select</option>
-													<option>Admin</option>
-													<option>Manager</option>
-													<option>Salesman</option>
-												</select>
-											</div>
-										</div>
-                                        <div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">User Code<span class="text-danger ms-1">*</span></label>
-												<input type="text" name="code" class="form-control">
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-												<input type="email" name="email" class="form-control">
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-												<input type="tel" name="phone" class="form-control">
-											</div>
-										</div>
-									
-										<div class="col-lg-6">
-											<div class="mb-3">
-												<label class="form-label">Password<span class="text-danger ms-1">*</span></label>
-												<div class="pass-group">
-													<input type="password" name="password" class="pass-input form-control">
-													<i class="ti ti-eye-off toggle-password"></i>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="mb-3">
-												<label class="form-label">Confirm Password<span class="text-danger ms-1">*</span></label>
-												<div class="pass-group">
-													<input type="password" name="password_confirmation" class="pass-input form-control">
-													<i class="ti ti-eye-off toggle-password"></i>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
-												<span class="status-label">Status</span>
-												<input type="checkbox" id="user1" name="status" class="check" checked="">
-												<label for="user1" class="checktoggle">	</label>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
-									<button type="submit" class="btn btn-primary">Add User</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Add User -->
+    <!-- Add User -->
+    <div class="modal fade" id="add-user">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="content">
+                        <div class="modal-header">
+                            <div class="page-title">
+                                <h4>Add User</h4>
+                            </div>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{{ url('users') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="new-employee-field">
 
-		<!-- Edit User -->
-		<div class="modal fade" id="edit-user">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="page-wrapper-new p-0">
-						<div class="content">
-							<div class="modal-header">
-								<div class="page-title">
-									<h4>Edit User</h4>
-								</div>
-								<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-                            <form id="editForm" action="{{ route('users.update', 0) }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                @method('PUT')
-                                <input type="hidden" id="edit-id" name="id">
-								<div class="modal-body">
-									<div class="row">
-										<div class="col-lg-12">
-											<div class="new-employee-field">
-												<div class="profile-pic-upload image-field">
-													<div class="profile-pic p-2">
-														<img src="" id="preview-image" class="object-fit-cover h-100 rounded-1" alt="user">
-														<button type="button" class="close rounded-1">
-															<span aria-hidden="true">&times;</span>
-														</button>
-													</div>
-													<div class="mb-3">
-														<div class="image-upload mb-0">
-															<input type="file" name="profile_picture" id="profile_picture" onchange="previewFile(this)">
-															<div class="image-uploads">
-																<h4>Change Image</h4>
-															</div>
-														</div>
-														<p class="mt-2">JPEG, PNG up to 2 MB</p>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">User Name<span class="text-danger ms-1">*</span></label>
-												<input type="text" class="form-control" id="edit-name" name="name">
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">Role<span class="text-danger ms-1">*</span></label>
-												<select name="role" id="edit-role" class="select">
-													<option>Admin</option>
-													<option>Manager</option>
-													<option>Salesman</option>
-												</select>
-											</div>
-										</div>
-                                        <div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">User Code<span class="text-danger ms-1"></span></label>
-												<input type="text" class="form-control" name="code">
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-												<input type="email" id="edit-email" name="email" class="form-control">
-											</div>
-										</div>
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-												<input type="tel" name="phone" id="edit-phone" class="form-control" >
-											</div>
-										</div>
-									
-										<div class="col-lg-6">
-											<div class="mb-3">
-												<label class="form-label">Password<span class="text-danger ms-1">*</span></label>
-												<div class="pass-group">
-                                                     <input type="password" name="password" class="form-control">
-													<i class="ti ti-eye-off toggle-password"></i>
-												</div>
-											</div>
-										</div>
-										<div class="col-lg-6">
-											<div class="mb-3">
-												<label class="form-label">Confirm Password<span class="text-danger ms-1">*</span></label>
-												<div class="pass-group">
-                                                    <input type="password" name="password_confirmation" class="form-control">
-													<i class="ti ti-eye-off toggle-password"></i>
-												</div>
-											</div>
-										</div>
-                                        <div class="input-blocks m-0">
-                                            <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
-                                                <span class="status-label">Status</span>
-                                                <input type="checkbox" id="edit-status" class="check" name="status">
-                                                <label for="edit-status" class="checktoggle"></label>
+                                            <div class="profile-pic-upload mb-2">
+                                                <div class="profile-pic">
+                                                    <span><i data-feather="plus-circle" class="plus-down-add"></i>Add Image</span>
+                                                </div>
+                                                <div class="mb-0">
+                                                    <div class="image-upload mb-0">
+                                                        <input type="file" name="profile_picture">
+                                                        <div class="image-uploads">
+                                                            <h4>Upload Image</h4>
+                                                        </div>
+                                                    </div>
+                                                    <p class="fs-13 mt-2">JPEG, PNG up to 2 MB</p>
+                                                </div>
                                             </div>
                                         </div>
-									</div>
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
-									<button type="submit" class="btn btn-primary">Save Changes</button>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- /Edit User -->
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">User Name<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" name="name" class="form-control">
+                                        </div>
+                                    </div>
 
-		<!-- delete modal -->
-        <div class="modal fade" id="delete-modal">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <form method="POST" action="{{ route('users.delete') }}">
-                        @csrf
-                        <input type="hidden" name="id" id="delete-id">
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role<span class="text-danger ms-1">*</span></label>
+                                            <select class="form-select" name="role">
+                                                <option value="">select here</option>
+                                                @foreach($roless as $role)
+                                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">User Code<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" name="code" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
+                                            <input type="email" name="email" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
+                                            <input type="tel" name="phone" class="form-control">
+                                        </div>
+                                    </div>
 
-                        <div class="page-wrapper-new p-0">
-                            <div class="content p-5 px-3 text-center">
-                                <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2">
-                                    <i class="ti ti-trash fs-24 text-danger"></i>
-                                </span>
-                                <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete User</h4>
-                                <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete this User?</p>
-                                <div class="modal-footer-btn mt-3 d-flex justify-content-center">
-                                    <button type="button" class="btn me-2 bg-secondary-gradient fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                                </div>						
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Password<span class="text-danger ms-1">*</span></label>
+                                            <div class="pass-group">
+                                                <input type="password" name="password" class="pass-input form-control">
+                                                <i class="ti ti-eye-off toggle-password"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Confirm Password<span class="text-danger ms-1">*</span></label>
+                                            <div class="pass-group">
+                                                <input type="password" name="password_confirmation" class="pass-input form-control">
+                                                <i class="ti ti-eye-off toggle-password"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
+                                            <span class="status-label">Status</span>
+                                            <input type="checkbox" id="user1" name="status" class="check" checked="">
+                                            <label for="user1" class="checktoggle">	</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Add User</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- /Add User -->
+
+    <!-- Edit User -->
+    <div class="modal fade" id="edit-user">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="page-wrapper-new p-0">
+                    <div class="content">
+                        <div class="modal-header">
+                            <div class="page-title">
+                                <h4>Edit User</h4>
+                            </div>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form id="editForm" action="{{ route('users.update', 0) }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" id="edit-id" name="id">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="new-employee-field">
+                                            <div class="profile-pic-upload image-field">
+                                                <div class="profile-pic p-2">
+                                                    <img src="" id="preview-image" class="object-fit-cover h-100 rounded-1" alt="user">
+                                                    <button type="button" class="close rounded-1">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <div class="image-upload mb-0">
+                                                        <input type="file" name="profile_picture" id="profile_picture" onchange="previewFile(this)">
+                                                        <div class="image-uploads">
+                                                            <h4>Change Image</h4>
+                                                        </div>
+                                                    </div>
+                                                    <p class="mt-2">JPEG, PNG up to 2 MB</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">User Name<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" class="form-control" id="edit-name" name="name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Role<span class="text-danger ms-1">*</span></label>
+                                            <select name="role" id="edit-role" class="select">
+                                                <option>Admin</option>
+                                                <option>Manager</option>
+                                                <option>Salesman</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">User Code<span class="text-danger ms-1"></span></label>
+                                            <input type="text" class="form-control" name="code">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
+                                            <input type="email" id="edit-email" name="email" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
+                                            <input type="tel" name="phone" id="edit-phone" class="form-control" >
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Password<span class="text-danger ms-1">*</span></label>
+                                            <div class="pass-group">
+                                                    <input type="password" name="password" class="form-control">
+                                                <i class="ti ti-eye-off toggle-password"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Confirm Password<span class="text-danger ms-1">*</span></label>
+                                            <div class="pass-group">
+                                                <input type="password" name="password_confirmation" class="form-control">
+                                                <i class="ti ti-eye-off toggle-password"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-blocks m-0">
+                                        <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
+                                            <span class="status-label">Status</span>
+                                            <input type="checkbox" id="edit-status" class="check" name="status">
+                                            <label for="edit-status" class="checktoggle"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Edit User -->
+
+    <!-- delete modal -->
+    <div class="modal fade" id="delete-modal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form method="POST" action="{{ route('users.delete') }}">
+                    @csrf
+                    <input type="hidden" name="id" id="delete-id">
+
+                    <div class="page-wrapper-new p-0">
+                        <div class="content p-5 px-3 text-center">
+                            <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2">
+                                <i class="ti ti-trash fs-24 text-danger"></i>
+                            </span>
+                            <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete User</h4>
+                            <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete this User?</p>
+                            <div class="modal-footer-btn mt-3 d-flex justify-content-center">
+                                <button type="button" class="btn me-2 bg-secondary-gradient fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endif
 
 @if(Route::is(['countries']))
@@ -32125,7 +32126,6 @@
                     <form action="{{ route('employee-salary.update') }}" method="POST">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" name="salary_id" id="salary_id">
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-6 col-12">

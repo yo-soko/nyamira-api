@@ -41,6 +41,7 @@ class Employee extends Authenticatable
         'account_number',
         'branch',
         'password',
+        'user_id',
     ];
 
     protected $hidden = ['password'];

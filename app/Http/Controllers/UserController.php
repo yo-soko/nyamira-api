@@ -83,39 +83,34 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+     public function update(Request $request)
     {
-        $user = User::findOrFail($id);
-    
+        $user = auth()->user();
+
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'phone' => 'nullable|string',
-            'code' => 'required',
-            'role' => 'required',
-            'password' => 'nullable|confirmed|min:6',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'phone' => 'nullable|string|max:20',
+            'profile_picture' => 'nullable|image|max:2048',
+            'password' => 'nullable|min:4|confirmed',
         ]);
-    
+
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->profile_picture = $path;
+        }
+
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->code = $request->code;
-        $user->role = $request->role;
-        $user->status = $request->has('status');
-    
-        if ($request->hasFile('profile_picture')) {
-            $imagePath = $request->file('profile_picture')->store('profiles', 'public');
-            $user->profile_picture = $imagePath;
-        }
-    
+
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
-    
-        $user->update();
-    
-        return redirect()->back()->with('success', 'User updated successfully!');
+
+        $user->save();
+
+        return back()->with('success', 'Profile updated successfully.');
     }
     
 

@@ -25,11 +25,11 @@
                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                     </li>
                 </ul>
-                @role('Admin')
+               @hasanyrole('admin|developer|manager|director|supervisor')
                 <div class="page-btn">
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-leave">Add Leave Type</a>
                 </div>
-                @endrole
+                @endhasanyrole
             </div>
             <!-- /product list -->
             <div class="card">
@@ -48,9 +48,9 @@
                                     <th>Leave Quota</th>
                                     <th>Created On</th>
                                     <th>Status</th>
-                                    @role('Admin')
+                                   @hasanyrole('admin|developer|manager|director|supervisor')
                                     <th class="no-sort"></th>
-                                    @endrole
+                                    @endhasanyrole
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,7 +70,7 @@
                                             {{ $leave->status ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
-                                    @role('Admin')
+                                   @hasanyrole('admin|developer|manager|director|supervisor')
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
                                             <a class="me-2 p-2 edit-btn" href="#" 
@@ -89,7 +89,7 @@
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
                                         </div>
-                                        @endrole
+                                        @endhasanyrole
                                     </td>
                                 </tr>
                                 @empty

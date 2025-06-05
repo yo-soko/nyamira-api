@@ -1,4 +1,4 @@
-@role('Admin')
+@hasanyrole('admin|superadmin|manager|supervisor|director|developer')
 <?php $page = 'add-employee'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -400,4 +400,4 @@
     </script>
 
 @endsection
-@endrole
+@endhasanyrole

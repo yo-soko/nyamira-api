@@ -1,4 +1,4 @@
-@role('Admin')
+@hasanyrole('admin|superadmin|manager|supervisor|director|developer')
 <?php $page = 'leaves-admin'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -154,4 +154,4 @@
 </div>
 
 @endsection
-@endrole
+@endhasanyrole

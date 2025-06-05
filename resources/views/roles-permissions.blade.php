@@ -1,4 +1,4 @@
-@role('Admin')
+@hasanyrole('admin|superadmin|developer|manager|supervisor')
 <?php $page = 'roles-permissions'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -66,53 +66,36 @@
                                     </th>
                                     <th>Role</th>
                                     <th>Created Date</th>
-                                    <th>Status</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($roles as $role)
                                 <tr>
                                     <td>
                                         <div class="form-check form-check-md">
-                                            <input class="form-check-input" type="checkbox">
+                                            <input class="form-check-input" type="checkbox" value="{{ $role->id }}">
                                         </div>
                                     </td>
-                                    <td>Admin</td>
-                                    <td>12 April 2025 </td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
+                                    <td>{{ $role->name }}</td>
+                                    <td>{{ $role->created_at ? $role->created_at->format('d M Y') : '—' }}</td>
                                     <td>
                                         <div class="action-icon d-inline-flex">
-                                            <a href="#" class="me-2 d-flex align-items-center p-2 border rounded"><i class="ti ti-shield"></i></a>
+                                            <form action="{{ route('permissions.setRole') }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <input type="hidden" name="role_id" value="{{ $role->id }}">
+                                                <button type="submit" class="me-2 d-flex align-items-center p-2 border rounded bg-white">
+                                                    <i class="ti ti-shield text-primary"></i>
+                                                </button>
+                                            </form> 
                                             <a href="#" class="me-2 d-flex align-items-center p-2 border rounded" data-bs-toggle="modal" data-bs-target="#edit-role"><i class="ti ti-edit"></i></a>
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#delete_modal" class=" d-flex align-items-center p-2 border rounded"><i class="ti ti-trash"></i></a>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check form-check-md">
-                                            <input class="form-check-input" type="checkbox">
-                                        </div>
-                                    </td>
-                                    <td>Manager</td>
-                                    <td>24 April 2024</td>
-                                    <td>
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="action-icon d-inline-flex">
-                                            <a href="{{url('permissions')}}" class="me-2 d-flex align-items-center p-2 border rounded"><i class="ti ti-shield"></i></a>
-                                            <a href="#" class="me-2 d-flex align-items-center p-2 border rounded" data-bs-toggle="modal" data-bs-target="#edit-role"><i class="ti ti-edit"></i></a>
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#delete_modal" class=" d-flex align-items-center p-2 border rounded"><i class="ti ti-trash"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                @empty
+
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -127,4 +110,4 @@
         </div>
     </div>
 @endsection
-@endrole
+@endhasanyrole

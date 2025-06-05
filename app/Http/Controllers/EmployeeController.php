@@ -34,14 +34,13 @@ class EmployeeController extends Controller
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
 
-        if (session('user_type') == 'Employee') {
-            // Fetch only the logged-in employee's details
-            $employees = Employee::where('user_id', session('user_id'))->get();
+        if (auth()->user()->hasRole('employee')) {
+            $employees = Employee::where('user_id', auth()->id())->get();
         } 
-        else if (session('user_type') == 'Admin') {
+        elseif (auth()->user()->hasAnyRole(['admin', 'superadmin', 'director', 'developer', 'manager', 'supervisor'])) {
             $employees = Employee::latest()->get();
-
         }
+
         else {
             // return an empty collection)
             $employees = collect(); 
@@ -147,7 +146,7 @@ class EmployeeController extends Controller
                 'phone' => $data['contact_number'],
                 'code' => $data['emp_code'],
                 'password' => $data['password'], // already hashed
-                'role' => 'Employee',
+                'role' => 'employee',
                 'status' => true,
                 'profile_picture' => $data['profile_photo'] ?? null,
             ]);

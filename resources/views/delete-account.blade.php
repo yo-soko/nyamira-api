@@ -1,4 +1,4 @@
-@role('Admin')
+@hasanyrole('admin|superadmin|manager|supervisor|director|developer')
 <?php $page = 'delete-account'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -101,4 +101,4 @@
         </div>
     </div>
 @endsection
-@endrole
+@endhasanyrole

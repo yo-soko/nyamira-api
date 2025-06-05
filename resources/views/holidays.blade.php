@@ -25,11 +25,11 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @useronly
+            @can('add holidays')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-holiday"><i class="ti ti-circle-plus me-1"></i>Add Holiday</a>
             </div>
-            @enduseronly
+            @endcan
         </div>
         <!-- product list -->
         <div class="card">
@@ -73,9 +73,9 @@
                                 <th>Date</th>
                                 <th>Description</th>
                                 <th>Status</th>
-                                @useronly
+                               
                                 <th class="no-sort"></th>
-                                @enduseronly
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -108,9 +108,10 @@
                                         </span>
                                     @endif
                                 </td>
-                                @useronly
+                              
                                 <td class="action-table-data">
                                     <div class="edit-delete-action">
+                                        @can('edit holidays')
                                     <a class="me-2 p-2 edit-btn" href="#" 
                                             data-id="{{ $holiday->id }}"
                                             data-holiday_name="{{ $holiday->holiday_name}}"
@@ -123,15 +124,18 @@
                                             data-bs-target="#edit-holiday">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                             </a>
+                                            @endcan
+                                            @can('delete holidays')
                                             <a href="javascript:void(0);" 
                                              class="delete-btn" 
                                             data-id="{{ $holiday->id }}"
                                             data-bs-target="#delete-modal" data-bs-toggle="modal">
                                                 <i data-feather="trash-2" class="feather-trash-2"></i>
                                             </a>
+                                            @endcan
                                     </div>
                                 </td>
-                                @enduseronly
+                               
                             </tr>
                         @empty
                            
@@ -146,7 +150,7 @@
         <!-- /product list -->
     </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-        <p class="mb-0">2014 - 2025 &copy; JavaPA. All Right Reserved</p>
+        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
         <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>

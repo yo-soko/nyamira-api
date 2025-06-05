@@ -9,7 +9,12 @@
                     <form method="POST" action="{{ route('signin.custom') }}">
                         @csrf 
                         <div class="login-userset">
-                           
+                            <div class="login-logo logo-normal">
+                            <img src="{{URL::asset('build/img/logo.svg')}}" alt="img">
+                        </div>
+                        <a href="{{url('index')}}" class="login-logo logo-white">
+                            <img src="{{URL::asset('build/img/logo-white.svg')}}"  alt="Img">
+                        </a>
                         <div class="login-userheading">
                             <h3>Sign In</h3>
                             <h4>Access using your email and password.</h4>

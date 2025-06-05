@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -30,6 +32,6 @@ class AppServiceProvider extends ServiceProvider
 
         View::share('departments', \App\Models\Department::where('status', 1)->get());
         View::share('leaveTypess', \App\Models\LeaveType::where('status', 1)->get());
-        
+        View::share('roless', \App\Models\Role::all());
     }
 }

@@ -31,7 +31,7 @@ class EmployeeFactory extends Factory
             'designation_id' => Designation::inRandomOrder()->first()->id ?? Designation::factory(),
             'blood_group' => $this->faker->randomElement(['A+', 'B+', 'O+', 'AB+']),
             'status' => true,
-            'about' => $this->faker->sentence,
+            'about' => null,
 
             'address' => $this->faker->address,
             'country' => $this->faker->country,

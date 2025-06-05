@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
 		'code' => 'Dev001',
 		'email' => 'info@javapa.com',
     	'password' => Hash::make('12345678'),
-		'role' => 'Admin',
+		'role' => 'developer',
 		'status' => true,
 		'created_at' => now(),
 		'updated_at' => now(),

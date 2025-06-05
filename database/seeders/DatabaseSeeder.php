@@ -19,5 +19,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\Designation::factory()->count(2)->create();
         \App\Models\Shift::factory()->count(2)->create();
         \App\Models\Employee::factory()->count(2)->create();
+        $this->call(RoleSeeder::class);
+        $this->call(PermissionSeeder::class);
+        $this->call(RolePermissionSeeder::class);
     }
 }

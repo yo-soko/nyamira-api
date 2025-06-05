@@ -22,55 +22,28 @@
                                 <div class="avatar avatar-lg online mb-3">
                                         <img src="{{URL::asset('build/img/logo.png')}}" alt="Img" class="img-fluid rounded-circle">
                                 </div>
-                                <h6 class="fs-12 fw-normal mb-1">Adrian Herman</h6>
-                                <p class="fs-10 mb-0">System Admin</p>
+                                <h6 class="fs-12 fw-normal mb-1">{{ auth()->user()->name }}</h6>
+                                <p class="fs-10 mb-0">{{ auth()->user()->role }}</p>
                         </div>
                         <div class="sidebar-nav mb-3">
                                 <ul class="nav nav-tabs nav-tabs-solid nav-tabs-rounded nav-justified bg-transparent" role="tablist">
                                         <li class="nav-item"><a class="nav-link active border-0" href="#">Menu</a></li>
-                                        <li class="nav-item"><a class="nav-link border-0" href="{{url('chat')}}">Chats</a></li>
-                                        <li class="nav-item"><a class="nav-link border-0" href="{{url('email')}}">Inbox</a></li>
+                                        <li class="nav-item"><a class="nav-link border-0" href="#">Chats</a></li>
+                                        <li class="nav-item"><a class="nav-link border-0" href="#">Inbox</a></li>
                                 </ul>
                         </div>
                 </div>
                 <div class="sidebar-header p-3 pb-0 pt-2">
                         <div class="text-center rounded bg-light p-2 mb-4 sidebar-profile d-flex align-items-center">
                                 <div class="avatar avatar-md onlin">
-                                        <img src="{{URL::asset('build/img/customer/customer15.jpg')}}" alt="Img" class="img-fluid rounded-circle">
+                                        <img src="{{ auth()->user()->profile_picture ? asset('storage/' . auth()->user()->profile_picture) : asset('build/img/users/default.png') }}" alt="Img" class="img-fluid rounded-circle">
                                 </div>
                                 <div class="text-start sidebar-profile-info ms-2">
-                                        <h6 class="fs-12 fw-normal mb-1">Adrian Herman</h6>
-                                        <p class="fs-10">System Admin</p>
+                                        <h6 class="fs-12 fw-normal mb-1">{{ auth()->user()->name }}</h6>
+                                        <p class="fs-10">{{ auth()->user()->role }}</p>
                                 </div>
                         </div>
-                        <div class="d-flex align-items-center justify-content-between menu-item mb-3">
-                                <div>
-                                        <a href="{{url('index')}}" class="btn btn-sm btn-icon bg-light">
-                                                <i class="ti ti-layout-grid-remove"></i>
-                                        </a>
-                                </div>
-                                <div>
-                                        <a href="{{url('chat')}}" class="btn btn-sm btn-icon bg-light">
-                                                <i class="ti ti-brand-hipchat"></i>
-                                        </a>
-                                </div>
-                                <div>
-                                        <a href="{{url('email')}}" class="btn btn-sm btn-icon bg-light position-relative">
-                                                <i class="ti ti-message"></i>
-                                        </a>
-                                </div>
-                                <div class="notification-item">
-                                        <a href="{{url('activities')}}" class="btn btn-sm btn-icon bg-light position-relative">
-                                                <i class="ti ti-bell"></i>
-                                                <span class="notification-status-dot"></span>
-                                        </a>
-                                </div>
-                                <div class="me-0">
-                                        <a href="{{url('general-settings')}}" class="btn btn-sm btn-icon bg-light">
-                                                <i class="ti ti-settings"></i>
-                                        </a>
-                                </div>
-                        </div>
+                       
                 </div>
                 <div class="sidebar-inner slimscroll">
                         <div id="sidebar-menu" class="sidebar-menu">
@@ -88,9 +61,9 @@
                                                         <li class="submenu">
                                                                 <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
                                                                 <ul>
-                                                                     @role('Admin')
+                                                                     @hasanyrole('admin|developer|manager|director|supervisor')
                                                                         <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
-                                                                     @endrole
+                                                                     @endhasanyrole
                                                                         <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
                                                                         
                                                                         <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
@@ -98,17 +71,17 @@
                                                         </li>
                                                         <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
                                                         </li>
-                                                        @role('Admin')
+                                                        @hasanyrole('admin|developer|manager|director|supervisor')
                                                         <li class="submenu">
                                                                 <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
                                                                 <ul>
                                                                         <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
                                                                 </ul>
                                                         </li>
-                                                        @endrole
+                                                        @endhasanyrole
                                                 </ul>
                                         </li>
-                                        @role('Admin')
+                                        @hasanyrole('admin|developer|manager|director|supervisor')
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">User Management</h6>
                                                 <ul>
@@ -117,7 +90,7 @@
                                                         <li class="{{ Request::is('delete-account') ? 'active' : '' }}"><a href="{{url('delete-account')}}"><i class="ti ti-trash-x fs-16 me-2"></i><span>Delete Account Request</span></a></li>
                                                 </ul>
                                         </li>
-                                        @endrole
+                                        @endhasanyrole
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">Accounts</h6>
                                                 <ul>

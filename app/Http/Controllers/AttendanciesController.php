@@ -18,12 +18,12 @@ class AttendanciesController extends Controller
         $activeEmployees = Employee::where('status', 1)->count(); // assuming 1 = active
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
-        // Fetch all employees
-        if (session('user_type') == 'Employee') {
-            $employees = Employee::where('user_id', session('user_id'))->get(); // Only this employee
+      
+        if (auth()->user()->hasRole('employee')) {
+            $employees = Employee::where('user_id', auth()->id())->get();
         } 
-        else if (session('user_type') == 'Admin') {
-            $employees = Employee::all(); // All employees
+        elseif (auth()->user()->hasAnyRole(['admin', 'superadmin', 'director', 'developer', 'manager', 'supervisor'])) {
+            $employees = Employee::latest()->get();
         }
         else{
             $employees = collect();

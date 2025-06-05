@@ -33,11 +33,11 @@
             </ul>
          
             <x-modalpopup :hods="$hods" />
-            @role('Admin')
+            @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-department"><i class="ti ti-circle-plus me-1"></i>Add Department</a>
             </div>
-            @endrole
+            @endhasanyrole
         </div>
 
         <div class="card">
@@ -107,7 +107,7 @@
                                     <i data-feather="more-vertical" class="feather-user"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    @role('Admin')
+                                    @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                     <li>
                                     <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#edit-department" 
                                         data-department-id="{{ $department->id }}" 
@@ -126,7 +126,7 @@
                                             <i data-feather="trash-2" class="info-img me-2"></i>Delete
                                     </a>
                                     </li>
-                                    @endrole								
+                                    @endhasanyrole								
                                 </ul>
                             </div>
                         </div>
@@ -142,7 +142,7 @@
 
                         <div class="d-flex align-items-center justify-content-between">
                             @php
-                                $staffMembers = $department->employees->filter(fn($e) => $e->user && $e->user->role === 'Employee');
+                                $staffMembers = $department->employees->filter(fn($e) => $e->user && $e->user->role === 'employee');
                             @endphp
 
                             <p class="mb-0">Total Members: {{ $staffMembers->count() }}</p>
@@ -192,9 +192,9 @@
                                 <th>Total Members</th>
                                 <th>Created On</th>
                                 <th>Status</th>
-                                @role('Admin')
+                                @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                 <th class="no-sort"></th>
-                                @endrole
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -240,7 +240,7 @@
                                             <i class="ti ti-point-filled me-1"></i>Active
                                         </span>
                                     </td>
-                                    @role('Admin')
+                                    @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
                                             <a class="me-2 p-2" href="javascript:void(0);"
@@ -257,7 +257,7 @@
                                             </a>
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endhasanyrole
                                 </tr>                                     
                             @endforeach
                         </tbody>

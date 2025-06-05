@@ -18,16 +18,15 @@ class CustomAuthController extends Controller
         return view('login');   // your Blade file
     }
 
-    public function customSignin(Request $request)
+     public function customSignin(Request $request)
     {
         $request->validate([
-            'login'    => 'required', // email or code
-            'password' => 'nullable', // only required if email is used
+            'login' => 'required',
         ]);
 
         $loginValue = $request->input('login');
-        $password   = $request->input('password');
-        $remember   = $request->boolean('remember');
+        $password = $request->input('password');
+        $remember = $request->boolean('remember');
 
         // Log out existing session
         if (Auth::check()) {
@@ -35,41 +34,44 @@ class CustomAuthController extends Controller
             session()->flush();
         }
 
-        $user = null;
-
         if (filter_var($loginValue, FILTER_VALIDATE_EMAIL)) {
-            // Login using email and password
-            $user = User::where('email', $loginValue)->first();
-
-            if (!$user || !Hash::check($password, $user->password)) {
+            // Email login requires password
+            if (empty($password)) {
                 return back()
-                    ->with('error', 'Invalid email or password.')
+                    ->withErrors(['password' => 'Please input a password'])
                     ->withInput($request->only('login'));
             }
-        }
-        else {
-            // Login using code (no password required)
+
+            if (!Auth::attempt(['email' => $loginValue, 'password' => $password], $remember)) {
+                return back()
+                    ->with('error', 'Invalid credentials.')
+                    ->withInput($request->only('login'));
+            }
+
+            //  Correctly fetch user role after login
+            $user = Auth::user();
+            if ($user && $user->role) {
+                $user->syncRoles([$user->role]);
+            }
+
+        } else {
+            // login without password
             $user = User::where('code', $loginValue)->first();
 
             if (!$user) {
                 return back()
-                    ->with('error', 'Invalid code.')
+                    ->with('error', 'Invalid credentials.')
                     ->withInput($request->only('login'));
+            }
+
+            Auth::login($user, $remember);
+
+            if ($user && $user->role) {
+                $user->syncRoles([$user->role]);
             }
         }
 
-        // Login the user
-        Auth::login($user, $remember);
         $request->session()->regenerate();
-
-        session([
-            'user_type'   => $user->role, // e.g. 'Employee', 'Admin', etc.
-            'user_id'     => $user->id,
-            'user_email'  => $user->email,
-            'user_name'   => $user->name,
-            'user_phone'  => $user->phone,
-            'user_image'  => $user->profile_picture,
-        ]);
 
         return redirect()->intended('index')->with('success', 'Very nice to have you back!');
     }

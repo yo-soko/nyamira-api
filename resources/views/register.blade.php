@@ -1,12 +1,13 @@
-<?php $page = 'register'; ?>
+<?php $page = 'register-2'; ?>
 @extends('layout.mainlayout')
 @section('content')
     <div class="account-content">
-        <div class="login-wrapper register-wrap bg-img">
-            <div class="login-content authent-content">
-                <form action="{{url('signin')}}">
-                    <div class="login-userset">
-                        <div class="login-logo logo-normal">
+        <div class="row login-wrapper m-0">
+            <div class="col-lg-6 p-0">
+                <div class="login-content">
+                    <form action="{{url('signin')}}">
+                        <div class="login-userset">
+                            <div class="login-logo logo-normal">
                             <img src="{{URL::asset('build/img/logo.svg')}}" alt="img">
                         </div>
                         <a href="{{url('index')}}" class="login-logo logo-white">
@@ -14,7 +15,7 @@
                         </a>
                         <div class="login-userheading">
                             <h3>Register</h3>
-                            <h4>Create New Dreamspos Account</h4>
+                            <h4>Create New Account with Us</h4>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Name <span class="text-danger"> *</span></label>
@@ -66,7 +67,7 @@
                             <button type="submit" class="btn btn-login">Sign Up</button>
                         </div>
                         <div class="signinform">
-                            <h4>Already have an account ? <a href="{{url('signin')}}" class="hover-a">Sign In Instead</a></h4>
+                            <h4>Already have an account ? <a href="{{url('login')}}" class="hover-a">Sign In Instead</a></h4>
                         </div>
                         <div class="form-setlogin or-text">
                             <h4>OR</h4>
@@ -94,11 +95,16 @@
                             </div>
                         </div>
                         <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
-                            <p>Copyright &copy; 2025 DreamsPOS</p>
+                            <p>Copyright &copy; 2025 JavaPA</p>
                         </div>
                     </div>
-                </form>
-                
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 p-0">
+                <div class="login-img">
+                    <img src="{{URL::asset('build/img/authentication/authentication-02.svg')}}" alt="img">
+                </div>
             </div>
         </div>
     </div>
