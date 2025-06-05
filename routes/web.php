@@ -94,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/employee-salary/delete', [EmployeeSalaryController::class, 'destroy'])->name('employee-salary.delete');
 
     Route::get('attendance-admin/', [AttendanciesController::class, 'index'])->name('attendance-admin.index');
+    Route::get('/attendance-employee', [AttendanciesController::class, 'markAttendance'])->name('attendance.mark');
     Route::post('attendance-employee', [AttendanciesController::class, 'markAttendance'])->name('attendance-employee');
     Route::post('/attendance-employee/clock-in', [AttendanciesController::class, 'clockIn'])->name('attendance-employee.clockIn');
     Route::post('/attendance-employee/clock-out', [AttendanciesController::class, 'clockOut'])->name('attendance-employee.clockOut');

@@ -57,7 +57,6 @@ class EmployeeController extends Controller
         return view('employee-details', compact('employee'));
     }
 
-
     public function edit(Request $request)
     {
         try {
@@ -171,7 +170,7 @@ class EmployeeController extends Controller
         }
     }
 
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         try {
             // Decrypt route ID
@@ -193,7 +192,7 @@ class EmployeeController extends Controller
                 'last_name' => 'required|string',
                 'email' => 'required|email',
                 'contact_number' => 'required',
-                'emp_code' => 'required|unique:employees,emp_code,' . $id . ',id',
+                'emp_code' => 'required|unique:employees,emp_code,' . $decryptedId . ',id',
                 'dob' => 'required|date_format:Y-m-d',
                 'gender' => 'required',
                 'nationality' => 'nullable|string',
@@ -269,10 +268,10 @@ class EmployeeController extends Controller
 
                 DB::commit();
 
-                return redirect()->route('edit-employee', $id)->with('success', 'Employee and user updated successfully!');
+                return redirect()->route('employees-list')->with('success', 'Employee and user updated successfully!');
             } catch (\Exception $e) {
                 DB::rollBack();
-                return redirect()->route('edit-employee', $id)->with('error', 'Update failed: ' . $e->getMessage());
+                return redirect()->route('employees-list')->with('error', 'Update failed: ' . $e->getMessage());
             }
         }
         catch (\Exception $e) {
@@ -280,59 +279,59 @@ class EmployeeController extends Controller
         }
     }
 
-        public function destroy($id)
-        {
-            $employee = Employee::findOrFail($id);
+    public function destroy($id)
+    {
+        $employee = Employee::findOrFail($id);
 
-            // Delete profile photo if exists
-            if ($employee->profile_photo && Storage::disk('public')->exists($employee->profile_photo)) {
-                Storage::disk('public')->delete($employee->profile_photo);
-            }
-
-            if ($employee->delete()) {
-                return redirect()->back()->with('success', 'Employee deleted successfully!');
-            } else {
-                return redirect()->back()->with('error', 'Failed to delete employee. Please try again.');
-            }
+        // Delete profile photo if exists
+        if ($employee->profile_photo && Storage::disk('public')->exists($employee->profile_photo)) {
+            Storage::disk('public')->delete($employee->profile_photo);
         }
-        public function migrateEmployeesToUsers()
-        {
-        
-            $employees = Employee::whereNull('user_id')->get();
 
-            $count = 0;
+        if ($employee->delete()) {
+            return redirect()->back()->with('success', 'Employee deleted successfully!');
+        } else {
+            return redirect()->back()->with('error', 'Failed to delete employee. Please try again.');
+        }
+    }
+    public function migrateEmployeesToUsers()
+    {
+    
+        $employees = Employee::whereNull('user_id')->get();
 
-            DB::beginTransaction();
+        $count = 0;
 
-            try {
-                foreach ($employees as $employee) {
-                    if (User::where('email', $employee->email)->exists()) {
-                        continue;
-                    }
+        DB::beginTransaction();
 
-                    $user = User::create([
-                        'name' => $employee->first_name . ' ' . $employee->last_name,
-                        'email' => $employee->email,
-                        'phone' => $employee->contact_number,
-                        'code' => $employee->emp_code,
-                        'role' => 'Employee',
-                        'profile_picture' => $employee->profile_photo,
-                        'password' => Hash::make('password123'),
-                        'status' => 1,
-                    ]);
-
-                    $employee->user_id = $user->id;
-                    $employee->save();
-
-                    $count++;
+        try {
+            foreach ($employees as $employee) {
+                if (User::where('email', $employee->email)->exists()) {
+                    continue;
                 }
 
-                DB::commit();
-                return "✅ Migrated {$count} employees successfully!";
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return "❌ Migration failed: " . $e->getMessage();
-            }
-        }
+                $user = User::create([
+                    'name' => $employee->first_name . ' ' . $employee->last_name,
+                    'email' => $employee->email,
+                    'phone' => $employee->contact_number,
+                    'code' => $employee->emp_code,
+                    'role' => 'Employee',
+                    'profile_picture' => $employee->profile_photo,
+                    'password' => Hash::make('password123'),
+                    'status' => 1,
+                ]);
 
+                $employee->user_id = $user->id;
+                $employee->save();
+
+                $count++;
+            }
+
+            DB::commit();
+            return "✅ Migrated {$count} employees successfully!";
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return "❌ Migration failed: " . $e->getMessage();
+        }
     }
+
+}

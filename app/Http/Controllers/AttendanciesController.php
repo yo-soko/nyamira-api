@@ -55,7 +55,7 @@ class AttendanciesController extends Controller
 
     public function markAttendance(Request $request)
     {
-        $employeeId = $request->input('employee_id');
+        $employeeId = $request->input('employee_id') ?? session('employee_id');
 
         $employee = Employee::findOrFail($employeeId);
 
@@ -83,19 +83,25 @@ class AttendanciesController extends Controller
         $onBreak = $attendance && $attendance->break_start && !$attendance->break_end;
          // Automatically clock-out if grace period has elapsed
         if ($alreadyClockedIn && !$attendance->clock_out) {
-            $shift = Shift::find($attendance->shift_id);  // Assuming shift_id exists in Attendancies
-            $shiftEndTime = Carbon::parse($shift->end_time);
+            $shift = Shift::find($attendance->shift_id);
             
-            $gracePeriodEndTime = $shiftEndTime->addMinutes(120); // Assuming a 15-minute grace period
+            $shiftStart = Carbon::today()->setTimeFromTimeString($shift->start_time);
+            $shiftEnd = Carbon::today()->setTimeFromTimeString($shift->end_time);
+
+            if ($shiftEnd->lessThanOrEqualTo($shiftStart)) {
+                $shiftEnd->addDay();
+            }
+
+            $gracePeriodEndTime = $shiftEnd->copy()->addMinutes(120); // 2 hour grace
 
             if (Carbon::now()->gt($gracePeriodEndTime)) {
-                // Automatically clock-out after grace period
                 $attendance->update([
-                    'clock_out' => $shiftEndTime->toTimeString(),
-                    'total_hours' => $shiftEndTime->diff($attendance->clock_in)->format('%H:%I:%S'),
+                    'clock_out' => $shiftEnd->toDateTimeString(),
+                    'total_hours' => $shiftEnd->diff($attendance->clock_in)->format('%H:%I:%S'),
                 ]);
             }
         }
+
 
         $currentMonth = now()->month;
         $currentYear   = now()->year;
@@ -177,17 +183,27 @@ class AttendanciesController extends Controller
         $today = Carbon::today();
 
         if ($today->day <= 5) {
-            $start = $today->copy()->subMonth()->startOfMonth();
-            $end = $today->copy()->subMonth()->endOfMonth();
+            // Combine: previous month + current month up to today
+            $previousStart = $today->copy()->subMonth()->startOfMonth();
+            $currentEnd = $today->copy(); // today is up to date 5
+
+            $attendanceRecords = Attendancies::where('employee_id', $employee->id)
+                ->where(function ($query) use ($previousStart, $currentEnd) {
+                    $query->whereBetween('date', [$previousStart, $currentEnd]);
+                })
+                ->latest('date')
+                ->get();
         } else {
-            $start = $today->copy()->startOfMonth();
-            $end = $today->copy()->endOfMonth();
+            // Current month only
+            $currentStart = $today->copy()->startOfMonth();
+            $currentEnd = $today->copy()->endOfMonth();
+
+            $attendanceRecords = Attendancies::where('employee_id', $employee->id)
+                ->whereBetween('date', [$currentStart, $currentEnd])
+                ->latest('date')
+                ->get();
         }
 
-        $attendanceRecords = Attendancies::where('employee_id', $employee->id)
-            ->whereBetween('date', [$start, $end])
-            ->latest('date')
-            ->get();
 
 
 
@@ -207,13 +223,17 @@ class AttendanciesController extends Controller
         // Get the employee by ID
         $employee = Employee::find($employeeId);
         if (!$employee || !$employee->shift_id) {  // Using employee's shift field
-            return back()->with('error', 'Employee or assigned shift not found.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Employee or assigned shift not found.');
+            return redirect()->route('attendance.mark');
         }
         
         // Find the shift based on the shift_id from the employee's shift field
         $shift = Shift::find($employee->shift_id);  // Accessing the shift using the shift field directly
         if (!$shift) {
-            return back()->with('error', 'Shift details not found.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Shift details not found.');
+            return redirect()->route('attendance.mark');
         }
 
         // Define grace periods (in minutes)
@@ -239,7 +259,9 @@ class AttendanciesController extends Controller
         
         // Step 4: Check if now is within clock-in window
         if (!$now->between($startWindow, $endWindow)) {
-            return back()->with('error', 'Clock-in not allowed outside shift grace period.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Clock-in not allowed outside shift grace period.');
+            return redirect()->route('attendance.mark');
         }
         
         // Prevent duplicate clock-in for the same shift window
@@ -249,7 +271,9 @@ class AttendanciesController extends Controller
             ->exists();
 
         if ($alreadyClocked) {
-            return back()->with('error', 'Already clocked in for this shift.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Already clocked in for this shift.');
+            return redirect()->route('attendance.mark');
         }
 
         // Store clock-in record
@@ -261,7 +285,10 @@ class AttendanciesController extends Controller
             'date' => $now->toDateString(),
         ]);
 
-        return back()->with('success', 'Clock In recorded successfully!');
+        session()->put('employee_id', $employeeId);
+        session()->flash('success', 'Clock-in successful!');
+        return redirect()->route('attendance.mark');
+
     }
 
     public function break(Request $request)
@@ -278,14 +305,19 @@ class AttendanciesController extends Controller
             ->first();
 
         if (!$attendance) {
-            return back()->with('error', 'Employee must be clocked in to take a break.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Employee must be clocked in to take a break.');
+            return redirect()->route('attendance.mark');
         }
 
         // Mark employee as on break
         $attendance->break_start = now();  // Save the break start time
         $attendance->save();
 
-        return back()->with('success', 'Its nice to take a break!');
+        session()->put('employee_id', $employeeId);
+        session()->flash('success', 'Its nice to take a break!');
+        return redirect()->route('attendance.mark');
+       
     }
 
     public function backFromBreak(Request $request)
@@ -303,14 +335,18 @@ class AttendanciesController extends Controller
             ->first();
 
         if (!$attendance) {
-            return back()->with('error', 'Employee is not on break.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Employee is not on break.');
+            return redirect()->route('attendance.mark');
         }
 
         // Mark employee as back from break
         $attendance->break_end = now();  // Record the break end time
         $attendance->save();
 
-        return back()->with('success', 'Welcome Back from break!');
+        session()->put('employee_id', $employeeId);
+        session()->flash('success', 'Welcome Back from break!');
+        return redirect()->route('attendance.mark');
     }
 
     public function clockOut(Request $request)
@@ -328,12 +364,16 @@ class AttendanciesController extends Controller
             ->first();
     
         if (!$attendance) {
-            return back()->with('error', 'Employee already clocked out or not clocked in for the shift.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Employee already clocked out or not clocked in for the shift.');
+            return redirect()->route('attendance.mark');
         }
     
         // Check if the attendance has a valid shift relationship
         if (!$attendance->shift) {
-            return back()->with('error', 'No shift associated with this attendance.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'No shift associated with this attendance.');
+            return redirect()->route('attendance.mark');
         }
     
         // Record clock-out time
@@ -343,7 +383,9 @@ class AttendanciesController extends Controller
         // Ensure clock-in time exists
         $clockInTime = Carbon::parse($attendance->clock_in);
         if (!$clockInTime) {
-            return back()->with('error', 'Invalid clock-in time.');
+            session()->put('employee_id', $employeeId);
+            session()->flash('error', 'Invalid clock-in time.');
+            return redirect()->route('attendance.mark');
         }
     
         // Handle case for shifts spanning over midnight
@@ -371,7 +413,9 @@ class AttendanciesController extends Controller
     
         if ($breakStart && $breakEnd) {
             if ($breakStart->greaterThan($breakEnd)) {
-                return back()->with('error', 'Invalid break time: Break start cannot be later than break end.');
+                session()->put('employee_id', $employeeId);
+                session()->flash('error', 'Invalid break time: Break start cannot be later than break end.');
+                return redirect()->route('attendance.mark');
             }
     
             $breakDuration = $breakEnd->diffInSeconds($breakStart);
@@ -386,7 +430,9 @@ class AttendanciesController extends Controller
         // Save the updated attendance record
         $attendance->save();
     
-        return back()->with('success', 'Clock Out time recorded successfully!');
+        session()->put('employee_id', $employeeId);
+        session()->flash('success', 'Clock Out time recorded successfully!');
+        return redirect()->route('attendance.mark');
     }   
 
 
