@@ -99,16 +99,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance-employee/clock-out', [AttendanciesController::class, 'clockOut'])->name('attendance-employee.clockOut');
     Route::post('/attendance-employee/break', [AttendanciesController::class, 'break'])->name('attendance-employee.break');
     Route::post('/attendance-employee/backFromBreak', [AttendanciesController::class, 'backFromBreak'])->name('attendance-employee.backFromBreak');
-
+ 
     Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');  // List all employees
     Route::get('/employee/create', [EmployeeController::class, 'create'])->name('employee.create');  // Add new employee
     Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');  // Store employee
     Route::get('/employees-list', [EmployeeController::class, 'list'])->name('employees-list');  // List of employees
-    Route::get('/employee-details/{id}', [EmployeeController::class, 'show'])->name('employee.details');  // View employee details
-    Route::get('/edit-employee/{id}', [EmployeeController::class, 'edit'])->name('edit-employee');  // Edit employee
+    Route::post('/employee-details', [EmployeeController::class, 'show'])->name('employee.details');
+    Route::post('/edit-employee', [EmployeeController::class, 'edit'])->name('edit-employee');
     Route::put('/update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');  // Update employee
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');  // Delete employee
-    
+      
     Route::get('/migrate-employees', [EmployeeController::class, 'migrateEmployeesToUsers']);
     Route::get('/auto-clockout', [AttendanciesController::class, 'autoClockOutForgottenEmployees']);
 

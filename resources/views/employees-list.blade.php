@@ -135,9 +135,14 @@
                                                 </a>
                                                 <div class="ms-2">
                                                     <p class="text-dark mb-0">
-                                                        <a href="{{ url('employee-details/' . $employee->id) }}">
-                                                            {{ $employee->first_name }} {{ $employee->last_name }}
-                                                        </a>
+                                                      <form method="POST" action="{{ route('employee.details') }}" style="display:inline;">
+                                                            @csrf
+                                                            <input type="hidden" name="id" value="{{ Crypt::encryptString($employee->id) }}">
+                                                            <button type="submit" class="btn btn-link p-0 m-0 align-baseline" style="text-decoration: none;">
+                                                                {{ $employee->first_name }} {{ $employee->last_name }}
+                                                            </button>
+                                                        </form>
+
                                                     </p>
                                                 </div>
                                             </div>
@@ -154,12 +159,20 @@
                                         @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                         <td>
                                             <div class="edit-delete-action d-flex align-items-center">
-                                                <a class="me-2 d-flex align-items-center border rounded p-2" href="{{ url('employee-details/' . $employee->id) }}">
-                                                    <i data-feather="eye" class="feather-eye"></i>
-                                                </a>
-                                                <a class="me-2 p-2 d-flex align-items-center border rounded" href="{{ url('edit-employee/' . $employee->id) }}">
-                                                    <i data-feather="edit" class="feather-edit"></i>
-                                                </a>
+                                                <form method="POST" action="{{ route('employee.details') }}">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ Crypt::encryptString($employee->id) }}">
+                                                    <button type="submit" class="btn btn-link">
+                                                        <i data-feather="eye" class="feather-eye"></i>
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="{{ route('edit-employee') }}" style="display:inline;">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ Crypt::encryptString($employee->id) }}">
+                                                    <button type="submit" class="btn btn-link p-0 m-0">
+                                                        <i data-feather="edit" class="feather-edit"></i>
+                                                    </button>
+                                                </form>
                                                 <a href="javascript:void(0);" 
                                                     class="p-2 d-flex align-items-center border rounded delete-btn" 
                                                     data-id="{{ $employee->id }}" 

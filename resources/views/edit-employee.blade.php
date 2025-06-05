@@ -25,10 +25,11 @@
                 </div>
             </div>
 
-            <form action="{{ route('update-employee', $employee->id) }}" method="POST" enctype="multipart/form-data">
+           <form action="{{ route('update-employee', Crypt::encryptString($employee->id)) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                <input type="hidden" name="employee_id" value="{{ Crypt::encryptString($employee->id) }}">
+
                 <div class="accordion-card-one accordion" id="accordionExample">
                     <div class="accordion-item">
                         <div class="accordion-header p-3" id="headingOne">
