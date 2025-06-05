@@ -13,7 +13,8 @@ class ShiftController extends Controller
     
         // Remove AM/PM if time has it
         $time = preg_replace('/\s?(AM|PM)/i', '', $time);
-    
+
+      
         try {
             return Carbon::createFromFormat('h:i A', $time)->format('H:i:s');
         } catch (\Exception $e1) {
@@ -77,15 +78,14 @@ class ShiftController extends Controller
     public function update(Request $request)
     {
         $shift = Shift::findOrFail($request->id);
-    
         $data = $request->all();
-    
+
         $validated = $request->validate([
             'shift_name' => 'sometimes|required|string',
             'start_time' => 'sometimes|required',
             'end_time' => 'sometimes|required',
             'day_off' => 'nullable|string',
-            'days' => 'sometimes|required|string',
+            'days' => 'sometimes|required|array',
             'morning_from' => 'nullable',
             'morning_to' => 'nullable',
             'lunch_from' => 'nullable',
@@ -105,12 +105,13 @@ class ShiftController extends Controller
         $shift->status = $request->has('status');
 
         // Optional fields - wrap in null-checking parseTime
-        $shift->morning_from = $request->morning_from ? $this->parseTime($request->morning_from) : null;
-        $shift->morning_to = $request->morning_to ? $this->parseTime($request->morning_to) : null;
-        $shift->lunch_from = $request->lunch_from ? $this->parseTime($request->lunch_from) : null;
-        $shift->lunch_to = $request->lunch_to ? $this->parseTime($request->lunch_to) : null;
-        $shift->evening_from = $request->evening_from ? $this->parseTime($request->evening_from) : null;
-        $shift->evening_to = $request->evening_to ? $this->parseTime($request->evening_to) : null;
+        $shift->morning_from = $request->filled('morning_from') ? $this->parseTime($request->morning_from) : null;
+        $shift->morning_to = $request->filled('morning_to') ? $this->parseTime($request->morning_to) : null;
+        $shift->lunch_from = $request->filled('lunch_from') ? $this->parseTime($request->lunch_from) : null;
+        $shift->lunch_to = $request->filled('lunch_to') ? $this->parseTime($request->lunch_to) : null;
+        $shift->evening_from = $request->filled('evening_from') ? $this->parseTime($request->evening_from) : null;
+        $shift->evening_to = $request->filled('evening_to') ? $this->parseTime($request->evening_to) : null;
+
         $shift->description = $request->description;
 
 
