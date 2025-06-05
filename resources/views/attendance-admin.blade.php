@@ -95,9 +95,14 @@
                                     <input class="form-check-input" type="checkbox">
                                 </div>
                                 <div>
-                                    <a href="{{ url('attendance-employee/'.$employee->id) }}" class="avatar avatar-xl avatar-rounded border p-1 rounded-circle">
-                                        <img src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/profile.jpg') }}" class="img-fluid h-auto w-auto" alt="img">
-                                    </a>
+                                   <form action="{{ route('attendance-employee') }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" class="avatar avatar-xl avatar-rounded border p-1 rounded-circle" style="border:none; background:none; padding:0;">
+                                            <img src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/profile.jpg') }}" class="img-fluid h-auto w-auto" alt="img" />
+                                        </button>
+                                    </form>
+
                                 </div>
                                 <div class="dropdown">
                                     <a href="#" class="action-icon border-0" data-bs-toggle="dropdown" aria-expanded="false">
@@ -105,9 +110,13 @@
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <a href="{{ url('attendance-employee/'.$employee->id) }}" class="dropdown-item">
-                                              <i class="ti ti-circle-check me-2"></i> Mark attendance
-                                            </a>
+                                            <form action="{{ route('attendance-employee') }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                                <button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0; width: 100%; text-align: left;">
+                                                    <i class="ti ti-circle-check me-2"></i> Mark attendance
+                                                </button>
+                                            </form>
                                         </li>
                                        								
                                     </ul>

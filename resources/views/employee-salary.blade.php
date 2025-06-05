@@ -96,20 +96,29 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <a href="{{ url('employee-details/' . $employeeSalary->id) }}" class="avatar avatar-md">
-                                                <img 
-                                                    src="{{ $employeeSalary->employee->profile_photo ? asset('storage/' . $employeeSalary->employee->profile_photo) : asset('build/img/users/user-33.png') }}" 
-                                                    class="img-fluid" 
-                                                    alt="Profile"
-                                                >
-                                            </a>
+                                            <form method="POST" action="{{ route('employee.details') }}" style="display: inline;">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ Crypt::encryptString($employeeSalary->id) }}">
+                                                <button type="submit" class="p-0 m-0 border-0 bg-transparent">
+                                                    <img 
+                                                        src="{{ $employeeSalary->employee->profile_photo ? asset('storage/' . $employeeSalary->employee->profile_photo) : asset('build/img/users/user-33.png') }}" 
+                                                        class="img-fluid avatar avatar-md" 
+                                                        alt="Profile"
+                                                    >
+                                                </button>
+                                            </form>
+
                                             <div class="ms-2">
                                                 <p class="text-dark mb-0">
-                                                    <a href="{{url('employee-details')}}">
-                                                        {{ $employeeSalary->employee->first_name . ' ' . $employeeSalary->employee->last_name }}
-                                                    </a>
+                                                    <form method="POST" action="{{ route('employee.details') }}" style="display: inline;">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ Crypt::encryptString($employeeSalary->id) }}">
+                                                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline" style="text-decoration: none;">
+                                                            {{ $employeeSalary->employee->first_name . ' ' . $employeeSalary->employee->last_name }}
+                                                        </button>
+                                                    </form>
+
                                                 </p>
-                                                <p><a>{{ $employeeSalary->employee->designation->designation ?? 'N/A' }}</a></p>
                                             </div>
                                         </div>
                                     </td>
@@ -127,9 +136,13 @@
                                     </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
-                                            <a class="p-2 me-2" href="{{ url('payslip/' . $employeeSalary->id) }}">
-                                                <i data-feather="eye" class="feather-eye"></i>
-                                            </a>
+                                            <form method="POST" action="{{ route('payslip.view') }}" style="display:inline;">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ Crypt::encryptString($employeeSalary->id) }}">
+                                                <button type="submit" class="btn btn-link p-0 m-0" style="text-decoration: none;">
+                                                    <i data-feather="eye" class="feather-eye"></i>
+                                                </button>
+                                            </form>
                                             @hasanyrole('admin|superadmin|manager|supervisor|director|developer')
                                             <a class="p-2 me-2 edit-btn" href="javascript:void(0);" 
                                             

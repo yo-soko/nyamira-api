@@ -130,9 +130,17 @@
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <a href="{{ url('employee-details/' . $employee->id) }}" class="avatar avatar-md">
-                                                    <img src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/user-32.jpg') }}" class="img-fluid" alt="Profile">
-                                                </a>
+                                               <form method="POST" action="{{ route('employee.details') }}" style="display:inline;">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ Crypt::encryptString($employee->id) }}">
+                                                    <button type="submit" style="border: none; background: none; padding: 0;">
+                                                        <img 
+                                                            src="{{ $employee->profile_photo ? asset('storage/' . $employee->profile_photo) : asset('build/img/users/user-32.jpg') }}" 
+                                                            class="avatar avatar-md img-fluid" 
+                                                            alt="Profile"
+                                                        >
+                                                    </button>
+                                                </form>
                                                 <div class="ms-2">
                                                     <p class="text-dark mb-0">
                                                       <form method="POST" action="{{ route('employee.details') }}" style="display:inline;">

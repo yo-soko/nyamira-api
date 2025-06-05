@@ -53,8 +53,12 @@ class AttendanciesController extends Controller
         return view('index', compact('employees', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 
-    public function markAttendance($id)
+    public function markAttendance(Request $request)
     {
+        $employeeId = $request->input('employee_id');
+
+        $employee = Employee::findOrFail($employeeId);
+
         $hour = Carbon::now()->format('H');
 
         if ($hour < 12) {
@@ -65,7 +69,6 @@ class AttendanciesController extends Controller
             $greeting = 'Good Evening';
         }
 
-        $employee = Employee::findOrFail($id);
 
         $today = now()->toDateString();
 

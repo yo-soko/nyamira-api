@@ -148,7 +148,7 @@
                 </div>
                 <div class="text-center">
                     <div class="mb-3">
-                        <img src="{{URL::asset('build/img/logo.png')}}" width="130" class="img-fluid" alt="logo">
+                         <img src="{{URL::asset('build/img/logo.svg')}}" width="130" class="img-fluid" alt="logo">
                     </div>
                 </div>
             </div>

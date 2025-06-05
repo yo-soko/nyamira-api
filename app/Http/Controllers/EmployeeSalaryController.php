@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\EmployeeSalary;
 use App\Models\Employee;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Crypt;
 
 class EmployeeSalaryController extends Controller
 {
@@ -23,9 +23,9 @@ class EmployeeSalaryController extends Controller
         return view('employee-salary', compact('employeeSalary','employees','employees_view'));
     }
     
-    public function showPayslip($id)
+    public function showPayslip(Request $request)
     {
-
+        $id = Crypt::decryptString($request->id);
         $salary = EmployeeSalary::with('employee')->findOrFail($id);
         return view('payslip', compact('salary'));
     }
