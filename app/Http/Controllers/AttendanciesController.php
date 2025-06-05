@@ -136,7 +136,7 @@ class AttendanciesController extends Controller
         
                 if ($shift && $shift->start_time) {
                     $clockInTime = Carbon::parse($record->clock_in);
-                    $shiftStartTimeWithGrace = Carbon::parse($shift->start_time)->addHours(2); // 2-hour grace
+                    $shiftStartTimeWithGrace = Carbon::parse($shift->start_time)->addHours(1); // 1-hour grace
         
                     if ($clockInTime->gt($shiftStartTimeWithGrace)) {
                         $lateDays++;
