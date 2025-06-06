@@ -70,36 +70,49 @@ class AttendanciesController extends Controller
         }
 
 
-        $today = now()->toDateString();
+        $today = Carbon::today();
 
 
-        // Check if the employee is on break
+
         $attendance = Attendancies::where('employee_id', $employee->id)
-            ->whereDate('date', $today)
+            ->orderByDesc('clock_in')
             ->first();
-            
-        $alreadyClockedIn = $attendance && $attendance->clock_in;
 
+        // Consider clocked in if and only if the last record has no clock_out
+        $alreadyClockedIn = $attendance && is_null($attendance->clock_out);
         $onBreak = $attendance && $attendance->break_start && !$attendance->break_end;
-         // Automatically clock-out if grace period has elapsed
+
+        //auto clock out the record
         if ($alreadyClockedIn && !$attendance->clock_out) {
             $shift = Shift::find($attendance->shift_id);
             
-            $shiftStart = Carbon::today()->setTimeFromTimeString($shift->start_time);
-            $shiftEnd = Carbon::today()->setTimeFromTimeString($shift->end_time);
+            if ($shift) {
+                $clockInDate = Carbon::parse($attendance->clock_in)->toDateString();
+                $shiftStart = Carbon::parse($clockInDate . ' ' . $shift->start_time);
+                $shiftEnd = Carbon::parse($clockInDate . ' ' . $shift->end_time);
 
-            if ($shiftEnd->lessThanOrEqualTo($shiftStart)) {
-                $shiftEnd->addDay();
+                if ($shiftEnd->lessThanOrEqualTo($shiftStart)) {
+                    $shiftEnd->addDay();
+                }
+
+                $gracePeriodEndTime = $shiftEnd->copy()->addMinutes(120);
+
+                if (Carbon::now()->gt($gracePeriodEndTime)) {
+                    $attendance->update([
+                        'clock_out' => $shiftEnd->toDateTimeString(),
+                        'total_hours' => $shiftEnd->diff($attendance->clock_in)->format('%H:%I:%S'),
+                        'auto_clocked_out' => true,
+                    ]);
+                    session()->flash('error', 'You were automatically clocked out on ' . $shiftEnd->toDayDateTimeString() . ' due to exceeding shift period. Please see HR if this is incorrect.');
+                    // Re-fetch the updated attendance record to get fresh data
+                    $attendance = Attendancies::find($attendance->id);
+
+                    // Recalculate clock-in status
+                    $alreadyClockedIn = is_null($attendance->clock_out);
+
+                }
             }
 
-            $gracePeriodEndTime = $shiftEnd->copy()->addMinutes(120); // 2 hour grace
-
-            if (Carbon::now()->gt($gracePeriodEndTime)) {
-                $attendance->update([
-                    'clock_out' => $shiftEnd->toDateTimeString(),
-                    'total_hours' => $shiftEnd->diff($attendance->clock_in)->format('%H:%I:%S'),
-                ]);
-            }
         }
 
 
@@ -133,24 +146,27 @@ class AttendanciesController extends Controller
         $absentDays = $totalWorkingDays - $presentDays;
         //4 late days
     
+        $graceMinutes = 30;
         $lateDays = 0;
 
-        $attendanceRecords = Attendancies::where('employee_id', $employee->id)
+        $attendancesForLateCheck = Attendancies::where('employee_id', $employee->id)
             ->whereBetween('date', [$start, $end])
+            ->whereNotNull('clock_in')
             ->get();
-        
-        foreach ($attendanceRecords as $record) {
-            if ($record->clock_in && $record->shift_id) {
-                $shift = Shift::find($record->shift_id);
-        
-                if ($shift && $shift->start_time) {
-                    $clockInTime = Carbon::parse($record->clock_in);
-                    $shiftStartTimeWithGrace = Carbon::parse($shift->start_time)->addHours(1); // 1-hour grace
-        
-                    if ($clockInTime->gt($shiftStartTimeWithGrace)) {
-                        $lateDays++;
-                    }
-                }
+
+        foreach ($attendancesForLateCheck as $att) {
+            $shift = Shift::find($att->shift_id);
+
+            if (!$shift) {
+                continue;
+            }
+
+            $clockInTime = Carbon::parse($att->clock_in);
+            $shiftDate = Carbon::parse($att->date)->toDateString();
+            $shiftStart = Carbon::parse($shiftDate . ' ' . $shift->start_time)->addMinutes($graceMinutes);
+
+            if ($clockInTime->gt($shiftStart)) {
+                $lateDays++;
             }
         }
         
@@ -180,7 +196,6 @@ class AttendanciesController extends Controller
                 $holidayDays++;
             }
         }
-        $today = Carbon::today();
 
        if ($today->day <= 5) {
             $previousStart = $today->copy()->subMonth()->startOfMonth()->toDateString();
@@ -201,7 +216,6 @@ class AttendanciesController extends Controller
                 ->latest('date')
                 ->get();
         }
-
 
 
 

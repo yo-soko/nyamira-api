@@ -18,6 +18,7 @@ class Attendancies extends Model
         'overtime',
         'total_hours',
         'progress',
+        'auto_clocked_out',
     ];
     
     public function employee() {
