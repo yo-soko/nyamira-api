@@ -65,15 +65,10 @@
 
         <!-- Total Companies -->
         <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill">
+            <div class="card flex-fill bg-secondary-gradient">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <span class="avatar avatar-md bg-dark mb-3">
-                            <i class="ti ti-building fs-16"></i>
-                        </span>
-                        <span class="badge bg-success fw-normal mb-3">
-                            +19.01%
-                        </span>
+                 
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
@@ -89,15 +84,11 @@
 
         <!-- Active Companies -->
         <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill">
+            <div class="card flex-fill bg-primary-gradient">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <span class="avatar avatar-md bg-dark mb-3">
-                            <i class="ti ti-carousel-vertical fs-16"></i>
-                        </span>
-                        <span class="badge bg-danger fw-normal mb-3">
-                            -2%
-                        </span>
+                 
+                      
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
@@ -113,15 +104,11 @@
 
         <!-- Total Subscribers -->
         <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill">
+            <div class="card flex-fill bg-info-gradient">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <span class="avatar avatar-md bg-dark mb-3">
-                            <i class="ti ti-chalkboard-off fs-16"></i>
-                        </span>
-                        <span class="badge bg-success fw-normal mb-3">
-                            +6%
-                        </span>
+                  
+                      
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
@@ -133,33 +120,75 @@
                 </div>
             </div>
         </div>
-        <!-- /Total Subscribers -->
-
-        <!-- Total Earnings -->
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill">
+       <div class="col-xl-3 col-sm-6 d-flex">
+            <div class="card flex-fill bg-danger-gradient">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <span class="avatar avatar-md bg-dark mb-3">
-                            <i class="ti ti-businessplan fs-16"></i>
-                        </span>
-                        <span class="badge bg-info fw-normal mb-3">
-                            16%
-                        </span>
+                      
+                      
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <h2 class="mb-1">7</h2>
-                            <p class="fs-13">Total Projects</p>
+                            <h2 class="mb-1">{{ $inactiveEmployees }}</h2>
+                            <p class="fs-13">InActive Employees</p>
                         </div>
-                        <div class="company-bar4"></div>
+                        <div class="company-bar3"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /Total Earnings -->
-
-    </div>
+        <div class="col-xl-3 col-sm-6 d-flex">
+            <div class="card flex-fill bg-danger-gradient">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h2 class="mb-1">{{ $lateCount }}</h2>
+                            <p class="fs-13">Late Employees Today</p>
+                        </div>
+                        <div class="company-bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 d-flex">
+            <div class="card flex-fill bg-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h2 class="mb-1">{{ $In }}</h2>
+                            <p class="fs-13">Employees Still At work</p>
+                        </div>
+                        <div class="company-bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="col-xl-3 col-sm-6 d-flex">
+            <div class="card flex-fill bg-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h2 class="mb-1">{{ $onLeave }}</h2>
+                            <p class="fs-13">Employees On Leave</p>
+                        </div>
+                        <div class="company-bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+          <div class="col-xl-3 col-sm-6 d-flex">
+            <div class="card flex-fill bg-teal">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h2 class="mb-1">{{ $presentToday }}</h2>
+                            <p class="fs-13">Employees Reported to work</p>
+                        </div>
+                        <div class="company-bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <div class="row">
 

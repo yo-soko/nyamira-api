@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Attendancies;
 use App\Models\Employee;
 use App\Models\Holiday;
+use App\Models\leaves;
 use App\Models\Shift;
 use Carbon\Carbon;
 
@@ -42,15 +43,61 @@ class AttendanciesController extends Controller
         } else {
             $greeting = 'Good Evening';
         }
+        $today = Carbon::today();
+
         $totalEmployees = Employee::count();
         $activeEmployees = Employee::where('status', 1)->count(); // assuming 1 = active
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
+        $presentToday = Attendancies::whereDate('date', $today)->distinct('employee_id')->count('employee_id');
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
+
+        $onLeave = leaves::whereDate('from_date', '<=', $today)
+            ->whereDate('to_date', '>=', $today)
+            ->count();
+
+        
+        $graceMinutes = 30;
+
+        $lateCount = 0;
+
+        // Get today's attendances with clock_in
+        $attendances = Attendancies::whereDate('date', $today)
+            ->whereNotNull('clock_in')
+            ->get();
+
+        // Preload all shifts to avoid N+1 queries
+        $shifts = Shift::all()->keyBy('id');
+
+        $checkedEmployees = [];
+
+        foreach ($attendances as $att) {
+            $shift = $shifts[$att->shift_id] ?? null;
+
+            if (!$shift) continue;
+
+            $clockIn = Carbon::parse($att->clock_in);
+            $shiftStart = Carbon::parse($today->toDateString() . ' ' . $shift->start_time)
+                            ->addMinutes($graceMinutes);
+
+            if ($clockIn->gt($shiftStart) && !in_array($att->employee_id, $checkedEmployees)) {
+                $lateCount++;
+                $checkedEmployees[] = $att->employee_id;
+            }
+            $lateCount++;
+        }
+
+        $Inn = Attendancies::with('employee') // assuming there's a relationship
+            ->whereDate('date', $today)
+            ->whereNotNull('clock_in')
+            ->whereNull('clock_out')
+            ->get();
+
+        $In = $Inn->count();
         // Fetch all employees
         $employees = Employee::with(['department', 'designation'])->get();
          // If you have a large dataset, you can use pagination instead
         
-        return view('index', compact('employees', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
+        return view('hrdashboard', compact('employees','onLeave','presentToday', 'lateCount','In', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 
     public function markAttendance(Request $request)
