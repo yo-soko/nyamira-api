@@ -97,7 +97,7 @@ class AttendanciesController extends Controller
         $employees = Employee::with(['department', 'designation'])->get();
          // If you have a large dataset, you can use pagination instead
         
-        return view('hrdashboard', compact('employees','onLeave','presentToday', 'lateCount','In', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
+        return view('index', compact('employees','onLeave','presentToday', 'lateCount','In', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 
     public function markAttendance(Request $request)
