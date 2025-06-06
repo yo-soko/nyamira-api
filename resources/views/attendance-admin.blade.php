@@ -127,8 +127,14 @@
                             </div>
                             <div class="text-center mb-3">
                                 <h6 class="mb-1">
-                                    <a href="{{ url('attendance-employee/'.$employee->id) }}">{{ $employee->first_name .' '. $employee->last_name }}</a>
-                                </h6>
+                                    <form action="{{ route('attendance-employee') }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" style="border: none; background: none; padding: 0; color: #0d6efd; text-decoration: underline;">
+                                            {{ $employee->first_name .' '. $employee->last_name }}
+                                        </button>
+                                    </form>                               
+                                 </h6>
                                 <span class="badge bg-secondary-gradient text-gray-9 fs-10 fw-medium">{{ $employee->designation->designation ?? '-' }}</span>
                                 <br class="mb-2">
                                 <span class="badge {{ $employee->status === 1 ? 'badge-success' : 'badge-danger' }} d-inline-flex align-items-center badge-xs">
