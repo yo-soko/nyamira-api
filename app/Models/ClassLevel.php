@@ -13,4 +13,15 @@ class ClassLevel extends Model
                     ->withTimestamps();
     }
 
+    public function getDisplayNameAttribute()
+    {
+        return $this->level_name;
+    }
+
+    public function stream()
+    {
+        return $this->belongsTo(Stream::class);
+    }
+
+
 }

@@ -10,7 +10,7 @@
 |
 */
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanciesController;
@@ -28,6 +28,10 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\FeeStructureController;
+use App\Http\Controllers\FeePaymentsController;
+use App\Http\Controllers\Api\PaymentController;
+
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
 Route::post('custom-login',     [CustomAuthController::class, 'customSignin'])->name('signin.custom');
@@ -103,7 +107,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/attendance-employee/clock-out', [AttendanciesController::class, 'clockOut'])->name('attendance-employee.clockOut');
     Route::post('/attendance-employee/break', [AttendanciesController::class, 'break'])->name('attendance-employee.break');
     Route::post('/attendance-employee/backFromBreak', [AttendanciesController::class, 'backFromBreak'])->name('attendance-employee.backFromBreak');
- 
+
     Route::get('/add-employee', [EmployeeController::class, 'index'])->name('add-employee');  // List all employees
     Route::get('/employee/create', [EmployeeController::class, 'create'])->name('employee.create');  // Add new employee
     Route::post('/employees/store', [EmployeeController::class, 'store'])->name('employees.store');  // Store employee
@@ -112,7 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/edit-employee', [EmployeeController::class, 'edit'])->name('edit-employee');
     Route::put('/update-employee/{id}', [EmployeeController::class, 'update'])->name('update-employee');  // Update employee
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy'])->name('employees.destroy');  // Delete employee
-      
+
     Route::get('/migrate-employees', [EmployeeController::class, 'migrateEmployeesToUsers']);
     Route::get('/auto-clockout', [AttendanciesController::class, 'autoClockOutForgottenEmployees']);
 
@@ -150,6 +154,36 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/results-filter', [ResultController::class, 'showFilterForm'])->name('results-filter');
     Route::post('/results-filter', [ResultController::class, 'filterResults'])->name('results-filter');
     Route::get('/results-view', [ResultController::class, 'viewResults'])->name('results-view');
+
+
+    // Fees
+
+    Route::get('fee-structure', [FeeStructureController::class, 'index'])->middleware('auth');
+    Route::post('fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
+    Route::post('fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
+    Route::post('fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
+    Route::post('fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
+    Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
+    Route::post('/fee-payments', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
+    Route::resource('fee-payments', FeePaymentsController::class);
+
+    //Fees
+    // ========== AJAX ROUTES (Used by JS) ==========
+
+    // ✅ Get students by class (used in payment modal)
+    Route::get('/students/by-class/{classId}', [StudentController::class, 'getByClass'])->name('students.byClass');
+
+    // ✅ Get student balance for a specific term
+    Route::get('/students/{studentId}/balance/{termId}', [StudentController::class, 'getBalance'])->name('students.balance');
+
+    // ✅ Handle payment (already in your JS)
+    Route::post('/ajax/payments', [PaymentController::class, 'handleAjax'])->name('ajax.payments');
+
+    Route::get('/fetch-students', [FeePaymentsController::class, 'fetchStudents']);
+    Route::get('/fetch-balance/{student}', [FeePaymentsController::class, 'fetchBalance']);
+    Route::post('/get-students', [FeePaymentsController::class, 'fetchStudents'])->name('get.students');
+    Route::post('/get-balance', [FeePaymentsController::class, 'fetchBalance'])->name('get.balance');
+
 
 
 });

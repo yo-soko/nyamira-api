@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Models\Payment;
+use App\Models\FeeStructure;
 
 class StudentController extends Controller
 {
@@ -65,4 +67,42 @@ class StudentController extends Controller
     {
         //
     }
+
+    // AJAX: Get students by class ID
+    public function getByClass($classId)
+    {
+        $students = Student::where('class_id', $classId)
+            ->select('id', 'first_name', 'middle_name', 'last_name')
+            ->get()
+            ->map(function ($student) {
+                return [
+                    'id' => $student->id,
+                    'full_name' => trim("{$student->first_name} {$student->middle_name} {$student->last_name}")
+                ];
+            });
+
+        return response()->json($students);
+    }
+
+    // AJAX: Get balance for student and term
+    public function getBalance($studentId, $termId)
+    {
+        $student = Student::findOrFail($studentId);
+        $classId = $student->class_id;
+
+        $totalFees = FeeStructure::where('class_id', $classId)
+            ->where('term_id', $termId)
+            ->sum('amount');
+
+        $totalPaid = Payment::where('student_id', $studentId)
+            ->where('term_id', $termId)
+            ->sum('amount_paid');
+
+        return response()->json([
+            'expected' => $totalFees,
+            'paid' => $totalPaid,
+            'balance' => $totalFees - $totalPaid,
+        ]);
+    }
+
 }
