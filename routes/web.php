@@ -24,7 +24,8 @@ use App\Http\Controllers\EmployeeSalaryController;
 use App\Http\Controllers\LeavesController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
-
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\AttendanceController;
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
 Route::post('custom-login',     [CustomAuthController::class, 'customSignin'])->name('signin.custom');
@@ -130,6 +131,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions');
     Route::post('/permissions/set-role', [PermissionController::class, 'setRole'])->name('permissions.setRole');
     Route::put('/roles-permissions/{role}', [PermissionController::class, 'update'])->name('roles.permissions.update');
+
+    Route::get('/students', [StudentController::class, 'index'])->name('students');
+
+    Route::get('/attendance', [AttendanceController::class, 'index']);
+    Route::get('/attendance-all', [AttendanceController::class, 'index']);
+    Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/filter', [AttendanceController::class, 'filter'])->name('attendance.filter');
+
+
 });
 
 

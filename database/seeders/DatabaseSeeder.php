@@ -30,6 +30,10 @@ class DatabaseSeeder extends Seeder
             TermsTableSeeder::class,
             GuardiansTableSeeder::class,
             AttendanceTableSeeder::class,
+            TermsTableSeeder::class,
+            StudentsTableSeeder::class,
+            TransportRoutesTableSeeder::class,
+            
         ]);
     }
 }

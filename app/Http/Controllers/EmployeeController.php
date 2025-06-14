@@ -314,7 +314,7 @@ class EmployeeController extends Controller
                     'email' => $employee->email,
                     'phone' => $employee->contact_number,
                     'code' => $employee->emp_code,
-                    'role' => 'Employee',
+                    'role' => 'class_teacher',
                     'profile_picture' => $employee->profile_photo,
                     'password' => Hash::make('password123'),
                     'status' => 1,

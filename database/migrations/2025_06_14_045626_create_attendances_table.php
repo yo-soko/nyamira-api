@@ -15,13 +15,16 @@ return new class extends Migration
             $table->id();
             
             $table->unsignedBigInteger('student_id')->nullable();
+            $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->date('date')->nullable();
 
-            $table->enum('session', ['AM', 'PM'])->default('AM');
-            $table->enum('status', ['Present', 'Absent', 'Late', 'Excused'])->default('Absent');
+            $table->string('session');
+            $table->enum('status', ['Present', 'Absent'])->default('Absent');
             $table->text('reason')->nullable();
             $table->timestamps();
+
+            $table->unique(['student_id','class_id', 'session', 'date']); 
         });
     }
 
