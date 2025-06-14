@@ -13,6 +13,7 @@ class AttendanceTableSeeder extends Seeder
 
         Attendance::create([
             'student_id' => 1,
+            'class_id' => 7,
             'date' => $date,
             'session' => 'AM',
             'status' => 'Present',
@@ -21,6 +22,7 @@ class AttendanceTableSeeder extends Seeder
 
         Attendance::create([
             'student_id' => 1,
+            'class_id' => 6,
             'date' => $date,
             'session' => 'PM',
             'status' => 'Absent',

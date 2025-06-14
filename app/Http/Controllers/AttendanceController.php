@@ -21,9 +21,12 @@ class AttendanceController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin') {
+        if (in_array($user->role, ['admin', 'developer', 'manager', 'director', 'supervisor'])) {
 
-          return view('attendance-all', compact('class', 'students'));
+          $classes = SchoolClass::with('classTeacher')->get();
+
+          return view('attendance-all', compact('classes'));
+
         }
         elseif ($user->role === 'class_teacher') {
             // Find the class where this user is the class teacher
@@ -43,7 +46,17 @@ class AttendanceController extends Controller
        abort(403, 'Unauthorized access');
     }
 
+    public function attendanceAll(Request $request)
+    {
+        $classId = $request->input('class_id');
 
+        $class = SchoolClass::with(['students', 'classTeacher', 'level', 'stream'])->findOrFail($classId);
+
+        $students = $class->students;
+        $today = Carbon::now()->format('l, jS F Y');
+        // Pass to view that marks attendance for that class
+        return view('attendance', compact('class', 'students','today'));
+    }
     /**
      * Show the form for creating a new resource.
      */

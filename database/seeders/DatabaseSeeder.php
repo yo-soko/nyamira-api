@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             TermsTableSeeder::class,
             StudentsTableSeeder::class,
             TransportRoutesTableSeeder::class,
+            ExamsTableSeeder::class,
+            ExamSubjectsClasses::class, 
             
         ]);
     }

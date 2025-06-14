@@ -26,6 +26,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ExamController;
+use App\Http\Controllers\ResultController;
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
 Route::post('custom-login',     [CustomAuthController::class, 'customSignin'])->name('signin.custom');
@@ -135,9 +137,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students', [StudentController::class, 'index'])->name('students');
 
     Route::get('/attendance', [AttendanceController::class, 'index']);
-    Route::get('/attendance-all', [AttendanceController::class, 'index']);
+    Route::get('/attendance-all', [AttendanceController::class, 'index'])->name('attendance-all');
     Route::post('/attendance/store', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::get('/attendance/filter', [AttendanceController::class, 'filter'])->name('attendance.filter');
+
+    Route::post('/attendance', [AttendanceController::class, 'attendanceAll'])->name('attendance-all');
+    Route::get('/exams', [ExamController::class, 'index'])->name('exams');
+
+    Route::get('/submit-results', [ResultController::class, 'filterForm'])->name('submit-results');
+    Route::get('/results/entry', [ResultController::class, 'entryForm'])->name('results.entry'); // shows students form after filters
+    Route::post('/results/store', [ResultController::class, 'store'])->name('results.store');
 
 
 });

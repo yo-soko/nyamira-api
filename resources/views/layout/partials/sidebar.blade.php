@@ -57,6 +57,8 @@
                                                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
                                                         <li class="{{ Request::is('attendance','attendance-all') ? 'active' : '' }}"> <a href="{{url('attendance')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendance</span></a></li>
                                                         @endhasrole
+                                                        <li class="{{ Request::is('exams') ? 'active' : '' }}"> <a href="{{url('exams')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Exams</span></a></li>
+                                                        <li class="{{ Request::is('submit-results') ? 'active' : '' }}"> <a href="{{url('submit-results')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Submit Results</span></a></li>
                                                         <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
                                                         <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                                                         <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
