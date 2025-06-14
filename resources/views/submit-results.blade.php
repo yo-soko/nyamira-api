@@ -31,54 +31,55 @@
             </div>
             @endcan
         </div>
-      <div class="container">
-    <h3>Filter Exam to Submit Results</h3>
+        <div class="container">
+            <h3>Filter Exam to Submit Results</h3>
 
-    <form action="{{ route('results.entry') }}" method="GET">
-        @csrf
-        <div class="mb-3">
-            <label for="term_id" class="form-label">Select Term</label>
-            <select name="term_id" id="term_id" class="form-control" required>
-                <option value="">-- Choose Term --</option>
-                @foreach($terms as $term)
-                    <option value="{{ $term->id }}">{{ $term->term_name }} - {{ $term->year }}</option>
-                @endforeach
-            </select>
+            <form action="{{ route('results.entry') }}" method="GET">
+                @csrf
+                <div class="mb-3">
+                    <label for="term_id" class="form-label">Select Term</label>
+                    <select name="term_id" id="term_id" class="form-control" required>
+                        <option value="">-- Choose Term --</option>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}">{{ $term->term_name }} - {{ $term->year }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="class_id" class="form-label">Select Class</label>
+                    <select name="class_id" id="class_id" class="form-control" required>
+                        <option value="">-- Choose Class --</option>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}">  {{ $class->level->level_name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="subject_id" class="form-label">Select Subject</label>
+                    <select name="subject_id" id="subject_id" class="form-control" required>
+                        <option value="">-- Choose Subject --</option>
+                        @foreach($subjects as $subject)
+                            <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exam_id" class="form-label">Select Exam</label>
+                    <select name="exam_id" id="exam_id" class="form-control" required>
+                        <option value="">-- Choose Exam --</option>
+                        @foreach($exams as $exam)
+                            <option value="{{ $exam->id }}">{{ $exam->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Proceed</button>
+            </form>
         </div>
-
-        <div class="mb-3">
-            <label for="class_id" class="form-label">Select Class</label>
-            <select name="class_id" id="class_id" class="form-control" required>
-                <option value="">-- Choose Class --</option>
-                @foreach($classes as $class)
-                    <option value="{{ $class->id }}">  {{ $class->classLevel->name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="subject_id" class="form-label">Select Subject</label>
-            <select name="subject_id" id="subject_id" class="form-control" required>
-                <option value="">-- Choose Subject --</option>
-                @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="exam_id" class="form-label">Select Exam</label>
-            <select name="exam_id" id="exam_id" class="form-control" required>
-                <option value="">-- Choose Exam --</option>
-                @foreach($exams as $exam)
-                    <option value="{{ $exam->id }}">{{ $exam->name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Proceed</button>
-    </form>
-</div>
+    </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
         <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
         <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>

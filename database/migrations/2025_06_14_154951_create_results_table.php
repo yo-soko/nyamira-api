@@ -19,12 +19,13 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('subject_id');
             $table->unsignedBigInteger('class_id');
-            $table->integer('marks');
-            $table->string('remarks')->nullable();
+            $table->integer('marks')->nullable();
+            $table->integer('absent')->nullable();
+            $table->string('comments')->nullable();
+            $table->string('grade')->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

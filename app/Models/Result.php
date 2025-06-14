@@ -6,6 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Result extends Model
 {
+    protected $fillable = [
+        'student_id',
+        'exam_id',
+        'term_id',
+        'user_id',
+        'subject_id',
+        'class_id',
+        'marks',
+        'absent',
+        'comments',
+        'grade',
+    ];
    public function student() {
         return $this->belongsTo(Student::class);
     }
@@ -23,11 +35,11 @@ class Result extends Model
     }
 
     public function class() {
-        return $this->belongsTo(SchoolClass::class); // or your actual class model
+        return $this->belongsTo(SchoolClass::class); 
     }
 
-    public function teacher() {
-        return $this->belongsTo(User::class, 'user_id');
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
-
 }

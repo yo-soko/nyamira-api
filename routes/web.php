@@ -145,8 +145,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/exams', [ExamController::class, 'index'])->name('exams');
 
     Route::get('/submit-results', [ResultController::class, 'filterForm'])->name('submit-results');
-    Route::get('/results/entry', [ResultController::class, 'entryForm'])->name('results.entry'); // shows students form after filters
+    Route::get('/results-entry', [ResultController::class, 'entryForm'])->name('results.entry'); 
     Route::post('/results/store', [ResultController::class, 'store'])->name('results.store');
+    Route::get('/results-filter', [ResultController::class, 'showFilterForm'])->name('results-filter');
+    Route::post('/results-filter', [ResultController::class, 'filterResults'])->name('results-filter');
+    Route::get('/results-view', [ResultController::class, 'viewResults'])->name('results-view');
 
 
 });

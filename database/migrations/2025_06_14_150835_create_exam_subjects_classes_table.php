@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('exam_id');
             $table->unsignedBigInteger('subject_id');
+            $table->unsignedBigInteger('term_id');
             $table->unsignedBigInteger('level_id');
             $table->timestamps();
 
-            $table->unique(['exam_id', 'subject_id', 'level_id']);
+            $table->unique(['exam_id', 'subject_id', 'level_id','term_id']);
         });
     }
 
