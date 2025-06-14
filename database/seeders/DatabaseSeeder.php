@@ -22,5 +22,14 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(RolePermissionSeeder::class);
+        $this->call([
+            ClassLevelsTableSeeder::class,
+            StreamsTableSeeder::class,
+            ClassesTableSeeder::class,
+            SubjectsTableSeeder::class,
+            TermsTableSeeder::class,
+            GuardiansTableSeeder::class,
+            AttendanceTableSeeder::class,
+        ]);
     }
 }
