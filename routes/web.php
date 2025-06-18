@@ -34,6 +34,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\TermController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ClassLevelController;
+use App\Http\Controllers\StreamController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -175,6 +176,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/class-levels', [ClassLevelController::class, 'store'])->name('class-levels.store');
     Route::put('/class-levels/{classLevel}', [ClassLevelController::class, 'update'])->name('class-levels.update');
     Route::delete('/class-levels/{classLevel}', [ClassLevelController::class, 'destroy'])->name('class-levels.destroy');
+    //streams
+    Route::resource('streams', StreamController::class)->except(['create', 'show', 'edit']);
 
     // Fees
 

@@ -59,7 +59,9 @@
                                                         @endhasrole
                                                         <li class="{{ Request::is('subjects') ? 'active' : '' }}"> <a href="{{url('subjects')}}"><i class="fas fa-book-open fa-sm me-2"></i><span>Subjects</span></a></li>
                                                         <li class="{{ Request::is('terms') ? 'active' : '' }}"> <a href="{{url('terms')}}"><i class="fas fa-calendar-alt fa-sm me-2"></i><span>Terms</span></a></li>
-                                                        <li class="{{ request()->is('class-levels') ? 'active' : '' }}"><a href="{{ route('class-levels') }}"><i class="fas fa-layer-group fa-sm me-2"></i><span>Class Levels</span></a></li>
+                                                        <li class="{{ Request::is('class-levels') ? 'active' : '' }}"><a href="{{ route('class-levels') }}"><i class="fas fa-layer-group fa-sm me-2"></i><span>Class Levels</span></a></li>
+                                                        <li class="{{ Request::is('streams*') ? 'active' : '' }}"><a href="{{ route('streams.index') }}"><i class="fas fa-stream fa-sm me-2"></i><span>Streams</span></a></li>
+
                                                         <li class="{{ Request::is('exams') ? 'active' : '' }}"> <a href="{{url('exams')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Exams</span></a></li>
                                                         <li class="{{ Request::is('submit-results') ? 'active' : '' }}"> <a href="{{url('submit-results')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Submit Results</span></a></li>
                                                         <li class="{{ Request::is('results-filter','results-view') ? 'active' : '' }}"> <a href="{{url('results-filter')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>View Results</span></a></li>
