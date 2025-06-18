@@ -38,5 +38,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('subjects', \App\Models\Subject::where('status', 1)->get());
         View::share('levels', \App\Models\ClassLevel::where('status', 1)->get());
         View::share('roless', \App\Models\Role::all());
+
     }
 }

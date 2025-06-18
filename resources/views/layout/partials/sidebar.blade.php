@@ -43,7 +43,7 @@
                                         <p class="fs-10">{{ auth()->user()->role }}</p>
                                 </div>
                         </div>
-                       
+
                 </div>
                 <div class="sidebar-inner slimscroll">
                         <div id="sidebar-menu" class="sidebar-menu">
@@ -53,7 +53,7 @@
                                                 <ul>
                                                         <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}"><a href="{{url('index')}}"><i class="ti ti-dashboard fs-16 me-2"></i><span>Dashboard</span></a></li>
                                                         <li class="{{ Request::is('students') ? 'active' : '' }}"><a href="{{url('students')}}"><i class="ti ti-user fs-16 me-2"></i><span>Learners</span></a></li>
-                                                        
+
                                                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
                                                         <li class="{{ Request::is('attendance','attendance-all') ? 'active' : '' }}"> <a href="{{url('attendance')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendance</span></a></li>
                                                         @endhasrole
@@ -70,7 +70,7 @@
                                                                         <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
                                                                      @endhasanyrole
                                                                         <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
-                                                                        
+
                                                                         <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
                                                                 </ul>
                                                         </li>
@@ -86,6 +86,28 @@
                                                         @endhasanyrole
                                                 </ul>
                                         </li>
+
+                                        <li class="submenu-open">
+                                                <h6 class="submenu-hdr">Fee Management</h6>
+                                                <ul>
+
+                                                        <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                                        <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
+                                                        <!-- <li class="submenu">
+                                                                <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
+                                                                <ul>
+                                                                     @hasanyrole('admin|developer|manager|director|supervisor')
+                                                                        <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
+                                                                     @endhasanyrole
+                                                                        <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
+
+                                                                        <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
+                                                                </ul>
+                                                        </li> -->
+
+                                                </ul>
+                                        </li>
+
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">HRM</h6>
                                                 <ul>
@@ -102,7 +124,7 @@
                                                                         <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
                                                                      @endhasanyrole
                                                                         <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
-                                                                        
+
                                                                         <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
                                                                 </ul>
                                                         </li>
@@ -136,8 +158,8 @@
                                                 <ul>
                                                         <li class="{{ Request::is('signout') ? 'active' : '' }}"><a href="{{ route('signout') }}"><i class="ti ti-logout me-2"></i><span>log out</span></a></li>
                                                 </ul>
-                                        </li>  
-                                         
+                                        </li>
+
                                 </ul>
                         </div>
                 </div>

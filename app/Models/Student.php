@@ -14,17 +14,29 @@ class Student extends Model
 
     public function term()
     {
-        return $this->belongsTo(Term::class);
+        return $this->belongsTo(Term::class, 'term_id');
     }
 
     public function attendance()
     {
-        return $this->hasMany(Attendance::class, 'student_id'); 
-    
+        return $this->hasMany(Attendance::class, 'student_id');
+
     }
     public function results()
     {
         return $this->hasMany(Result::class);
     }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->second_name} {$this->last_name}";
+    }
+
+    public function schoolClass()
+    {
+        return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
+
+
 
 }
