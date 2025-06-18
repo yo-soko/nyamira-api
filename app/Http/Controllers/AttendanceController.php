@@ -166,7 +166,9 @@ class AttendanceController extends Controller
             $date = $request->date;
 
             $students = $query->with(['attendance' => function ($q) use ($date) {
-                $q->whereDate('date', $date);
+                $q->whereDate('date', $date)
+                 ->orderBy('date')
+                 ->orderBy('session');
             }])->get();
 
         } elseif ($request->filled('week_start') && $request->filled('week_end')) {

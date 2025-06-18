@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('date')->nullable();
 
             $table->string('session');
-            $table->enum('status', ['Present', 'Absent'])->default('Absent');
+            $table->enum('status', ['Present', 'Absent','Excused'])->default('Absent');
             $table->text('reason')->nullable();
             $table->timestamps();
 

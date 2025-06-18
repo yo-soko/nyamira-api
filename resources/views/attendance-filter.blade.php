@@ -25,11 +25,7 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            @hasanyrole('admin|developer|manager|director|supervisor')
-            <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-shift"><i class="ti ti-circle-plus me-1"></i>Add Shift</a>
-            </div>
-            @endhasanyrole
+          
         </div>
         <!-- /product list -->
         <div class="card">
@@ -101,10 +97,9 @@
                                         <th colspan="2" class="text-center">{{ \Carbon\Carbon::parse($date)->format('M d') }}</th>
                                     @endforeach
                                 @else
-                                    <th>Session</th>
-                                    <th>Present</th>
-                                    <th>Absent</th>
-                                    <th>Other (specify)</th>
+                                   <th>Morning</th>
+<th>Afternoon</th>
+
                                 @endif
                             </tr>
                             @if(!empty($dates))
@@ -112,7 +107,7 @@
                                     <th colspan="3"></th>
                                     @foreach($dates as $date)
                                         <th>Morning</th>
-                                        <th class="day-separator">Afternoon</th> {{-- add class here --}}
+                                        <th class="day-separator">Afternoon</th>
                                     @endforeach
                                 </tr>
                             @endif
@@ -152,26 +147,31 @@
                                     @endforeach
 
                                     @else
-                                        {{-- Single date / default behavior --}}
-                                        @php
-                                            $morning = $student->attendance->firstWhere('session', 'morning');
-                                            $afternoon = $student->attendance->firstWhere('session', 'afternoon');
-                                        @endphp
-                                        <td>Morning</td>
-                                        <td>@if($morning && $morning->status === 'Present') ✔ @endif</td>
-                                        <td>@if($morning && $morning->status === 'Absent') ✘ @endif</td>
-                                        <td>@if($morning && $morning->status === 'Excused') {{ $morning->reason ?? '-' }} @endif</td>
-                                    @endif
-                                </tr>
-
-                                @if(empty($dates))
-                                <tr>
-                                    <td></td><td></td><td></td><td>Afternoon</td>
-                                    <td>@if($afternoon && $afternoon->status === 'Present') ✔ @endif</td>
-                                    <td>@if($afternoon && $afternoon->status === 'Absent') ✘ @endif</td>
-                                    <td>@if($afternoon && $afternoon->status === 'Excused') {{ $afternoon->reason ?? '-' }} @endif</td>
-                                </tr>
+                                @php
+                                    $date = $filters['date'] ?? null;
+                                    $morning = $student->attendance->firstWhere(fn($att) => $att->date == $date && $att->session == 'morning');
+                                    $afternoon = $student->attendance->firstWhere(fn($att) => $att->date == $date && $att->session == 'afternoon');
+                                @endphp
+                                <td class="text-center">
+                                    @if($morning)
+                                        @if($morning->status === 'Present') ✔
+                                        @elseif($morning->status === 'Absent') ✘
+                                        @elseif($morning->status === 'Excused') {{ $morning->reason ?? '-' }}
+                                        @else -
+                                        @endif
+                                    @else N/A @endif
+                                </td>
+                                <td class="text-center">
+                                    @if($afternoon)
+                                        @if($afternoon->status === 'Present') ✔
+                                        @elseif($afternoon->status === 'Absent') ✘
+                                        @elseif($afternoon->status === 'Excused') {{ $afternoon->reason ?? '-' }}
+                                        @else -
+                                        @endif
+                                    @else N/A @endif
+                                </td>
                                 @endif
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
