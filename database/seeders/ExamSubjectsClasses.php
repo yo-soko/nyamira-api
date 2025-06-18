@@ -30,6 +30,7 @@ class ExamSubjectsClasses extends Seeder
                 DB::table('exam_subjects_classes')->updateOrInsert(
                     [
                         'exam_id' => $exam->id,
+                        'term_id' => 1,
                         'subject_id' => $subject->id,
                         'level_id' => $level->id,
                     ]

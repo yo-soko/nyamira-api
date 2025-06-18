@@ -31,6 +31,9 @@ use App\Http\Controllers\ResultController;
 use App\Http\Controllers\FeeStructureController;
 use App\Http\Controllers\FeePaymentsController;
 use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\TermController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\ClassLevelController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -154,7 +157,24 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/results-filter', [ResultController::class, 'showFilterForm'])->name('results-filter');
     Route::post('/results-filter', [ResultController::class, 'filterResults'])->name('results-filter');
     Route::get('/results-view', [ResultController::class, 'viewResults'])->name('results-view');
+    
+    //terms
+    Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
+    Route::post('/terms', [TermController::class, 'store'])->name('terms.store');
+    Route::put('/terms/{term}', [TermController::class, 'update'])->name('terms.update');
+    Route::delete('/terms/{term}', [TermController::class, 'destroy'])->name('terms.destroy');
 
+    //subjects
+    Route::get('/subjects', [SubjectController::class, 'index'])->name('subjects.index');
+    Route::post('/subjects/store', [SubjectController::class, 'store'])->name('subjects.store');
+    Route::post('/subjects/update/{subject}', [SubjectController::class, 'update'])->name('subjects.update');
+    Route::delete('/subjects/delete/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
+  
+    //classlevel
+    Route::get('/class-levels', [ClassLevelController::class, 'index'])->name('class-levels');
+    Route::post('/class-levels', [ClassLevelController::class, 'store'])->name('class-levels.store');
+    Route::put('/class-levels/{classLevel}', [ClassLevelController::class, 'update'])->name('class-levels.update');
+    Route::delete('/class-levels/{classLevel}', [ClassLevelController::class, 'destroy'])->name('class-levels.destroy');
 
     // Fees
 
