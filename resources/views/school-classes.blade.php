@@ -192,71 +192,76 @@
 
 
     </div>
-</div>
-
-<!-- Add Modal -->
-<div class="modal fade" id="addClassModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <form action="{{ route('school-classes.store') }}" method="POST" class="modal-content">
-            @csrf
-            <div class="modal-header">
-                <h5 class="modal-title">Add New Class</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-
-                <div class="mb-3">
-                    <label>Stream</label>
-                    <select name="stream_id" class="form-select">
-                        <option value="">Select Stream</option>
-                        @foreach($streams as $stream)
-                            <option value="{{ $stream->id }}">{{ $stream->name }}</option>
-                        @endforeach
-                    </select>
+    <!-- Add Modal -->
+    <div class="modal fade" id="addClassModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <form action="{{ route('school-classes.store') }}" method="POST" class="modal-content">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Class</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+                <div class="modal-body">
 
-                <div class="mb-3">
-                    <label>Level</label>
-                    <select name="level_id" class="form-select">
-                        <option value="">Select Level</option>
-                        @foreach($levels as $level)
-                            <option value="{{ $level->id }}">{{ $level->level_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div class="mb-3">
+                        <label>Stream</label>
+                        <select name="stream_id" class="form-select">
+                            <option value="">Select Stream</option>
+                            @foreach($streams as $stream)
+                                <option value="{{ $stream->id }}">{{ $stream->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="mb-3">
-                    <label>Class Teacher</label>
-                    <select name="class_teacher" class="form-select">
-                        <option value="">Select Teacher</option>
-                        @foreach($teachers as $teacher)
-                            <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                    <div class="mb-3">
+                        <label>Level</label>
+                        <select name="level_id" class="form-select">
+                            <option value="">Select Level</option>
+                            @foreach($levels as $level)
+                                <option value="{{ $level->id }}">{{ $level->level_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="mb-3">
-                    <label>Class Prefect</label>
-                    <input type="text" name="class_prefect" class="form-control">
-                </div>
-                <div class="mb-3">
-                    <label>Capacity</label>
-                    <input type="number" name="capacity" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label>Class Teacher</label>
+                        <select name="class_teacher" class="form-select">
+                            <option value="">Select Teacher</option>
+                            @foreach($teachers as $teacher)
+                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="mb-3">
-                    <label>Status</label>
-                    <select name="status" class="form-select">
-                        <option value="1" selected>Active</option>
-                        <option value="0">Inactive</option>
-                    </select>
-                </div>
+                    <div class="mb-3">
+                        <label>Class Prefect</label>
+                        <input type="text" name="class_prefect" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Capacity</label>
+                        <input type="number" name="capacity" class="form-control" required>
+                    </div>
 
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Add Class</button>
-            </div>
-        </form>
+                    <div class="mb-3">
+                        <label>Status</label>
+                        <select name="status" class="form-select">
+                            <option value="1" selected>Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Add Class</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+
+ <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
+        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
+    </div>
+      
+</div>      
 @endsection
