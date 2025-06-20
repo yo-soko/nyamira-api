@@ -8,11 +8,7 @@
         <!-- Page Header -->
         <div class="page-header d-flex justify-content-between align-items-center">
             <h4>Guardian List</h4>
-            <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addGuardianModal">
-                    <i class="ti ti-circle-plus me-1"></i> Add Guardian
-                </a>
-            </div>
+          
         </div>
 
         <!-- Guardian Table -->
@@ -27,25 +23,17 @@
                                 <th>Relationship</th>
                                 <th>Phones</th>
                                 <th>Email</th>
-                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($guardians as $guardian)
                             <tr>
                                 <td>{{ $guardian->guardian_first_name }} {{ $guardian->guardian_last_name }}</td>
-                                <td>{{ $guardian->student->name ?? 'N/A' }}</td>
+                                <td>{{ $guardian->student->first_name ?? ' ' }}{{ $guardian->student->second_name ?? ' ' }}{{ $guardian->student->last_name ?? ' ' }}</td>
                                 <td>{{ $guardian->guardian_relationship }}</td>
                                 <td>{{ $guardian->first_phone ?? '-' }} / {{ $guardian->second_phone }}</td>
                                 <td>{{ $guardian->email }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editGuardianModal{{ $guardian->id }}">Edit</button>
-                                    <form method="POST" action="{{ route('guardians.destroy', $guardian->id) }}" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
-                                    </form>
-                                </td>
+                              
                             </tr>
 
                             <!-- Edit Modal -->

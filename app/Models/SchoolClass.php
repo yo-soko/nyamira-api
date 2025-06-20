@@ -12,7 +12,7 @@ class SchoolClass extends Model
         'level_id',
         'stream_id',
         'name',
-        'description',
+        'capacity',
         'class_teacher',
         'class_prefect',
         'status',

@@ -22,7 +22,7 @@ class SchoolClassController extends Controller
         $request->validate([
             'stream_id' => 'nullable|exists:streams,id',
             'class_teacher' => 'nullable|exists:users,id',
-            'class_prefect' => 'nullable|exists:students,id',
+            'class_prefect' => 'nullable',
             'capacity' => 'required|integer|min:0',
             'status' => 'boolean',
             'level_id' => 'nullable|exists:class_levels,id',
@@ -38,7 +38,7 @@ class SchoolClassController extends Controller
         $request->validate([
             'stream_id' => 'nullable|exists:streams,id',
             'class_teacher' => 'nullable|exists:users,id',
-            'class_prefect' => 'nullable|exists:students,id',
+            'class_prefect' => 'nullable',
             'capacity' => 'required|integer|min:0',
             'status' => 'boolean',
             'level_id' => 'nullable|exists:class_levels,id',
