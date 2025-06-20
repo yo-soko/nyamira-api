@@ -42,4 +42,11 @@ class SchoolClass extends Model
     {
         return $this->belongsTo(Student::class, 'class_prefect');
     }
+    public function teachers()
+    {
+        return $this->belongsToMany(Teacher::class, 'subject_teacher_class')
+                    ->withPivot('subject_id')
+                    ->withTimestamps();
+    }
+
 }

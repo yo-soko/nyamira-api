@@ -37,6 +37,7 @@ use App\Http\Controllers\ClassLevelController;
 use App\Http\Controllers\StreamController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\GuardianController;
+use App\Http\Controllers\TeacherController;
 
 
 
@@ -191,6 +192,11 @@ Route::middleware(['auth'])->group(function () {
 
     //guardians
     Route::resource('guardians', GuardianController::class);
+
+    //teachers
+    Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+    Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+
 
     // Fees
 
