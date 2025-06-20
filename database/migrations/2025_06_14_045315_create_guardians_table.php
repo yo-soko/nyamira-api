@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::create('guardians', function (Blueprint $table) {
             $table->id();
-             $table->unsignedBigInteger('student_id'); // FK to students table
+            $table->unsignedBigInteger('student_id'); // FK to students table
 
             $table->string('guardian_first_name');
             $table->string('guardian_last_name');
             $table->string('guardian_relationship', 100);
 
             $table->string('first_phone', 15)->nullable();
-            $table->string('second_phone', 15);
+            $table->string('second_phone', 15)->nullable();
             $table->text('address')->nullable();
             $table->string('id_number', 50)->nullable();
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
             $table->text('guardian_about')->nullable();
             $table->timestamps();
         });

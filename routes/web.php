@@ -143,6 +143,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/roles-permissions/{role}', [PermissionController::class, 'update'])->name('roles.permissions.update');
 
     Route::get('/students', [StudentController::class, 'index'])->name('students');
+    Route::post('/students', [StudentController::class, 'store'])->name('students.store');
 
     Route::get('/attendance', [AttendanceController::class, 'index']);
     Route::get('/attendance-all', [AttendanceController::class, 'index'])->name('attendance-all');

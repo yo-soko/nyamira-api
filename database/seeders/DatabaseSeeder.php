@@ -35,6 +35,8 @@ class DatabaseSeeder extends Seeder
             TransportRoutesTableSeeder::class,
             ExamsTableSeeder::class,
             ExamSubjectsClasses::class, 
+            MealPlanSeeder::class, 
+            FeeStructureSeeder::class, 
             
         ]);
     }

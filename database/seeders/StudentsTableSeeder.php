@@ -21,7 +21,7 @@ class StudentsTableSeeder extends Seeder
                 'student_reg_number' => strtoupper(Str::random(6)) . $index,
                 'student_age' => $faker->dateTimeBetween('-18 years', '-6 years')->format('Y-m-d'),
                 'class_id' => rand(1, 5), 
-                'term_id' => rand(1, 3), 
+                'term_id' => 1, 
                 'about' => $faker->optional()->sentence,
                 'gender' => $faker->randomElement(['Male', 'Female']),
                 'status' => 1,

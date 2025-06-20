@@ -27,7 +27,7 @@
             </ul>
             @hasanyrole('admin|developer|manager|director|supervisor')
             <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-shift"><i class="ti ti-circle-plus me-1"></i>Add Shift</a>
+                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal"><i class="ti ti-circle-plus me-1"></i>Add Learner</a>
             </div>
             @endhasanyrole
         </div>
@@ -149,6 +149,248 @@
         <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div> 
+<!-- Student Registration Modal -->
+<div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="modalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-xl"> 
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalTitle"><b>Student Registration Form</b></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form method="POST" action="{{ route('students.store') }}" id="registerForm">
+                  @csrf
+                  <input type="hidden" name="student_id" value="">
+
+                  <h4 class="mb-3"><b>Student Details</b></h4>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <label class="form-label"><b>First Name</b></label>
+                          <input type="text" class="form-control" name="first_name" required>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Second Name</b></label>
+                          <input type="text" class="form-control" name="second_name">
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Last Name</b></label>
+                          <input type="text" class="form-control" name="last_name" required>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="form-label"><b>Date Of Birth</b></label>
+                          <input type="date" class="form-control" name="student_age" required>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="form-label"><b>Class</b></label>
+                          <select class="form-control select2" name="student_class" required>
+                              <option value="">Select Class</option>
+                              @foreach($classes as $class)
+                                  <option value="{{ $class->id }}">
+                                 {{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}
+                                  </option>
+                              @endforeach
+                          </select>
+                      </div>
+
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Registration Number</b></label>
+                          <input type="text" class="form-control" name="student_reg_number" required>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="form-label"><b>Student Status</b></label>
+                          <select class="form-select" name="studentStatus" required>
+                              <option value="1">Active</option>
+                              <option value="0">Inactive</option>
+                          </select>
+                      </div>
+                      <div class="col-md-3">
+                          <label class="form-label"><b>Term</b></label>
+                          <select class="form-select" name="studentTerm" required>
+                              <option value="">Select Term</option>
+                              @foreach($terms as $term)
+                                  <option value="{{ $term->id }}">{{ $term->term_name }}</option>
+                              @endforeach
+                          </select>
+                      </div>
+
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Gender</b></label>
+                          <select class="form-select" name="studentGender" required>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                              <option value="other">Other</option>
+                          </select>
+                      </div>
+
+                      <div class="col-md-6">
+                          <label class="form-label"><b>About</b></label>
+                          <textarea class="form-control" name="student_about" rows="2"></textarea>
+                      </div>
+
+                      <div class="col-md-6">
+                          <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" id="needs_meals" name="needs_meals" onchange="toggleMealFields()">
+                              <label class="form-check-label" for="needs_meals">Student requires school meals</label>
+                          </div>
+                          <div id="meal_fields" style="display: none;">
+                              <label><b>Select Meal Plan</b></label>
+                              <select name="meal_plan_id" class="form-control" id="meal_plan_id" onchange="updateMealFeeDisplay()">
+                                  <option value="">Select Meal Plan</option>
+                                  @foreach($mealPlans as $meal)
+                                      <option value="{{ $meal->id }}" data-fee="{{ $meal->fee }}">
+                                          {{ $meal->plan_name }} - KSh {{ number_format($meal->fee, 2) }}
+                                      </option>
+                                  @endforeach
+                              </select>
+                              <div class="mt-2">
+                                  <strong>Meal Fee:</strong> <span id="meal_fee_display">KSh 0.00</span>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-md-6">
+                          <div class="form-check mb-2">
+                              <input class="form-check-input" type="checkbox" id="needs_transport" name="needs_transport" onchange="toggleTransportFields()">
+                              <label class="form-check-label" for="needs_transport">Student requires school transport</label>
+                          </div>
+                          <div id="transport_fields" style="display: none;">
+                              <label><b>Transport Type</b></label>
+                              <select name="transport_option" class="form-control mb-2" id="transport_option" onchange="calculateTransportFee()">
+                                  <option value="two_way">Two Way</option>
+                                  <option value="one_way">One Way</option>
+                              </select>
+
+                              <label><b>Select Route</b></label>
+                              <select name="transport_route_id" class="form-control mb-2" id="transport_route_id" onchange="calculateTransportFee()">
+                                  <option value="">Select Route</option>
+                                  @foreach($transportRoutes as $route)
+                                      <option value="{{ $route->id }}" data-fee="{{ $route->fee }}">
+                                          {{ $route->route_name }} - KSh {{ number_format($route->fee, 2) }}
+                                      </option>
+                                  @endforeach
+                              </select>
+                              <div class="mt-2">
+                                  <strong>Estimated Transport Fee:</strong> <span id="transport_fee_display">KSh 0.00</span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <hr class="my-4">
+
+                    <h4 class="mb-3"><b>Subjects Enrollment</b></h4>
+                    <div class="mb-3">
+                        <label class="form-label">Subjects to Enroll In</label>
+                        <div class="row">
+                            @foreach($subjects as $subject)
+                                <div class="col-md-3"> {{-- 4 columns per row (12/3 = 4) --}}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="studentSubjects[]" value="{{ $subject->id }}" id="subject_{{ $subject->id }}">
+                                        <label class="form-check-label" for="subject_{{ $subject->id }}">{{ $subject->subject_name }}</label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+
+                  <hr class="my-4">
+
+                  <h4 class="mb-3"><b>Parent / Guardian Details</b></h4>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <label class="form-label"><b>First Name</b></label>
+                          <input type="text" class="form-control" name="guardian_first_name" required>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Last Name</b></label>
+                          <input type="text" class="form-control" name="guardian_last_name" required>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Relationship to Student</b></label>
+                          <select class="form-select" name="guardian_relationship" required>
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Other Relative">Other Relative</option>
+                              <option value="Guardian">Guardian</option>
+                          </select>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>First Phone Number</b></label>
+                          <input type="text" class="form-control" name="guardian_first_phone" required>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Second Phone Number</b></label>
+                          <input type="text" class="form-control" name="guardian_second_phone">
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>ID Number</b></label>
+                          <input type="text" class="form-control" name="id_number" required>
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Email</b></label>
+                          <input type="email" class="form-control" name="email">
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>Address</b></label>
+                          <input type="text" class="form-control" name="address">
+                      </div>
+                      <div class="col-md-6">
+                          <label class="form-label"><b>About</b></label>
+                          <textarea class="form-control" name="guardian_about" rows="2"></textarea>
+                      </div>
+                  </div>
+
+                  <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Register</button>
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- JS to show/hide meal & transport fields -->
+<script>
+    function toggleMealFields() {
+        const checkbox = document.getElementById('needs_meals');
+        const mealSection = document.getElementById('meal_fields');
+        mealSection.style.display = checkbox.checked ? 'block' : 'none';
+        updateMealFeeDisplay();
+    }
+
+    function updateMealFeeDisplay() {
+        const mealSelect = document.getElementById('meal_plan_id');
+        const selectedOption = mealSelect.options[mealSelect.selectedIndex];
+        const fee = parseFloat(selectedOption.getAttribute('data-fee')) || 0;
+        document.getElementById('meal_fee_display').innerText = 'KSh ' + fee.toFixed(2);
+    }
+
+    function toggleTransportFields() {
+        const checkbox = document.getElementById('needs_transport');
+        const transportSection = document.getElementById('transport_fields');
+        transportSection.style.display = checkbox.checked ? 'block' : 'none';
+        calculateTransportFee();
+    }
+
+    function calculateTransportFee() {
+        const transportOption = document.getElementById('transport_option').value;
+        const routeSelect = document.getElementById('transport_route_id');
+        const selectedRoute = routeSelect.options[routeSelect.selectedIndex];
+        const baseFee = parseFloat(selectedRoute.getAttribute('data-fee')) || 0;
+        
+        let calculatedFee = 0;
+        if (transportOption === 'two_way') {
+            calculatedFee = baseFee;
+        } else if (transportOption === 'one_way') {
+            calculatedFee = (baseFee / 2) + 500;
+        }
+
+        document.getElementById('transport_fee_display').innerText = 'KSh ' + calculatedFee.toFixed(2);
+    }
+</script>
+
 <script>
     document.querySelector('form').addEventListener('submit', function(e) {
     let days = [];

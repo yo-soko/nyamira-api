@@ -6,7 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class SchoolClass extends Model
 {
+    protected $table = 'school_classes';
 
+    protected $fillable = [
+        'level_id',
+        'stream_id',
+        'name',
+        'description',
+        'class_teacher',
+        'class_prefect',
+        'status',
+    ];
+    
     public function level()
     {
         return $this->belongsTo(ClassLevel::class, 'level_id');
