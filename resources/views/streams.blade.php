@@ -66,85 +66,87 @@
 
 
     <!-- Streams Table -->
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table datatable">
-                <thead class="thead-light" >
-                    <tr>
-                        <th>#</th>
-                        <th>Initials</th>
-                        <th>Name</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($streams as $key => $stream)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $stream->initials }}</td>
-                        <td>{{ $stream->name }}</td>
-                        <td>{{ $stream->status ? 'Active' : 'Inactive' }}</td>
-                        <td>
-                            <!-- Edit Button -->
-                            <button class="btn btn-sm  btn-info" data-bs-toggle="modal" data-bs-target="#editStream{{ $stream->id }}">
-                                Edit
-                            </button>
+    <div class="card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table datatable">
+                    <thead class="thead-light" >
+                        <tr>
+                            <th>#</th>
+                            <th>Initials</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($streams as $key => $stream)
+                        <tr>
+                            <td>{{ $key + 1 }}</td>
+                            <td>{{ $stream->initials }}</td>
+                            <td>{{ $stream->name }}</td>
+                            <td>{{ $stream->status ? 'Active' : 'Inactive' }}</td>
+                            <td>
+                                <!-- Edit Button -->
+                                <button class="btn btn-sm  btn-info" data-bs-toggle="modal" data-bs-target="#editStream{{ $stream->id }}">
+                                    Edit
+                                </button>
 
-                            <!-- Delete Button -->
-                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteStream{{ $stream->id }}">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
+                                <!-- Delete Button -->
+                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteStream{{ $stream->id }}">
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
 
-                    <!-- Edit Stream Modal -->
-                    <div class="modal fade" id="editStream{{ $stream->id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <form action="{{ route('streams.update', $stream->id) }}" method="POST">
-                                @csrf @method('PUT')
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5>Edit Stream</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <!-- Edit Stream Modal -->
+                        <div class="modal fade" id="editStream{{ $stream->id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <form action="{{ route('streams.update', $stream->id) }}" method="POST">
+                                    @csrf @method('PUT')
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5>Edit Stream</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="text" name="initials" class="form-control mb-2" value="{{ $stream->initials }}" required>
+                                            <input type="text" name="name" class="form-control" value="{{ $stream->name }}" required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-success">Update</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                        <input type="text" name="initials" class="form-control mb-2" value="{{ $stream->initials }}" required>
-                                        <input type="text" name="name" class="form-control" value="{{ $stream->name }}" required>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-success">Update</button>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Delete Stream Modal -->
-                    <div class="modal fade" id="deleteStream{{ $stream->id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <form action="{{ route('streams.destroy', $stream->id) }}" method="POST">
-                                @csrf @method('DELETE')
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5>Delete Stream</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        <!-- Delete Stream Modal -->
+                        <div class="modal fade" id="deleteStream{{ $stream->id }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <form action="{{ route('streams.destroy', $stream->id) }}" method="POST">
+                                    @csrf @method('DELETE')
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5>Delete Stream</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete "<strong>{{ $stream->name }}</strong>"?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete "<strong>{{ $stream->name }}</strong>"?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-danger">Delete</button>
-                                    </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
                         </div>
-                    </div>
 
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>  
     </div>  
 </div>
 @endsection

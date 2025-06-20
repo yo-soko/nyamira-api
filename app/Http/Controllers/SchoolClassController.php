@@ -3,63 +3,55 @@
 namespace App\Http\Controllers;
 
 use App\Models\SchoolClass;
+use App\Models\ClassLevel;
+use App\Models\Stream;
+use App\Models\User;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class SchoolClassController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $classes = SchoolClass::with(['level', 'stream', 'classTeacher', 'classPrefect'])->get();
+        return view('school-classes', compact('classes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'stream_id' => 'nullable|exists:streams,id',
+            'class_teacher' => 'nullable|exists:users,id',
+            'class_prefect' => 'nullable|exists:students,id',
+            'capacity' => 'required|integer|min:0',
+            'status' => 'boolean',
+            'level_id' => 'nullable|exists:class_levels,id',
+        ]);
+
+        SchoolClass::create($request->all());
+
+        return redirect()->back()->with('success', 'Class created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(SchoolClass $schoolClass)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(SchoolClass $schoolClass)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, SchoolClass $schoolClass)
     {
-        //
+        $request->validate([
+            'stream_id' => 'nullable|exists:streams,id',
+            'class_teacher' => 'nullable|exists:users,id',
+            'class_prefect' => 'nullable|exists:students,id',
+            'capacity' => 'required|integer|min:0',
+            'status' => 'boolean',
+            'level_id' => 'nullable|exists:class_levels,id',
+        ]);
+
+        $schoolClass->update($request->all());
+
+        return redirect()->back()->with('success', 'Class updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(SchoolClass $schoolClass)
     {
-        //
+        $schoolClass->delete();
+        return redirect()->back()->with('success', 'Class deleted successfully.');
     }
 }

@@ -27,13 +27,19 @@ class SchoolClass extends Model
     {
         return $this->belongsTo(Stream::class, 'stream_id');
     }
+
     public function classTeacher()
     {
         return $this->belongsTo(User::class, 'class_teacher');
     }
+
     public function students()
     {
         return $this->hasMany(Student::class, 'class_id');
     }
 
+    public function classPrefect()
+    {
+        return $this->belongsTo(Student::class, 'class_prefect');
+    }
 }

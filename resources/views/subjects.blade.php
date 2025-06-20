@@ -27,108 +27,108 @@
         </div>
 
 
-    
-        <div class="card-body p-0">
+        <div class="card">
+            <div class="card-body p-0">
 
-            <div class="table-responsive">
+                <div class="table-responsive">
 
-                <table class="table datatable">
-                    <thead class="thead-light" >
-                        <tr>
-                            <th>#</th>
-                            <th>Subject Code</th>
-                            <th>Subject Name</th>
-                            <th>Status</th>
-                            <!-- <th>Exams</th> -->
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($subjects as $key => $subject)
-                        <tr>
-                            <td>{{ $key + 1 }}</td>
-                            <td>{{ $subject->subject_code }}</td>
-                            <td>{{ $subject->subject_name }}</td>
-                            <td>{{ $subject->status ? 'Active' : 'Inactive' }}</td>
-                            <!-- <td>
-                                @if($subject->exams->count())
-                                    @foreach ($subject->exams as $exam)
-                                        <span class="badge bg-info">{{ $exam->name }}</span>
-                                    @endforeach
-                                @else
-                                    <span class="text-muted">No exams</span>
-                                @endif
-                            </td> -->
-                            <td>
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editSubjectModal{{ $subject->id }}">Edit</button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal{{ $subject->id }}"> Delete
-                                </button>
-                            </td>
-                        </tr>
+                    <table class="table datatable">
+                        <thead class="thead-light" >
+                            <tr>
+                                <th>#</th>
+                                <th>Subject Code</th>
+                                <th>Subject Name</th>
+                                <th>Status</th>
+                                <!-- <th>Exams</th> -->
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($subjects as $key => $subject)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $subject->subject_code }}</td>
+                                <td>{{ $subject->subject_name }}</td>
+                                <td>{{ $subject->status ? 'Active' : 'Inactive' }}</td>
+                                <!-- <td>
+                                    @if($subject->exams->count())
+                                        @foreach ($subject->exams as $exam)
+                                            <span class="badge bg-info">{{ $exam->name }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">No exams</span>
+                                    @endif
+                                </td> -->
+                                <td>
+                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editSubjectModal{{ $subject->id }}">Edit</button>
+                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal{{ $subject->id }}"> Delete
+                                    </button>
+                                </td>
+                            </tr>
 
-                        <!-- Edit Modal -->
-                        <div class="modal fade" id="editSubjectModal{{ $subject->id }}" tabindex="-1">
-                            <div class="modal-dialog">
-                                <form action="{{ route('subjects.update', $subject->id) }}" method="POST">
-                                    @csrf
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Edit Subject</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="form-group mb-2">
-                                                <label>Subject Code</label>
-                                                <input type="text" name="subject_code" value="{{ $subject->subject_code }}" class="form-control" required>
+                            <!-- Edit Modal -->
+                            <div class="modal fade" id="editSubjectModal{{ $subject->id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <form action="{{ route('subjects.update', $subject->id) }}" method="POST">
+                                        @csrf
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Edit Subject</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                             </div>
-                                            <div class="form-group mb-2">
-                                                <label>Subject Name</label>
-                                                <input type="text" name="subject_name" value="{{ $subject->subject_name }}" class="form-control" required>
+                                            <div class="modal-body">
+                                                <div class="form-group mb-2">
+                                                    <label>Subject Code</label>
+                                                    <input type="text" name="subject_code" value="{{ $subject->subject_code }}" class="form-control" required>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label>Subject Name</label>
+                                                    <input type="text" name="subject_name" value="{{ $subject->subject_name }}" class="form-control" required>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label>Status</label>
+                                                    <select name="status" class="form-control">
+                                                        <option value="1" {{ $subject->status ? 'selected' : '' }}>Active</option>
+                                                        <option value="0" {{ !$subject->status ? 'selected' : '' }}>Inactive</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="form-group mb-2">
-                                                <label>Status</label>
-                                                <select name="status" class="form-control">
-                                                    <option value="1" {{ $subject->status ? 'selected' : '' }}>Active</option>
-                                                    <option value="0" {{ !$subject->status ? 'selected' : '' }}>Inactive</option>
-                                                </select>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-primary" type="submit">Update</button>
+                                                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-primary" type="submit">Update</button>
-                                            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        <!-- Delete Confirmation Modal -->
-                        <div class="modal fade" id="deleteSubjectModal{{ $subject->id }}" tabindex="-1">
-                            <div class="modal-dialog">
-                                <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-white">Confirm Deletion</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteSubjectModal{{ $subject->id }}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <form action="{{ route('subjects.destroy', $subject->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-white">Confirm Deletion</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete the subject <strong>{{ $subject->subject_name }}</strong>?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            <p>Are you sure you want to delete the subject <strong>{{ $subject->subject_name }}</strong>?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>   
-    
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>   
+        </div>
       
     </div>
 

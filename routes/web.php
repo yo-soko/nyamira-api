@@ -35,6 +35,9 @@ use App\Http\Controllers\TermController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\ClassLevelController;
 use App\Http\Controllers\StreamController;
+use App\Http\Controllers\SchoolClassController;
+use App\Http\Controllers\GuardianController;
+
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -181,6 +184,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/class-levels/{classLevel}', [ClassLevelController::class, 'destroy'])->name('class-levels.destroy');
     //streams
     Route::resource('streams', StreamController::class)->except(['create', 'show', 'edit']);
+
+    //school Class
+
+    Route::resource('school-classes', SchoolClassController::class);
+
+    //guardians
+    Route::resource('guardians', GuardianController::class);
 
     // Fees
 

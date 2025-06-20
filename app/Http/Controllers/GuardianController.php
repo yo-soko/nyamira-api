@@ -3,63 +3,53 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guardian;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class GuardianController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $guardians = Guardian::with('student')->get();
+        $students = Student::all();
+        return view('guardians', compact('guardians', 'students'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'guardian_first_name' => 'required',
+            'guardian_last_name' => 'required',
+            'guardian_relationship' => 'required',
+            'second_phone' => 'required',
+            'email' => 'required|email|unique:guardians,email',
+        ]);
+
+        Guardian::create($request->all());
+        return redirect()->back()->with('success', 'Guardian added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Guardian $guardian)
+    public function update(Request $request, $id)
     {
-        //
+        $guardian = Guardian::findOrFail($id);
+
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'guardian_first_name' => 'required',
+            'guardian_last_name' => 'required',
+            'guardian_relationship' => 'required',
+            'second_phone' => 'required',
+            'email' => 'required|email|unique:guardians,email,' . $guardian->id,
+        ]);
+
+        $guardian->update($request->all());
+        return redirect()->back()->with('success', 'Guardian updated successfully.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Guardian $guardian)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Guardian $guardian)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Guardian $guardian)
-    {
-        //
+        Guardian::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Guardian deleted successfully.');
     }
 }
