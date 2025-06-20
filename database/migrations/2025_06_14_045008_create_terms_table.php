@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('terms', function (Blueprint $table) {
             $table->id();
-              $table->string('term_name', 50);
+            $table->string('term_name', 50);
             $table->year('year');
             $table->date('start_date');
             $table->date('end_date');

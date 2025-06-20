@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     {
         DB::table('users')-> insert([
 		'name' => 'Solomon Batasi',
-		'code' => 'Dev001',
+		'code' => '002',
 		'email' => 'info@javapa.com',
     	'password' => Hash::make('12345678'),
 		'role' => 'developer',

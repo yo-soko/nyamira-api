@@ -7,59 +7,40 @@ use Illuminate\Http\Request;
 
 class StreamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $streams = Stream::all();
+        return view('streams', compact('streams'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'initials' => 'required|string|max:10',
+            'name' => 'required|string|max:255',
+        ]);
+
+        Stream::create($request->all());
+
+        return redirect()->back()->with('success', 'Stream added successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Stream $stream)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Stream $stream)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Stream $stream)
     {
-        //
+        $request->validate([
+            'initials' => 'required|string|max:10',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $stream->update($request->all());
+
+        return redirect()->back()->with('success', 'Stream updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Stream $stream)
     {
-        //
+        $stream->delete();
+
+        return redirect()->back()->with('success', 'Stream deleted successfully.');
     }
 }

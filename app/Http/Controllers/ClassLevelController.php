@@ -7,59 +7,37 @@ use Illuminate\Http\Request;
 
 class ClassLevelController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $levels = ClassLevel::all();
+        return view('class-levels', compact('levels'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'level_name' => 'required|string|max:100',
+            'status' => 'required|integer',
+        ]);
+
+        ClassLevel::create($request->all());
+        return redirect()->back()->with('success', 'Class level added successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ClassLevel $classLevel)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ClassLevel $classLevel)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, ClassLevel $classLevel)
     {
-        //
+        $request->validate([
+            'level_name' => 'required|string|max:100',
+            'status' => 'required|integer',
+        ]);
+
+        $classLevel->update($request->all());
+        return redirect()->back()->with('success', 'Class level updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(ClassLevel $classLevel)
     {
-        //
+        $classLevel->delete();
+        return redirect()->back()->with('success', 'Class level deleted successfully!');
     }
 }
