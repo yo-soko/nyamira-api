@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentTransport extends Model
 {
-        protected $fillable = [
+    protected $table = 'student_transports';
+    protected $fillable = [
         'student_id',
         'term_id',
         'class_id',

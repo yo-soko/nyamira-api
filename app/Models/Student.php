@@ -50,6 +50,20 @@ class Student extends Model
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }
+    public function guardian()
+    {
+        return $this->hasOne(Guardian::class);
+    }
+    public function meal() { return $this->hasOne(StudentMeal::class); }
+    public function transport()
+    {
+        return $this->hasOne(StudentTransport::class, 'student_id');
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'student_subjects'); 
+    }
 
 
 

@@ -144,6 +144,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/students', [StudentController::class, 'index'])->name('students');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+    Route::put('/students/update', [StudentController::class, 'update'])->name('students.update');
+    Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
 
     Route::get('/attendance', [AttendanceController::class, 'index']);
     Route::get('/attendance-all', [AttendanceController::class, 'index'])->name('attendance-all');
