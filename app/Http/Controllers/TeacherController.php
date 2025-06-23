@@ -9,6 +9,7 @@ use App\Models\Schoolclass;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 
 class TeacherController extends Controller
@@ -92,6 +93,57 @@ class TeacherController extends Controller
             DB::rollBack();
             \Log::error('Error adding teacher: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while adding the teacher.');
+        }
+    }
+    public function migrateTeachersToUsers()
+    {
+        DB::beginTransaction();
+
+        try {
+            $teachers = Teacher::whereNull('user_id')->get();
+
+            foreach ($teachers as $teacher) {
+                // Check if teacher is assigned as a class teacher
+                $isClassTeacher = DB::table('school_classes')
+                    ->where('class_teacher', $teacher->id)
+                    ->exists();
+
+                // Determine role
+                $role = $isClassTeacher ? 'class_teacher' : 'teacher';
+
+                // Create the user
+                $user = User::create([
+                    'code' => 'TCHR' . str_pad($teacher->id, 5, '0', STR_PAD_LEFT),
+                    'role' => $role,
+                    'email' => $teacher->email,
+                    'name' => $teacher->first_name . ' ' . $teacher->last_name,
+                    'phone' => $teacher->phone,
+                    'password' => Hash::make($teacher->id_no), // Use ID number as password
+                    'status' => true,
+                ]);
+
+                // Link user to teacher
+                $teacher->update([
+                    'user_id' => $user->id
+                ]);
+
+                // If class teacher, update school_classes.class_teacher to user_id
+               if ($isClassTeacher) {
+    $affected = DB::table('school_classes')
+        ->where('class_teacher', $teacher->id)
+        ->update(['class_teacher' => $user->id]);
+    \Log::info("Updated school_classes.class_teacher for teacher_id {$teacher->id}, affected rows: $affected");
+}
+
+            }
+
+            DB::commit();
+            return response()->json(['message' => 'Teachers migrated to users successfully.']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Migration failed: ' . $e->getMessage());
+            return response()->json(['error' => 'An error occurred during migration.'], 500);
         }
     }
 

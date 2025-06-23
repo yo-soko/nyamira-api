@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 use App\Models\Student;
@@ -337,6 +338,46 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+        }
+    }
+
+    public function migrateStudentsToUsers()
+    {
+        DB::beginTransaction();
+
+        try {
+            // Get students who don't have a user account yet
+            $students = Student::whereNull('user_id')->get();
+
+            foreach ($students as $student) {
+                $guardianPhone = optional($student->guardian)->first_phone ?? '0700000000';
+
+               $email = $student->email ?? strtolower(Str::slug($student->first_name . '.' . $student->last_name)) . '@example.com';
+
+                $user = User::create([
+                    'code' => $student->student_reg_number,
+                    'role' => 'student',
+                    'email' => $email,
+                    'name' => $student->first_name . ' ' . $student->last_name,
+                    'phone' => $guardianPhone,
+                    'password' => Hash::make($student->id_no ?? 'Password'),
+                    'status' => true,
+                ]);
+
+
+                $student->update([
+                    'user_id' => $user->id
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json(['message' => 'Students migrated to users successfully.']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Student migration error: ' . $e->getMessage());
+            return response()->json(['error' => 'Migration failed.'], 500);
         }
     }
 

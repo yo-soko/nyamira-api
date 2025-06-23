@@ -40,7 +40,9 @@
                                 <th>Start</th>
                                 <th>End</th>
                                 <th>Status</th>
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <th style="width: 160px;">Actions</th>
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -55,11 +57,13 @@
                                         {{ $term->status ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <td>
                                     <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editTermModal{{ $term->id }}">Edit</button>
 
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteTermModal{{ $term->id }}">Delete</button>
                                 </td>
+                                @endhasanyrole
                             </tr>
 
                             @push('modals')

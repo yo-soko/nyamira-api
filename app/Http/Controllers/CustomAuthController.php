@@ -18,7 +18,7 @@ class CustomAuthController extends Controller
         return view('login');   // your Blade file
     }
 
-     public function customSignin(Request $request)
+    public function customSignin(Request $request)
     {
         $request->validate([
             'login' => 'required',
@@ -72,8 +72,16 @@ class CustomAuthController extends Controller
         }
 
         $request->session()->regenerate();
+        // 🔁 Role-based Redirect
+        $user = Auth::user();
+        if ($user->role === 'class_teacher') {
+            return redirect()->intended('tdashboard')->with('success', 'Very nice to have you back!');
+        } elseif ($user->role === 'student') {
+            return redirect()->intended('sdashboard')->with('success', 'Very nice to have you back!');
+        } else {
+            return redirect()->intended('index')->with('success', 'Very nice to have you back!');
+        }
 
-        return redirect()->intended('index')->with('success', 'Very nice to have you back!');
     }
 
 

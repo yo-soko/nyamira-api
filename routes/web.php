@@ -40,6 +40,7 @@ use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
 
 use App\Http\Controllers\SdashboardController;
+use App\Http\Controllers\TdashboardController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -168,7 +169,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/results-filter', [ResultController::class, 'showFilterForm'])->name('results-filter');
     Route::post('/results-filter', [ResultController::class, 'filterResults'])->name('results-filter');
     Route::get('/results-view', [ResultController::class, 'viewResults'])->name('results-view');
-    
+ 
+    Route::get('/tdashboard', [TdashboardController::class, 'index'])->name('tdashboard');
+
     //terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
     Route::post('/terms', [TermController::class, 'store'])->name('terms.store');
@@ -199,6 +202,8 @@ Route::middleware(['auth'])->group(function () {
     //teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
     Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+    Route::get('/migrate-teachers', [TeacherController::class, 'migrateTeachersToUsers']);
+    Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
 
 
     // Fees

@@ -59,7 +59,9 @@
                                 <th>Prefect</th>
                                 <th>Capacity</th>
                                 <th>Status</th>
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <th>Actions</th>
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -75,6 +77,7 @@
                                         {{ $class->status ? 'Active' : 'Inactive' }}
                                     </span>
                                 </td>
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <td>
                                     <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editClassModal{{ $class->id }}">
                                         Edit
@@ -83,6 +86,7 @@
                                         Delete
                                     </button>
                                 </td>
+                                @endhasanyrole
                             </tr>
                             @endforeach
                         </tbody>

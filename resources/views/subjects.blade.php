@@ -23,7 +23,7 @@
                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                     </li>
                 </ul>
-             @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
+             @hasanyrole('admin|developer|manager|director|supervisor')
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubjectModal">Add Subject</button>
             @endhasrole
         </div>
