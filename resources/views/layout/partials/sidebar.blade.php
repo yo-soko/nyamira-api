@@ -52,6 +52,7 @@
                                                 <h6 class="submenu-hdr">SCHOOL MANAGEMENT</h6>
                                                 <ul>
                                                         <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}"><a href="{{url('index')}}"><i class="ti ti-dashboard fs-16 me-2"></i><span>Dashboard</span></a></li>
+                                                        <li class="{{ Request::is('sdashboard', 'sdashboard') ? 'active' : '' }}"><a href="{{url('sdashboard')}}"><i class="ti ti-dashboard fs-16 me-2"></i><span>SDashboard</span></a></li>
                                                         <li class="{{ Request::is('students') ? 'active' : '' }}"><a href="{{url('students')}}"><i class="ti ti-user fs-16 me-2"></i><span>Learners</span></a></li>
 
                                                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')

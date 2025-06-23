@@ -65,6 +65,10 @@ class Student extends Model
         return $this->belongsToMany(Subject::class, 'student_subjects'); 
     }
 
+    public function marks()
+    {
+        return $this->hasMany(Mark::class);
+    }
 
 
 }

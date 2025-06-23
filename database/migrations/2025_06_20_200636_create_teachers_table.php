@@ -19,8 +19,7 @@ return new class extends Migration {
             $table->string('gender', 50);
             $table->unsignedBigInteger('department');
             $table->tinyInteger('status')->default(1); // 1 = active
-            $table->timestamp('date_created')->useCurrent();
-            $table->timestamp('date_updated')->nullable()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

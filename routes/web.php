@@ -39,6 +39,7 @@ use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
 
+use App\Http\Controllers\SdashboardController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -145,6 +146,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions');
     Route::post('/permissions/set-role', [PermissionController::class, 'setRole'])->name('permissions.setRole');
     Route::put('/roles-permissions/{role}', [PermissionController::class, 'update'])->name('roles.permissions.update');
+
+    Route::get('/sdashboard', [SdashboardController::class, 'index'])->name('sdashboard');
 
     Route::get('/students', [StudentController::class, 'index'])->name('students');
     Route::post('/students', [StudentController::class, 'store'])->name('students.store');
