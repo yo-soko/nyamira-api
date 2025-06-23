@@ -61,36 +61,19 @@
                                                         <li class="{{ Request::is('subjects') ? 'active' : '' }}"> <a href="{{url('subjects')}}"><i class="fas fa-book-open fa-sm me-2"></i><span>Subjects</span></a></li>
                                                         <li class="{{ Request::is('terms') ? 'active' : '' }}"> <a href="{{url('terms')}}"><i class="fas fa-calendar-alt fa-sm me-2"></i><span>Terms</span></a></li>
                                                         <li class="{{ Request::is('school-classes') ? 'active' : '' }}"><a href="{{ url('school-classes') }}"><i class="fa-solid fa-chalkboard fa-sm me-2 "></i><span>Classes</span></a></li>
+                                                        @hasanyrole('admin|developer|manager|director|supervisor')
                                                         <li class="{{ Request::is('class-levels') ? 'active' : '' }}"><a href="{{ url('class-levels') }}"><i class="fas fa-layer-group fa-sm me-2"></i><span>Class Levels</span></a></li>
                                                        <li class="{{ Request::is('streams') ? 'active' : '' }}"><a href="{{ url('streams') }}"><i class="fas fa-stream fa-sm me-2"></i><span>Streams</span></a></li>
                                                        <li class="{{ Request::is('guardians') ? 'active' : '' }}"><a href="{{ url('guardians') }}"><i class="fa-solid fa-user-shield fa-sm me-2"></i><span>Parent/Guardian</span></a></li>
-                                                        <li class="{{ Request::is('exams') ? 'active' : '' }}"> <a href="{{url('exams')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Exams</span></a></li>
+                                                       <li class="{{ Request::is('teachers') ? 'active' : '' }}"><a href="{{ url('teachers') }}"><i class="fa-solid fa-user-shield fa-sm me-2"></i><span>Teachers</span></a></li>
+                                                        @endhasanyrole
+                                                       <li class="{{ Request::is('exams') ? 'active' : '' }}"> <a href="{{url('exams')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Exams</span></a></li>
                                                         <li class="{{ Request::is('submit-results') ? 'active' : '' }}"> <a href="{{url('submit-results')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Submit Results</span></a></li>
                                                         <li class="{{ Request::is('results-filter','results-view') ? 'active' : '' }}"> <a href="{{url('results-filter')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>View Results</span></a></li>
                                                         <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
                                                         <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                                                         <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
-                                                        <li class="submenu">
-                                                                <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
-                                                                <ul>
-                                                                     @hasanyrole('admin|developer|manager|director|supervisor')
-                                                                        <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
-                                                                     @endhasanyrole
-                                                                        <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
-
-                                                                        <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
-                                                                </ul>
-                                                        </li>
-                                                        <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
-                                                        </li>
-                                                        @hasanyrole('admin|developer|manager|director|supervisor')
-                                                        <li class="submenu">
-                                                                <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
-                                                                <ul>
-                                                                        <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
-                                                                </ul>
-                                                        </li>
-                                                        @endhasanyrole
+                                                   
                                                 </ul>
                                         </li>
 
@@ -115,38 +98,6 @@
                                                 </ul>
                                         </li>
 
-                                        <li class="submenu-open">
-                                                <h6 class="submenu-hdr">HRM</h6>
-                                                <ul>
-                                                        <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}"><a href="{{url('index')}}"><i class="ti ti-dashboard fs-16 me-2"></i><span>Dashboard</span></a></li>
-                                                        <li class="{{ Request::is('employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('employees-list')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
-                                                        <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
-                                                        <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
-                                                        <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
-                                                        <li class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span></a></li>
-                                                        <li class="submenu">
-                                                                <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
-                                                                <ul>
-                                                                     @hasanyrole('admin|developer|manager|director|supervisor')
-                                                                        <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
-                                                                     @endhasanyrole
-                                                                        <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
-
-                                                                        <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
-                                                                </ul>
-                                                        </li>
-                                                        <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
-                                                        </li>
-                                                        @hasanyrole('admin|developer|manager|director|supervisor')
-                                                        <li class="submenu">
-                                                                <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
-                                                                <ul>
-                                                                        <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
-                                                                </ul>
-                                                        </li>
-                                                        @endhasanyrole
-                                                </ul>
-                                        </li>
                                         @hasanyrole('admin|developer|manager|director|supervisor')
                                         <li class="submenu-open">
                                                 <h6 class="submenu-hdr">User Management</h6>

@@ -23,7 +23,9 @@
                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                     </li>
                 </ul>
+             @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubjectModal">Add Subject</button>
+            @endhasrole
         </div>
 
 
@@ -39,8 +41,9 @@
                                 <th>Subject Code</th>
                                 <th>Subject Name</th>
                                 <th>Status</th>
-                                <!-- <th>Exams</th> -->
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <th>Actions</th>
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -50,20 +53,13 @@
                                 <td>{{ $subject->subject_code }}</td>
                                 <td>{{ $subject->subject_name }}</td>
                                 <td>{{ $subject->status ? 'Active' : 'Inactive' }}</td>
-                                <!-- <td>
-                                    @if($subject->exams->count())
-                                        @foreach ($subject->exams as $exam)
-                                            <span class="badge bg-info">{{ $exam->name }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="text-muted">No exams</span>
-                                    @endif
-                                </td> -->
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <td>
                                     <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editSubjectModal{{ $subject->id }}">Edit</button>
                                     <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSubjectModal{{ $subject->id }}"> Delete
                                     </button>
                                 </td>
+                                @endhasanyrole
                             </tr>
 
                             <!-- Edit Modal -->

@@ -13,12 +13,13 @@ return new class extends Migration {
             $table->string('email', 100)->unique();
             $table->string('phone', 100);
             $table->string('id_no');
-            $table->text('address');
+            $table->text('address')->nullable();
             $table->string('education_level');
             $table->string('years_of_experience', 100);
             $table->string('gender', 50);
-            $table->unsignedBigInteger('department');
-            $table->tinyInteger('status')->default(1); // 1 = active
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->tinyInteger('status')->default(1); 
             $table->timestamps();
         });
     }

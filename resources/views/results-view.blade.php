@@ -72,7 +72,7 @@
                                     $averageGrade = scoreToGrade($studentData['average_score']);
                                 @endphp
                                 <tr>
-                                    <td>{{ $studentData['rank'] }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>{{ $student->first_name }} {{ $student->last_name }}</td>
                                     <td>{{ $student->student_reg_number }}</td>
                                     <td>{{ $student->class->level->level_name ?? '-' }}</td>

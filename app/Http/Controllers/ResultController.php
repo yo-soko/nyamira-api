@@ -233,80 +233,82 @@ class ResultController extends Controller
 
         $results = $query->get();
 
-    if ($results->isEmpty()) {
-        return redirect()->route('results-filter')
-            ->with('error', 'No results found for the selected criteria.');
-    }
+        if ($results->isEmpty()) {
+            return redirect()->route('results-filter')
+                ->with('error', 'No results found for the selected criteria.');
+        }
 
-    // Group results by student
-    $groupedResults = $results->groupBy(fn($r) => $r->student->id);
+        // Group results by student
+        $groupedResults = $results->groupBy(fn($r) => $r->student->id);
 
-    // Define your gradeToScore here or import it properly
-    $gradeToScore = function($grade) {
-        return match(strtoupper($grade)) {
-            'B.E' => 12,
-            'A.E' => 37,
-            'M.E' => 62,
-            'E.E' => 87,
-            default => null,
+        // Define your gradeToScore here or import it properly
+        $gradeToScore = function($grade) {
+            $normalized = strtolower(trim($grade));
+            return match($normalized) {
+                'below expectation'        => 12,
+                'approaching expectation'  => 37,
+                'meeting expectation'      => 62,
+                'exceeding expectation'    => 87,
+                default => null,
+            };
         };
-    };
 
-    // Build an array with student data + average score
-    $studentsWithAverage = [];
 
-    foreach ($groupedResults as $studentId => $resultsForStudent) {
-        $totalScore = 0;
-        $countSubjects = 0;
+        // Build an array with student data + average score
+        $studentsWithAverage = [];
 
-        foreach ($resultsForStudent as $result) {
-            if (!is_null($result->marks)) {
-                $totalScore += $result->marks;
-                $countSubjects++;
-            } elseif (!empty($result->grade)) {
-                $score = $gradeToScore($result->grade);
-                if (!is_null($score)) {
-                    $totalScore += $score;
+        foreach ($groupedResults as $studentId => $resultsForStudent) {
+            $totalScore = 0;
+            $countSubjects = 0;
+
+            foreach ($resultsForStudent as $result) {
+                if (!is_null($result->marks)) {
+                    $totalScore += $result->marks;
                     $countSubjects++;
+                } elseif (!empty($result->grade)) {
+                    $score = $gradeToScore($result->grade);
+                    if (!is_null($score)) {
+                        $totalScore += $score;
+                        $countSubjects++;
+                    }
                 }
             }
+
+            $averageScore = $countSubjects > 0 ? $totalScore / $countSubjects : 0;
+
+            $studentsWithAverage[] = [
+                'student' => $resultsForStudent->first()->student,
+                'results' => $resultsForStudent,
+                'average_score' => $averageScore,
+            ];
         }
 
-        $averageScore = $countSubjects > 0 ? $totalScore / $countSubjects : 0;
+        // Sort descending by average_score
+        usort($studentsWithAverage, fn($a, $b) => $b['average_score'] <=> $a['average_score']);
 
-        $studentsWithAverage[] = [
-            'student' => $resultsForStudent->first()->student,
-            'results' => $resultsForStudent,
-            'average_score' => $averageScore,
-        ];
-    }
+        // Assign rank (handle ties if needed)
+        $rank = 0;
+        $prevScore = null;
+        $skipRank = 0; // for ties
 
-    // Sort descending by average_score
-    usort($studentsWithAverage, fn($a, $b) => $b['average_score'] <=> $a['average_score']);
-
-    // Assign rank (handle ties if needed)
-    $rank = 0;
-    $prevScore = null;
-    $skipRank = 0; // for ties
-
-    foreach ($studentsWithAverage as $index => &$studentData) {
-        if ($prevScore !== null && $studentData['average_score'] == $prevScore) {
-            // same score as previous, same rank
-            $studentData['rank'] = $rank;
-            $skipRank++;
-        } else {
-            // new score, increment rank with any skipped ranks for ties
-            $rank = $rank + 1 + $skipRank;
-            $studentData['rank'] = $rank;
-            $skipRank = 0;
+        foreach ($studentsWithAverage as $index => &$studentData) {
+            if ($prevScore !== null && $studentData['average_score'] == $prevScore) {
+                // same score as previous, same rank
+                $studentData['rank'] = $rank;
+                $skipRank++;
+            } else {
+                // new score, increment rank with any skipped ranks for ties
+                $rank = $rank + 1 + $skipRank;
+                $studentData['rank'] = $rank;
+                $skipRank = 0;
+            }
+            $prevScore = $studentData['average_score'];
         }
-        $prevScore = $studentData['average_score'];
-    }
 
-    // Pass studentsWithAverage and subjects to the view
-    $subjects = $results->pluck('subject')->unique('id')->sortBy('subject_name')->values();
+        // Pass studentsWithAverage and subjects to the view
+        $subjects = $results->pluck('subject')->unique('id')->sortBy('subject_name')->values();
 
-    return view('results-view', compact('studentsWithAverage', 'subjects', 'filters'));
+        return view('results-view', compact('studentsWithAverage', 'subjects', 'filters'));
 
     }
 

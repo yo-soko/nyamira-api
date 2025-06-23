@@ -37,13 +37,13 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-           
+            @hasanyrole('admin|developer|manager|director|supervisor')
             <div class="page-btn">
                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClassModal">
                 <i class="ti ti-plus"></i> Add Class
                </a>
             </div>
-        
+             @endhasanyrole
         </div>
         
         <div class="card">

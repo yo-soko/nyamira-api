@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('teacher_subjects', function (Blueprint $table) {
+        Schema::create('teacher_subject', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('teacher_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('subject_id')->constrained()->onDelete('cascade');
@@ -15,6 +15,6 @@ return new class extends Migration {
     }
 
     public function down(): void {
-        Schema::dropIfExists('subject_teacher_class');
+        Schema::dropIfExists('teacher_subject');
     }
 };

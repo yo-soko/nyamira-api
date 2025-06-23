@@ -18,12 +18,14 @@
                 <li><a data-bs-toggle="tooltip" title="Excel"><img src="{{ asset('build/img/icons/excel.svg') }}" alt="excel"></a></li>
                 <li><a data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a></li>
                 <li><a data-bs-toggle="tooltip" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a></li>
-            </ul>
+            </ul>         
+            @hasanyrole('admin|developer|manager|director|supervisor')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTermModal">
                     <i class="ti ti-circle-plus me-1"></i>Add Term
                 </a>
             </div>
+            @endhasanyrole
         </div>
 
         {{-- Term Table --}}

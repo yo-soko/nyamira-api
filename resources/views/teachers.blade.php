@@ -1,114 +1,213 @@
 @extends('layout.mainlayout')
 @section('content')
+@include('layout.toast')
 
-<h2>Add Teacher</h2>
-<form action="{{ route('teachers.store') }}" method="POST">
-    @csrf
-    <div><label>First Name:</label><input type="text" name="first_name" required></div>
-    <div><label>Last Name:</label><input type="text" name="last_name" required></div>
-    <div><label>Date of Birth:</label><input type="date" name="date_of_birth" required></div>
-    <div><label>Email:</label><input type="email" name="email" required></div>
-    <div><label>Phone:</label><input type="text" name="phone" required></div>
-    <div><label>ID Number:</label><input type="text" name="id_no" required></div>
-    <div><label>Address:</label><textarea name="address" required></textarea></div>
-    <div><label>Education Level:</label><input type="text" name="education_level" required></div>
-    <div><label>Years of Experience:</label><input type="text" name="years_of_experience" required></div>
-    <div>
-        <label>Gender:</label>
-        <select name="gender" required>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-    </div>
-    <div><label>Department (ID):</label><input type="number" name="department" required></div>
-    <div>
-        <label>Status:</label>
-        <select name="status" required>
-            <option value="1">Active</option>
-            <option value="0">Inactive</option>
-        </select>
-    </div>
-
-    <h4>Subjects and Classes</h4>
-    <div id="teaching-area">
-        <div class="teaching-entry">
-            <select name="subject_class[0][subject_id]">
-                @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
-                @endforeach
-            </select>
-
-            <select name="subject_class[0][schoolclass_id]">
-                @foreach($schoolclasses as $class)
-                    <option value="{{ $class->id }}">{{ $class->name }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <button type="button" onclick="addEntry()">+ Add More</button>
-    <button type="submit">Save Teacher</button>
-</form>
-
-<hr>
-
-<h2>Teachers List</h2>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th><th>Email</th><th>ID No</th><th>DOB</th><th>Phone</th>
-            <th>Address</th><th>Education</th><th>Experience</th><th>Gender</th>
-            <th>Department</th><th>Status</th><th>Subjects & Classes</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($teachers as $teacher)
-        <tr>
-            <td>{{ $teacher->first_name }} {{ $teacher->last_name }}</td>
-            <td>{{ $teacher->email }}</td>
-            <td>{{ $teacher->id_no }}</td>
-            <td>{{ $teacher->date_of_birth }}</td>
-            <td>{{ $teacher->phone }}</td>
-            <td>{{ $teacher->address }}</td>
-            <td>{{ $teacher->education_level }}</td>
-            <td>{{ $teacher->years_of_experience }}</td>
-            <td>{{ $teacher->gender }}</td>
-            <td>{{ $teacher->department }}</td>
-            <td>{{ $teacher->status == 1 ? 'Active' : 'Inactive' }}</td>
-            <td>
-                <ul>
-                    @foreach($teacher->subjects as $subject)
-                        <li>{{ $subject->name }} - Class: {{ \App\Models\Schoolclass::find($subject->pivot->schoolclass_id)->name ?? 'N/A' }}</li>
-                    @endforeach
+<div class="page-wrapper">
+    <div class="content">
+        <div class="page-header">
+           <div class="page-title">
+                    <h4>Teachers</h4>
+                    <h6>Manage your Teachers</h6>
+                </div>
+                <ul class="table-top-head">
+                    <li>
+                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img src="{{URL::asset('build/img/icons/pdf.svg')}}" alt="img"></a>
+                    </li>
+                    <li>
+                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Excel"><img src="{{URL::asset('build/img/icons/excel.svg')}}" alt="img"></a>
+                    </li>						
+                    <li>
+                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh"><i class="ti ti-refresh"></i></a>
+                    </li>
+                    <li>
+                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
+                    </li>
                 </ul>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+             @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#teacherModal">Add Teacher</button>
+            @endhasrole
+        </div>
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                <table class="table datatable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>Qualification</th>
+                            <th>Department</th>
+                            <th>Subjects</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($teachers as $teacher)
+                        <tr>
+                            <td>{{ $teacher->first_name }} {{ $teacher->last_name }}</td>
+                  
+                            <td>{{ $teacher->phone }}</td>
+                            <td>{{ $teacher->gender }}</td>
 
-<script>
-    let index = 1;
-    function addEntry() {
-        const container = document.getElementById('teaching-area');
-        const div = document.createElement('div');
-        div.className = 'teaching-entry';
-        div.innerHTML = `
-            <select name="subject_class[${index}][subject_id]">
+                            <td>{{ $teacher->education_level }}</td>
+                            <td>{{ $teacher->department->name }}</td>
+                            <td>
+                                @if($teacher->subjects->count() > 0)
+                                    {{ $teacher->subjects->pluck('subject_name')->join(', ') }}
+                                @else
+                                    <em>No subjects assigned</em>
+                                @endif
+                            </td>
+                            <td>{{ $teacher->status == 1 ? 'Active' : 'Inactive' }}</td>
+                            <td>
+                            
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>   
+    </div>
+</div>
+    <script>
+        let index = 1;
+        function addEntry() {
+            const container = document.getElementById('teaching-area');
+            const div = document.createElement('div');
+            div.className = 'teaching-entry';
+            div.innerHTML = `
+                <select name="subject_class[${index}][subject_id]">
+                    @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                    @endforeach
+                </select>
+
+                <select name="subject_class[${index}][schoolclass_id]">
+                    @foreach($schoolclasses as $class)
+                        <option value="{{ $class->id }}">{{ $class->name }}</option>
+                    @endforeach
+                </select>
+            `;
+            container.appendChild(div);
+            index++;
+        }
+    </script>
+<!-- Teacher Add/Edit Modal -->
+<div class="modal fade" id="teacherModal" tabindex="-1" aria-labelledby="teacherModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <form id="teacherForm" method="POST" action="{{ route('teachers.store') }}">
+      @csrf
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="teacherModalLabel">Add/Edit Teacher</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-3">
+
+            <div class="col-md-6">
+              <label for="first_name" class="form-label">Teacher's First Name</label>
+              <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="last_name" class="form-label">Teacher's Last Name</label>
+              <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="date_of_birth" class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="phone" class="form-label">Phone Number</label>
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="id_no" class="form-label">ID Number</label>
+              <input type="text" class="form-control" id="id_no" name="id_no" placeholder="Enter identity number" required>
+            </div>
+
+            <div class="col-12">
+              <label for="address" class="form-label">Address</label>
+              <textarea class="form-control" id="address" name="address" rows="2" placeholder="Enter address" required></textarea>
+            </div>
+
+            <div class="col-md-6">
+              <label for="education_level" class="form-label">Education Level</label>
+              <input type="text" class="form-control" id="education_level" name="education_level" placeholder="Enter education level" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="years_of_experience" class="form-label">Years of Experience</label>
+              <input type="number" min="0" class="form-control" id="years_of_experience" name="years_of_experience" placeholder="Enter experience years" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Gender</label>
+              <select class="form-select" id="gender" name="gender" required>
+                <option value="" selected disabled>Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="department" class="form-label">Department</label>
+              <select class="form-select" id="department" name="department" required>
+                <option value="" selected disabled>Select Department</option>
+                @foreach($departments as $dept)
+                  <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                @endforeach
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Subjects to Teach</label>
+              <div class="row">
                 @foreach($subjects as $subject)
-                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>
+                <div class="col-md-4">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="subjects[]" id="subject_{{ $subject->id }}" value="{{ $subject->id }}">
+                    <label class="form-check-label" for="subject_{{ $subject->id }}">
+                      {{ $subject->subject_name }}
+                    </label>
+                  </div>
+                </div>
                 @endforeach
-            </select>
+              </div>
+            </div>
 
-            <select name="subject_class[${index}][schoolclass_id]">
-                @foreach($schoolclasses as $class)
-                    <option value="{{ $class->id }}">{{ $class->name }}</option>
-                @endforeach
-            </select>
-        `;
-        container.appendChild(div);
-        index++;
-    }
-</script>
+            <div class="col-md-6">
+              <label for="status" class="form-label">Status</label>
+              <select class="form-select" id="status" name="status" required>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save Teacher</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 @endsection
