@@ -18,7 +18,8 @@
                     @foreach ($payments as $index => $payment)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $payment->student->full_name ?? 'N/A' }}</td>
+                        <td>{{ $payment->student->name ?? 'N/A' }}</td>
+                        <a href="{{ route('fee-payments.student', $student->id) }}" class="btn btn-info btn-sm"></a>
                         <td>{{ $payment->classLevel->class_name ?? 'N/A' }}</td>
                         <td>{{ $payment->term->term_name ?? 'N/A' }}</td>
                         <td>KSh {{ number_format($payment->amount_paid, 2) }}</td>

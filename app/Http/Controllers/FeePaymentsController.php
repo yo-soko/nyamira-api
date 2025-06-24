@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -8,21 +9,48 @@ use App\Models\Student;
 use App\Models\ClassLevel;
 use App\Models\Term;
 use App\Models\SchoolClass;
+use App\Models\Stream;
+use App\Models\FeeStructure;
 
 class FeePaymentsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $query = FeePayment::with(['student.schoolClass.level', 'student.schoolClass.stream', 'term']);
 
-        $payments = FeePayment::with(['student.schoolClass.level', 'student.schoolClass.stream', 'term'])->latest()->get();
+        // Filter by Stream
+        if ($request->filled('stream_id')) {
+            $query->whereHas('student.schoolClass', function ($q) use ($request) {
+                $q->where('stream_id', $request->stream_id);
+            });
+        }
 
-        $students = Student::with(['schoolClass.level', 'schoolClass.stream', 'term'])->get();
+        // Filter by Student
+        if ($request->filled('student_id')) {
+            $query->where('student_id', $request->student_id);
+        }
+
+        $payments = $query->latest()->get();
+
+        // Get all streams
+        $streams = Stream::all();
+
+        // Get all students for the dropdown
+        $students = Student::with(['schoolClass.level', 'schoolClass.stream'])->get();
+
+        // Apply balance filters to students
+        if ($request->filled('balance_status')) {
+            if ($request->balance_status === 'with') {
+                $students = $students->filter(fn($s) => $s->current_balance > 0);
+            } elseif ($request->balance_status === 'none') {
+                $students = $students->filter(fn($s) => $s->current_balance <= 0);
+            }
+        }
 
         $classLevels = SchoolClass::with(['level', 'stream'])->get();
-
         $terms = Term::orderBy('year', 'desc')->orderBy('term_name')->get();
 
-        return view('fees.fee-payments', compact('payments', 'students', 'classLevels', 'terms'));
+        return view('fees.fee-payments', compact('payments', 'students', 'streams', 'classLevels', 'terms'));
     }
 
     public function fetchStudents(Request $request)
@@ -33,7 +61,7 @@ class FeePaymentsController extends Controller
             ->map(function ($student) {
                 return [
                     'id' => $student->id,
-                    'name' => $student->first_name,
+                    'name' => "{$student->first_name} {$student->last_name}",
                 ];
             });
 
@@ -46,19 +74,33 @@ class FeePaymentsController extends Controller
         $termId = $request->term_id;
         $classId = $request->class_id;
 
-        // Calculate total fees expected for this class and term (assume you have logic)
-        $expected = 20000; // Replace with dynamic logic if available
+        // Find the student
+        $student = Student::with('schoolClass')->findOrFail($studentId);
 
-        // Get total payments made
+        // Determine expected fee based on the class's level and term
+        $levelId = $student->schoolClass->level_id ?? null;
+
+        if (!$levelId) {
+            return response()->json(['balance' => '0.00']);
+        }
+
+        $expected = \App\Models\FeeStructure::where('level_id', $levelId)
+            ->where('term_id', $termId)
+            ->sum('amount');
+
+        // Sum of payments made
         $paid = FeePayment::where('student_id', $studentId)
             ->where('term_id', $termId)
             ->where('class_id', $classId)
             ->sum('amount_paid');
 
+        $balance = $expected - $paid;
+
         return response()->json([
-            'balance' => number_format(($expected - $paid), 2)
+            'balance' => number_format($balance, 2)
         ]);
     }
+
 
     public function store(Request $request)
     {
@@ -68,7 +110,9 @@ class FeePaymentsController extends Controller
             'term_id' => 'required|exists:terms,id',
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string',
+            'receipt_number' => 'nullable|string'
+
         ]);
 
         FeePayment::create([
@@ -77,10 +121,13 @@ class FeePaymentsController extends Controller
             'term_id' => $request->term_id,
             'payment_mode' => $request->payment_mode,
             'amount_paid' => $request->amount_paid,
+            'receipt_number' => uniqid('RCP-'),
             'description' => $request->description,
         ]);
 
-        return redirect()->back()->with('success', 'Payment added successfully.');
+        return redirect()->route('student.payments', $request->student_id)
+            ->with('success', 'Payment added successfully.');
+
     }
 
 

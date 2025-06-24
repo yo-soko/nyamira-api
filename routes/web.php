@@ -164,12 +164,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/exams', [ExamController::class, 'index'])->name('exams');
 
     Route::get('/submit-results', [ResultController::class, 'filterForm'])->name('submit-results');
-    Route::get('/results-entry', [ResultController::class, 'entryForm'])->name('results.entry'); 
+    Route::get('/results-entry', [ResultController::class, 'entryForm'])->name('results.entry');
     Route::post('/results/store', [ResultController::class, 'store'])->name('results.store');
     Route::get('/results-filter', [ResultController::class, 'showFilterForm'])->name('results-filter');
     Route::post('/results-filter', [ResultController::class, 'filterResults'])->name('results-filter');
     Route::get('/results-view', [ResultController::class, 'viewResults'])->name('results-view');
- 
+
     Route::get('/tdashboard', [TdashboardController::class, 'index'])->name('tdashboard');
 
     //terms
@@ -183,7 +183,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/subjects/store', [SubjectController::class, 'store'])->name('subjects.store');
     Route::post('/subjects/update/{subject}', [SubjectController::class, 'update'])->name('subjects.update');
     Route::delete('/subjects/delete/{subject}', [SubjectController::class, 'destroy'])->name('subjects.destroy');
-  
+
     //classlevel
     Route::get('/class-levels', [ClassLevelController::class, 'index'])->name('class-levels');
     Route::post('/class-levels', [ClassLevelController::class, 'store'])->name('class-levels.store');
@@ -208,14 +208,20 @@ Route::middleware(['auth'])->group(function () {
 
     // Fees
 
-    Route::get('fee-structure', [FeeStructureController::class, 'index'])->middleware('auth');
-    Route::post('fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
-    Route::post('fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
-    Route::post('fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
-    Route::post('fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
+    Route::get('/fee-structure', [FeeStructureController::class, 'index'])->name('fee-structure')->middleware('auth');
+
+    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
+    Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
+    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
+    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
     Route::post('/fee-payments', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
     Route::resource('fee-payments', FeePaymentsController::class);
+    Route::get('/students/balance', [FeePaymentsController::class, 'fetchBalance']);
+    Route::get('/fee-payments/student/{student}', [FeePaymentsController::class, 'studentPayments'])->name('fee-payments.student');
+    Route::post('/fee-payments/store', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
+
+
 
     //Fees
     // ========== AJAX ROUTES (Used by JS) ==========

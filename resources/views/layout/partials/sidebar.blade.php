@@ -65,7 +65,7 @@
                                                         </a>
                                                 </li>
                                                 @endhasanyrole
-                                            
+
                                                 @hasanyrole('student|developer')
                                                 <li class="{{ Request::is('sdashboard') ? 'active' : '' }}">
                                                 <a href="{{ url('sdashboard') }}">
@@ -168,7 +168,7 @@
                                                 <h6 class="submenu-hdr">Fee Management</h6>
                                                 <ul>
 
-                                                        <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                                        <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('/fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
                                                         <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
                                                         <!-- <li class="submenu">
                                                                 <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>

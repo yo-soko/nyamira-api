@@ -37,7 +37,7 @@
     <title>JavaPA</title>
 
     <!-- Favicon -->
-    
+
     <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('/build/img/favicon.ico')}}">
 
     @include('layout.partials.head')
@@ -113,6 +113,8 @@
     @include('layout.partials.horizontal-sidebar')
 @endif
 @yield('content')
+@stack('scripts')
+
 </div>
 <!-- /Main Wrapper -->
 

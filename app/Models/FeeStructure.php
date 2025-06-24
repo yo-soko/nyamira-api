@@ -10,13 +10,14 @@ class FeeStructure extends Model
     use HasFactory;
 
     protected $fillable = [
-        'class_id', 'term_id', 'amount', 'description', 'status'
+        'level_id', 'term_id', 'amount', 'description', 'status'
     ];
 
-    public function classLevel()
-    {
-        return $this->belongsTo(ClassLevel::class, 'class_id');
+
+    public function classLevel() {
+        return $this->belongsTo(ClassLevel::class, 'level_id');
     }
+
 
     public function term()
     {

@@ -154,15 +154,20 @@ $(document).ready(function () {
 
     });
 
-    // NEW: Fetch balance when both student and term are selected
     $('#student_id, #term_id').on('change', function () {
         const studentId = $('#student_id').val();
         const termId = $('#term_id').val();
+        const classId = $('#class_id').val(); // ADD THIS — it's required by your controller
 
-        if (studentId && termId) {
+        if (studentId && termId && classId) {
             $.ajax({
-                url: `/api/students/${studentId}/balance/${termId}`,
+                url: `/students/balance`,
                 type: "GET",
+                data: {
+                    student_id: studentId,
+                    term_id: termId,
+                    class_id: classId
+                },
                 success: function (data) {
                     $('#outstanding_balance').val(parseFloat(data.balance).toFixed(2));
                 },
@@ -172,4 +177,5 @@ $(document).ready(function () {
             });
         }
     });
+
 });

@@ -29,9 +29,10 @@
                         @foreach($feeStructures as $index => $fee)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $fee->classLevel->name ?? 'N/A' }}</td>
-                            <td>{{ $fee->term->name ?? 'N/A' }}</td>
-                            <td>{{ number_format($fee->amount, 2) }}</td>
+                            <td>{{ $fee->classLevel->name ?? 'No Class Level' }}</td>
+                            <td>{{ $fee->term->term_name ?? 'No Term' }}</td>
+                            <td>KSh {{ number_format($fee->amount) }}</td>
+
                             <td>{{ $fee->description }}</td>
                             <td>
                                 <span class="badge bg-{{ $fee->status == 'active' ? 'success' : 'danger' }}">
