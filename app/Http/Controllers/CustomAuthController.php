@@ -78,6 +78,9 @@ class CustomAuthController extends Controller
             return redirect()->intended('tdashboard')->with('success', 'Very nice to have you back!');
         } elseif ($user->role === 'student') {
             return redirect()->intended('sdashboard')->with('success', 'Very nice to have you back!');
+        }
+        elseif ($user->role === 'teacher') {
+            return redirect()->intended('submit-results')->with('success', 'Very nice to have you back!');
         } else {
             return redirect()->intended('index')->with('success', 'Very nice to have you back!');
         }

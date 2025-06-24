@@ -51,13 +51,21 @@
                                         <li class="submenu-open">
                                         <h6 class="submenu-hdr">SCHOOL MANAGEMENT</h6>
                                         <ul>
-                                                @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                                                @hasanyrole('admin|developer|manager|director|supervisor')
                                                 <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}">
-                                                <a href="{{ url('index') }}">
-                                                        <i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span>
-                                                </a>
+                                                        <a href="{{ url('index') }}">
+                                                                <i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span>
+                                                        </a>
                                                 </li>
                                                 @endhasanyrole
+                                                @hasanyrole('developer|class_teacher')
+                                                <li class="{{ Request::is('index', 'tdashboard') ? 'active' : '' }}">
+                                                        <a href="{{ url('tdashboard') }}">
+                                                                <i class="fas fa-tachometer-alt me-2"></i><span>Dashboard</span>
+                                                        </a>
+                                                </li>
+                                                @endhasanyrole
+                                            
                                                 @hasanyrole('student|developer')
                                                 <li class="{{ Request::is('sdashboard') ? 'active' : '' }}">
                                                 <a href="{{ url('sdashboard') }}">

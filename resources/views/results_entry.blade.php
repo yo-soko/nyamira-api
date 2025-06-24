@@ -7,8 +7,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Attendance Register </h4>
-                    <h6>Class: {{ $class->level->level_name ?? '-' }} {{ $class->stream->name ?? '-' }}</h6>
+                    <h4>Submit results </h4>
+                    <h6>Ensure to submit correct results. Those learners who never sat for the exam to be marked absent</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -135,7 +135,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <button type="submit" class="btn btn-success mt-3">Submit Attendance</button>
+                    <button type="submit" class="btn btn-success mt-3">Submit Results</button>
                     </form>
                 </div>
             </div>
