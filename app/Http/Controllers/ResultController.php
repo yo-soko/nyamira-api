@@ -260,30 +260,48 @@ class ResultController extends Controller
         $studentsWithAverage = [];
 
         foreach ($groupedResults as $studentId => $resultsForStudent) {
-            $totalScore = 0;
-            $countSubjects = 0;
+            $student = $resultsForStudent->first()->student;
 
-            foreach ($resultsForStudent as $result) {
-                if (!is_null($result->marks)) {
-                    $totalScore += $result->marks;
-                    $countSubjects++;
-                } elseif (!empty($result->grade)) {
-                    $score = $gradeToScore($result->grade);
-                    if (!is_null($score)) {
-                        $totalScore += $score;
-                        $countSubjects++;
+            // ✅ Get all subject IDs assigned to this student
+            $assignedSubjectIds = DB::table('student_subjects')
+                ->where('student_id', $studentId)
+                ->pluck('subject_id')
+                ->toArray();
+
+            $totalScore = 0;
+            $countSubjects = count($assignedSubjectIds); // ✅ always divide by this
+
+            foreach ($assignedSubjectIds as $subjectId) {
+                // ✅ Look for a result *only if* it's for an assigned subject
+                $result = $resultsForStudent->firstWhere('subject_id', $subjectId);
+
+                if ($result) {
+                    if (!is_null($result->marks)) {
+                        $totalScore += $result->marks;
+                    } elseif (!empty($result->grade)) {
+                        $score = $gradeToScore($result->grade);
+                        if (!is_null($score)) {
+                            $totalScore += $score;
+                        }
                     }
+                } else {
+                    // ✅ No result for assigned subject → treat as 0
+                    $totalScore += 0;
                 }
             }
 
+            // ✅ Average is based only on assigned subjects
             $averageScore = $countSubjects > 0 ? $totalScore / $countSubjects : 0;
 
             $studentsWithAverage[] = [
-                'student' => $resultsForStudent->first()->student,
+                'student' => $student,
                 'results' => $resultsForStudent,
                 'average_score' => $averageScore,
+                'subjects_assigned' => $countSubjects,
+                'results_found' => $resultsForStudent->count(),
             ];
         }
+
 
         // Sort descending by average_score
         usort($studentsWithAverage, fn($a, $b) => $b['average_score'] <=> $a['average_score']);

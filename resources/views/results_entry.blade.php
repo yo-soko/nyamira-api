@@ -110,16 +110,26 @@
                                 </td>
 
                                 <td>
-                                    <input type="number" min="0" max="100" name="exams[{{ $student->id }}][marks]" class="form-control">
+                                    <input type="number" style="min-width: 80px;" min="0" max="100" name="exams[{{ $student->id }}][marks]" class="form-control">
                                 </td>
 
                                 <td>
-                                    <select name="exams[{{ $student->id }}][grade]" class="form-control">
-                                        <option value="">select here</option>
-                                        <option value="Exceeding Expectation">E.E</option>
-                                        <option value="Meeting Expectation">M.E</option>
-                                        <option value="Approaching Expectation">A.E</option>
-                                        <option value="Below Expectation">B.E</option>
+                                    <select name="exams[{{ $student->id }}][grade]" class="form-control" style="min-width: 80px;">
+                                            <option value="">select here</option>
+                                            @php
+                                                $subject = \App\Models\Subject::find($subjectId)->subject_name;
+                                                $isSwahili = strtolower($subject) == 'kiswahili';
+                                                $grades = [
+                                                    'Exceeding Expectation' => $isSwahili ? 'KUZ' : 'EE',
+                                                    'Meeting Expectation' => $isSwahili ? 'KUF' : 'ME',
+                                                    'Approaching Expectation' => $isSwahili ? 'KUK' : 'AE',
+                                                    'Below Expectation' => $isSwahili ? 'MM' : 'BE',
+                                                ];
+                                            @endphp
+
+                                            @foreach ($grades as $value => $label)
+                                                <option value="{{ $value }}">{{ $label }}</option>
+                                            @endforeach
                                     </select>
                                 </td>
 

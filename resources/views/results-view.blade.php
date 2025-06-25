@@ -81,29 +81,84 @@
                                     @foreach($subjects as $subject)
                                         @php
                                             $result = $resultsForStudent->firstWhere('subject.id', $subject->id);
+
+                                            // Kiswahili translation logic
+                                            $isSwahili = strtolower($subject->subject_name) === 'kiswahili';
+                                            $swahiliMap = [
+                                                'Exceeding Expectation' => 'KUZ',
+                                                'Meeting Expectation' => 'KUF',
+                                                'Approaching Expectation' => 'KUK',
+                                                'Below Expectation' => 'MM',
+                                            ];
+
+                                            $defaultMap = [
+                                                'Exceeding Expectation' => 'E.E',
+                                                'Meeting Expectation' => 'M.E',
+                                                'Approaching Expectation' => 'A.E',
+                                                'Below Expectation' => 'B.E',
+                                            ];
+
+                                            $gradeLabel = '-';
+                                            if ($result && !empty($result->grade)) {
+                                                $gradeLabel = ($isSwahili ? $swahiliMap[$result->grade] ?? $result->grade : $defaultMap[$result->grade] ?? $result->grade);
+                                            } elseif ($result && is_null($result->marks)) {
+                                                $gradeLabel = 'Absent';
+                                            }
                                         @endphp
-                                        <td>
-                                            @if($result)
-                                                @if(!is_null($result->marks))
-                                                    {{ $result->grade }}
-                                                @elseif(!empty($result->grade))
-                                                    {{ $result->grade }}
-                                                @else
-                                                    Absent
-                                                @endif
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
+                                        <td>{{ $gradeLabel }}</td>
                                     @endforeach
+
 
                                     @if($subjects->count() >= 2)
                                         <td>{{ $averageGrade }}</td>
                                     @endif
+                                   
+
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="p-3">
+                        <h6><strong>Grade Key:</strong></h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <table class="table table-bordered table-sm">
+                                    <thead class="table-light">
+                                        <tr><th colspan="2" class="text-center">English Subjects</th></tr>
+                                        <tr>
+                                            <th>Initial</th>
+                                            <th>Meaning</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>E.E</td><td>Exceeding Expectation</td></tr>
+                                        <tr><td>M.E</td><td>Meeting Expectation</td></tr>
+                                        <tr><td>A.E</td><td>Approaching Expectation</td></tr>
+                                        <tr><td>B.E</td><td>Below Expectation</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="col-md-6">
+                                <table class="table table-bordered table-sm">
+                                    <thead class="table-light">
+                                        <tr><th colspan="2" class="text-center">Kiswahili</th></tr>
+                                        <tr>
+                                            <th>Kifupi</th>
+                                            <th>Maana</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>KUZ</td><td>Kuzidi Matarajio</td></tr>
+                                        <tr><td>KUF</td><td>Kufikia Matarajio</td></tr>
+                                        <tr><td>KUK</td><td>Kukaribia Matarajio</td></tr>
+                                        <tr><td>MM</td><td>Mbali na Matarajio</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
