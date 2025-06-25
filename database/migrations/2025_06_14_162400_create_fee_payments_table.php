@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('amount_paid', 10, 2);
             $table->string('payment_mode');
             $table->string('description')->nullable();
-            $table->string('receipt_number')->unique(); // if generating this, must be in store()
+            $table->string('receipt_number')->nullable(); // if generating this, must be in store()
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');

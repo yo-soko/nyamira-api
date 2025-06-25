@@ -13,9 +13,9 @@
 
                     <!-- Class Level -->
                     <div class="mb-3">
-                        <label for="class_id" class="form-label">Class</label>
+                        <label for="class_id" class="form-label">Stream</label>
                         <select name="class_id" id="class_id" class="form-select" required>
-                            <option value="">-- Select Class --</option>
+                            <option value="">-- Select Stream --</option>
                             @foreach($classLevels as $class)
                             <option value="{{ $class->id }}">
                                 {{ $class->level?->level_name ?? 'No Level' }} - {{ $class->stream?->name ?? 'No Stream' }}
@@ -65,10 +65,16 @@
                         </select>
                     </div>
 
+                    <!-- Receipt Number -->
+                    <div class="mb-3">
+                        <label for="receipt_number" class="form-label">Receipt Number</label>
+                        <input type="text" name="receipt_number" id="receipt_number" class="form-control" placeholder="Enter receipt number">
+                    </div>
+
                     <!-- Description -->
                     <div class="mb-3">
                         <label for="description" class="form-label">Description (Optional)</label>
-                        <input type="text" name="description" id="description" class="form-control" placeholder="Optional description">
+                        <textarea type="text" name="description" id="description" rows="3" class="form-control" placeholder="Optional description"></textarea>
                     </div>
 
                     <!-- Amount Paid -->

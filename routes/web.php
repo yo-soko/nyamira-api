@@ -220,11 +220,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
     Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
-    Route::post('/fee-payments', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
+
     Route::resource('fee-payments', FeePaymentsController::class);
     Route::get('/students/balance', [FeePaymentsController::class, 'fetchBalance']);
     Route::get('/fee-payments/student/{student}', [FeePaymentsController::class, 'studentPayments'])->name('fee-payments.student');
     Route::post('/fee-payments/store', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
+
 
 
 
@@ -240,8 +241,7 @@ Route::middleware(['auth'])->group(function () {
     // ✅ Handle payment (already in your JS)
     Route::post('/ajax/payments', [PaymentController::class, 'handleAjax'])->name('ajax.payments');
 
-    Route::get('/fetch-students', [FeePaymentsController::class, 'fetchStudents']);
-    Route::get('/fetch-balance/{student}', [FeePaymentsController::class, 'fetchBalance']);
+
     Route::post('/get-students', [FeePaymentsController::class, 'fetchStudents'])->name('get.students');
     Route::post('/get-balance', [FeePaymentsController::class, 'fetchBalance'])->name('get.balance');
 

@@ -44,7 +44,7 @@ class StudentController extends Controller
                         ->whereIn('class_id', $classIds)
                         ->get();
         } else {
-         
+
             $students = collect();
         }
 
@@ -148,14 +148,14 @@ class StudentController extends Controller
             $student->current_balance = ($feeStructure + $mealFee + ($fee ?? 0)) - $paid;
             $student->save();
 
-          
+
             $user = User::create([
-                'code' => $student->student_reg_number, 
+                'code' => $student->student_reg_number,
                 'role' => 'student',
                 'email' => $request->email ?? null,
                 'name' => $request->first_name . ' ' . $request->last_name,
                 'phone' => $request->guardian_first_phone,
-                'password' => Hash::make('Password'), 
+                'password' => Hash::make('Password'),
                 'status' => true,
             ]);
 
@@ -414,7 +414,7 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
- 
+
 
     /**
      * Remove the specified resource from storage.
@@ -451,22 +451,36 @@ class StudentController extends Controller
     // AJAX: Get balance for student and term
     public function getBalance($studentId, $termId)
     {
-        $student = Student::findOrFail($studentId);
-        $classId = $student->class_id;
+        $student = Student::with(['meal', 'transport', 'class.level'])->findOrFail($studentId);
+        $levelId = $student->class->level_id ?? null;
 
-        $totalFees = FeeStructure::where('class_id', $classId)
+        if (!$levelId) {
+            return response()->json([
+                'expected' => 0,
+                'paid' => 0,
+                'balance' => 0,
+            ]);
+        }
+
+        $feeStructure = FeeStructure::where('level_id', $levelId)
             ->where('term_id', $termId)
             ->sum('amount');
 
-        $totalPaid = Payment::where('student_id', $studentId)
+        $mealFee = $student->meal?->meal_fee ?? 0;
+        $transportFee = $student->transport?->transport_fee ?? 0;
+
+        $totalExpected = $feeStructure + $mealFee + $transportFee;
+
+        $totalPaid = FeePayment::where('student_id', $student->id)
             ->where('term_id', $termId)
             ->sum('amount_paid');
 
         return response()->json([
-            'expected' => $totalFees,
+            'expected' => $totalExpected,
             'paid' => $totalPaid,
-            'balance' => $totalFees - $totalPaid,
+            'balance' => $totalExpected - $totalPaid,
         ]);
     }
+
 
 }

@@ -40,7 +40,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
         let classSelect = document.getElementById('class_id');
         let termSelect = document.getElementById('term_id');
         let studentSelect = document.getElementById('student_id');
@@ -81,7 +81,11 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
-                    body: JSON.stringify({ class_id: classId, term_id: termId, student_id: studentId })
+                    body: JSON.stringify({
+                        class_id: classId,
+                        term_id: termId,
+                        student_id: studentId
+                    })
                 })
                 .then(res => res.json())
                 .then(data => {
@@ -94,8 +98,8 @@
         termSelect.addEventListener('change', fetchStudents);
         studentSelect.addEventListener('change', fetchBalance);
     });
-
     </script>
+
 
 
     {{-- Footer --}}
