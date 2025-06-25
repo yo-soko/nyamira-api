@@ -8,7 +8,7 @@
             <div class="add-item d-flex">
                 <div class="page-title">
                     <h4>Attendance Register - </h4>
-                    <h6>Class: {{ $class->level->level_name ?? '-' }} {{ $class->stream->name ?? '-' }}</h6>
+                    <h6>Stream: {{ $class->level->level_name ?? '-' }} {{ $class->stream->name ?? '-' }}</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -91,14 +91,14 @@
                             <tr>
                                 <th>#</th>
                                 <th>Learner Name</th>
-                                <th>Class</th>
+                                <th>Stream</th>
                                 @if(!empty($dates))
                                     @foreach($dates as $date)
                                         <th colspan="2" class="text-center">{{ \Carbon\Carbon::parse($date)->format('M d') }}</th>
                                     @endforeach
                                 @else
                                    <th>Morning</th>
-<th>Afternoon</th>
+                                   <th>Afternoon</th>
 
                                 @endif
                             </tr>

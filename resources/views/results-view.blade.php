@@ -6,16 +6,16 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Exam Results @if(!empty($filters)) - Filters Applied @endif</h4>
+                    <h4>Assesment Outcomes @if(!empty($filters))  @endif</h4>
                     <h6>
                         @if(!empty($filters['level_id']))
-                            Level: {{ $filters['level_name'] ?? '-' }}
+                            Grade: {{ $filters['level_name'] ?? '-' }}
                         @endif
                         @if(!empty($filters['class_id']))
-                            | Class: {{ $filters['class_name'] ?? '-' }}
+                            | Sream: {{ $filters['class_name'] ?? '-' }}
                         @endif
                         @if(!empty($filters['exam_id']))
-                            | Exam: {{ $filters['name'] ?? '-' }}
+                            | Assesment: {{ $filters['name'] ?? '-' }}
                         @endif
                         @if(!empty($filters['term_id']))
                             | Term: {{ $filters['term_name'] ?? '-' }}
@@ -54,8 +54,8 @@
                                 <th>#</th>
                                 <th>Learner Name</th>
                                 <th>Adm No</th>
-                                <th>Level</th>
-                                <th>Class</th>
+                                <th>Grade</th>
+                                <th>Stream</th>
                                 @foreach($subjects as $subject)
                                     <th>{{ $subject->subject_name }}</th>
                                 @endforeach

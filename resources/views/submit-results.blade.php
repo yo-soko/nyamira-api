@@ -7,8 +7,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Manage Exams</h4>
-                    <h6>Manage your examinations</h6>
+                    <h4>Manage Assesment</h4>
+                    <h6>Manage your assesments</h6>
                 </div>						
             </div>
             <ul class="table-top-head">
@@ -32,7 +32,7 @@
             @endcan
         </div>
         <div class="container">
-            <h3>Filter Exam to Submit Results</h3>
+            <h3>Filter Assesment to Submit Results</h3>
 
             <form action="{{ route('results.entry') }}" method="GET">
                 @csrf
@@ -47,9 +47,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="class_id" class="form-label">Select Class</label>
+                    <label for="class_id" class="form-label">Select Stream</label>
                     <select name="class_id" id="class_id" class="form-control" required>
-                        <option value="">-- Choose Class --</option>
+                        <option value="">-- Choose Stream --</option>
                         @foreach($classes as $class)
                             <option value="{{ $class->id }}">  {{ $class->level->level_name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}</option>
                         @endforeach
@@ -57,9 +57,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="subject_id" class="form-label">Select Subject</label>
+                    <label for="subject_id" class="form-label">Select Learning Area</label>
                     <select name="subject_id" id="subject_id" class="form-control" required>
-                        <option value="">-- Choose Subject --</option>
+                        <option value="">-- Choose learning area--</option>
                         @foreach($subjects as $subject)
                             <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
                         @endforeach
@@ -67,9 +67,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="exam_id" class="form-label">Select Exam</label>
+                    <label for="exam_id" class="form-label">Select Assesment</label>
                     <select name="exam_id" id="exam_id" class="form-control" required>
-                        <option value="">-- Choose Exam --</option>
+                        <option value="">-- Choose assesment --</option>
                         @foreach($exams as $exam)
                             <option value="{{ $exam->id }}">{{ $exam->name }}</option>
                         @endforeach

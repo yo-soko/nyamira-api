@@ -90,7 +90,7 @@
                                 </th>
                                 <th>Learner Name</th> 
                                 <th>ADM No</th>
-                                <th>Class</th>
+                                <th>Stream</th>
                                 <th>Term</th>
                                 <th>Gender</th>
                                 <th>Status</th>

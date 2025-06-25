@@ -7,8 +7,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Manage Exams</h4>
-                    <h6>Manage your examinations</h6>
+                    <h4>Manage Assesment</h4>
+                    <h6>Manage your assesments</h6>
                 </div>						
             </div>
             <ul class="table-top-head">
@@ -32,41 +32,41 @@
             @endcan
         </div>
         <div class="container">
-            <h2 class="mb-4">Filter Recorded Exam Results</h2>
+            <h2 class="mb-4">Filter Recorded Assesment</h2>
 
             <!-- Tabs -->
             <ul class="nav nav-tabs" id="filterTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn btn-primary active" id="subject-tab" data-bs-toggle="tab" data-bs-target="#subject" type="button" role="tab">Per Subject</button>
+                    <button class="nav-link btn btn-primary active" id="subject-tab" data-bs-toggle="tab" data-bs-target="#subject" type="button" role="tab">Per Learning Area</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn btn-outline-primary" id="class-tab" data-bs-toggle="tab" data-bs-target="#class" type="button" role="tab">Per Class</button>
+                    <button class="nav-link btn btn-outline-primary" id="class-tab" data-bs-toggle="tab" data-bs-target="#class" type="button" role="tab">Per Stream</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link btn btn-outline-primary" id="level-tab" data-bs-toggle="tab" data-bs-target="#level" type="button" role="tab">Per Level</button>
+                    <button class="nav-link btn btn-outline-primary" id="level-tab" data-bs-toggle="tab" data-bs-target="#level" type="button" role="tab">Per Grade</button>
                 </li>
             </ul>
 
 
             <div class="tab-content p-3 border border-top-0" id="filterTabsContent">
-                <!-- Per Subject -->
+                <!-- Per learning area -->
                 <div class="tab-pane fade show active" id="subject" role="tabpanel">
                     <form action="{{ route('results-filter') }}" method="POST">
                         @csrf
                         <div class="row mb-3">
                             <div class="mb-3">
-                                <label>Class</label>
+                                <label>Stream</label>
                                 <select name="class_id" class="form-select" required>
-                                    <option value="">-- Select Class --</option>
+                                    <option value="">-- Select Stream --</option>
                                     @foreach($classes as $class)
                                        <option value="{{ $class->id }}">  {{ $class->level->level_name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label>Exam</label>
+                                <label>Assesment</label>
                                 <select name="exam_id" class="form-select" required>
-                                    <option value="">-- Select Exam --</option>
+                                    <option value="">-- Select Assesment --</option>
                                     @foreach($exams as $exam)
                                         <option value="{{ $exam->id }}">{{ $exam->name }}</option>
                                     @endforeach
@@ -82,9 +82,9 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label>Subject</label>
+                                <label>Learning Area</label>
                                 <select name="subject_id" class="form-select" required>
-                                    <option value="">-- Select Subject --</option>
+                                    <option value="">-- Select learning area --</option>
                                     @foreach($subjects as $subject)
                                         <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
                                     @endforeach
@@ -102,18 +102,18 @@
                         <div class="mb-3">
                           
                             <div class="mb-3">
-                                <label>Class</label>
+                                <label>Stream</label>
                                 <select name="class_id" class="form-select" required>
-                                    <option value="">-- Select Class --</option>
+                                    <option value="">-- Select Stream --</option>
                                     @foreach($classes as $class)
                                        <option value="{{ $class->id }}">  {{ $class->level->level_name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label>Exam</label>
+                                <label>Assesment</label>
                                 <select name="exam_id" class="form-select" required>
-                                    <option value="">-- Select Exam --</option>
+                                    <option value="">-- Select Assesment--</option>
                                     @foreach($exams as $exam)
                                         <option value="{{ $exam->id }}">{{ $exam->name }}</option>
                                     @endforeach
@@ -139,18 +139,18 @@
                         @csrf
                         <div class="row mb-3">
                             <div class="mb-3">
-                                <label>Level</label>
+                                <label>Grade</label>
                                 <select name="level_id" class="form-select" required>
-                                    <option value="">-- Select Level --</option>
+                                    <option value="">-- Select Grade --</option>
                                     @foreach($levels as $level)
                                         <option value="{{ $level->id }}">{{ $level->level_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label>Exam</label>
+                                <label>Assesment</label>
                                 <select name="exam_id" class="form-select" required>
-                                    <option value="">-- Select Exam --</option>
+                                    <option value="">-- Select Assesment--</option>
                                     @foreach($exams as $exam)
                                         <option value="{{ $exam->id }}">{{ $exam->name }}</option>
                                     @endforeach

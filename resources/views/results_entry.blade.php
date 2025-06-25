@@ -7,8 +7,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Submit results </h4>
-                    <h6>Ensure to submit correct results. Those learners who never sat for the exam to be marked absent</h6>
+                    <h4>Submit Assesments</h4>
+                    <h6>Ensure to submit correct assesment. Those learners who were never assessed to be marked absent</h6>
                 </div>
             </div>
             <ul class="table-top-head">
@@ -86,8 +86,8 @@
                             <tr>
                                 <th>#</th>
                                 <th>Learner Name</th>
-                                <th>Class</th>
-                                <th>Subject</th>
+                                <th>Stream</th>
+                                <th>Learning Area</th>
                                 <th>Marks</th>
                                 <th>Grade</th>
                                 <th>Comments</th>
