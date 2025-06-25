@@ -138,8 +138,10 @@ class ResultController extends Controller
             return back()->with('error', 'You cannot enter results: The selected exam and subject are not assigned to this class level.');
         }
 
-        // Load students in the selected class
-        $students = Student::where('class_id', $classId)->get();
+        $students = Student::where('class_id', $classId)
+                   ->where('status', 1)
+                   ->get();
+
 
         // Pass the data to the view
         return view('results_entry', compact('termId', 'classId', 'subjectId', 'examId', 'students'));
