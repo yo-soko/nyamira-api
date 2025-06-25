@@ -137,17 +137,16 @@
                                                         <i class="fas fa-upload me-2"></i><span>Submit Results</span>
                                                 </a>
                                                 </li>
-                                                <li>
-                                                        <a href="{{ route('library.index') }}">
-                                                                <i class="ti ti-book"></i> <span>Library</span>
-                                                        </a>
-                                                </li>
-
                                                 @endhasanyrole
                                                 <li class="{{ Request::is('results-filter', 'results-view') ? 'active' : '' }}">
                                                 <a href="{{ url('results-filter') }}">
                                                         <i class="fas fa-search me-2"></i><span>View Results</span>
                                                 </a>
+                                                </li>
+                                                <li>
+                                                        <a href="#">
+                                                                <i class="ti ti-book me-2"></i> <span> Library</span>
+                                                        </a>
                                                 </li>
                                                 @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                                                 <li class="{{ Request::is('department-grid') ? 'active' : '' }}">
