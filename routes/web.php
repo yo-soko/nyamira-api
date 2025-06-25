@@ -41,6 +41,7 @@ use App\Http\Controllers\TeacherController;
 
 use App\Http\Controllers\SdashboardController;
 use App\Http\Controllers\TdashboardController;
+use App\Http\Controllers\LibraryController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -204,6 +205,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
     Route::get('/migrate-teachers', [TeacherController::class, 'migrateTeachersToUsers']);
     Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
+    //library
+    Route::middleware(['auth'])->group(function () {
+    Route::resource('library', LibraryController::class);
+    Route::resource('library-categories', BookCategoryController::class)->except(['show']);});
 
 
     // Fees
