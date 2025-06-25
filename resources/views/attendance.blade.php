@@ -218,6 +218,22 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get current hour
+        let now = new Date();
+        let hour = now.getHours();
+
+        // Decide default session
+        let defaultSession = (hour >= 6 && hour < 12) ? 'morning' : 'afternoon';
+
+        // Loop through all session select elements and set default
+        document.querySelectorAll('select[name^="attendance"][name$="[session]"]').forEach(function (select) {
+            select.value = defaultSession;
+        });
+        
+    });
+</script>
 
 
 

@@ -41,9 +41,9 @@
                 <div class="table-responsive">
                     @php
                     function scoreToGrade($score) {
-                        if ($score >= 75) return 'E.E';
-                        if ($score >= 50) return 'M.E';
-                        if ($score >= 25) return 'A.E';
+                        if ($score >= 80) return 'E.E';
+                        if ($score >= 60) return 'M.E';
+                        if ($score >= 40) return 'A.E';
                         if ($score >= 0) return 'B.E';
                         return '-';
                     }

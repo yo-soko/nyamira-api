@@ -149,24 +149,49 @@
 </div> 
 
 <script>
-    document.querySelectorAll('input[type=checkbox][name$="[absent]"]').forEach(function(checkbox) {
-    checkbox.addEventListener('change', function() {
-        const row = this.closest('tr');
-        const marksInput = row.querySelector('input[name$="[marks]"]');
-        const gradeSelect = row.querySelector('select[name$="[grade]"]');
+document.addEventListener('DOMContentLoaded', function () {
+    // Grade auto-selection when marks are typed
+    document.querySelectorAll('input[name^="exams"][name$="[marks]"]').forEach(function (input) {
+        input.addEventListener('input', function () {
+            let marks = parseInt(this.value);
+            let gradeSelect = this.closest('tr').querySelector('select[name$="[grade]"]');
+            if (isNaN(marks)) return;
 
-        if (this.checked) {
-            marksInput.value = '';
-            marksInput.disabled = true;
-            gradeSelect.selectedIndex = 0;
-            gradeSelect.disabled = true;
-        } else {
-            marksInput.disabled = false;
-            gradeSelect.disabled = false;
-        }
+            let grade = '';
+            if (marks >= 0 && marks <= 39) grade = 'Below Expectation';
+            else if (marks >= 40 && marks <= 59) grade = 'Approaching Expectation';
+            else if (marks >= 60 && marks <= 79) grade = 'Meeting Expectation';
+            else if (marks >= 80 && marks <= 100) grade = 'Exceeding Expectation';
+
+            // Set the grade option based on value (not label)
+            for (let i = 0; i < gradeSelect.options.length; i++) {
+                if (gradeSelect.options[i].value === grade) {
+                    gradeSelect.selectedIndex = i;
+                    break;
+                }
+            }
+        });
+    });
+
+    // Disable marks & grade if "Absent" is checked
+    document.querySelectorAll('input[type=checkbox][name$="[absent]"]').forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            const row = this.closest('tr');
+            const marksInput = row.querySelector('input[name$="[marks]"]');
+            const gradeSelect = row.querySelector('select[name$="[grade]"]');
+
+            if (this.checked) {
+                marksInput.value = '';
+                marksInput.disabled = true;
+                gradeSelect.selectedIndex = 0;
+                gradeSelect.disabled = true;
+            } else {
+                marksInput.disabled = false;
+                gradeSelect.disabled = false;
+            }
+        });
     });
 });
-
 </script>
 
 

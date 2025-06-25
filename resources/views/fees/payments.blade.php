@@ -38,7 +38,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $payment->student->full_name }}</td> {{-- ✅ Fixed --}}
-                        <td>{{ $payment->classLevel->level_name }}</td> {{-- ✅ Fixed --}}
+                        <td>{{ $payment->class->level_name }}</td> 
                         <td>{{ $payment->term->term_name }}</td>
                         <td>{{ $payment->receipt_number }}</td>
                         <td>{{ number_format($payment->amount_paid, 2) }}</td>

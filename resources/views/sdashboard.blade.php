@@ -71,7 +71,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <h2 class="mb-1">{{ $summary['total_subjects'] }}</h2>
+                            <h2 class="mb-1">{{ $summary['total_subjects'] ?? '-'}}</h2>
                             <p class="fs-13">Total Subjects</p>
                         </div>
                         <div class="company-bar1"></div>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <h2 class="mb-1">{{ $summary['term_name'] }}</h2>
+                            <h2 class="mb-1">{{ $summary['term_name'] ?? '-' }}</h2>
                             <p class="fs-13">Term</p>
                         </div>
                         <div class="company-bar1"></div>
@@ -119,7 +119,7 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <h2 class="mb-1">{{ $summary['grade'] }}</h2>
+                            <h2 class="mb-1">{{ $summary['grade'] ?? '-'}}</h2>
                             <p class="fs-13">Grade</p>
                         </div>
                         <div class="company-bar1"></div>
@@ -142,13 +142,13 @@
                     <tbody>
                         @forelse($marks as $mark)
                             <tr>
-                                <td>{{ $mark->subject->subject_name }}</td>
-                                <td>{{ $mark->grade }}</td>
-                                <td>{{ $mark->comments }}</td>
+                                <td>{{ $mark->subject->subject_name ?? '-' }}</td>
+                                <td>{{ $mark->grade ?? '-'}}</td>
+                                <td>{{ $mark->comments ?? '-' }}</td>
                                 <td>{{ $mark->absent ? 'Yes' : 'No' }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="5">No marks found.</td></tr>
+                          
                         @endforelse
                     </tbody>
                 </table>
