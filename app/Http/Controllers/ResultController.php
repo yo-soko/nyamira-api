@@ -262,7 +262,7 @@ class ResultController extends Controller
         foreach ($groupedResults as $studentId => $resultsForStudent) {
             $student = $resultsForStudent->first()->student;
 
-            // ✅ Get all subject IDs assigned to this student
+            //  Get all subject IDs assigned to this student
             $assignedSubjectIds = DB::table('student_subjects')
                 ->where('student_id', $studentId)
                 ->pluck('subject_id')
@@ -285,12 +285,12 @@ class ResultController extends Controller
                         }
                     }
                 } else {
-                    // ✅ No result for assigned subject → treat as 0
+                    //  No result for assigned subject → treat as 0
                     $totalScore += 0;
                 }
             }
 
-            // ✅ Average is based only on assigned subjects
+            //  Average is based only on assigned subjects
             $averageScore = $countSubjects > 0 ? $totalScore / $countSubjects : 0;
 
             $studentsWithAverage[] = [
