@@ -73,20 +73,23 @@ class DashboardController extends Controller
             ->filter(fn($item) => $item['class'] !== null)
             ->sortByDesc('average')
             ->first();
-        $topStudent = Result::with('student')
-            ->where('term_id', $currentTerm->id)
-            ->whereNotNull('marks')
-            ->get()
-            ->groupBy('student_id')
-            ->map(function ($results) {
-                return [
-                    'student' => $results->first()->student,
-                    'average' => $results->avg('marks'),
-                ];
-            })
-            ->filter(fn($data) => $data['student'] !== null)
-            ->sortByDesc('average')
-            ->first();
+      $topStudent = Result::with('student')
+    ->where('term_id', $currentTerm->id)
+    ->whereNotNull('marks')
+    ->get()
+    ->filter(fn($r) => $r->student !== null) // prevent nulls early
+    ->groupBy('student_id')
+    ->map(function ($results) {
+        $student = optional($results->first())->student;
+
+        return [
+            'student' => $student,
+            'average' => $results->avg('marks'),
+        ];
+    })
+    ->sortByDesc('average')
+    ->first();
+
         $topLevel = Result::with('student.class.level')
             ->where('term_id', $currentTerm->id)
             ->whereNotNull('marks')
