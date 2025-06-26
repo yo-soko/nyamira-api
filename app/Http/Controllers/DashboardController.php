@@ -8,9 +8,15 @@ use App\Models\Employee;
 use App\Models\Holiday;
 use App\Models\leaves;
 use App\Models\Shift;
+use App\Models\Subject;
+use App\Models\SchoolClass;
+use App\Models\Term;
+use App\Models\Exam;
+use App\Models\ClassLevel;
 use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\User;
+use App\Models\Result;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -28,72 +34,89 @@ class DashboardController extends Controller
         }
         $today = Carbon::today();
 
-        $totalEmployees = Employee::count();
-        $activeEmployees = Employee::where('status', 1)->count(); // assuming 1 = active
-        $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
-        $presentToday = Attendancies::whereDate('date', $today)->distinct('employee_id')->count('employee_id');
-        $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
-
-        $onLeave = leaves::whereDate('from_date', '<=', $today)
-            ->whereDate('to_date', '>=', $today)
-            ->count();
-
-        
-        $graceMinutes = 30;
-
-        $lateCount = 0;
-
-        // Get today's attendances with clock_in
-        $attendances = Attendancies::whereDate('date', $today)
-            ->whereNotNull('clock_in')
-            ->get();
-
-        // Preload all shifts to avoid N+1 queries
-        $shifts = Shift::all()->keyBy('id');
-
-        $checkedEmployees = [];
-
-        foreach ($attendances as $att) {
-            $shift = $shifts[$att->shift_id] ?? null;
-
-            if (!$shift) continue;
-
-            $clockIn = Carbon::parse($att->clock_in);
-            $shiftStart = Carbon::parse($today->toDateString() . ' ' . $shift->start_time)
-                            ->addMinutes($graceMinutes);
-
-            if ($clockIn->gt($shiftStart) && !in_array($att->employee_id, $checkedEmployees)) {
-                $lateCount++;
-                $checkedEmployees[] = $att->employee_id;
-            }
-            $lateCount++;
-        }
-
-        $Inn = Attendancies::with('employee') // assuming there's a relationship
-            ->whereDate('date', $today)
-            ->whereNotNull('clock_in')
-            ->whereNull('clock_out')
-            ->get();
-
-        $In = $Inn->count();
-        // Fetch all employees
-        $employees = Employee::with(['department', 'designation'])->get();
-         // If you have a large dataset, you can use pagination instead
          $totalStudents = Student::count();
          $totalTeachers = Teacher::count(); 
          $activeStudents = Student::where('status', 1)->count(); 
          $inactiveStudents = Student::where('status', 0)->count(); 
          $totalUsers = User::count(); 
+         $totalLevels = ClassLevel::count(); 
+         $totalStreams = SchoolClass::count(); 
+         $totalSubjects = Subject::count();
+         $currentTerm = Term::where('start_date', '<=', $today)
+            ->where('end_date', '>=', $today)
+            ->where('status', 1)
+            ->first();
+        $examCount = $currentTerm
+            ? Exam::where('term_id', $currentTerm->id)->count()
+            : 0;
+        $previousTerm = Term::where('end_date', '<', $currentTerm->start_date ?? now())
+                                ->orderBy('end_date', 'desc')
+                                ->first();
+        $previousExamCount = $previousTerm
+            ? Exam::where('term_id', $previousTerm->id)->count()
+            : 0;
        
+        // Difference
+        $examDiff = $examCount - $previousExamCount;
+
+        $topClass = Result::with('student.class.level', 'term')
+            ->where('term_id', $currentTerm->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->groupBy(fn($r) => optional($r->student->class)->id)
+            ->map(function ($group) {
+                return [
+                    'class' => optional($group->first()->student->class),
+                    'average' => $group->avg('marks')
+                ];
+            })
+            ->filter(fn($item) => $item['class'] !== null)
+            ->sortByDesc('average')
+            ->first();
+        $topStudent = Result::with('student')
+            ->where('term_id', $currentTerm->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->groupBy('student_id')
+            ->map(function ($results) {
+                return [
+                    'student' => $results->first()->student,
+                    'average' => $results->avg('marks'),
+                ];
+            })
+            ->filter(fn($data) => $data['student'] !== null)
+            ->sortByDesc('average')
+            ->first();
+        $topLevel = Result::with('student.class.level')
+            ->where('term_id', $currentTerm->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->groupBy(fn($r) => optional($r->student->class->level)->id)
+            ->map(function ($group) {
+                return [
+                    'level' => optional($group->first()->student->class->level),
+                    'average' => $group->avg('marks'),
+                ];
+            })
+            ->filter(fn($item) => $item['level'] !== null)
+            ->sortByDesc('average')
+            ->first();
+
         return view('index', compact(
-            'employees','onLeave','presentToday', 'lateCount','In', 
-            'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees',
-             'newJoiners',
+            'totalLevels', 
+            'totalStreams', 
+            'totalSubjects',
+             'currentTerm',
               'totalStudents',
               'totalTeachers',
               'activeStudents',
               'inactiveStudents',
               'totalUsers',
+              'examCount',
+              'examDiff',
+              'topClass',
+              'topStudent',
+              'topLevel',
              
             ));
     }
