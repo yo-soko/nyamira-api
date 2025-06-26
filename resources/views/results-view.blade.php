@@ -12,7 +12,7 @@
                             Grade: {{ $filters['level_name'] ?? '-' }}
                         @endif
                         @if(!empty($filters['class_id']))
-                            | Sream: {{ $filters['class_name'] ?? '-' }}
+                            | Stream: {{ $filters['class_name'] ?? '-' }}
                         @endif
                         @if(!empty($filters['exam_id']))
                             | Assesment: {{ $filters['name'] ?? '-' }}

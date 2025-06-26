@@ -124,7 +124,7 @@ class CustomAuthController extends Controller
             return view('index');
         }
   
-        return redirect("signin")->withSuccess('You are not allowed to access');
+        return redirect("login")->withSuccess('You are not allowed to access');
     }
     
 

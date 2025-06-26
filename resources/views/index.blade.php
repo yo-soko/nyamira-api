@@ -38,159 +38,95 @@
             </ul>
         </div>
         <!-- Welcome Wrap -->
-    <div class="welcome-wrap mb-4">
-        <div class=" d-flex align-items-center justify-content-between flex-wrap">
-            <div class="mb-3">
-                <h2 class="mb-1 text-white">Welcome Back,  {{ auth()->user()->name }}</h2>
+        <div class="welcome-wrap mb-4">
+            <div class=" d-flex align-items-center justify-content-between flex-wrap">
+                <div class="mb-3">
+                    <h2 class="mb-1 text-white">Welcome Back,  {{ auth()->user()->name }}</h2>
+                </div>
+            
             </div>
-            <div class="d-flex align-items-center flex-wrap mb-1">
-                <a href="{{url('profile')}}" class="btn btn-dark btn-md me-2 mb-2">Profile</a>
-                @hasanyrole('admin|developer|manager|director|supervisor')
-                        <a href="{{ url('auto-clockout') }}" class="btn btn-dark btn-md me-2 mb-2"
-                            onclick="return confirm('Are you sure you want to auto-clock out employees who forgot?');">
-                            <i class="ti ti-circle-plus me-1"></i>Clock out forgotten
-                        </a>
-                @endhasanyrole
-                <a href="{{url('general-settings')}}" class="btn btn-light btn-md mb-2">Settings</a>
+            <div class="welcome-bg">
+                <img src="{{URL::asset('build/img/bg/welcome-bg-02.svg')}}" alt="img" class="welcome-bg-01">
+                <img src="{{URL::asset('build/img/bg/welcome-bg-01.svg')}}" alt="img" class="welcome-bg-03">
             </div>
-        </div>
-        <div class="welcome-bg">
-            <img src="{{URL::asset('build/img/bg/welcome-bg-02.svg')}}" alt="img" class="welcome-bg-01">
-            <img src="{{URL::asset('build/img/bg/welcome-bg-01.svg')}}" alt="img" class="welcome-bg-03">
-        </div>
-    </div>	
-    <!-- /Welcome Wrap -->
+        </div>	
+        <!-- /Welcome Wrap -->
 
-    <div class="row">
+        <div class="row">
 
-        <!-- Total Companies -->
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-secondary-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                 
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $totalEmployees }}</h2>
-                            <p class="fs-13">Total Employees</p>
-                        </div>
-                        <div class="company-bar1"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Total Companies -->
+        
 
-        <!-- Active Companies -->
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-primary-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                 
-                      
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $newJoiners }}</h2>
-                            <p class="fs-13">New Joiners</p>
+            <!-- Active Companies -->
+            <div class="col-xl-3 col-sm-6 d-flex">
+                <div class="card flex-fill bg-primary-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                    
+                        
                         </div>
-                        <div class="company-bar2"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $totalStudents }}</h2>
+                                <p class="fs-13">Total Learners</p>
+                            </div>
+                            <div class="company-bar2"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- /Active Companies -->
+            <!-- /Active Companies -->
 
-        <!-- Total Subscribers -->
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-info-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                  
-                      
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $activeEmployees }}</h2>
-                            <p class="fs-13">Active Employees</p>
+            <!-- Total Subscribers -->
+            <div class="col-xl-3 col-sm-6 d-flex">
+                <div class="card flex-fill bg-info-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                    
+                        
                         </div>
-                        <div class="company-bar3"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $activeStudents }}</h2>
+                                <p class="fs-13">Active Learners</p>
+                            </div>
+                            <div class="company-bar3"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-       <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-danger-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                      
-                      
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $inactiveEmployees }}</h2>
-                            <p class="fs-13">InActive Employees</p>
+            <div class="col-xl-3 col-sm-6 d-flex">
+                <div class="card flex-fill bg-danger-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                        
+                        
                         </div>
-                        <div class="company-bar3"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $inactiveStudents }}</h2>
+                                <p class="fs-13">InActive Learners</p>
+                            </div>
+                            <div class="company-bar3"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-danger-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $lateCount }}</h2>
-                            <p class="fs-13">Late Employees Today</p>
-                        </div>
-                        <div class="company-bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-info">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $In }}</h2>
-                            <p class="fs-13">Employees Still At work</p>
-                        </div>
-                        <div class="company-bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-         <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-primary">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $onLeave }}</h2>
-                            <p class="fs-13">Employees On Leave</p>
-                        </div>
-                        <div class="company-bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-          <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-teal">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $presentToday }}</h2>
-                            <p class="fs-13">Employees Reported to work</p>
-                        </div>
-                        <div class="company-bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
+            <div class="col-xl-3 col-sm-6 d-flex">
+                <div class="card flex-fill bg-teal">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $totalUsers }}</h2>
+                                <p class="fs-13">Total Users</p>
+                            </div>
+                            <div class="company-bar3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+        </div>
     </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
         <p class="mb-0 text-gray-9">&copy; JavaPA. All Right Reserved</p>

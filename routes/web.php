@@ -39,6 +39,7 @@ use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SdashboardController;
 use App\Http\Controllers\TdashboardController;
 use App\Http\Controllers\LibraryController;
@@ -49,7 +50,7 @@ Route::post('custom-login',     [CustomAuthController::class, 'customSignin'])->
 Route::get('register',          [CustomAuthController::class, 'registration'])->name('register');
 Route::post('custom-register',  [CustomAuthController::class, 'customRegister'])->name('register.custom');
 
-Route::get('index',             [CustomAuthController::class, 'dashboard'])->middleware('auth');
+
 Route::get('signout',           [CustomAuthController::class, 'signOut'])->name('signout');
 
 
@@ -64,7 +65,7 @@ Route::get('/login', function () {
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('index/', [AttendanciesController::class, 'indexx'])->name('index.index');
+    Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 
 
     Route::get('/general-settings', function () {
