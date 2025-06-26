@@ -127,6 +127,14 @@
                 </div>
             </div>
         </div> 
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>Performance Per Subject</h5>
+    </div>
+    <div class="card-body">
+        <canvas id="performanceChart" height="120"></canvas>
+    </div>
+</div>
 
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -161,6 +169,94 @@
         <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('performanceChart').getContext('2d');
+
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($chartData->pluck('subject')) !!},
+            datasets: [
+                {
+                    label: 'Student Score',
+                    data: {!! json_encode($chartData->pluck('score')) !!},
+                    backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false
+                },
+                {
+                    label: 'Class Avg',
+                    data: new Array({{ $chartData->count() }}).fill({{ round($classAverage ?? 0, 2) }}),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 2,
+                    borderDash: [10, 5],
+                    pointRadius: 0,
+                    fill: false
+                },
+                {
+                    label: 'Level Avg',
+                    data: new Array({{ $chartData->count() }}).fill({{ round($levelAverage ?? 0, 2) }}),
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        callback: function (value) {
+                            if (value >= 80) return 'E.E';
+                            if (value >= 60) return 'M.E';
+                            if (value >= 40) return 'A.E';
+                            if (value > 0) return 'B.E';
+                            return '-';
+                        },
+                        stepSize: 20
+                    },
+                    title: {
+                        display: true,
+                        text: 'Grade'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Subjects'
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            let score = context.parsed.y;
+                            let label = context.dataset.label;
+                            let grade = '-';
+                            if (score >= 80) grade = 'E.E';
+                            else if (score >= 60) grade = 'M.E';
+                            else if (score >= 40) grade = 'A.E';
+                            else if (score > 0) grade = 'B.E';
+
+                            return `${label}: ${score} (${grade})`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
 
 
 @endsection

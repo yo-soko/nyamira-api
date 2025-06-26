@@ -59,57 +59,57 @@ class DashboardController extends Controller
         // Difference
         $examDiff = $examCount - $previousExamCount;
 
-$topClass = Result::with('student.class.level', 'term')
-    ->where('term_id', $currentTerm->id)
-    ->whereNotNull('marks')
-    ->get()
-    ->filter(fn($r) => $r->student !== null && $r->student->class !== null) // filter out nulls
-    ->groupBy(fn($r) => $r->student->class->id) // now safe
-    ->map(function ($group) {
-        return [
-            'class' => $group->first()->student->class,
-            'average' => $group->filter(fn($r) => $r->marks !== null)->avg('marks')
-        ];
-    })
-    ->sortByDesc('average')
-    ->first();
+        $topClass = Result::with('student.class.level', 'term')
+            ->where('term_id', $currentTerm->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->filter(fn($r) => $r->student !== null && $r->student->class !== null) // filter out nulls
+            ->groupBy(fn($r) => $r->student->class->id) // now safe
+            ->map(function ($group) {
+                return [
+                    'class' => $group->first()->student->class,
+                    'average' => $group->filter(fn($r) => $r->marks !== null)->avg('marks')
+                ];
+            })
+            ->sortByDesc('average')
+            ->first();
 
 
-      $topStudent = Result::with('student')
-    ->where('term_id', $currentTerm->id)
-    ->whereNotNull('marks')
-    ->get()
-    ->filter(fn($r) => $r->student !== null) // prevent nulls early
-    ->groupBy('student_id')
-    ->map(function ($results) {
-        $student = optional($results->first())->student;
+        $topStudent = Result::with('student')
+            ->where('term_id', $currentTerm->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->filter(fn($r) => $r->student !== null) // prevent nulls early
+            ->groupBy('student_id')
+            ->map(function ($results) {
+                $student = optional($results->first())->student;
 
-        return [
-            'student' => $student,
-            'average' => $results->avg('marks'),
-        ];
-    })
-    ->sortByDesc('average')
-    ->first();
+                return [
+                    'student' => $student,
+                    'average' => $results->avg('marks'),
+                ];
+            })
+            ->sortByDesc('average')
+            ->first();
 
-      $topLevel = Result::with('student.class.level')
-    ->where('term_id', $currentTerm->id)
-    ->whereNotNull('marks')
-    ->get()
-    ->filter(fn($r) =>
-        $r->student !== null &&
-        $r->student->class !== null &&
-        $r->student->class->level !== null
-    )
-    ->groupBy(fn($r) => $r->student->class->level->id)
-    ->map(function ($group) {
-        return [
-            'level' => $group->first()->student->class->level,
-            'average' => $group->avg('marks'),
-        ];
-    })
-    ->sortByDesc('average')
-    ->first();
+        $topLevel = Result::with('student.class.level')
+            ->where('term_id', $currentTerm->id)
+            ->whereNotNull('marks')
+            ->get()
+            ->filter(fn($r) =>
+                $r->student !== null &&
+                $r->student->class !== null &&
+                $r->student->class->level !== null
+            )
+            ->groupBy(fn($r) => $r->student->class->level->id)
+            ->map(function ($group) {
+                return [
+                    'level' => $group->first()->student->class->level,
+                    'average' => $group->avg('marks'),
+                ];
+            })
+            ->sortByDesc('average')
+            ->first();
 
 
         return view('index', compact(

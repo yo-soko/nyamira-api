@@ -4,92 +4,127 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Result;
+use Illuminate\Support\Facades\DB;
 
 class SdashboardController extends Controller
 {
-  public function index()
-{
-    $user = auth()->user();
-    $student = $user->student;
 
-    if (!$student) {
-        abort(403, 'Student profile not found.');
-    }
+    public function index()
+    {
+        $user = auth()->user();
+        $student = $user->student;
 
-    $studentId = $student->id;
-    $termId = $student->term_id;
+        if (!$student) {
+            abort(403, 'Student profile not found.');
+        }
 
-    // Get the most recent exam the student has marks for in this term
-    $latestExam = Result::where('student_id', $studentId)
-        ->where('term_id', $termId)
-        ->orderByDesc('created_at')
-        ->first();
+        $studentId = $student->id;
 
-    if (!$latestExam) {
-        return view('sdashboard', [
-            'marks' => collect(),
-            'exam' => null,
-            'summary' => [],
-        ]);
-    }
+        // Get the latest exam the student participated in
+        $latestExamResult = Result::where('student_id', $studentId)
+            ->orderByDesc('created_at')
+            ->first();
 
-    $examId = $latestExam->exam_id;
+        if (!$latestExamResult) {
+            return view('sdashboard', [
+                'marks' => collect(),
+                'summary' => [],
+                'student' => $student,
+                'chartData' => collect(),
+            ]);
+        }
 
-    // Fetch all marks for that student in this exam and term
-    $marks = Result::with('subject')
-        ->where('student_id', $studentId)
-        ->where('term_id', $termId)
-        ->where('exam_id', $examId)
-        ->get();
+        $examId = $latestExamResult->exam_id;
+        $termId = $latestExamResult->term_id;
+// Get student's class and level
+$studentClass = $student->class;
+$studentLevelId = $studentClass->level_id ?? null;
+$studentClassId = $studentClass->id ?? null;
 
-    // Fallback grade-to-score logic
-    $gradeToScore = function($grade) {
-        return match(strtolower(trim($grade))) {
-            'below expectation' => 12,
-            'approaching expectation' => 37,
-            'meeting expectation' => 62,
-            'exceeding expectation' => 87,
-            default => null,
+// Get class average
+$classAverage = Result::where('exam_id', $examId)
+    ->where('term_id', $termId)
+    ->whereHas('student', fn($q) => $q->where('class_id', $studentClassId))
+    ->whereNotNull('marks')
+    ->avg('marks');
+
+// Get level average
+$levelAverage = Result::where('exam_id', $examId)
+    ->where('term_id', $termId)
+    ->whereHas('student.class', fn($q) => $q->where('level_id', $studentLevelId))
+    ->whereNotNull('marks')
+    ->avg('marks');
+        // Fetch all marks for that student in this exam
+        $marks = Result::with('subject')
+            ->where('student_id', $studentId)
+            ->where('exam_id', $examId)
+            ->where('term_id', $termId)
+            ->get();
+
+        // Grade fallback converter
+        $gradeToScore = function ($grade) {
+            return match(strtolower(trim($grade))) {
+                'below expectation' => 12,
+                'approaching expectation' => 37,
+                'meeting expectation' => 62,
+                'exceeding expectation' => 87,
+                default => null,
+            };
         };
-    };
 
-    $totalScore = 0;
-    $countSubjects = 0;
+        // Get assigned subjects
+        $assignedSubjectIds = DB::table('student_subjects')
+            ->where('student_id', $studentId)
+            ->pluck('subject_id')
+            ->toArray();
 
-    foreach ($marks as $mark) {
-        if (!is_null($mark->marks)) {
-            $totalScore += $mark->marks;
-            $countSubjects++;
-        } elseif (!empty($mark->grade)) {
-            $score = $gradeToScore($mark->grade);
-            if (!is_null($score)) {
-                $totalScore += $score;
-                $countSubjects++;
+        $totalScore = 0;
+        $countSubjects = count($assignedSubjectIds);
+
+        foreach ($assignedSubjectIds as $subjectId) {
+            $result = $marks->firstWhere('subject_id', $subjectId);
+
+            if ($result) {
+                if (!is_null($result->marks)) {
+                    $totalScore += $result->marks;
+                } elseif (!empty($result->grade)) {
+                    $score = $gradeToScore($result->grade);
+                    $totalScore += $score ?? 0;
+                }
+            } else {
+                $totalScore += 0; // Treat as zero if no result exists
             }
         }
+
+        $average = $countSubjects > 0 ? round($totalScore / $countSubjects, 2) : 0;
+
+        $overallGrade = match (true) {
+            $average >= 80 => 'E.E',
+            $average >= 60 => 'M.E',
+            $average >= 40 => 'A.E',
+            $average > 0   => 'B.E',
+            default        => '-',
+        };
+
+        $summary = [
+            'total_subjects' => $countSubjects,
+            'total_marks' => $totalScore,
+            'average' => $average,
+            'grade' => $overallGrade,
+            'exam_name' => $latestExamResult->exam->name ?? 'N/A',
+            'term_name' => $latestExamResult->term->name ?? 'N/A',
+        ];
+
+        $chartData = $marks->map(function ($mark) use ($gradeToScore) {
+            $score = $mark->marks ?? $gradeToScore($mark->grade);
+            return [
+                'subject' => $mark->subject->subject_name ?? 'Unknown',
+                'score' => $score ?? 0,
+            ];
+        });
+
+        return view('sdashboard', compact('marks', 'summary', 'student', 'chartData', 'classAverage',
+    'levelAverage'));
     }
-
-    $average = $countSubjects > 0 ? round($totalScore / $countSubjects, 2) : 0;
-
-    $overallGrade = match (true) {
-        $average >= 75 && $average <= 100 => 'E.E',
-        $average >= 50 && $average < 75 => 'M.E',
-        $average >= 25 && $average < 50 => 'A.E',
-        $average >= 0 && $average < 25 => 'B.E',
-        default => '-'
-    };
-
-
-    $summary = [
-        'total_subjects' => $countSubjects,
-        'total_marks' => $totalScore,
-        'average' => $average,
-        'grade' => $overallGrade,
-        'exam_name' => $latestExam->exam->name ?? 'N/A',
-        'term_name' => $latestExam->term->name ?? 'N/A',
-    ];
-
-    return view('sdashboard', compact('marks', 'summary','student'));
-}
 
 }
