@@ -103,7 +103,7 @@
                                                 </li>
                                                 <li>
                                                         <a href="{{ route('library.index') }}">
-                                                                <i class="ti ti-book"></i> <span>Library</span>
+                                                                <i class="ti ti-book me-2"></i> <span> Library</span>
                                                         </a>
                                                 </li>
                                                 <li>
@@ -118,12 +118,6 @@
                                                         <i class="fas fa-search me-2"></i><span>View Results</span>
                                                 </a>
                                                 </li>
-                                                <li>
-                                                        <a href="#">
-                                                                <i class="ti ti-book me-2"></i> <span> Library</span>
-                                                        </a>
-                                                </li>
-                                                
                                                 <li class="{{ Request::is('designation') ? 'active' : '' }}">
                                                 <a href="#">
                                                         <i class="fas fa-tasks me-2"></i><span>Assessment Book</span>
