@@ -18,9 +18,6 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['class_id', 'subject_id']);
-
-            $table->foreign('class_id')->references('id')->on('school_classes')->onDelete('cascade');
-            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
         });
     }
 
