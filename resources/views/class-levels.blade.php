@@ -9,11 +9,11 @@
     <div class="content">
         <div class="page-header d-flex justify-content-between align-items-center">
             <div>
-                <h4>Class Levels</h4>
-                <h6>Manage class levels</h6>
+                <h4>Grades</h4>
+                <h6>Manage Grades</h6>
             </div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addClassLevelModal">
-                <i class="fas fa-plus"></i> Add Class Level
+                <i class="fas fa-plus"></i> Add Grade level
             </button>
         </div>
 
@@ -26,7 +26,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Level Name</th>
+                                <th>Grade Name</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>

@@ -19,8 +19,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4>Classe</h4>
-                    <h6>Manage your Classes</h6>
+                    <h4>Streams</h4>
+                    <h6>Manage your Streams</h6>
                 </div>						
             </div>
             <ul class="table-top-head">
@@ -54,7 +54,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th>ID</th>
-                                <th>Class Name</th>
+                                <th>Stream Name</th>
                                 <th>Teacher</th>
                                 <th>Prefect</th>
                                 <th>Capacity</th>
