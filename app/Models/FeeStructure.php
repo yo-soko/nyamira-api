@@ -19,8 +19,7 @@ class FeeStructure extends Model
     }
 
 
-    public function term()
-    {
-        return $this->belongsTo(Term::class);
+    public function term() {
+        return $this->belongsTo(Term::class, 'term_id');
     }
 }

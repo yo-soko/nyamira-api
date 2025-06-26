@@ -1,9 +1,9 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\FeePayment;
 use App\Models\Student;
 use App\Models\ClassLevel;
@@ -17,6 +17,7 @@ class FeePaymentsController extends Controller
     public function index(Request $request)
     {
         $query = FeePayment::with(['student.schoolClass.level', 'student.schoolClass.stream', 'term']);
+        $query = FeePayment::with(['student', 'classLevel', 'term']);
 
         // Filter by Stream
         if ($request->filled('stream_id')) {
@@ -74,64 +75,66 @@ class FeePaymentsController extends Controller
         $termId = $request->term_id;
         $classId = $request->class_id;
 
-        // Find the student
-        $student = Student::with('schoolClass')->findOrFail($studentId);
-
-        // Determine expected fee based on the class's level and term
-        $levelId = $student->schoolClass->level_id ?? null;
-
-        if (!$levelId) {
-            return response()->json(['balance' => '0.00']);
+        if (!$studentId || !$termId || !$classId) {
+            return response()->json(['balance' => 0.00]);
         }
 
-        $expected = \App\Models\FeeStructure::where('level_id', $levelId)
+        $student = Student::with(['meal', 'transport', 'class.level'])->find($studentId);
+        $levelId = $student->class->level_id ?? null;
+
+        if (!$levelId) {
+            return response()->json(['balance' => 0.00]);
+        }
+
+        $feeStructure = FeeStructure::where('level_id', $levelId)
             ->where('term_id', $termId)
             ->sum('amount');
 
-        // Sum of payments made
+        $mealFee = $student->meal?->meal_fee ?? 0;
+        $transportFee = $student->transport?->transport_fee ?? 0;
+
+        $totalExpected = $feeStructure + $mealFee + $transportFee;
+
         $paid = FeePayment::where('student_id', $studentId)
             ->where('term_id', $termId)
-            ->where('class_id', $classId)
             ->sum('amount_paid');
 
-        $balance = $expected - $paid;
-
         return response()->json([
-            'balance' => number_format($balance, 2)
+            'balance' => number_format($totalExpected - $paid, 2)
         ]);
     }
-
 
     public function store(Request $request)
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
+        $validated = $request->validate([
             'class_id' => 'required|exists:school_classes,id',
             'term_id' => 'required|exists:terms,id',
+            'student_id' => 'required|exists:students,id',
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
-            'description' => 'nullable|string',
-            'receipt_number' => 'nullable|string'
-
+            'description' => 'nullable|string|max:255',
+            'receipt_number' => 'nullable|string|unique:fee_payments,receipt_number',
         ]);
 
-        FeePayment::create([
-            'student_id' => $request->student_id,
-            'class_id' => $request->class_id,
-            'term_id' => $request->term_id,
-            'payment_mode' => $request->payment_mode,
-            'amount_paid' => $request->amount_paid,
-            'receipt_number' => uniqid('RCP-'),
-            'description' => $request->description,
-        ]);
+        try {
 
-        return redirect()->route('student.payments', $request->student_id)
-            ->with('success', 'Payment added successfully.');
+            \Log::info('Attempting to create fee payment', $validated);
+            $payment = FeePayment::create([
+                'class_id' => $validated['class_id'],
+                'term_id' => $validated['term_id'],
+                'student_id' => $validated['student_id'],
+                'payment_mode' => $validated['payment_mode'],
+                'amount_paid' => $validated['amount_paid'],
+                'description' => $validated['description'] ?? null,
+                'receipt_number' => $validated['receipt_number'] ?? null,
+            ]);
 
+            \Log::info('Payment saved', ['id' => $payment->payment_id]);
+
+            return redirect()->back()->with('success', 'Payment recorded successfully.');
+        } catch (\Exception $e) {
+            \Log::error('FeePayment store error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to record payment. Please try again.');
+        }
     }
-
-
-
-
-    // Later: store(), update(), destroy() etc.
 }

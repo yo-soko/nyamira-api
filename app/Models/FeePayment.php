@@ -9,11 +9,27 @@ class FeePayment extends Model
 {
     use HasFactory;
 
+    protected $table = 'fee_payments'; // optional, but safe to include
+    protected $primaryKey = 'payment_id';
+    public $incrementing = true; // REQUIRED
+    protected $keyType = 'int';  // REQUIRED if not UUID
+
     protected $fillable = [
-        'student_id', 'class_id', 'term_id', 'amount_paid', 'receipt_number', 'payment_mode', 'description'
+        'student_id',
+        'class_id',
+        'term_id',
+        'amount_paid',
+        'payment_mode',
+        'description',
+        'receipt_number',
     ];
 
-    public function class()
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function classLevel()
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }
@@ -23,10 +39,12 @@ class FeePayment extends Model
         return $this->belongsTo(Term::class);
     }
 
-    public function student()
+
+    public function schoolClass()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(SchoolClass::class, 'class_id');
     }
+
 
     public function getFullNameAttribute()
     {
