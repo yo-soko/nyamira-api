@@ -59,20 +59,21 @@ class DashboardController extends Controller
         // Difference
         $examDiff = $examCount - $previousExamCount;
 
-    $topClass = Result::with('student.class.level', 'term')
+$topClass = Result::with('student.class.level', 'term')
     ->where('term_id', $currentTerm->id)
     ->whereNotNull('marks')
     ->get()
-    ->groupBy(fn($r) => optional($r->student->class)->id)
+    ->filter(fn($r) => $r->student !== null && $r->student->class !== null) // filter out nulls
+    ->groupBy(fn($r) => $r->student->class->id) // now safe
     ->map(function ($group) {
         return [
-            'class' => optional($group->first()->student->class),
+            'class' => $group->first()->student->class,
             'average' => $group->filter(fn($r) => $r->marks !== null)->avg('marks')
         ];
     })
-    ->filter(fn($item) => $item['class'] !== null)
     ->sortByDesc('average')
     ->first();
+
 
       $topStudent = Result::with('student')
     ->where('term_id', $currentTerm->id)
