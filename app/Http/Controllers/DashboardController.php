@@ -92,20 +92,25 @@ $topClass = Result::with('student.class.level', 'term')
     ->sortByDesc('average')
     ->first();
 
-        $topLevel = Result::with('student.class.level')
-            ->where('term_id', $currentTerm->id)
-            ->whereNotNull('marks')
-            ->get()
-            ->groupBy(fn($r) => optional($r->student->class->level)->id)
-            ->map(function ($group) {
-                return [
-                    'level' => optional($group->first()->student->class->level),
-                    'average' => $group->avg('marks'),
-                ];
-            })
-            ->filter(fn($item) => $item['level'] !== null)
-            ->sortByDesc('average')
-            ->first();
+      $topLevel = Result::with('student.class.level')
+    ->where('term_id', $currentTerm->id)
+    ->whereNotNull('marks')
+    ->get()
+    ->filter(fn($r) =>
+        $r->student !== null &&
+        $r->student->class !== null &&
+        $r->student->class->level !== null
+    )
+    ->groupBy(fn($r) => $r->student->class->level->id)
+    ->map(function ($group) {
+        return [
+            'level' => $group->first()->student->class->level,
+            'average' => $group->avg('marks'),
+        ];
+    })
+    ->sortByDesc('average')
+    ->first();
+
 
         return view('index', compact(
             'totalLevels', 
