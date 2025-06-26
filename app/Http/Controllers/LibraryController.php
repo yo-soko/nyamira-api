@@ -36,7 +36,7 @@ class LibraryController extends Controller
     public function create()
     {
         // Restrict to teacher/admin roles only
-        if (!in_array(auth()->user()->role, ['teacher', 'admin'])) {
+        if (!in_array(auth()->user()->role, ['teacher', 'developer','admin'])) {
             abort(403, 'Unauthorized');
         }
 
@@ -50,7 +50,7 @@ class LibraryController extends Controller
     public function store(Request $request)
     {
         // Restrict to teacher/admin roles only
-        if (!in_array(auth()->user()->role, ['teacher', 'admin'])) {
+        if (!in_array(auth()->user()->role, ['teacher', 'developer','admin'])) {
             abort(403, 'Unauthorized');
         }
 
@@ -92,7 +92,7 @@ class LibraryController extends Controller
         // Optional: allow only uploader or admin to delete
         if (
             auth()->user()->id !== $library->uploaded_by &&
-            !in_array(auth()->user()->role, ['admin'])
+            !in_array(auth()->user()->role, ['admin','developer'])
         ) {
             abort(403, 'Unauthorized to delete');
         }

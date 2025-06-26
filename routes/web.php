@@ -43,6 +43,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SdashboardController;
 use App\Http\Controllers\TdashboardController;
 use App\Http\Controllers\LibraryController;
+use App\Http\Controllers\BookCategoryController;
+
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
