@@ -60,9 +60,10 @@ class Student extends Model
         return $this->hasOne(StudentTransport::class, 'student_id');
     }
 
+
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'student_subjects'); 
+        return $this->belongsToMany(Subject::class, 'student_subjects', 'student_id', 'subject_id');
     }
 
     public function marks()

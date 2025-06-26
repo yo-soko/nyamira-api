@@ -10,7 +10,7 @@
 
     $streams = Stream::all();
     $levels = ClassLevel::all();
-    $teachers = User::where('role', 'teacher')->get(); // adjust if column is different
+    $teachers = User::role(['teacher', 'class_teacher'])->get();
     $students = Student::all();
 @endphp
 
@@ -70,7 +70,7 @@
                                 <td>{{ $class->id }}</td>
                                 <td>{{ $class->level->level_name ?? 'N/A' }} {{ $class->stream->name ?? 'N/A' }}</td>
                                 <td>{{ $class->classTeacher->name ?? 'N/A' }}</td>
-                                <td>{{ $class->classPrefect->name ?? 'N/A' }}</td>
+                                <td>{{ $class->class_prefect ?? 'N/A' }}</td>
                                 <td>{{ $class->capacity }}</td>
                                 <td>
                                     <span class="badge bg-{{ $class->status ? 'success' : 'danger' }}">
@@ -140,21 +140,39 @@
                                 <select name="class_teacher" class="form-select">
                                     <option value="">Select Teacher</option>
                                     @foreach($teachers as $teacher)
-                                    <option value="{{ $teacher->id }}" {{ $class->class_teacher == $teacher->id ? 'selected' : '' }}>
-                                        {{ $teacher->name }}
-                                    </option>
+                                        <option value="{{ $teacher->id }}" {{ $class->class_teacher == $teacher->id ? 'selected' : '' }}>
+                                            {{ $teacher->name }}
+                                        </option>
                                     @endforeach
                                 </select>
+
                             </div>
 
                             <div class="mb-3">
                                 <label>Class Prefect</label>
-                                <input type="text" name="class_prefect" class="form-control">
+                                <input type="text" name="class_prefect" value="{{ $class->class_prefect }}" class="form-control">
                             </div>
 
                             <div class="mb-3 col-md-6">
                                 <label>Capacity</label>
                                 <input type="number" name="capacity" class="form-control" value="{{ $class->capacity }}">
+                            </div>
+                            <div class="mb-3">
+                                <h5 class="mb-2"><strong>Update Assigned Subjects</strong></h5>
+                                <div class="row">
+                                    @foreach($subjects as $subject)
+                                        <div class="col-md-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="subjects[]" value="{{ $subject->id }}"
+                                                    id="subject_edit_{{ $class->id }}_{{ $subject->id }}"
+                                                    {{ $class->subjects->contains($subject->id) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="subject_edit_{{ $class->id }}_{{ $subject->id }}">
+                                                    {{ $subject->subject_name }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
                             </div>
 
                             <div class="mb-3 col-md-6">
@@ -244,6 +262,20 @@
                     <div class="mb-3">
                         <label>Capacity</label>
                         <input type="number" name="capacity" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5 class="mb-2"><strong>Assign Subjects to Class</strong></h5>
+                        <div class="row">
+                            @foreach($subjects as $subject)
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="subjects[]" value="{{ $subject->id }}" id="subject_add_{{ $subject->id }}">
+                                        <label class="form-check-label" for="subject_add_{{ $subject->id }}">{{ $subject->subject_name }}</label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
                     </div>
 
                     <div class="mb-3">

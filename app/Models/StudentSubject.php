@@ -10,4 +10,5 @@ class StudentSubject extends Model
         'student_id',
         'subject_id',
     ];
+    
 }

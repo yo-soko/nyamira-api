@@ -26,9 +26,24 @@ class SchoolClassController extends Controller
             'capacity' => 'required|integer|min:0',
             'status' => 'boolean',
             'level_id' => 'nullable|exists:class_levels,id',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:subjects,id',
+
         ]);
 
-        SchoolClass::create($request->all());
+          $schoolClass = SchoolClass::create($request->only([
+             'stream_id', 'class_teacher', 'class_prefect', 'capacity', 'status', 'level_id'
+            ]));
+
+            if ($request->filled('class_teacher')) {
+                User::where('id', $request->class_teacher)
+                    ->update(['role' => 'class_teacher']);
+            }
+
+            // Sync subjects
+            if ($request->has('subjects')) {
+                $schoolClass->subjects()->sync($request->subjects);
+            }
 
         return redirect()->back()->with('success', 'Class created successfully.');
     }
@@ -42,10 +57,30 @@ class SchoolClassController extends Controller
             'capacity' => 'required|integer|min:0',
             'status' => 'boolean',
             'level_id' => 'nullable|exists:class_levels,id',
+            'subjects' => 'nullable|array',
+            'subjects.*' => 'exists:subjects,id',
         ]);
 
-        $schoolClass->update($request->all());
+           $schoolClass->update($request->only([
+            'stream_id', 'class_teacher', 'class_prefect', 'capacity', 'status', 'level_id'
+        ]));
 
+        if ($request->filled('class_teacher')) {
+            User::where('id', $request->class_teacher)
+                ->update(['role' => 'class_teacher']);
+        }
+
+        // Sync subjects
+        if ($request->has('subjects')) {
+            $schoolClass->subjects()->sync($request->subjects);
+        }
+
+        $students = $schoolClass->students; // assuming relation is set up
+
+        foreach ($students as $student) {
+            $student->subjects()->sync($request->subjects); // assumes subjects() is a belongsToMany
+        }
+        
         return redirect()->back()->with('success', 'Class updated successfully.');
     }
 
