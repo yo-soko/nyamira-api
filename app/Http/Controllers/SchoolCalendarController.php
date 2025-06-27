@@ -30,11 +30,12 @@ class SchoolCalendarController extends Controller
 
 
         // Get upcoming events (next 30 days)
-        $upcomingEvents = SchoolCalendar::where('event_date', '>=', now())
-            ->where('event_date', '<=', now()->addDays(30))
+       $upcomingEvents = SchoolCalendar::where('event_date', '>=', now())
             ->orderBy('event_date')
             ->orderBy('start_time')
+            ->take(5)
             ->get();
+
 
         // Prepare months and years for dropdowns
         $months = [];
@@ -72,29 +73,29 @@ class SchoolCalendarController extends Controller
                          ->with('success', 'Event created successfully');
     }
 
-    public function updateEvent(Request $request)
-    {
-        $validated = $request->validate([
-            'id' => 'required|exists:school_calendars,id',
-            'event_name' => 'required|string|max:255',
-            'event_date' => 'required|date',
-            'start_time' => 'nullable|date_format:H:i',
-            'end_time' => 'nullable|date_format:H:i|after:start_time',
-            'event_location' => 'nullable|string|max:255',
-            'description' => 'nullable|string',
-            'is_holiday' => 'nullable|boolean',
-            'event_color' => 'required|string|max:7'
-        ]);
+    // public function updateEvent(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'id' => 'required|exists:school_calendars,id',
+    //         'event_name' => 'required|string|max:255',
+    //         'event_date' => 'required|date',
+    //         'start_time' => 'nullable|date_format:H:i',
+    //         'end_time' => 'nullable|date_format:H:i|after:start_time',
+    //         'event_location' => 'nullable|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'is_holiday' => 'nullable|boolean',
+    //         'event_color' => 'required|string|max:7'
+    //     ]);
 
-        $event = SchoolCalendar::findOrFail($request->id);
-        $event->update($validated);
+    //     $event = SchoolCalendar::findOrFail($request->id);
+    //     $event->update($validated);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Event updated successfully',
-            'event' => $event
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Event updated successfully',
+    //         'event' => $event
+    //     ]);
+    // }
 
     public function show($id)
     {
@@ -112,51 +113,51 @@ class SchoolCalendarController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function updateEventDate(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|exists:school_calendars,id',
-            'event_date' => 'required|date'
-        ]);
+    // public function updateEventDate(Request $request)
+    // {
+    //     $request->validate([
+    //         'id' => 'required|exists:school_calendars,id',
+    //         'event_date' => 'required|date'
+    //     ]);
 
-        $event = SchoolCalendar::find($request->id);
-        $event->event_date = $request->event_date;
-        $event->save();
+    //     $event = SchoolCalendar::find($request->id);
+    //     $event->event_date = $request->event_date;
+    //     $event->save();
 
-        return response()->json(['success' => true]);
-    }
+    //     return response()->json(['success' => true]);
+    // }
 
-    public function getCalendarData(Request $request)
-    {
-        $year = $request->input('year', now()->year);
-        $month = $request->input('month', now()->month);
-        $view = $request->input('view', 'month');
+    // public function getCalendarData(Request $request)
+    // {
+    //     $year = $request->input('year', now()->year);
+    //     $month = $request->input('month', now()->month);
+    //     $view = $request->input('view', 'month');
 
-        $currentDate = Carbon::create($year, $month, 1);
+    //     $currentDate = Carbon::create($year, $month, 1);
 
-        // Get events for the month
-        $events = SchoolCalendar::whereYear('event_date', $year)
-            ->whereMonth('event_date', $month)
-            ->orderBy('event_date')
-            ->orderBy('start_time')
-            ->get();
+    //     // Get events for the month
+    //     $events = SchoolCalendar::whereYear('event_date', $year)
+    //         ->whereMonth('event_date', $month)
+    //         ->orderBy('event_date')
+    //         ->orderBy('start_time')
+    //         ->get();
 
-        // Get upcoming events (next 30 days)
-        $upcomingEvents = SchoolCalendar::where('event_date', '>=', now())
-            ->where('event_date', '<=', now()->addDays(30))
-            ->orderBy('event_date')
-            ->orderBy('start_time')
-            ->get();
+    //     // Get upcoming events (next 30 days)
+    //     $upcomingEvents = SchoolCalendar::where('event_date', '>=', now())
+    //         ->where('event_date', '<=', now()->addDays(30))
+    //         ->orderBy('event_date')
+    //         ->orderBy('start_time')
+    //         ->get();
 
-        return response()->json([
-            'success' => true,
-            'currentYear' => $currentDate->year,
-            'currentMonth' => $currentDate->month - 1, // JavaScript uses 0-indexed months
-            'events' => $events,
-            'upcomingEvents' => $upcomingEvents,
-            'view' => $view
-        ]);
-    }
+    //     return response()->json([
+    //         'success' => true,
+    //         'currentYear' => $currentDate->year,
+    //         'currentMonth' => $currentDate->month - 1, // JavaScript uses 0-indexed months
+    //         'events' => $events,
+    //         'upcomingEvents' => $upcomingEvents,
+    //         'view' => $view
+    //     ]);
+    // }
 
     public function edit($id)
     {
@@ -193,5 +194,72 @@ class SchoolCalendarController extends Controller
 
         return $luminance > 0.5 ? '#000000' : '#FFFFFF';
     }
+
+        public function getCalendarData(Request $request)
+    {
+        $year = $request->input('year', now()->year);
+        $month = $request->input('month', now()->month);
+        $view = $request->input('view', 'month');
+
+        $startDate = Carbon::create($year, $month, 1)->startOfMonth()->startOfWeek();
+        $endDate = $startDate->copy()->addWeeks(6)->subDay();
+
+        $events = SchoolCalendar::whereBetween('event_date', [$startDate, $endDate])
+            ->orderBy('event_date')
+            ->orderBy('start_time')
+            ->get();
+
+        $upcomingEvents = SchoolCalendar::where('event_date', '>=', now())
+            ->orderBy('event_date')
+            ->orderBy('start_time')
+            ->take(10)
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'currentYear' => $year,
+            'currentMonth' => $month - 1, // JavaScript months are 0-indexed
+            'events' => $events->map(function($event) {
+                return [
+                    'id' => $event->id,
+                    'event_name' => $event->event_name,
+                    'event_date' => $event->event_date->format('Y-m-d'),
+                    'start_time' => $event->start_time ? $event->start_time->format('H:i:s') : null,
+                    'end_time' => $event->end_time ? $event->end_time->format('H:i:s') : null,
+                    'event_location' => $event->event_location,
+                    'description' => $event->description,
+                    'is_holiday' => $event->is_holiday,
+                    'event_color' => $event->event_color,
+                ];
+            }),
+            'upcomingEvents' => $upcomingEvents->map(function($event) {
+                return [
+                    'id' => $event->id,
+                    'event_name' => $event->event_name,
+                    'event_date' => $event->event_date->format('Y-m-d'),
+                    'start_time' => $event->start_time ? $event->start_time->format('H:i:s') : null,
+                    'end_time' => $event->end_time ? $event->end_time->format('H:i:s') : null,
+                    'event_location' => $event->event_location,
+                    'description' => $event->description,
+                    'is_holiday' => $event->is_holiday,
+                    'event_color' => $event->event_color,
+                ];
+            }),
+        ]);
+    }
+
+    public function updateEventDate(Request $request)
+{
+    $request->validate([
+        'id' => 'required|exists:school_calendars,id',
+        'event_date' => 'required|date'
+    ]);
+
+    $event = SchoolCalendar::find($request->id);
+    $event->event_date = $request->event_date;
+    $event->save();
+
+    return response()->json(['success' => true]);
+}
 
 }
