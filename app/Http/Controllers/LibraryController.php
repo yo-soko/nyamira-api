@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\BookCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Smalot\PdfParser\Parser;
 
 class LibraryController extends Controller
 {
@@ -35,8 +36,7 @@ class LibraryController extends Controller
      */
     public function create()
     {
-        // Restrict to teacher/admin roles only
-        if (!in_array(auth()->user()->role, ['teacher', 'developer','admin'])) {
+        if (!in_array(auth()->user()->role, ['teacher', 'developer', 'admin'])) {
             abort(403, 'Unauthorized');
         }
 
@@ -49,8 +49,7 @@ class LibraryController extends Controller
      */
     public function store(Request $request)
     {
-        // Restrict to teacher/admin roles only
-        if (!in_array(auth()->user()->role, ['teacher', 'developer','admin'])) {
+        if (!in_array(auth()->user()->role, ['teacher', 'developer', 'admin'])) {
             abort(403, 'Unauthorized');
         }
 
@@ -63,6 +62,20 @@ class LibraryController extends Controller
 
         $filePath = $request->file('file')->store('library', 'public');
 
+        // Attempt to extract TOC
+        $toc = null;
+        try {
+            $parser = new Parser();
+            $pdf = $parser->parseFile(storage_path('app/public/' . $filePath));
+            $text = $pdf->getText();
+
+            if (preg_match('/Table of Contents(.*?)(Chapter|Introduction|1\. )/is', $text, $matches)) {
+                $toc = trim($matches[1]);
+            }
+        } catch (\Exception $e) {
+            $toc = null;
+        }
+
         Book::create([
             'title' => $request->title,
             'author' => $request->author,
@@ -71,6 +84,7 @@ class LibraryController extends Controller
             'description' => $request->description,
             'published_year' => $request->published_year,
             'uploaded_by' => auth()->id(),
+            'table_of_contents' => $toc,
         ]);
 
         return redirect()->route('library.index')->with('success', 'Library item uploaded successfully!');
@@ -81,7 +95,9 @@ class LibraryController extends Controller
      */
     public function show(Book $library)
     {
-        return view('library.show', ['book' => $library]);
+        return view('library.show', [
+            'book' => $library
+        ]);
     }
 
     /**
@@ -89,10 +105,9 @@ class LibraryController extends Controller
      */
     public function destroy(Book $library)
     {
-        // Optional: allow only uploader or admin to delete
         if (
             auth()->user()->id !== $library->uploaded_by &&
-            !in_array(auth()->user()->role, ['admin','developer'])
+            !in_array(auth()->user()->role, ['admin', 'developer'])
         ) {
             abort(403, 'Unauthorized to delete');
         }
