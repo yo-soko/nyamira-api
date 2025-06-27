@@ -9,6 +9,7 @@
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CustomAuthController;
@@ -38,6 +39,7 @@ use App\Http\Controllers\StreamController;
 use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SchoolCalendarController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SdashboardController;
@@ -69,6 +71,22 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 
+    /*===========================calendar======================================================*/
+
+    Route::get('/calendar', [SchoolCalendarController::class, 'index'])->name('calendar.index');
+    Route::prefix('school-calendar')->group(function () {
+        Route::get('/', [SchoolCalendarController::class, 'index'])->name('school.calendar');
+        Route::get('/data', [SchoolCalendarController::class, 'getCalendarData']);
+        Route::get('/events/{event}', [SchoolCalendarController::class, 'getEvent']);
+        Route::post('/school-calendar', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
+        Route::put('/school-calendar/update-event', [SchoolCalendarController::class, 'updateEvent'])->name('school-calendar.update-event');
+        Route::delete('/delete-event', [SchoolCalendarController::class, 'deleteEvent'])->name('calendar.delete');
+        Route::post('/update-event-date', [SchoolCalendarController::class, 'updateEventDate']);
+    });
+
+    /*===========================calendar======================================================*/
+
+
 
     Route::get('/general-settings', function () {
         return view('general-settings');
@@ -95,7 +113,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
 
-    Route::get('/profile', function () {return view('profile');})->name('profile');
+    Route::get('/profile', function () {
+        return view('profile');
+    })->name('profile');
     Route::put('/profile', [UserController::class, 'update'])->name('profile.update');
 
     Route::get('/leave-types', [LeaveTypeController::class, 'index'])->name('leave-types');
@@ -242,14 +262,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/students/{studentId}/balance/{termId}', [StudentController::class, 'getBalance'])->name('students.balance');
 
     // ✅ Handle payment (already in your JS)
-    Route::post('/ajax/payments', [PaymentController::class, 'handleAjax'])->name('ajax.payments');
+    //Route::post('/ajax/payments', [PaymentController::class, 'handleAjax'])->name('ajax.payments');
 
 
     Route::post('/get-students', [FeePaymentsController::class, 'fetchStudents'])->name('get.students');
     Route::post('/get-balance', [FeePaymentsController::class, 'fetchBalance'])->name('get.balance');
-
-
-
 });
 
 
@@ -260,4 +277,3 @@ Route::get('/delete-account', function () {
 Route::get('/register-2', function () {
     return view('register-2');
 })->name('register-2');
-
