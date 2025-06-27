@@ -11,14 +11,13 @@
             </a>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <p><strong>Author:</strong> {{ $book->author }}</p>
-                <p><strong>Category:</strong> {{ $book->category->name }}</p>
-                <p><strong>Year:</strong> {{ $book->published_year ?? 'N/A' }}</p>
-                <p><strong>Description:</strong> {{ $book->description ?? 'No description' }}</p>
-            </div>
+        <!-- <div class="d-flex flex-wrap mb-4 gap-4 align-items-start border p-3 rounded bg-light">
+            <div><strong>Author:</strong> {{ $book->author }}</div>
+            <div><strong>Category:</strong> {{ $book->category->name }}</div>
+            <div><strong>Year:</strong> {{ $book->published_year ?? 'N/A' }}</div>
+            <div><strong>Description:</strong> {{ $book->description ?? 'No description' }}</div>
         </div>
+ -->
 
         <div class="mb-4">
             <iframe src="{{ asset('storage/' . $book->file_path) }}" width="100%" height="600px" style="border: 1px solid #ccc;"></iframe>

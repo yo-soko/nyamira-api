@@ -77,7 +77,12 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">No books found in the library.</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center">No books found in the library.</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -85,6 +90,7 @@
                 </div>
             </div>
         </div>  
+
         {{-- 📄 Pagination --}}
         <div class="mt-3">
             {{ $items->withQueryString()->links() }}
