@@ -101,9 +101,19 @@ class SchoolCalendarController extends Controller
     {
         $event = SchoolCalendar::findOrFail($id);
 
-        return response()->json($event);
+        return response()->json([
+            'id' => $event->id,
+            'event_name' => $event->event_name,
+            'event_date' => $event->event_date->format('Y-m-d'),
+            'start_time' => $event->start_time ? $event->start_time->format('H:i:s') : null,
+            'end_time' => $event->end_time ? $event->end_time->format('H:i:s') : null,
+            'event_location' => $event->event_location,
+            'description' => $event->description,
+            'is_holiday' => $event->is_holiday,
+            'event_color' => $event->event_color,
+            'contrast_color' => $this->getContrastColor($event->event_color)
+        ]);
     }
-
 
     public function destroy($id)
     {
@@ -248,18 +258,40 @@ class SchoolCalendarController extends Controller
         ]);
     }
 
-    public function updateEventDate(Request $request)
-{
-    $request->validate([
-        'id' => 'required|exists:school_calendars,id',
-        'event_date' => 'required|date'
-    ]);
+        public function updateEventDate(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:school_calendars,id',
+            'event_date' => 'required|date'
+        ]);
 
-    $event = SchoolCalendar::find($request->id);
-    $event->event_date = $request->event_date;
-    $event->save();
+        $event = SchoolCalendar::find($request->id);
+        $event->event_date = $request->event_date;
+        $event->save();
 
-    return response()->json(['success' => true]);
-}
+        return response()->json(['success' => true]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'event_name' => 'required|string|max:255',
+            'event_date' => 'required|date',
+            'start_time' => 'nullable|date_format:H:i',
+            'end_time' => 'nullable|date_format:H:i|after:start_time',
+            'event_location' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'is_holiday' => 'nullable|boolean',
+            'event_color' => 'required|string|max:7'
+        ]);
+
+        $event = SchoolCalendar::findOrFail($id);
+        $event->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Event updated successfully'
+        ]);
+    }
 
 }

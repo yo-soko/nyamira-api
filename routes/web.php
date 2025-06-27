@@ -74,17 +74,14 @@ Route::middleware(['auth'])->group(function () {
     /*===========================calendar======================================================*/
 
     Route::get('/calendar', [SchoolCalendarController::class, 'index'])->name('calendar.index');
-    Route::prefix('school-calendar')->group(function () {
-        Route::get('/', [SchoolCalendarController::class, 'index'])->name('school.calendar');
-        Route::get('/data', [SchoolCalendarController::class, 'getCalendarData']);
-        Route::get('/events/{event}', [SchoolCalendarController::class, 'getEvent']);
-        Route::post('/school-calendar', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
-        //Route::put('/school-calendar/edit', [SchoolCalendarController::class, 'edit'])->name('school-calendar.edit');
-        Route::put('/school-calendar', [SchoolCalendarController::class, 'edit'])->name('school-calendar.update');
-        Route::delete('/delete-event', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
-        Route::post('/update-event-date', [SchoolCalendarController::class, 'updateEventDate']);
-    });
-
+  Route::prefix('school-calendar')->group(function () {
+    Route::get('/data', [SchoolCalendarController::class, 'getCalendarData'])->name('school-calendar.data');
+    Route::get('/events/{event}', [SchoolCalendarController::class, 'show'])->name('school-calendar.events.show');
+    Route::post('/', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
+    Route::put('/{event}', [SchoolCalendarController::class, 'update'])->name('school-calendar.update');
+    Route::delete('/{event}', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
+    Route::post('/{event}/update-date', [SchoolCalendarController::class, 'updateEventDate'])->name('school-calendar.update-date');
+});
     /*===========================calendar======================================================*/
 
 

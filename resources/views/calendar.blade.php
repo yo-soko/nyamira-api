@@ -241,7 +241,7 @@
                         <h5 class="modal-title">Edit Event</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form id="editEventForm" method="POST" action="{{ route('school-calendar.update', '') }}">
+                    <form id="editEventForm" method="POST" action="">
                         @csrf
                         @method('PUT')
                         <div class="modal-body">
@@ -312,7 +312,7 @@
             </div>
         </div>
 
-        <!-- Event Details Modal -->
+      <!-- Event Details Modal -->
         <div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -401,11 +401,23 @@
             document.getElementById('editEventBtn').addEventListener('click', editCurrentEvent);
             document.getElementById('deleteEventDetailsBtn').addEventListener('click', deleteCurrentEvent);
 
-            // Event delegation for calendar day clicks
-            document.getElementById('calendarDays').addEventListener('click', function(e) {
-                // Find the closest day-cell element
+            // Event delegation for calendar clicks
+           elements.calendarDays.addEventListener('click', function(e) {
+                // Check if we clicked on an event badge or its children
+                const eventBadge = e.target.closest('.badge[data-event-id]');
+                if (eventBadge) {
+                    e.preventDefault();
+                    const eventId = eventBadge.dataset.eventId;
+                    if (eventId) {
+                        showEventDetails(eventId);
+                    }
+                    return;
+                }
+
+                // Check if we clicked on a day cell (but not on an event)
                 const dayCell = e.target.closest('.day-cell');
-                if (dayCell && !e.target.closest('.badge')) {
+                if (dayCell) {
+                    e.preventDefault();
                     const date = dayCell.dataset.date;
                     if (date) {
                         document.getElementById('eventDate').value = date;
@@ -473,9 +485,6 @@
 
             // Generate and render calendar grid
             elements.calendarDays.innerHTML = generateCalendarGrid(data);
-
-            // Set up event listeners for the new elements
-            setupCalendarEventListeners();
 
             // Update upcoming events list
             updateUpcomingEventsList(data.upcomingEvents);
@@ -582,23 +591,11 @@
             });
         }
 
-        function setupCalendarEventListeners() {
-            // Event badge click handler
-            document.querySelectorAll('.badge[data-event-id]').forEach(badge => {
-                badge.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    showEventDetails(this.dataset.eventId);
-                });
-            });
-
-            // Initialize drag and drop
-            initDragAndDrop();
-        }
-
         // Event details and form handling
         async function showEventDetails(eventId) {
             try {
                 const response = await fetch(`/school-calendar/events/${eventId}`);
+                if (!response.ok) throw new Error('Network response was not ok');
                 const event = await response.json();
 
                 currentEventId = event.id;
@@ -715,7 +712,7 @@
 
         async function fetchEventForEdit(eventId) {
             try {
-                const response = await fetch(`/school-calendar/events/${eventId}/edit`);
+                const response = await fetch(`/school-calendar/events/${eventId}`);
                 const event = await response.json();
 
                 // Populate the edit form
@@ -740,10 +737,11 @@
             }
         }
 
+
         function submitDeleteForm(eventId) {
             const deleteForm = document.createElement('form');
             deleteForm.method = 'POST';
-            deleteForm.action = '{{ route("school-calendar.destroy", "") }}/' + eventId;
+            deleteForm.action = `/school-calendar/${eventId}`;
 
             // Add CSRF token and method spoofing
             const csrfInput = document.createElement('input');
@@ -809,10 +807,9 @@
 
         async function updateEventDate(eventId, newDate) {
             try {
-                const response = await fetch('/school-calendar/update-event-date', {
+                const response = await fetch(`/school-calendar/${eventId}/update-date`, {
                     method: 'POST',
                     body: JSON.stringify({
-                        id: eventId,
                         event_date: newDate
                     }),
                     headers: {
