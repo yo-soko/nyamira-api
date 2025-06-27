@@ -401,19 +401,18 @@
             document.getElementById('editEventBtn').addEventListener('click', editCurrentEvent);
             document.getElementById('deleteEventDetailsBtn').addEventListener('click', deleteCurrentEvent);
 
-            // Day cell click handler for adding new events
-            document.querySelectorAll('.day-cell').forEach(cell => {
-                cell.addEventListener('click', function(e) {
-                    // Only trigger if clicking on the day cell itself, not on an event
-                    if (e.target === this || e.target.classList.contains('day-number')) {
-                        const date = this.dataset.date;
-                        if (date) {
-                            document.getElementById('eventDate').value = date;
-                            document.getElementById('eventDateForAdd').value = date;
-                            elements.addEventModal.show();
-                        }
+            // Event delegation for calendar day clicks
+            document.getElementById('calendarDays').addEventListener('click', function(e) {
+                // Find the closest day-cell element
+                const dayCell = e.target.closest('.day-cell');
+                if (dayCell && !e.target.closest('.badge')) {
+                    const date = dayCell.dataset.date;
+                    if (date) {
+                        document.getElementById('eventDate').value = date;
+                        document.getElementById('eventDateForAdd').value = date;
+                        elements.addEventModal.show();
                     }
-                });
+                }
             });
         }
 
