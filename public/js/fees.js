@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Open Add Modal
     document.getElementById('addFeeStructureBtn')?.addEventListener('click', () => {
-        document.querySelector('#feeStructureForm').reset();
-        document.querySelector('#feeStructureForm input[name="fee_id"]').value = '';
+        const form = document.querySelector('#feeStructureForm');
+        form.reset();
+        form.querySelector('input[name="fee_id"]').value = '';
         document.querySelector('#feeStructureModal .modal-title').textContent = 'Add Fee Structure';
         document.getElementById('saveFeeStructureBtn').textContent = 'Save Fee';
     });
@@ -11,12 +12,21 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.editFeeStructureBtn').forEach(btn => {
         btn.addEventListener('click', function () {
             const id = this.getAttribute('data-id');
-            fetch(`/fee-structure/${id}`)
-                .then(response => response.json())
-                .then(data => {
+            fetch('/fee-structure/show', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ fee_id: id })
+            })
+            .then(response => response.json())
+            .then(res => {
+                if (res.success) {
+                    const data = res.data;
                     const form = document.querySelector('#feeStructureForm');
                     form.querySelector('input[name="fee_id"]').value = data.id;
-                    form.querySelector('select[name="level_id"]').value = data.class_id;
+                    form.querySelector('select[name="level_id"]').value = data.level_id;
                     form.querySelector('select[name="term_id"]').value = data.term_id;
                     form.querySelector('input[name="amount"]').value = data.amount;
                     form.querySelector('input[name="description"]').value = data.description;
@@ -26,7 +36,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.querySelector('#feeStructureModal .modal-title').textContent = 'Edit Fee Structure';
                     document.getElementById('saveFeeStructureBtn').textContent = 'Update Fee';
                     modal.show();
-                });
+                } else {
+                    alert(res.error || 'Failed to load fee structure.');
+                }
+            });
         });
     });
 
@@ -35,16 +48,20 @@ document.addEventListener('DOMContentLoaded', function () {
         btn.addEventListener('click', function () {
             const id = this.getAttribute('data-id');
             if (confirm('Are you sure you want to delete this fee structure?')) {
-                fetch(`/fee-structure/${id}`, {
-                    method: 'DELETE',
+                fetch('/fee-structure/delete', {
+                    method: 'POST',
                     headers: {
+                        'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                }).then(response => {
-                    if (response.ok) {
+                    },
+                    body: JSON.stringify({ fee_id: id })
+                })
+                .then(response => response.json())
+                .then(res => {
+                    if (res.success) {
                         location.reload();
                     } else {
-                        alert('Failed to delete. Try again.');
+                        alert(res.error || 'Failed to delete.');
                     }
                 });
             }
@@ -57,23 +74,24 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         const formData = new FormData(this);
-        const feeId = formData.get('fee_id');
-        const url = feeId ? `/fee-structure/${feeId}` : '/fee-structure';
-        const method = feeId ? 'PUT' : 'POST';
+        const isEdit = formData.get('fee_id');
+        const url = isEdit ? '/fee-structure/update' : '/fee-structure/store';
 
         fetch(url, {
-            method: method,
+            method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: formData
         })
-        .then(response => {
-            if (response.ok) {
+        .then(response => response.json())
+        .then(res => {
+            if (res.success) {
                 location.reload();
             } else {
-                alert('Error saving fee structure. Check your inputs.');
+                alert(res.error || 'Failed to save fee structure.');
             }
-        });
+        })
+        .catch(() => alert('Server error. Please try again.'));
     });
 });

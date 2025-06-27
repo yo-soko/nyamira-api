@@ -31,7 +31,7 @@ class FeePayment extends Model
 
     public function classLevel()
     {
-        return $this->belongsTo(SchoolClass::class, 'class_id');
+        return $this->belongsTo(SchoolClass::class, 'level_id');
     }
 
     public function term()

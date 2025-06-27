@@ -1,62 +1,82 @@
-@extends('layouts.mainlayout')
+@extends('layout.mainlayout')
 
 @section('content')
-<div class="container-fluid">
-    <div class="d-flex justify-content-between mb-3">
-        <h4 class="page-title">Fee Structure</h4>
-        <button class="btn btn-primary" id="addFeeStructureBtn" data-bs-toggle="modal" data-bs-target="#feeStructureModal">
-            <i class="fas fa-plus-circle"></i> Add Fee Structure
-        </button>
-    </div>
+<div class="page-wrapper">
+    <div class="content">
+        <div class="page-header d-flex justify-content-between align-items-center">
+            <div class="page-title">
+                <h4>Fee Structure</h4>
+                <h6>Manage School Fee Structure</h6>
+            </div>
+            @hasanyrole('admin|developer|manager|director|supervisor')
+            <div class="page-btn">
+                <button class="btn btn-primary" id="addFeeStructureBtn" data-bs-toggle="modal" data-bs-target="#feeStructureModal">
+                    <i class="ti ti-circle-plus me-1"></i>Add Fee Structure
+                </button>
+            </div>
+            @endhasanyrole
+        </div>
 
-    <div class="card">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table datatable">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>#</th>
-                            <th>Class</th>
-                            <th>Term</th>
-                            <th>Amount (KSh)</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Date Created</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($feeStructures as $index => $fee)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $fee->classLevel->name ?? 'No Class Level' }}</td>
-                            <td>{{ $fee->term->term_name ?? 'No Term' }}</td>
-                            <td>KSh {{ number_format($fee->amount) }}</td>
+        <div class="card">
 
-                            <td>{{ $fee->description }}</td>
-                            <td>
-                                <span class="badge bg-{{ $fee->status == 'active' ? 'success' : 'danger' }}">
-                                    {{ ucfirst($fee->status) }}
-                                </span>
-                            </td>
-                            <td>{{ \Carbon\Carbon::parse($fee->created_at)->format('d M Y') }}</td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-info editFeeStructureBtn" data-id="{{ $fee->id }}">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger deleteFeeStructureBtn" data-id="{{ $fee->id }}">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        @endforeach
-                        @if(count($feeStructures) === 0)
-                        <tr>
-                            <td colspan="8" class="text-center text-muted">No Fee Structures Found</td>
-                        </tr>
-                        @endif
-                    </tbody>
-                </table>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Fee Structure</h5>
+
+                <div>
+                    <a href="#" data-bs-toggle="tooltip" title="PDF"><img src="{{ asset('build/img/icons/pdf.svg') }}" alt="PDF"></a>
+                    <a href="#" data-bs-toggle="tooltip" title="Excel"><img src="{{ asset('build/img/icons/excel.svg') }}" alt="Excel"></a>
+                    <a href="#" data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table datatable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Class</th>
+                                <th>Term</th>
+                                <th>Amount (KSh)</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Date Created</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($feeStructures as $index => $fee)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $fee->classLevel->level_name ?? 'No Class Level' }}</td>
+                                <td>{{ $fee->term->term_name ?? 'No Term' }}</td>
+                                <td>KSh {{ number_format($fee->amount) }}</td>
+
+                                <td>{{ $fee->description }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $fee->status == 'active' ? 'success' : 'danger' }}">
+                                        {{ ucfirst($fee->status) }}
+                                    </span>
+                                </td>
+                                <td>{{ \Carbon\Carbon::parse($fee->created_at)->format('d M Y') }}</td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-info editFeeStructureBtn" data-id="{{ $fee->id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-danger deleteFeeStructureBtn" data-id="{{ $fee->id }}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @if(count($feeStructures) === 0)
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">No Fee Structures Found</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -65,7 +85,7 @@
 <!-- Fee Structure Modal -->
 <div class="modal fade" id="feeStructureModal" tabindex="-1" aria-labelledby="feeStructureModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form id="feeStructureForm" method="post">
+        <form id="feeStructureForm" method="POST" action="{{ route('fee-structure.store') }}">
             @csrf
             <input type="hidden" name="fee_id">
             <div class="modal-content">
@@ -79,7 +99,7 @@
                         <select name="level_id" class="form-control" required>
                             <option value="">Select Class</option>
                             @foreach($classLevels as $class)
-                                <option value="{{ $class->id }}">{{ $class->name }}</option>
+                                <option value="{{ $class->id }}">{{ $class->level_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -88,7 +108,7 @@
                         <select name="term_id" class="form-control" required>
                             <option value="">Select Term</option>
                             @foreach($terms as $term)
-                                <option value="{{ $term->id }}">{{ $term->name }}</option>
+                                <option value="{{ $term->id }}">{{ $term->term_name }}</option>
                             @endforeach
                         </select>
                     </div>
