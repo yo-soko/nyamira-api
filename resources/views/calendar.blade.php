@@ -109,7 +109,7 @@
                             @if($isCurrentMonth)
                                 @foreach($dayEvents->take(2) as $event)
                                 <div class="badge d-block text-truncate px-1 mb-1 {{ $event->is_holiday ? 'holiday' : '' }}"
-                                    style="background-color: {{ $event->event_color }}; color: {{ getContrastColor($event->event_color) }};"
+                                    style="background-color: {{ $event->event_color }}; color: {{ $event->contrast_color }};"
                                     data-event-id="{{ $event->id }}"
                                     draggable="true">
                                     {{ $event->event_name }}
@@ -156,7 +156,7 @@
             </div>
         </div>
 
-                <!-- Event Modal -->
+        <!-- Event Modal -->
         <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -166,20 +166,27 @@
                     </div>
                     <form id="eventForm" method="POST" action="{{ route('school-calendar.store') }}">
                         @csrf
+                        @if(isset($event) && $event->id)
+                            <input type="hidden" name="_method" value="PUT">
+                        @endif
                         <div class="modal-body">
-                            <input type="hidden" id="eventId" name="id">
+                            <input type="hidden" id="eventId" name="id" value="{{ $event->id ?? '' }}">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="mb-3">
                                         <label for="eventName" class="form-label">Event Name *</label>
-                                        <input type="text" class="form-control" id="eventName" name="event_name" required>
-                                        <div class="invalid-feedback">Please provide an event name.</div>
+                                        <input type="text" class="form-control" id="eventName" name="event_name"
+                                            value="{{ old('event_name', $event->event_name ?? '') }}" required>
+                                        @error('event_name')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <label for="eventColor" class="form-label">Color *</label>
-                                        <input type="color" class="form-control form-control-color" id="eventColor" name="event_color" value="#3b82f6" required>
+                                        <input type="color" class="form-control form-control-color" id="eventColor"
+                                            name="event_color" value="{{ old('event_color', $event->event_color ?? '#3b82f6') }}" required>
                                     </div>
                                 </div>
                             </div>
@@ -187,14 +194,18 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="eventDate" class="form-label">Date *</label>
-                                        <input type="date" class="form-control" id="eventDate" name="event_date" required>
-                                        <div class="invalid-feedback">Please select a date.</div>
+                                        <input type="date" class="form-control" id="eventDate" name="event_date"
+                                            value="{{ old('event_date', $event->event_date ?? date('Y-m-d')) }}" required>
+                                        @error('event_date')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="eventLocation" class="form-label">Location</label>
-                                        <input type="text" class="form-control" id="eventLocation" name="event_location">
+                                        <input type="text" class="form-control" id="eventLocation" name="event_location"
+                                            value="{{ old('event_location', $event->event_location ?? '') }}">
                                     </div>
                                 </div>
                             </div>
@@ -202,19 +213,22 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="startTime" class="form-label">Start Time</label>
-                                        <input type="time" class="form-control" id="startTime" name="start_time">
+                                        <input type="time" class="form-control" id="startTime" name="start_time"
+                                            value="{{ old('start_time', $event->start_time ?? '') }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="endTime" class="form-label">End Time</label>
-                                        <input type="time" class="form-control" id="endTime" name="end_time">
+                                        <input type="time" class="form-control" id="endTime" name="end_time"
+                                            value="{{ old('end_time', $event->end_time ?? '') }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="isHoliday" name="is_holiday">
+                                    <input class="form-check-input" type="checkbox" id="isHoliday" name="is_holiday"
+                                        value="1" {{ old('is_holiday', $event->is_holiday ?? false) ? 'checked' : '' }}>
                                     <label class="form-check-label" for="isHoliday">
                                         Is this a holiday?
                                     </label>
@@ -222,7 +236,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                                <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $event->description ?? '') }}</textarea>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -534,11 +548,49 @@
                 });
         }
 
-        // Edit event button handler
+        // Form validation before submission
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            if (!validateEventForm()) {
+                e.preventDefault();
+            }
+            // If validation passes, the form will submit normally
+        });
+
+        // Delete event button handler
+        document.getElementById('deleteEventBtn').addEventListener('click', function() {
+            const eventId = document.getElementById('eventId').value;
+            if (eventId) {
+                if (confirm('Are you sure you want to delete this event?')) {
+                    // Create a form for deletion
+                    const deleteForm = document.createElement('form');
+                    deleteForm.method = 'POST';
+                    deleteForm.action = '{{ route("calendar.delete", "") }}/' + eventId;
+
+                    // Add CSRF token and method spoofing
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+                    deleteForm.appendChild(csrfInput);
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    deleteForm.appendChild(methodInput);
+
+                    document.body.appendChild(deleteForm);
+                    deleteForm.submit();
+                }
+            }
+        });
+
+        // Edit event button handler (in details modal)
         document.getElementById('editEventBtn').addEventListener('click', function() {
             if (currentEventId) {
                 eventDetailsModal.hide();
-                fetchEventForEdit(currentEventId);
+                // Redirect to edit page or populate form
+                window.location.href = '{{ route("school-calendar.edit", "") }}/' + currentEventId;
             }
         });
 
@@ -546,23 +598,29 @@
         document.getElementById('deleteEventDetailsBtn').addEventListener('click', function() {
             if (currentEventId) {
                 if (confirm('Are you sure you want to delete this event?')) {
-                    deleteEvent(currentEventId, true);
+                    // Create a form for deletion
+                    const deleteForm = document.createElement('form');
+                    deleteForm.method = 'POST';
+                    deleteForm.action = '{{ route("calendar.delete", "") }}/' + currentEventId;
+
+                    // Add CSRF token and method spoofing
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = document.querySelector('meta[name="csrf-token"]').content;
+                    deleteForm.appendChild(csrfInput);
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    deleteForm.appendChild(methodInput);
+
+                    document.body.appendChild(deleteForm);
+                    deleteForm.submit();
                 }
             }
         });
-
-        // Fetch event data for editing
-        function fetchEventForEdit(eventId) {
-            fetch(`/school-calendar/events/${eventId}`)
-                .then(response => response.json())
-                .then(event => {
-                    editEvent(event);
-                })
-                .catch(error => {
-                    console.error('Error fetching event details:', error);
-                    showToast('error', 'Failed to load event details');
-                });
-        }
 
         // Helper functions
         function isSameDay(date1, date2) {
@@ -601,23 +659,6 @@
             // Return black for light colors, white for dark colors
             return luminance > 0.5 ? '#000000' : '#ffffff';
         }
-
-        // Event form handling
-        document.getElementById('eventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            saveEvent();
-        });
-
-        document.getElementById('deleteEventBtn').addEventListener('click', function() {
-            const eventId = document.getElementById('eventId').value;
-            if (eventId) {
-                deleteEvent(eventId, false);
-            }
-        });
-
-        document.getElementById('addEventBtn').addEventListener('click', function() {
-            resetEventForm();
-        });
 
         function validateEventForm() {
             let isValid = true;
@@ -689,119 +730,6 @@
             // Reset validation states
             document.getElementById('eventName').classList.remove('is-invalid');
             document.getElementById('eventDate').classList.remove('is-invalid');
-        }
-
-        function saveEvent() {
-            if (!validateEventForm()) return;
-
-            const form = document.getElementById('eventForm');
-            const formData = new FormData(form);
-            const jsonData = {};
-
-            // Convert FormData to JSON
-            formData.forEach((value, key) => {
-                if (key === 'is_holiday') {
-                    jsonData[key] = document.getElementById('isHoliday').checked;
-                } else {
-                    jsonData[key] = value;
-                }
-            });
-
-            // Determine if this is an edit or new event
-            const isEdit = !!document.getElementById('eventId').value;
-            const url = isEdit ? '/school-calendar/update-event' : '/school-calendar/store-event';
-            const method = isEdit ? 'PUT' : 'POST';
-
-            // Show loading state
-            const saveBtn = document.getElementById('saveEventBtn');
-            saveBtn.disabled = true;
-            saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
-
-            fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Accept': 'application/json'
-                },
-                body: JSON.stringify(jsonData)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw err; });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    showToast('success', isEdit ? 'Event updated successfully' : 'Event created successfully');
-                    eventModal.hide();
-                    loadCalendar();
-                } else {
-                    showToast('error', data.message || 'An error occurred');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                let errorMessage = 'An error occurred while saving the event';
-                if (error.errors) {
-                    // Handle validation errors
-                    document.querySelectorAll('.is-invalid').forEach(el => {
-                        el.classList.remove('is-invalid');
-                    });
-
-                    Object.entries(error.errors).forEach(([field, messages]) => {
-                        const input = document.querySelector(`[name="${field}"]`);
-                        if (input) {
-                            input.classList.add('is-invalid');
-                            const feedback = input.nextElementSibling;
-                            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                                feedback.textContent = messages.join(' ');
-                            }
-                        }
-                    });
-                    errorMessage = 'Please fix the errors in the form';
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-                showToast('error', errorMessage);
-            })
-            .finally(() => {
-                saveBtn.disabled = false;
-                saveBtn.textContent = 'Save Event';
-            });
-        }
-
-        function deleteEvent(eventId, fromDetailsModal = false) {
-            fetch('/school-calendar/delete-event', {
-                    method: 'DELETE',
-                    body: JSON.stringify({
-                        id: eventId
-                    }),
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('success', 'Event deleted successfully');
-                        if (fromDetailsModal) {
-                            eventDetailsModal.hide();
-                        } else {
-                            eventModal.hide();
-                        }
-                        loadCalendar();
-                    } else {
-                        showToast('error', data.message || 'An error occurred');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showToast('error', 'An error occurred while deleting the event');
-                });
         }
 
         function showToast(type, message) {

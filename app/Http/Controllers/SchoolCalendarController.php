@@ -18,11 +18,16 @@ class SchoolCalendarController extends Controller
         $currentDate = Carbon::create($year, $month, 1);
 
         // Get events for the current month view
-        $events = SchoolCalendar::whereMonth('event_date', $month)
+       $events = SchoolCalendar::whereMonth('event_date', $month)
             ->whereYear('event_date', $year)
             ->orderBy('event_date')
             ->orderBy('start_time')
-            ->get();
+            ->get()
+            ->map(function ($event) {
+                $event->contrast_color = $this->getContrastColor($event->event_color);
+                return $event;
+        });
+
 
         // Get upcoming events (next 30 days)
         $upcomingEvents = SchoolCalendar::where('event_date', '>=', now())
@@ -63,11 +68,8 @@ class SchoolCalendarController extends Controller
 
         $event = SchoolCalendar::create($validated);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Event created successfully',
-            'event' => $event
-        ]);
+        return redirect()->route('calendar.index')
+                         ->with('success', 'Event created successfully');
     }
 
     public function updateEvent(Request $request)
@@ -155,4 +157,41 @@ class SchoolCalendarController extends Controller
             'view' => $view
         ]);
     }
+
+    public function edit($id)
+    {
+        $event = SchoolCalendar::findOrFail($id);
+        $currentDate = Carbon::parse($event->event_date);
+        $events = SchoolCalendar::whereMonth('event_date', $currentDate->month)
+                            ->whereYear('event_date', $currentDate->year)
+                            ->orderBy('event_date')
+                            ->get();
+
+        $upcomingEvents = SchoolCalendar::where('event_date', '>=', $currentDate->format('Y-m-d'))
+                                    ->orderBy('event_date')
+                                    ->take(10)
+                                    ->get();
+
+        return view('calendar.index', compact('currentDate', 'events', 'upcomingEvents', 'event'));
+    }
+
+        private function getContrastColor($hexColor)
+    {
+        $hexColor = str_replace('#', '', $hexColor);
+
+        if (strlen($hexColor) === 3) {
+            $r = hexdec(str_repeat($hexColor[0], 2));
+            $g = hexdec(str_repeat($hexColor[1], 2));
+            $b = hexdec(str_repeat($hexColor[2], 2));
+        } else {
+            $r = hexdec(substr($hexColor, 0, 2));
+            $g = hexdec(substr($hexColor, 2, 2));
+            $b = hexdec(substr($hexColor, 4, 2));
+        }
+
+        $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+        return $luminance > 0.5 ? '#000000' : '#FFFFFF';
+    }
+
 }

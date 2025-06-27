@@ -79,8 +79,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/data', [SchoolCalendarController::class, 'getCalendarData']);
         Route::get('/events/{event}', [SchoolCalendarController::class, 'getEvent']);
         Route::post('/school-calendar', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
+        Route::post('/school-calendar/edit', [SchoolCalendarController::class, 'edit'])->name('school-calendar.edit');
         Route::put('/school-calendar/update-event', [SchoolCalendarController::class, 'updateEvent'])->name('school-calendar.update-event');
-        Route::delete('/delete-event', [SchoolCalendarController::class, 'deleteEvent'])->name('calendar.delete');
+        Route::delete('/delete-event', [SchoolCalendarController::class, 'destroy'])->name('calendar.delete');
         Route::post('/update-event-date', [SchoolCalendarController::class, 'updateEventDate']);
     });
 
