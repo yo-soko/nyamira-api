@@ -1,6 +1,7 @@
 @extends('layout.mainlayout')
-
 @section('content')
+@include('layout.toast')
+
 <div class="page-wrapper">
 
     <div class="page-header d-flex justify-content-between align-items-center">
@@ -10,10 +11,7 @@
         </a>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
+  
     <div class="table-responsive mt-3">
         <table class="table table-bordered">
             <thead class="table-light">
