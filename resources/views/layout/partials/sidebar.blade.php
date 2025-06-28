@@ -118,13 +118,19 @@
                                                         <i class="ti ti-tag"></i> <span>Book Categories</span>
                                                 </a>
                                                 </li>
-
-                                                @endhasanyrole
                                                 <li class="{{ Request::is('results-filter', 'results-view') ? 'active' : '' }}">
-                                                <a href="{{ url('results-filter') }}">
+                                                    <a href="{{ url('results-filter') }}">
                                                         <i class="fas fa-search me-2"></i><span>View Results</span>
-                                                </a>
+                                                    </a>
                                                 </li>
+                                                @endhasanyrole
+                                                @hasanyrole('developer|student')
+                                                <li class="{{ Request::is('results-view','cbc-report') ? 'active' : '' }}">
+                                                    <a href="{{ url('cbc-report') }}">
+                                                        <i class="fas fa-search me-2"></i><span>View Results</span>
+                                                    </a>
+                                                </li>
+                                                @endhasanyrole
                                                 <li class="{{ Request::is('designation') ? 'active' : '' }}">
                                                 <a href="#">
                                                         <i class="fas fa-tasks me-2"></i><span>Assessment Book</span>

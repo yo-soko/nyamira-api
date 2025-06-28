@@ -45,12 +45,7 @@
             </div>
             <div class="d-flex align-items-center flex-wrap mb-1">
                 <a href="{{url('profile')}}" class="btn btn-dark btn-md me-2 mb-2">Profile</a>
-                @hasanyrole('admin|developer|manager|director|supervisor')
-                        <a href="{{ url('auto-clockout') }}" class="btn btn-dark btn-md me-2 mb-2"
-                            onclick="return confirm('Are you sure you want to auto-clock out employees who forgot?');">
-                            <i class="ti ti-circle-plus me-1"></i>Clock out forgotten
-                        </a>
-                @endhasanyrole
+             
                 <a href="{{url('general-settings')}}" class="btn btn-light btn-md mb-2">Settings</a>
             </div>
         </div>
@@ -127,41 +122,114 @@
                 </div>
             </div>
         </div> 
-<div class="card mt-4">
-    <div class="card-header">
-        <h5>Performance Per Subject</h5>
+      <div class="row mt-4">
+    <!-- Chart Column -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5>Performance Per Subject</h5>
+            </div>
+            <div class="card-body" style="position: relative; height: 300px;">
+                <canvas id="performanceChart"></canvas>
+            </div>
+        </div>
     </div>
-    <div class="card-body">
-        <canvas id="performanceChart" height="120"></canvas>
+
+    <!-- Table Column -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5>Marks Summary</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-sm mb-0">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                                <th>Comment</th>
+                                <th>Absent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($marks as $mark)
+                                <tr>
+                                    <td>{{ $mark->subject->subject_name ?? '-' }}</td>
+                                    <td>
+                                        @php
+                                            $subject = strtolower($mark->subject->subject_name ?? '');
+                                            $fullGrade = strtolower($mark->grade ?? '');
+                                            $gradeCode = '-';
+
+                                            // Convert full grade names to codes
+                                            if (str_contains($fullGrade, 'exceeding expectation')) $gradeCode = 'E.E';
+                                            elseif (str_contains($fullGrade, 'meeting expectation')) $gradeCode = 'M.E';
+                                            elseif (str_contains($fullGrade, 'approaching expectation')) $gradeCode = 'A.E';
+                                            elseif (str_contains($fullGrade, 'below expectation')) $gradeCode = 'B.E';
+
+                                            // For Kiswahili, use special subject performance codes
+                                            if ($subject === 'kiswahili') {
+                                                if (str_contains($fullGrade, 'exceeding expectation')) $gradeCode = 'KUZ';
+                                                elseif (str_contains($fullGrade, 'meeting expectation')) $gradeCode = 'KUF';
+                                                elseif (str_contains($fullGrade, 'approaching expectation')) $gradeCode = 'KUK';
+                                                elseif (str_contains($fullGrade, 'below expectation')) $gradeCode = 'MM';
+                                            }
+                                        @endphp
+                                        {{ $gradeCode }}
+                                    </td>
+
+                                    <td>{{ $mark->comments ?? '-' }}</td>
+                                    <td>{!! $mark->absent ? '<span class="text-danger">✔</span>' : '<span class="text-success">✖</span>' !!}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No marks available</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-lg-12">
+        <div class="card border">
+            <div class="card-header">
+                <h6 class="mb-0">Performance Key</h6>
+            </div>
+          <div class="card-body p-3">
+    <div class="row">
+        <!-- General Grade Codes -->
+        <div class="col-md-6">
+            <p class="mb-1"><strong>General Grade Codes:</strong></p>
+            <ul class="mb-2">
+                <li><strong>E.E</strong> – Exceeding Expectations</li>
+                <li><strong>M.E</strong> – Meeting Expectations</li>
+                <li><strong>A.E</strong> – Approaching Expectations</li>
+                <li><strong>B.E</strong> – Below Expectations</li>
+            </ul>
+        </div>
+
+        <!-- Kiswahili Subject Codes -->
+        <div class="col-md-6">
+            <p class="mb-1"><strong>Kiswahili Subject Codes:</strong></p>
+            <ul class="mb-2">
+                <li><strong>KUZ</strong> – Kuzidi Matarajio</li>
+                <li><strong>KUF</strong> – Kufikia Matarajio</li>
+                <li><strong>KUK</strong> – Kukaribia Matarajio</li>
+                <li><strong>MM</strong> – Mbali na Matarajio</li>
+            </ul>
+        </div>
     </div>
 </div>
 
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table datatable">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Subject</th>
-                            <th>Grade</th>
-                            <th>Comment</th>
-                            <th>Absent</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($marks as $mark)
-                            <tr>
-                                <td>{{ $mark->subject->subject_name ?? '-' }}</td>
-                                <td>{{ $mark->grade ?? '-'}}</td>
-                                <td>{{ $mark->comments ?? '-' }}</td>
-                                <td>{{ $mark->absent ? 'Yes' : 'No' }}</td>
-                            </tr>
-                        @empty
-                          
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
         </div>
+    </div>
+</div>
+
 
     </div>
     <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
@@ -169,7 +237,10 @@
         <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="{{ URL::asset('build/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ URL::asset('build/plugins/chartjs/chart.min.js') }}"></script>
+<script src="{{ URL::asset('build/plugins/chartjs/chart-data.js') }}"></script>
 
 <script>
     const ctx = document.getElementById('performanceChart').getContext('2d');
@@ -191,7 +262,7 @@
                 {
                     label: 'Class Avg',
                     data: new Array({{ $chartData->count() }}).fill({{ round($classAverage ?? 0, 2) }}),
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderColor: 'rgb(17, 238, 28)',
                     borderWidth: 2,
                     borderDash: [10, 5],
                     pointRadius: 0,
@@ -200,7 +271,7 @@
                 {
                     label: 'Level Avg',
                     data: new Array({{ $chartData->count() }}).fill({{ round($levelAverage ?? 0, 2) }}),
-                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderColor: 'rgb(243, 123, 10)',
                     borderWidth: 2,
                     borderDash: [5, 5],
                     pointRadius: 0,
@@ -220,7 +291,7 @@
                             if (value >= 60) return 'M.E';
                             if (value >= 40) return 'A.E';
                             if (value > 0) return 'B.E';
-                            return '-';
+                            return ' ';
                         },
                         stepSize: 20
                     },

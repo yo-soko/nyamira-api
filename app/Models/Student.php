@@ -70,6 +70,11 @@ class Student extends Model
     {
         return $this->hasMany(Mark::class);
     }
+   public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 
 
 }

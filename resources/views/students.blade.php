@@ -91,7 +91,7 @@
                                 <th>Learner Name</th> 
                                 <th>ADM No</th>
                                 <th>Stream</th>
-                                <th>Term</th>
+                                <th>Assesment</th>
                                 <th>Gender</th>
                                 <th>Status</th>
                                 @hasanyrole('admin|developer|manager|director|supervisor')
@@ -114,7 +114,15 @@
                                     </td>
                                     <td>{{ $student->student_reg_number }}</td>
                                     <td>{{ $student->class->level->level_name ?? 'N/A' }} {{ $student->class->stream->initials ?? '' }}</td>
-                                    <td>{{ $student->term->term_name ?? 'N/A' }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ route('cbc-report.view') }}">
+                                            @csrf
+                                            <input type="hidden" name="student_reg_number" value="{{ $student->student_reg_number }}">
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                View Assesment
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td>{{ $student->gender }}</td>
                                     <td>
                                         @if($student->status)
@@ -127,6 +135,7 @@
                                             </span>
                                         @endif
                                     </td>
+
                                     @hasanyrole('admin|developer|manager|director|supervisor')
                                     <td>{{ number_format($student->current_balance, 2) ?? 'N/A'}}</td>
                                     <td class="action-table-data">

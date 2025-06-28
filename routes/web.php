@@ -194,6 +194,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/tdashboard', [TdashboardController::class, 'index'])->name('tdashboard');
 
+    Route::get('/cbc-report', [SdashboardController::class, 'cbcReport'])->name('cbc.report');
+    Route::post('/cbc-report/view', [SdashboardController::class, 'viewCBCReport'])->name('cbc-report.view');
+
     //terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
     Route::post('/terms', [TermController::class, 'store'])->name('terms.store');
