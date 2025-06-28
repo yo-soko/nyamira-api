@@ -34,6 +34,8 @@
         content="employee system, Solomon Batasi, Point of Sale, business, Human Resource, traintrack, ERM, HR, POS, JavaPA">
     <meta name="author" content="Dreamguys - Bootstrap Admin Template">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <title>JavaPA</title>
 
     <!-- Favicon -->

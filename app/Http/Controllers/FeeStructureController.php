@@ -30,35 +30,75 @@ class FeeStructureController extends Controller
             'feeStatus' => 'required|in:active,inactive',
         ]);
 
-        $fee = FeeStructure::create([
-            'level_id' => $request->level_id,
-            'term_id' => $request->term_id,
-            'amount' => $request->amount,
-            'description' => $request->description,
-            'status' => $request->feeStatus,
-        ]);
+        if ($request->fee_id) {
+            // Update logic
+            $fee = FeeStructure::findOrFail($request->fee_id);
+            $difference = $request->amount - $fee->amount;
 
-        $students = Student::whereHas('schoolClass', function ($query) use ($request) {
-            $query->where('level_id', $request->level_id);
-        })->where('term_id', $request->term_id)->get();
+            $fee->update([
+                'level_id' => $request->level_id,
+                'term_id' => $request->term_id,
+                'amount' => $request->amount,
+                'description' => $request->description,
+                'status' => $request->feeStatus,
+            ]);
 
-        foreach ($students as $student) {
-            $previousExpected = FeeStructure::where('level_id', $request->level_id)
-                ->where('term_id', '<', $request->term_id)
-                ->sum('amount');
+            // Update student balances only if amount changed
+            if ($difference != 0) {
+                $students = Student::whereHas('schoolClass', function ($query) use ($request) {
+                    $query->where('level_id', $request->level_id);
+                })->where('term_id', $request->term_id)->get();
 
-            $previousPaid = FeePayment::where('student_id', $student->id)
-                ->where('term_id', '<', $request->term_id)
-                ->sum('amount_paid');
+                foreach ($students as $student) {
+                    $previousExpected = FeeStructure::where('level_id', $request->level_id)
+                        ->where('term_id', '<', $request->term_id)
+                        ->sum('amount');
 
-            if (($previousExpected - $previousPaid) <= 0) {
-                $student->current_balance += $fee->amount;
-                $student->save();
+                    $previousPaid = FeePayment::where('student_id', $student->id)
+                        ->where('term_id', '<', $request->term_id)
+                        ->sum('amount_paid');
+
+                    if (($previousExpected - $previousPaid) <= 0) {
+                        $student->current_balance += $difference;
+                        $student->save();
+                    }
+                }
             }
-        }
 
-        return response()->json(['success' => true]);
+            return redirect()->route('fee-structure')->with('success', 'Fee structure updated successfully.');
+        } else {
+            // Create logic
+            $fee = FeeStructure::create([
+                'level_id' => $request->level_id,
+                'term_id' => $request->term_id,
+                'amount' => $request->amount,
+                'description' => $request->description,
+                'status' => $request->feeStatus,
+            ]);
+
+            $students = Student::whereHas('schoolClass', function ($query) use ($request) {
+                $query->where('level_id', $request->level_id);
+            })->where('term_id', $request->term_id)->get();
+
+            foreach ($students as $student) {
+                $previousExpected = FeeStructure::where('level_id', $request->level_id)
+                    ->where('term_id', '<', $request->term_id)
+                    ->sum('amount');
+
+                $previousPaid = FeePayment::where('student_id', $student->id)
+                    ->where('term_id', '<', $request->term_id)
+                    ->sum('amount_paid');
+
+                if (($previousExpected - $previousPaid) <= 0) {
+                    $student->current_balance += $fee->amount;
+                    $student->save();
+                }
+            }
+
+            return redirect()->route('fee-structure')->with('success', 'Fee structure added successfully.');
+        }
     }
+
 
     public function show(Request $request)
     {
@@ -72,7 +112,7 @@ class FeeStructureController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'fee_id' => 'required|exists:fee_structures,id',
+            'fee_id' => 'required|exists:fee_structures,fee_id',
             'level_id' => 'required|exists:class_levels,id',
             'term_id' => 'required|exists:terms,id',
             'amount' => 'required|numeric',
@@ -80,7 +120,7 @@ class FeeStructureController extends Controller
             'feeStatus' => 'required|in:active,inactive',
         ]);
 
-        $fee = FeeStructure::findOrFail($request->fee_id);
+        $fee = FeeStructure::where('fee_id', $request->fee_id)->firstOrFail();
         $difference = $request->amount - $fee->amount;
 
         $fee->update([
@@ -112,7 +152,8 @@ class FeeStructureController extends Controller
             }
         }
 
-        return response()->json(['success' => true]);
+        return redirect()->route('fee-structure')->with('success', 'Fee structure updated successfully.');
+
     }
 
     public function destroy(Request $request)
@@ -144,7 +185,8 @@ class FeeStructureController extends Controller
 
         $fee->delete();
 
-        return response()->json(['success' => true]);
+        return redirect()->route('fee-structure')->with('success', 'Fee structure deleted successfully.');
+
     }
 
     public function studentPayments(Student $student)

@@ -1,8 +1,10 @@
 @extends('layout.mainlayout')
 
+
 @section('content')
 <div class="page-wrapper">
     <div class="content">
+    @include('layout.toast')
         <div class="page-header d-flex justify-content-between align-items-center">
             <div class="page-title">
                 <h4>Fee Payments</h4>
@@ -114,5 +116,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/fees/payments.js') }}"></script>
+<!-- <script src="{{ asset('js/fees/payments.js') }}"></script> -->
 @endpush

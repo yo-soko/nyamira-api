@@ -9,6 +9,8 @@ class FeeStructure extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'fee_id';
+
     protected $fillable = [
         'level_id', 'term_id', 'amount', 'description', 'status'
     ];
@@ -22,4 +24,5 @@ class FeeStructure extends Model
     public function term() {
         return $this->belongsTo(Term::class, 'term_id');
     }
+
 }

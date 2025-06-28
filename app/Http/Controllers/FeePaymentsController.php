@@ -129,12 +129,38 @@ class FeePaymentsController extends Controller
                 'receipt_number' => $validated['receipt_number'] ?? null,
             ]);
 
-            \Log::info('Payment saved', ['id' => $payment->payment_id]);
+
 
             return redirect()->back()->with('success', 'Payment recorded successfully.');
         } catch (\Exception $e) {
-            \Log::error('FeePayment store error: ' . $e->getMessage());
+
             return redirect()->back()->with('error', 'Failed to record payment. Please try again.');
         }
     }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'class_id' => 'required|exists:class_levels,id',
+            'term_id' => 'required|exists:terms,id',
+            'student_id' => 'required|exists:students,id',
+            'receipt_number' => 'nullable|string',
+            'description' => 'nullable|string',
+            'amount_paid' => 'required|numeric',
+            'payment_mode' => 'required|in:Cash,Mpesa,Bank',
+        ]);
+
+        $payment = FeePayment::findOrFail($id);
+        $payment->update($request->all());
+
+        return redirect()->route('fee-payments.index')->with('success', 'Payment updated successfully!');
+    }
+
+    public function destroy(FeePayment $fee_payment)
+    {
+        $fee_payment->delete();
+        return redirect()->back()->with('success', 'Payment deleted successfully!');
+    }
+
+
 }
