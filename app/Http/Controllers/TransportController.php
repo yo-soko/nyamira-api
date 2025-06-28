@@ -462,6 +462,7 @@ class TransportController extends Controller
             'students' => Student::with('class')->get()
         ]);
     }
+
     public function getAttendance(Request $request)
     {
         try {
@@ -475,10 +476,11 @@ class TransportController extends Controller
             $date = $request->date ?: now()->toDateString();
             $sessionType = $request->session_type;
 
-            // Eager-load relevant transport records
+            // Load transports with student and nested class-level-stream relations
             $transports = StudentTransport::with([
                 'student:id,first_name,last_name,class_id',
-                'student.class:id', // Avoid requesting `name` if it doesn't exist
+                'student.class.level:id,level_name',
+                'student.class.stream:id,name',
                 'stop:id,stop_name',
                 'student.transportAttendances' => function ($query) use ($date) {
                     $query->whereDate('date', $date);
@@ -491,12 +493,17 @@ class TransportController extends Controller
                 if (!$transport->student) return null;
 
                 $student = $transport->student;
+                $class = $student->class;
+
                 $attendance = $student->transportAttendances->first();
 
                 return [
                     'id' => $student->id,
-                    'full_name' => $student->first_name . ' ' . $student->last_name,
-                    'class_id' => $student->class_id, // Since no class name field exists
+                    'full_name' => "{$student->first_name} {$student->last_name}",
+                    'class_name' => trim(
+                        (optional($class->level)->level_name ?? '') . ' ' .
+                            (optional($class->stream)->name ?? '')
+                    ) ?: 'N/A',
                     'stop' => $transport->stop ? [
                         'stop_name' => $transport->stop->stop_name
                     ] : null,
@@ -507,13 +514,11 @@ class TransportController extends Controller
                         'dropoff_time' => $attendance->dropoff_time,
                     ] : null
                 ];
-            })->filter()->values(); // Clean nulls + reindex
-
-            $stops = TransportStop::where('route_id', $routeId)->get(['id', 'stop_name']);
+            })->filter();
 
             return response()->json([
                 'students' => $students,
-                'stops' => $stops
+                'stops' => TransportStop::where('route_id', $routeId)->get(['id', 'stop_name'])
             ]);
         } catch (\Throwable $e) {
             Log::error('Attendance loading error', [
@@ -529,6 +534,7 @@ class TransportController extends Controller
             ], 500);
         }
     }
+
 
     public function saveAttendance(Request $request)
     {
@@ -584,7 +590,7 @@ class TransportController extends Controller
                 'attendance_id' => $attendance->id
             ]);
         } catch (\Exception $e) {
-            \Log::error('Attendance saving error', [
+            Log::error('Attendance saving error', [
                 'student_id' => $request->student_id,
                 'route_id' => $request->route_id,
                 'error' => $e->getMessage()

@@ -1,6 +1,7 @@
 @extends('layout.mainlayout')
 
 @section('content')
+@include('layout.toast')
 <div class="page-wrapper">
     <div class="row mb-4">
         <div class="col-md-12">
@@ -499,7 +500,7 @@
                 html += `
         <tr id="student-row-${student.id}" data-student-id="${student.id}">
             <td>${student.full_name}</td>
-            <td>${student.class?.name || 'N/A'}</td>
+           <td>${student.class_name || 'N/A'}</td>
             <td>${student.stop?.stop_name || 'Not Specified'}</td>
             <td>
                 <span class="badge badge-${isPresent ? 'success' : 'danger'}">
