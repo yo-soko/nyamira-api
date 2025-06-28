@@ -12,18 +12,29 @@ class Teacher extends Model
         'gender', 'department_id', 'status', 'user_id'
     ];
 
+    /**
+     * Get all subjects taught by the teacher, with class_id on the pivot
+     */
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class, 'teacher_subject');
-    }        
-                    
+        return $this->belongsToMany(Subject::class, 'teacher_subject')
+            ->withPivot('class_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Get the teacher's department
+     */
     public function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
 
-    public function schoolclasses()
+    /**
+     * If you want to work directly with the teacher_subject table rows
+     */
+    public function teacherSubjects()
     {
-        return $this->belongsToMany(Schoolclass::class);
+        return $this->hasMany(TeacherSubject::class);
     }
 }

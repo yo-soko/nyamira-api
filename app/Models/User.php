@@ -57,5 +57,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Teacher::class, 'user_id');
     }
+    public function subjects()
+    {
+        return $this->belongsToMany(\App\Models\Subject::class, 'teacher_subject', 'teacher_id', 'subject_id');
+    }
 
+    public function schoolClasses()
+    {
+        return $this->belongsToMany(\App\Models\SchoolClass::class, 'teacher_school_class', 'teacher_id', 'school_class_id');
+    }
+
+    
 }

@@ -312,6 +312,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('library', LibraryController::class);
         Route::resource('library-categories', BookCategoryController::class)->except(['show']);
     });
+    //teacher dash
+    Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('teacher.dashboard');
+
 
 
     // Fees

@@ -8,12 +8,31 @@ class TeacherSubject extends Model
 {
     protected $table = 'teacher_subject';
 
-    public $incrementing = false; // Since this is a pivot table with composite keys
-
-    public $timestamps = false; // If your pivot table does not have created_at/updated_at
+    public $incrementing = true; // you have an `id` column, so this should be true
+    public $timestamps = true;   // your migration includes timestamps
 
     protected $fillable = [
         'teacher_id',
         'subject_id',
+        'class_id', // include the class_id
     ];
+
+    /**
+     * Relationships
+     */
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
+
+    public function class()
+    {
+        return $this->belongsTo(SchoolClass::class, 'class_id');
+    }
 }

@@ -11,12 +11,12 @@
             </a>
         </div>
 
-        <div class="d-flex flex-wrap mb-4 gap-4 align-items-start border p-3 rounded bg-light">
+        <!-- <div class="d-flex flex-wrap mb-4 gap-4 align-items-start border p-3 rounded bg-light">
             <div><strong>Author:</strong> {{ $book->author }}</div>
             <div><strong>Category:</strong> {{ $book->category->name }}</div>
             <div><strong>Year:</strong> {{ $book->published_year ?? 'N/A' }}</div>
             <div><strong>Description:</strong> {{ $book->description ?? 'No description' }}</div>
-        </div>
+        </div> -->
 
         @if(!empty($book->table_of_contents))
         <div class="mb-4">

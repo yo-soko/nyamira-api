@@ -127,6 +127,12 @@
                                 <i class="ti ti-tag"></i> <span>Book Categories</span>
                             </a>
                         </li>
+                                                <li class="nav-item">
+                                                    <a href="{{ route('teacher.dashboard') }}" class="nav-link {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
+                                                        <i class="bi bi-speedometer2"></i>
+                                                        <span>Teacher Dashboard</span>
+                                                    </a>
+                                                </li>
                         <li class="{{ Request::is('results-filter', 'results-view') ? 'active' : '' }}">
                             <a href="{{ url('results-filter') }}">
                                 <i class="fas fa-search me-2"></i><span>View Results</span>
