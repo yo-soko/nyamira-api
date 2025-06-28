@@ -11,24 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_transports', function (Blueprint $table) {
+        Schema::create('transport_stops', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('student_id')->index();
-            $table->unsignedBigInteger('term_id');
-            $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('route_id');
-            $table->enum('transport_type', ['one_way', 'two_way']);
-            $table->decimal('transport_fee', 10, 2);
-            $table->decimal('balance', 10, 2)->default(0.00);
+            $table->string('stop_name');
+            $table->integer('stop_order')->default(0); // for sequencing stops
+            $table->time('pickup_time')->nullable();
+            $table->time('dropoff_time')->nullable();
             $table->timestamps();
+
+            $table->foreign('route_id')->references('id')->on('transport_routes')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('student_transports');
+        Schema::dropIfExists('transport_stops');
     }
 };

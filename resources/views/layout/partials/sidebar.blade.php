@@ -81,6 +81,15 @@
                             </a>
                         </li>
 
+                        <li class="{{ request()->is('transport*') ? 'active' : '' }}">
+                            <a href="{{ route('transport') }}">
+                                <i class="fas fa-bus me-2"></i>
+                                <span>Transport</span>
+                            </a>
+                        </li>
+
+
+
                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
                         <li class="{{ Request::is('students') ? 'active' : '' }}">
                             <a href="{{ url('students') }}">
@@ -95,124 +104,124 @@
                         @endhasanyrole
 
 
-                                                @hasanyrole('admin|developer|manager|director|supervisor')
-                                                <li class="{{ Request::is('exams') ? 'active' : '' }}">
-                                                <a href="{{ url('exams') }}">
-                                                        <i class="fas fa-file-alt me-2"></i><span>Exams</span>
-                                                </a>
-                                                </li>
-                                                @endhasanyrole
-                                                @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
-                                                <li class="{{ Request::is('submit-results') ? 'active' : '' }}">
-                                                <a href="{{ url('submit-results') }}">
-                                                        <i class="fas fa-upload me-2"></i><span>Submit Results</span>
-                                                </a>
-                                                </li>
-                                                <li>
-                                                        <a href="{{ route('library.index') }}">
-                                                                <i class="ti ti-book me-2"></i> <span> Library</span>
-                                                        </a>
-                                                </li>
-                                                <li>
-                                                <a href="{{ route('library-categories.index') }}">
-                                                        <i class="ti ti-tag"></i> <span>Book Categories</span>
-                                                </a>
-                                                </li>
-                                                <li class="{{ Request::is('results-filter', 'results-view') ? 'active' : '' }}">
-                                                    <a href="{{ url('results-filter') }}">
-                                                        <i class="fas fa-search me-2"></i><span>View Results</span>
-                                                    </a>
-                                                </li>
-                                                @endhasanyrole
-                                                @hasanyrole('developer|student')
-                                                <li class="{{ Request::is('results-view','cbc-report') ? 'active' : '' }}">
-                                                    <a href="{{ url('cbc-report') }}">
-                                                        <i class="fas fa-search me-2"></i><span>View Results</span>
-                                                    </a>
-                                                </li>
-                                                @endhasanyrole
-                                                <li class="{{ Request::is('designation') ? 'active' : '' }}">
-                                                <a href="#">
-                                                        <i class="fas fa-tasks me-2"></i><span>Assessment Book</span>
-                                                </a>
-                                                </li>
-                                                <li class="{{ Request::is('diary') ? 'active' : '' }}">
-                                                <a href="#">
-                                                        <i class="fas fa-book me-2"></i><span>Diary</span>
-                                                </a>
-                                                </li>
-                                                 @hasanyrole('admin|developer|manager|director|supervisor')
-                                                @php
-                                                        $activeAcademic = Request::is('subjects') || Request::is('class-levels') || Request::is('streams');
-                                                @endphp
+                        @hasanyrole('admin|developer|manager|director|supervisor')
+                        <li class="{{ Request::is('exams') ? 'active' : '' }}">
+                            <a href="{{ url('exams') }}">
+                                <i class="fas fa-file-alt me-2"></i><span>Exams</span>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                        @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                        <li class="{{ Request::is('submit-results') ? 'active' : '' }}">
+                            <a href="{{ url('submit-results') }}">
+                                <i class="fas fa-upload me-2"></i><span>Submit Results</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('library.index') }}">
+                                <i class="ti ti-book me-2"></i> <span> Library</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('library-categories.index') }}">
+                                <i class="ti ti-tag"></i> <span>Book Categories</span>
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('results-filter', 'results-view') ? 'active' : '' }}">
+                            <a href="{{ url('results-filter') }}">
+                                <i class="fas fa-search me-2"></i><span>View Results</span>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                        @hasanyrole('developer|student')
+                        <li class="{{ Request::is('results-view','cbc-report') ? 'active' : '' }}">
+                            <a href="{{ url('cbc-report') }}">
+                                <i class="fas fa-search me-2"></i><span>View Results</span>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                        <li class="{{ Request::is('designation') ? 'active' : '' }}">
+                            <a href="#">
+                                <i class="fas fa-tasks me-2"></i><span>Assessment Book</span>
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('diary') ? 'active' : '' }}">
+                            <a href="#">
+                                <i class="fas fa-book me-2"></i><span>Diary</span>
+                            </a>
+                        </li>
+                        @hasanyrole('admin|developer|manager|director|supervisor')
+                        @php
+                        $activeAcademic = Request::is('subjects') || Request::is('class-levels') || Request::is('streams');
+                        @endphp
 
-                                                <li class="submenu {{ $activeAcademic ? 'active' : '' }}">
-                                                <a href="javascript:void(0);">
-                                                        <i class="fas fa-chalkboard-teacher me-2"></i>
-                                                        <span>Academic Setup</span>
-                                                        <span class="menu-arrow"></span>
-                                                </a>
-                                                <ul>
-                                                        <li class="{{ Request::is('subjects') ? 'active' : '' }}">
-                                                        <a href="{{ url('subjects') }}">
-                                                                <i class="fas fa-book-open me-2"></i> Learning Areas
-                                                        </a>
-                                                        </li>
-                                                        <li class="{{ Request::is('class-levels') ? 'active' : '' }}">
-                                                        <a href="{{ url('class-levels') }}">
-                                                                <i class="fas fa-layer-group me-2"></i> Grades Setup
-                                                        </a>
-                                                        </li>
-                                                        <li class="{{ Request::is('streams') ? 'active' : '' }}">
-                                                        <a href="{{ url('streams') }}">
-                                                                <i class="fas fa-stream me-2"></i> Streams Setup
-                                                        </a>
-                                                        </li>
-                                                </ul>
-                                                </li>
+                        <li class="submenu {{ $activeAcademic ? 'active' : '' }}">
+                            <a href="javascript:void(0);">
+                                <i class="fas fa-chalkboard-teacher me-2"></i>
+                                <span>Academic Setup</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul>
+                                <li class="{{ Request::is('subjects') ? 'active' : '' }}">
+                                    <a href="{{ url('subjects') }}">
+                                        <i class="fas fa-book-open me-2"></i> Learning Areas
+                                    </a>
+                                </li>
+                                <li class="{{ Request::is('class-levels') ? 'active' : '' }}">
+                                    <a href="{{ url('class-levels') }}">
+                                        <i class="fas fa-layer-group me-2"></i> Grades Setup
+                                    </a>
+                                </li>
+                                <li class="{{ Request::is('streams') ? 'active' : '' }}">
+                                    <a href="{{ url('streams') }}">
+                                        <i class="fas fa-stream me-2"></i> Streams Setup
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
 
-                                                <li class="{{ Request::is('terms') ? 'active' : '' }}">
-                                                <a href="{{ url('terms') }}">
-                                                        <i class="fas fa-calendar-alt me-2"></i><span>Terms</span>
-                                                </a>
-                                                </li>
-                                                <li class="{{ Request::is('school-classes') ? 'active' : '' }}">
-                                                <a href="{{ url('school-classes') }}">
-                                                        <i class="fas fa-chalkboard me-2"></i><span>Streams</span>
-                                                </a>
-                                                </li>
-                                                <li class="{{ Request::is('class-levels') ? 'active' : '' }}">
+                        <li class="{{ Request::is('terms') ? 'active' : '' }}">
+                            <a href="{{ url('terms') }}">
+                                <i class="fas fa-calendar-alt me-2"></i><span>Terms</span>
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('school-classes') ? 'active' : '' }}">
+                            <a href="{{ url('school-classes') }}">
+                                <i class="fas fa-chalkboard me-2"></i><span>Streams</span>
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('class-levels') ? 'active' : '' }}">
 
-                                                </li>
-                                                <li class="{{ Request::is('guardians') ? 'active' : '' }}">
-                                                <a href="{{ url('guardians') }}">
-                                                        <i class="fas fa-user-shield me-2"></i><span>Parent/Guardian</span>
-                                                </a>
-                                                </li>
-                                                <li class="{{ Request::is('teachers') ? 'active' : '' }}">
-                                                <a href="{{ url('teachers') }}">
-                                                        <i class="fas fa-chalkboard-teacher me-2"></i><span>Teachers</span>
-                                                </a>
-                                                </li>
-                                                @endhasanyrole
-                                                @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
-                                                <li class="{{ Request::is('department-grid') ? 'active' : '' }}">
-                                                <a href="{{ url('department-grid') }}">
-                                                        <i class="fas fa-compass me-2"></i><span>Departments</span>
-                                                </a>
-                                                </li>
-                                                @endhasanyrole
-                                        </ul>
-                                        </li>
+                        </li>
+                        <li class="{{ Request::is('guardians') ? 'active' : '' }}">
+                            <a href="{{ url('guardians') }}">
+                                <i class="fas fa-user-shield me-2"></i><span>Parent/Guardian</span>
+                            </a>
+                        </li>
+                        <li class="{{ Request::is('teachers') ? 'active' : '' }}">
+                            <a href="{{ url('teachers') }}">
+                                <i class="fas fa-chalkboard-teacher me-2"></i><span>Teachers</span>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                        @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                        <li class="{{ Request::is('department-grid') ? 'active' : '' }}">
+                            <a href="{{ url('department-grid') }}">
+                                <i class="fas fa-compass me-2"></i><span>Departments</span>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                    </ul>
+                </li>
 
                 @hasanyrole('admin|developer|manager|director|supervisor')
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Fee Management</h6>
                     <ul>
 
-                                                        <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
-                                                        <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
-                                                        <!-- <li class="submenu">
+                        <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                        <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
+                        <!-- <li class="submenu">
                                                                 <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
                                                                 <ul>
                                                                      @hasanyrole('admin|developer|manager|director|supervisor')

@@ -40,12 +40,14 @@ use App\Http\Controllers\SchoolClassController;
 use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SchoolCalendarController;
+use App\Http\Controllers\TimetableController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SdashboardController;
 use App\Http\Controllers\TdashboardController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookCategoryController;
+use App\Http\Controllers\TransportController;
 
 
 
@@ -74,16 +76,92 @@ Route::middleware(['auth'])->group(function () {
     /*===========================calendar======================================================*/
 
     Route::get('/calendar', [SchoolCalendarController::class, 'index'])->name('calendar.index');
-  Route::prefix('school-calendar')->group(function () {
-    Route::get('/data', [SchoolCalendarController::class, 'getCalendarData'])->name('school-calendar.data');
-    Route::get('/events/{event}', [SchoolCalendarController::class, 'show'])->name('school-calendar.events.show');
-    Route::post('/', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
-    Route::put('/{event}', [SchoolCalendarController::class, 'update'])->name('school-calendar.update');
-    Route::delete('/{event}', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
-    Route::post('/{event}/update-date', [SchoolCalendarController::class, 'updateEventDate'])->name('school-calendar.update-date');
-});
+    Route::prefix('school-calendar')->group(function () {
+        Route::get('/data', [SchoolCalendarController::class, 'getCalendarData'])->name('school-calendar.data');
+        Route::get('/events/{event}', [SchoolCalendarController::class, 'show'])->name('school-calendar.events.show');
+        Route::post('/', [SchoolCalendarController::class, 'store'])->name('school-calendar.store');
+        Route::put('/{event}', [SchoolCalendarController::class, 'update'])->name('school-calendar.update');
+        Route::delete('/{event}', [SchoolCalendarController::class, 'destroy'])->name('school-calendar.destroy');
+        Route::post('/{event}/update-date', [SchoolCalendarController::class, 'updateEventDate'])->name('school-calendar.update-date');
+    });
     /*===========================calendar======================================================*/
 
+    /*===========================Timetable======================================================*/
+
+    Route::prefix('timetable')->group(function () {
+        Route::get('/', [TimetableController::class, 'index'])->name('timetable.index');
+        Route::get('/create', [TimetableController::class, 'create'])->name('timetable.create');
+        Route::post('/', [TimetableController::class, 'store'])->name('timetable.store');
+        Route::get('/{timetable}/edit', [TimetableController::class, 'edit'])->name('timetable.edit');
+        Route::put('/{timetable}', [TimetableController::class, 'update'])->name('timetable.update');
+        Route::delete('/{timetable}', [TimetableController::class, 'destroy'])->name('timetable.destroy');
+        Route::get('/timetable/generate', [TimetableController::class, 'generate'])->name('timetable.generate');
+
+        // Class-specific timetables
+        Route::get('/class/{class}', [TimetableController::class, 'classTimetable'])->name('timetable.class');
+
+        // Teacher-specific timetables
+        Route::get('/teacher/{teacher}', [TimetableController::class, 'teacherTimetable'])->name('timetable.teacher');
+
+        // Room-specific timetables
+        Route::get('/room/{room}', [TimetableController::class, 'roomTimetable'])->name('timetable.room');
+
+        // Print timetables
+        Route::get('/print/class/{class}', [TimetableController::class, 'printClassTimetable'])->name('timetable.print.class');
+        Route::get('/print/teacher/{teacher}', [TimetableController::class, 'printTeacherTimetable'])->name('timetable.print.teacher');
+    });
+    /*===========================Timetable======================================================*/
+
+    /*===========================Transport======================================================*/
+
+    Route::prefix('transport')->group(function () {
+        // Routes Management
+        Route::get('/routes', [TransportController::class, 'index'])->name('transport');
+        Route::post('/routes', [TransportController::class, 'storeRoute'])->name('transport.routes.store');
+        Route::get('/routes/{id}/edit', [TransportController::class, 'editRoute'])->name('transport.routes.edit');
+        Route::put('/routes/{id}', [TransportController::class, 'updateRoute'])->name('transport.routes.update');
+        Route::delete('/routes/{id}', [TransportController::class, 'destroyRoute'])->name('transport.routes.destroy');
+
+        Route::get('/transport/dashboard-counters', [TransportController::class, 'getDashboardCounters'])->name('transport.dashboard.counters');
+        Route::get('/transport/initial-data', [TransportController::class, 'getInitialData'])->name('transport.initial.data');
+
+        // Route Stops
+        Route::get('/routes/{routeId}/stops', [TransportController::class, 'getStops'])->name('transport.routes.stops');
+        Route::post('/stops', [TransportController::class, 'storeStop'])->name('transport.stops.store');
+        Route::put('/stops/{id}', [TransportController::class, 'updateStop'])->name('transport.stops.update');
+        Route::delete('/stops/{id}', [TransportController::class, 'destroyStop'])->name('transport.stops.destroy');
+
+        // Vehicles Management
+        Route::post('/vehicles', [TransportController::class, 'storeVehicle'])->name('transport.vehicles.store');
+        Route::get('/vehicles/{id}/edit', [TransportController::class, 'editVehicle'])->name('transport.vehicles.edit');
+        Route::put('/vehicles/{id}', [TransportController::class, 'updateVehicle'])->name('transport.vehicles.update');
+        Route::delete('/vehicles/{id}', [TransportController::class, 'destroyVehicle'])->name('transport.vehicles.destroy');
+
+        // Driver Assignments
+        Route::get('/vehicles/{vehicleId}/driver', [TransportController::class, 'getDriver'])->name('transport.driver.get');
+        Route::post('/drivers', [TransportController::class, 'assignDriver'])->name('transport.driver.assign');
+
+        // Student Transport
+        Route::post('/students', [TransportController::class, 'storeStudentTransport'])->name('transport.students.store');
+        Route::get('/students/{id}/edit', [TransportController::class, 'editStudentTransport'])->name('transport.students.edit');
+        Route::put('/students/{id}', [TransportController::class, 'updateStudentTransport'])->name('transport.students.update');
+        Route::delete('/students/{id}', [TransportController::class, 'destroyStudentTransport'])->name('transport.students.destroy');
+
+        // Payments
+        Route::get('/students/{id}/payment', [TransportController::class, 'getPaymentInfo'])->name('transport.payment.info');
+        Route::post('/students/{id}/payment', [TransportController::class, 'recordPayment'])->name('transport.payment.record');
+
+        // ✅ Updated Attendance Routes
+        Route::get('/attendance', [TransportController::class, 'getAttendance'])->name('transport.attendance.get');
+        Route::post('/attendance', [TransportController::class, 'saveAttendance'])->name('transport.attendance.save');
+        Route::put('/attendance/{id}', [TransportController::class, 'updateAttendance'])->name('transport.attendance.update');
+
+        // Reports
+        Route::get('/reports', [TransportController::class, 'generateReport'])->name('transport.reports');
+        Route::get('/reports/export', [TransportController::class, 'exportReport'])->name('transport.reports.export');
+    });
+
+    /*===========================Transport======================================================*/
 
 
     Route::get('/general-settings', function () {
@@ -231,26 +309,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
     //library
     Route::middleware(['auth'])->group(function () {
-    Route::resource('library', LibraryController::class);
-    Route::resource('library-categories', BookCategoryController::class)->except(['show']);});
+        Route::resource('library', LibraryController::class);
+        Route::resource('library-categories', BookCategoryController::class)->except(['show']);
+    });
 
 
     // Fees
 
     Route::get('/fee-structure', [FeeStructureController::class, 'index'])->name('fee-structure')->middleware('auth');
 
-    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee-structure.store')->middleware('auth');
-
-    Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->name('fee-structure.show');
-    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->name('fee-structure.update');
-    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->name('fee-structure.delete');
+    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
+    Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
+    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
+    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
 
     Route::resource('fee-payments', FeePaymentsController::class);
     Route::get('/students/balance', [FeePaymentsController::class, 'fetchBalance']);
     Route::get('/fee-payments/student/{student}', [FeePaymentsController::class, 'studentPayments'])->name('fee-payments.student');
     Route::post('/fee-payments/store', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
-    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee-structure.store');
+
 
 
 

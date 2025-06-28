@@ -34,7 +34,6 @@ class Student extends Model
     public function attendance()
     {
         return $this->hasMany(Attendance::class, 'student_id');
-
     }
     public function results()
     {
@@ -54,7 +53,10 @@ class Student extends Model
     {
         return $this->hasOne(Guardian::class);
     }
-    public function meal() { return $this->hasOne(StudentMeal::class); }
+    public function meal()
+    {
+        return $this->hasOne(StudentMeal::class);
+    }
     public function transport()
     {
         return $this->hasOne(StudentTransport::class, 'student_id');
@@ -76,5 +78,13 @@ class Student extends Model
     }
 
 
+    public function transports()
+    {
+        return $this->hasMany(StudentTransport::class);
+    }
 
+    public function transportAttendances()
+    {
+        return $this->hasMany(TransportAttendance::class);
+    }
 }

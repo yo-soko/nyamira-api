@@ -17,7 +17,7 @@ class SchoolClass extends Model
         'class_prefect',
         'status',
     ];
-    
+
     public function level()
     {
         return $this->belongsTo(ClassLevel::class, 'level_id');
@@ -52,4 +52,8 @@ class SchoolClass extends Model
         return $this->belongsToMany(Subject::class, 'class_subjects', 'class_id', 'subject_id');
     }
 
+    public function studentTransports()
+    {
+        return $this->hasMany(StudentTransport::class);
+    }
 }
