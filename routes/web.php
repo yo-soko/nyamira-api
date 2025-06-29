@@ -318,7 +318,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('library-categories', BookCategoryController::class)->except(['show']);
     });
     //teacher dash
-    Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+    Route::get('/teacher.dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 
 
 
