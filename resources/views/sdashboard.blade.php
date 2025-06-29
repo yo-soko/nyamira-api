@@ -106,7 +106,7 @@
                 </div>
             </div>
         </div> 
-                 <div class="col-xl-3 col-sm-6 d-flex">
+        <div class="col-xl-3 col-sm-6 d-flex">
             <div class="card flex-fill bg-secondary-gradient">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">

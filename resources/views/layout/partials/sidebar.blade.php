@@ -69,9 +69,9 @@
                                 </li>
                                 @endhasanyrole
                                 @hasanyrole('developer|teacher')
-                                <li class="{{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
-                                    <a href="{{ route('teacher.dashboard') }}">
-                                        <i class="bi bi-speedometer2"></i><span>Teacher Dashboard</span>
+                                <li class="{{ Request::is('teacher.dashboard') ? 'active' : '' }}">
+                                    <a href="{{ url('teacher-dashboard') }}">
+                                        <i class="fas fa-tachometer-alt me-2"></i><span>Teacher Dashboard</span>
                                     </a>
                                 </li>
                                 @endhasanyrole
