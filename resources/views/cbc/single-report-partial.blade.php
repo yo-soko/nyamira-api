@@ -134,6 +134,11 @@
                     </ul>
                 </div>
             </div>
+          
+
+        </div>
+        <div class="print-footer text-center">
+            <small><strong>Software developed by JavaPA LTD 0727147442</strong></small>
         </div>
 <script src="{{ asset('build/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('build/plugins/chartjs/chart.min.js') }}"></script>

@@ -434,9 +434,19 @@ class SdashboardController extends Controller
             if (!$selectedExam) {
                 abort(404, 'Assessment not found');
             }
-            $assessmentNames = [1 => $selectedExam->name];
+
+            // Reverse lookup: find key (1/2/3) from name
+            $reverseMap = array_flip([
+                1 => 'Assessment 1',
+                2 => 'Assessment 2',
+                3 => 'Assessment 3',
+            ]);
+
+            $index = $reverseMap[$selectedExam->name] ?? 1; // default to 1 if not found
+            $assessmentNames = [$index => $selectedExam->name];
             $exams = collect([$selectedExam])->keyBy('name');
-        } else {
+        }
+        else {
             $exams = \App\Models\Exam::where('term_id', $termId)
                 ->whereIn('name', array_values($assessmentNames))
                 ->get()
@@ -590,20 +600,20 @@ class SdashboardController extends Controller
             'termId'
         );
     }
-public function viewBulkReports(Request $request)
-{
-    $classId = $request->input('class_id');
-    $termId = $request->input('term_id');
-    $examId = $request->input('exam_id');
+    public function viewBulkReports(Request $request)
+    {
+        $classId = $request->input('class_id');
+        $termId = $request->input('term_id');
+        $examId = $request->input('exam_id');
 
-    $students = Student::where('class_id', $classId)->get();
-    $reports = [];
+        $students = Student::where('class_id', $classId)->get();
+        $reports = [];
 
-    foreach ($students as $student) {
-        $reports[] = $this->prepareCbcReportData($student, $termId, $examId);
+        foreach ($students as $student) {
+            $reports[] = $this->prepareCbcReportData($student, $termId, $examId);
+        }
+
+        return view('cbc.bulk-html-view', compact('reports'));
     }
-
-    return view('cbc.bulk-html-view', compact('reports'));
-}
 
 }

@@ -1,110 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bulk CBC Reports</title>
-  <style>
-@media print {
-    @page {
-        size: A4 portrait;
-        margin: 5mm;
-    }
-
-    body {
-        margin: 0 !important;
-        font-family: Georgia, 'Times New Roman', serif;
-        font-size: 15pt;
-        background: white;
-        color: black;
-    }
-
-    body * {
-        visibility: hidden;
-    }
-
-    .container-report, .container-report * {
-        visibility: visible;
-    }
-
-    .container-report {
-        margin-top: 20mm; /* add this */
-        position: relative;
-        width: 100%;
-        min-height: 100%;
-        background: white;
-        box-sizing: border-box;
-    }
-
-    .page-header,
-    .footer,
-    .d-print-none {
-        display: none !important;
-    }
-
-    h4, h5, h6 {
-        font-size: 16pt;
-        margin: 4px 0;
+<title>Bulk CBC Reports</title>
+<style>
+    @media print {
+        @page {
+            size: A4 portrait;
+            margin: 5mm;
+        }
+   .print-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
         text-align: center;
+        font-size: 12pt;
+        padding: 5px 0;
+        background: white;
+        border-top: 1px solid #000;
     }
+        body {
+            margin: 0 !important;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 15pt;
+            background: white;
+            color: black;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse !important;
-    }
+        body * {
+            visibility: hidden;
+        }
 
-    th, td {
-        padding: 6px;
-        border: 1px solid #000 !important;
-        text-align: left;
-        vertical-align: middle;
-        font-size: 15pt;
-    }
+        .container-report, .container-report * {
+            visibility: visible;
+        }
 
-    .table th {
-        background: #f0f0f0;
-    }
+        .container-report {
+            margin-top: 20mm; /* add this */
+            position: relative;
+            width: 100%;
+            min-height: 100%;
+            background: white;
+            box-sizing: border-box;
+        }
 
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
+        .page-header,
+        .footer,
+        .d-print-none {
+            display: none !important;
+        }
 
-    .col-6, .col-md-6 {
-        width: 50%;
-    }
+        h4, h5, h6 {
+            font-size: 16pt;
+            margin: 4px 0;
+            text-align: center;
+        }
 
-    canvas {
-        display: block;
-        margin: 0 auto;
-        page-break-inside: avoid;
-        image-rendering: crisp-edges;
-        image-rendering: pixelated;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse !important;
+        }
 
-    ul {
-        padding-left: 1rem;
-    }
+        th, td {
+            padding: 6px;
+            border: 1px solid #000 !important;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 15pt;
+        }
 
-    ul li {
-        margin-bottom: 2px;
-    }
+        .table th {
+            background: #f0f0f0;
+        }
 
-    .d-flex {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-    }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
 
-    .logo-img {
-        height: 200px !important;
-        width: auto !important;
-    }
+        .col-6, .col-md-6 {
+            width: 50%;
+        }
 
-    .page-break {
-        page-break-after: always;
+        canvas {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        ul {
+            padding-left: 1rem;
+        }
+
+        ul li {
+            margin-bottom: 2px;
+        }
+
+        .d-flex {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+        }
+
+        .logo-img {
+            height: 200px !important;
+            width: auto !important;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
     }
-}
 </style>
 
 </head>

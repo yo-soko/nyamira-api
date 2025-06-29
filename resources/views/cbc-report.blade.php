@@ -7,7 +7,19 @@
             size: A4 portrait;
             margin: 3mm;
         }
-
+        .print-footer {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 12pt;
+        padding: 5px 0;
+        background: white;
+        border-top: 1px solid #000;
+        z-index: 999;
+    }
         body {
             margin: 0 !important;
             font-family: Georgia, 'Times New Roman', serif;
@@ -108,9 +120,12 @@
               
             </div>
             <ul class="table-top-head">
-                <li class="me-2">
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img src="{{URL::asset('build/img/icons/pdf.svg')}}" alt="img"></a>
+               <li class="me-2 d-print-none">
+                    <a class="btn btn-primary" onclick="window.print()" data-bs-placement="top" title="Pdf">
+                        <img src="{{ URL::asset('build/img/icons/pdf.svg') }}" alt="img">
+                    </a>
                 </li>
+
                 <li class="me-2">
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Excel"><img src="{{URL::asset('build/img/icons/excel.svg')}}" alt="img"></a>
                 </li>
@@ -124,24 +139,24 @@
           
         </div>
         <div class="mb-4 d-print-none">
-    <form method="GET" action="{{ route('cbc.report') }}" class="form-inline">
-        <div class="row g-2 align-items-end">
-            <div class="col-auto">
-                <label for="term_id" class="form-label mb-0">Select Term:</label>
-                <select name="term_id" id="term_id" class="form-select">
-                    @foreach($terms as $term)
-                        <option value="{{ $term->id }}" {{ $termId == $term->id ? 'selected' : '' }}>
-                            {{ $term->term_name }} - {{ \Carbon\Carbon::parse($term->start_date)->format('M Y') }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
+            <form method="GET" action="{{ route('cbc.report') }}" class="form-inline">
+                <div class="row g-2 align-items-end">
+                    <div class="col-auto">
+                        <label for="term_id" class="form-label mb-0">Select Term:</label>
+                        <select name="term_id" id="term_id" class="form-select">
+                            @foreach($terms as $term)
+                                <option value="{{ $term->id }}" {{ $termId == $term->id ? 'selected' : '' }}>
+                                    {{ $term->term_name }} - {{ \Carbon\Carbon::parse($term->start_date)->format('M Y') }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
 
         <div class="container-report bg-white p-4"> 
             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -264,9 +279,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="text-center mt-3 d-print-none">
-            <button class="btn btn-primary" onclick="window.print()">Print Report</button>
+     
+        <div class="print-footer text-center">
+            <small><strong>Software developed by JavaPA LTD 0727147442</strong></small>
         </div>
 
     </div>
