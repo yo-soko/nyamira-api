@@ -17,7 +17,9 @@ return new class extends Migration {
             $table->string('education_level');
             $table->string('years_of_experience', 100);
             $table->string('gender', 50);
-            $table->unsignedBigInteger('department');
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('user_id');
+             $table->unsignedBigInteger('class_id')->nullable();
             $table->tinyInteger('status')->default(1); // 1 = active
             $table->timestamps();
 

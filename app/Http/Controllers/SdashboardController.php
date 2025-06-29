@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Result;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SdashboardController extends Controller
 {
@@ -141,14 +142,13 @@ class SdashboardController extends Controller
     public function cbcReport(Request $request)
     {
         $user = auth()->user();
-
         $student = $request->get('student') ?? $user->student;
+
         if (!$student) {
             abort(404, 'Student not found');
         }
 
         $studentId = $student->id;
-
         $termId = $request->input('term_id', $student->term_id);
 
         $termIds = \App\Models\Result::where('student_id', $studentId)
@@ -163,20 +163,35 @@ class SdashboardController extends Controller
         $studentClassId = $studentClass->id ?? null;
         $studentLevelId = $studentClass->level_id ?? null;
 
-        // Define exam name mapping
+        $examId = $request->input('exam_id');
+
         $assessmentNames = [
             1 => 'Assessment 1',
             2 => 'Assessment 2',
             3 => 'Assessment 3',
         ];
 
-        // Get exams for the selected term
-        $exams = \App\Models\Exam::where('term_id', $termId)
-            ->whereIn('name', array_values($assessmentNames))
-            ->get()
-            ->keyBy('name');
+        if ($examId) {
+            $selectedExam = \App\Models\Exam::find($examId);
+            if (!$selectedExam) {
+                abort(404, 'Assessment not found');
+            }
+            $assessmentNames = [1 => $selectedExam->name];
+            $exams = collect([$selectedExam])->keyBy('name');
+        } else {
+            $exams = \App\Models\Exam::where('term_id', $termId)
+                ->whereIn('name', array_values($assessmentNames))
+                ->get()
+                ->keyBy('name');
+        }
 
-        // Fetch all results for this student for those exams
+        $existingAssessments = [];
+        foreach ($assessmentNames as $i => $name) {
+            if (isset($exams[$name])) {
+                $existingAssessments[] = $i;
+            }
+        }
+
         $results = \App\Models\Result::with('subject')
             ->where('student_id', $studentId)
             ->whereIn('exam_id', $exams->pluck('id'))
@@ -184,9 +199,8 @@ class SdashboardController extends Controller
             ->get()
             ->groupBy('subject_id');
 
-        // Grade-to-score mapping
         $gradeToScore = function ($grade) {
-            return match(strtolower(trim($grade))) {
+            return match (strtolower(trim($grade))) {
                 'below expectation' => 12,
                 'approaching expectation' => 37,
                 'meeting expectation' => 62,
@@ -198,19 +212,18 @@ class SdashboardController extends Controller
         $marks = collect();
         $summary = [];
 
-        // Initialize summary
-        for ($i = 1; $i <= 3; $i++) {
+        foreach ($existingAssessments as $i) {
             $summary["avg_$i"] = '-';
         }
 
-        // Build the subject marks from actual results only
         foreach ($results as $subjectId => $subjectResults) {
             $subject = $subjectResults->first()?->subject ?? \App\Models\Subject::find($subjectId);
             $row = new \stdClass();
             $row->subject = $subject;
 
-            for ($i = 1; $i <= 3; $i++) {
-                $exam = $exams[$assessmentNames[$i]] ?? null;
+            foreach ($existingAssessments as $i) {
+                $examName = $assessmentNames[$i];
+                $exam = $exams[$examName] ?? null;
 
                 $row->{"assessment_$i"} = null;
                 $row->{"comment_$i"} = null;
@@ -229,13 +242,13 @@ class SdashboardController extends Controller
             $marks->push($row);
         }
 
-        // Compute averages per assessment (based only on subjects in results)
-        for ($i = 1; $i <= 3; $i++) {
+        foreach ($existingAssessments as $i) {
             $total = 0;
             $count = 0;
 
             foreach ($marks as $mark) {
-                $val = $mark->{"assessment_$i"};
+                $val = property_exists($mark, "assessment_$i") ? $mark->{"assessment_$i"} : null;
+
                 if (!is_null($val)) {
                     $total += $val;
                     $count++;
@@ -245,53 +258,56 @@ class SdashboardController extends Controller
             $summary["avg_$i"] = $count > 0 ? round($total / $count, 2) : '-';
         }
 
-        // Class and Level average (optional)
         $classAverage = 0;
         $levelAverage = 0;
-        for ($i = 1; $i <= 3; $i++) {
-            $exam = $exams[$assessmentNames[$i]] ?? null;
+
+        foreach ($existingAssessments as $i) {
+            $examName = $assessmentNames[$i];
+            $exam = $exams[$examName] ?? null;
+
             if ($exam) {
                 $classAvg = \App\Models\Result::where('exam_id', $exam->id)
                     ->where('term_id', $termId)
-                    ->whereHas('student', fn($q) => $q->where('class_id', $studentClassId))
+                    ->whereHas('student', fn ($q) => $q->where('class_id', $studentClassId))
                     ->avg('marks');
+
                 $classAverage = $classAvg ? round($classAvg, 2) : $classAverage;
 
                 $levelAvg = \App\Models\Result::where('exam_id', $exam->id)
                     ->where('term_id', $termId)
-                    ->whereHas('student.class', fn($q) => $q->where('level_id', $studentLevelId))
+                    ->whereHas('student.class', fn ($q) => $q->where('level_id', $studentLevelId))
                     ->avg('marks');
+
                 $levelAverage = $levelAvg ? round($levelAvg, 2) : $levelAverage;
             }
         }
 
-        // Rubric label generator
         $rubricCode = function ($score) {
             if ($score === null) return '-';
             if ($score >= 80) return 'E.E';
             if ($score >= 60) return 'M.E';
             if ($score >= 40) return 'A.E';
-            if ($score >= 0) return 'B.E';
+            if ($score >= 0)  return 'B.E';
             return '-';
         };
 
-        // Build chart data
-        $chartData = $marks->map(function ($mark) use ($gradeToScore) {
+        $chartData = $marks->map(function ($mark) use ($gradeToScore, $existingAssessments) {
             $score = null;
-            for ($i = 3; $i >= 1; $i--) {
+
+            foreach (array_reverse($existingAssessments) as $i) {
                 $val = property_exists($mark, "assessment_$i") ? $mark->{"assessment_$i"} : null;
                 if (!is_null($val)) {
                     $score = is_numeric($val) ? $val : $gradeToScore($val);
                     break;
                 }
             }
+
             return [
                 'subject' => $mark->subject->subject_name ?? 'Unknown',
                 'score' => $score ?? 0,
             ];
         });
 
-        // Facilitator detection
         $facilitatorUserId = \App\Models\Result::where('student_id', $studentId)
             ->where('term_id', $termId)
             ->select('user_id', DB::raw('count(*) as count'))
@@ -302,7 +318,6 @@ class SdashboardController extends Controller
         $facilitator = \App\Models\User::find($facilitatorUserId);
         $facilitatorName = $facilitator ? $facilitator->name : ' ';
 
-        // Term details
         $term = \App\Models\Term::find($termId);
         $summary['term_name'] = $term->term_name ?? '-';
         $summary['term_end_date'] = $term->end_date ?? '-';
@@ -322,6 +337,7 @@ class SdashboardController extends Controller
         ));
     }
 
+
     public function viewCBCReport(Request $request)
     {
         $user = auth()->user();
@@ -340,5 +356,242 @@ class SdashboardController extends Controller
         return $this->cbcReport($request->merge(['student' => $student]));
     }
 
+    public function cbcReportBatch(Request $request)
+    {
+        $classId = $request->input('class_id');
+        $termId = $request->input('term_id');
+        $examId = $request->input('exam_id'); // optional
+
+        $students = \App\Models\Student::where('class_id', $classId)->get();
+
+        if ($students->isEmpty()) {
+            return back()->with('error', 'No students found in selected class.');
+        }
+
+        $reports = [];
+
+        foreach ($students as $student) {
+            // Create a mock request for each student
+            $clone = new Request([
+                'term_id' => $termId,
+                'exam_id' => $examId
+            ]);
+            $clone->merge(['student' => $student]);
+
+            $reports[] = $this->cbcReport($clone)->getData();
+        }
+
+        return view('cbc-batch-report', compact('reports'));
+    }
+
+public function generateBulkReports(Request $request)
+{
+    $classId = $request->input('class_id');
+    $termId = $request->input('term_id');
+    $examId = $request->input('exam_id');
+
+    $students = Student::where('class_id', $classId)->get();
+
+    $reports = [];
+
+    foreach ($students as $student) {
+       $reportData = $this->prepareCbcReportData($student, $termId, $examId);
+
+        $reports[] = $reportData;
+    }
+
+    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('cbc-reports-bulk-wrapper', [
+        'students' => $reports
+    ])->setPaper('A4', 'portrait');
+
+    return $pdf->download('cbc-bulk-reports.pdf');
+}
+
+
+
+
+public function prepareCbcReportData($student, $termId, $examId = null)
+{
+    $studentId = $student->id;
+
+    $termIds = \App\Models\Result::where('student_id', $studentId)
+        ->pluck('term_id')
+        ->unique();
+
+    $terms = \App\Models\Term::whereIn('id', $termIds)
+        ->orderBy('start_date', 'desc')
+        ->get();
+
+    $studentClass = $student->class;
+    $studentClassId = $studentClass->id ?? null;
+    $studentLevelId = $studentClass->level_id ?? null;
+
+    $assessmentNames = [
+        1 => 'Assessment 1',
+        2 => 'Assessment 2',
+        3 => 'Assessment 3',
+    ];
+
+    if ($examId) {
+        $selectedExam = \App\Models\Exam::find($examId);
+        if (!$selectedExam) {
+            abort(404, 'Assessment not found');
+        }
+        $assessmentNames = [1 => $selectedExam->name];
+        $exams = collect([$selectedExam])->keyBy('name');
+    } else {
+        $exams = \App\Models\Exam::where('term_id', $termId)
+            ->whereIn('name', array_values($assessmentNames))
+            ->get()
+            ->keyBy('name');
+    }
+
+    $existingAssessments = [];
+    foreach ($assessmentNames as $i => $name) {
+        if (isset($exams[$name])) {
+            $existingAssessments[] = $i;
+        }
+    }
+
+    $results = \App\Models\Result::with('subject')
+        ->where('student_id', $studentId)
+        ->whereIn('exam_id', $exams->pluck('id'))
+        ->where('term_id', $termId)
+        ->get()
+        ->groupBy('subject_id');
+
+    $gradeToScore = function ($grade) {
+        return match (strtolower(trim($grade))) {
+            'below expectation' => 12,
+            'approaching expectation' => 37,
+            'meeting expectation' => 62,
+            'exceeding expectation' => 87,
+            default => null,
+        };
+    };
+
+    $marks = collect();
+    $summary = [];
+
+    foreach ($existingAssessments as $i) {
+        $summary["avg_$i"] = '-';
+    }
+
+    foreach ($results as $subjectId => $subjectResults) {
+        $subject = $subjectResults->first()?->subject ?? \App\Models\Subject::find($subjectId);
+        $row = new \stdClass();
+        $row->subject = $subject;
+
+        foreach ($existingAssessments as $i) {
+            $examName = $assessmentNames[$i];
+            $exam = $exams[$examName] ?? null;
+
+            $row->{"assessment_$i"} = null;
+            $row->{"comment_$i"} = null;
+
+            if ($exam) {
+                $result = $subjectResults->firstWhere('exam_id', $exam->id);
+
+                if ($result) {
+                    $score = $result->marks ?? $gradeToScore($result->grade);
+                    $row->{"assessment_$i"} = $score;
+                    $row->{"comment_$i"} = $result->comments;
+                }
+            }
+        }
+
+        $marks->push($row);
+    }
+
+    foreach ($existingAssessments as $i) {
+        $total = 0;
+        $count = 0;
+
+        foreach ($marks as $mark) {
+            $val = property_exists($mark, "assessment_$i") ? $mark->{"assessment_$i"} : null;
+            if (!is_null($val)) {
+                $total += $val;
+                $count++;
+            }
+        }
+
+        $summary["avg_$i"] = $count > 0 ? round($total / $count, 2) : '-';
+    }
+
+    $classAverage = 0;
+    $levelAverage = 0;
+
+    foreach ($existingAssessments as $i) {
+        $examName = $assessmentNames[$i];
+        $exam = $exams[$examName] ?? null;
+
+        if ($exam) {
+            $classAvg = \App\Models\Result::where('exam_id', $exam->id)
+                ->where('term_id', $termId)
+                ->whereHas('student', fn ($q) => $q->where('class_id', $studentClassId))
+                ->avg('marks');
+            $classAverage = $classAvg ? round($classAvg, 2) : $classAverage;
+
+            $levelAvg = \App\Models\Result::where('exam_id', $exam->id)
+                ->where('term_id', $termId)
+                ->whereHas('student.class', fn ($q) => $q->where('level_id', $studentLevelId))
+                ->avg('marks');
+            $levelAverage = $levelAvg ? round($levelAvg, 2) : $levelAverage;
+        }
+    }
+
+    $rubricCode = function ($score) {
+        if ($score === null) return '-';
+        if ($score >= 80) return 'E.E';
+        if ($score >= 60) return 'M.E';
+        if ($score >= 40) return 'A.E';
+        if ($score >= 0) return 'B.E';
+        return '-';
+    };
+
+    $chartData = $marks->map(function ($mark) use ($gradeToScore, $existingAssessments) {
+        $score = null;
+
+        foreach (array_reverse($existingAssessments) as $i) {
+            $val = property_exists($mark, "assessment_$i") ? $mark->{"assessment_$i"} : null;
+            if (!is_null($val)) {
+                $score = is_numeric($val) ? $val : $gradeToScore($val);
+                break;
+            }
+        }
+
+        return [
+            'subject' => $mark->subject->subject_name ?? 'Unknown',
+            'score' => $score ?? 0,
+        ];
+    });
+
+    $facilitatorUserId = \App\Models\Result::where('student_id', $studentId)
+        ->where('term_id', $termId)
+        ->select('user_id', DB::raw('count(*) as count'))
+        ->groupBy('user_id')
+        ->orderByDesc('count')
+        ->first()?->user_id;
+
+    $facilitator = \App\Models\User::find($facilitatorUserId);
+    $facilitatorName = $facilitator ? $facilitator->name : ' ';
+
+    $term = \App\Models\Term::find($termId);
+    $summary['term_name'] = $term->term_name ?? '-';
+    $summary['term_end_date'] = $term->end_date ?? '-';
+    $summary['next_term_begins'] = $term->next_term_begins ?? '-';
+
+    return compact(
+        'student',
+        'marks',
+        'summary',
+        'facilitatorName',
+        'chartData',
+        'rubricCode',
+        'classAverage',
+        'levelAverage',
+        'termId'
+    );
+}
 
 }

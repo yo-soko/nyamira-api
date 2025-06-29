@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('dropoff_location')->nullable();
             $table->time('pickup_time')->nullable();
             $table->time('dropoff_time')->nullable();
-
+            $table->unsignedBigInteger('route_id')->nullable();
             $table->timestamps();
 
             // Constraints

@@ -81,7 +81,8 @@ class CustomAuthController extends Controller
         }
         elseif ($user->role === 'teacher') {
             return redirect()->intended('submit-results')->with('success', 'Very nice to have you back!');
-        } else {
+        } 
+        else {
             return redirect()->intended('index')->with('success', 'Very nice to have you back!');
         }
 

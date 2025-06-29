@@ -9,7 +9,7 @@
         <div class="page-header d-flex justify-content-between align-items-center">
             <h4 class="page-title">E-Library</h4>
             <div class="page-btn">
-                @if(in_array(auth()->user()->role, ['teacher', 'developer' , 'admin']))
+                @if(in_array(auth()->user()->role, ['class_teacher','teacher', 'developer' , 'admin']))
                 <a href="{{ route('library.create') }}" class="btn btn-primary">
                     <i class="ti ti-circle-plus me-1"></i> Upload Book
                 </a>
@@ -17,7 +17,6 @@
             </div>
         </div>
 
-        {{-- 🔍 Search and Filter --}}
         <form method="GET" class="row g-2 mb-4">
             <div class="col-md-4">
                 <input type="text" name="search" class="form-control" placeholder="Search by title..." value="{{ request('search') }}">
@@ -40,7 +39,7 @@
             </div>
         </form>
 
-        {{-- 📚 Book Table --}}
+
         <div class="card">
 
             <div class="card-body p-0">

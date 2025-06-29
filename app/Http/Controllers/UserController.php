@@ -10,11 +10,16 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        $users = User::all(); // Or paginate() if you prefer
+        $users = User::whereDoesntHave('roles', function ($query) {
+            $query->where('name', 'developer');
+        })->get();
+
         return view('users', compact('users'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -35,6 +40,7 @@ class UserController extends Controller
             'phone' => 'nullable|string',
             'role' => 'required',
             'code' => 'required',
+       
             'password' => 'required|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -50,6 +56,7 @@ class UserController extends Controller
             'phone' => $request->phone,
             'code' => $request->code,
             'role' => $request->role,
+    
             'status' => $request->has('status'),
             'profile_picture' => $imagePath,
             'password' => Hash::make($request->password),
@@ -83,7 +90,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-     public function update(Request $request)
+  
+    public function update(Request $request)
     {
         $user = auth()->user();
 
@@ -112,7 +120,50 @@ class UserController extends Controller
 
         return back()->with('success', 'Profile updated successfully.');
     }
-    
+
+    public function upgrade(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'phone' => 'nullable|string',
+            'role' => 'required',
+            'code' => 'nullable',
+            
+            'password' => 'nullable|confirmed',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        // Handle profile picture upload
+        if ($request->hasFile('profile_picture')) {
+            // Delete old image if exists
+            if ($user->profile_picture && \Storage::disk('public')->exists($user->profile_picture)) {
+                \Storage::disk('public')->delete($user->profile_picture);
+            }
+            $user->profile_picture = $request->file('profile_picture')->store('profiles', 'public');
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+      
+        $user->role = $request->role;
+        $user->status = $request->has('status');
+
+        if ($request->filled('code')) {
+                $user->code = $request->code;
+            }
+        // Update password only if provided
+        if ($request->filled('password')) {
+            $user->password = \Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'User updated successfully!');
+    }
 
     /**
      * Remove the specified resource from storage.

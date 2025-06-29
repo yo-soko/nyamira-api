@@ -25,11 +25,17 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#printReportsModal">
+                Print Bulk Assesments
+            </button>
+
             @hasanyrole('admin|developer|manager|director|supervisor')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal"><i class="ti ti-circle-plus me-1"></i>Add Learner</a>
             </div>
             @endhasanyrole
+            
+
         </div>
         <!-- /product list -->
         <div class="card">
@@ -618,6 +624,55 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="printReportsModal" tabindex="-1" aria-labelledby="printReportsLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('cbc.reports.batch') }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="printReportsLabel">Generate Assesment Reports</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="class_id" class="form-label">Select Class</label>
+                        <select name="class_id" id="class_id" class="form-select select2" required>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">   {{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="term_id" class="form-label">Select Term</label>
+                        <select name="term_id" id="term_id" class="form-select select2" required>
+                            @foreach($terms as $term)
+                                <option value="{{ $term->id }}">{{ $term->term_name }} - {{ $term->year }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="exam_id" class="form-label">Select Assessment (Optional)</label>
+                        <select name="exam_id" id="exam_id" class="form-select select2">
+                            <option value="">All Assessments</option>
+                            @foreach($exams as $exam)
+                                <option value="{{ $exam->id }}">{{ $exam->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Print Reports</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
     function toggleEditMealFields() {
         const mealCheck = document.getElementById('edit_needs_meals');

@@ -16195,7 +16195,7 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Role<span class="text-danger ms-1">*</span></label>
-                                            <select class="form-select" name="role">
+                                            <select class="form-select select2" name="role">
                                                 <option value="">select here</option>
                                                 @foreach($roless as $role)
                                                     <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -16275,7 +16275,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form id="editForm" action="{{ route('users.update', 0) }}" method="POST" enctype="multipart/form-data">
+                        <form id="editForm" action="{{ route('users.upgrade', 0) }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
                             <input type="hidden" id="edit-id" name="id">
@@ -16311,10 +16311,11 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Role<span class="text-danger ms-1">*</span></label>
-                                            <select name="role" id="edit-role" class="select">
-                                                <option>Admin</option>
-                                                <option>Manager</option>
-                                                <option>Salesman</option>
+                                             <select class="form-select select2" id="edit-role" name="role">
+                                                <option value="">select here</option>
+                                                @foreach($roless as $role)
+                                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -16341,7 +16342,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Password<span class="text-danger ms-1">*</span></label>
                                             <div class="pass-group">
-                                                    <input type="password" name="password" class="form-control">
+                                                    <input type="password" name="password" class="form-control" autocomplete="new-password">
                                                 <i class="ti ti-eye-off toggle-password"></i>
                                             </div>
                                         </div>
@@ -16350,7 +16351,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Confirm Password<span class="text-danger ms-1">*</span></label>
                                             <div class="pass-group">
-                                                <input type="password" name="password_confirmation" class="form-control">
+                                                <input type="password" name="password_confirmation" class="form-control" autocomplete="new-password">
                                                 <i class="ti ti-eye-off toggle-password"></i>
                                             </div>
                                         </div>

@@ -21,7 +21,6 @@ return new class extends Migration
             $table->tinyInteger('day_of_week'); // 1-5 for Monday-Friday
             $table->timestamps();
 
-            // Prevent duplicate entries
             $table->unique(['class_level_id', 'day_of_week', 'time_slot_id']);
         });
     }

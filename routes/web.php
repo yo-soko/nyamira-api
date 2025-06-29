@@ -184,9 +184,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
     Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::post('/users', [UserController::class, 'store']);
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+    Route::put('/users/{id}', [UserController::class, 'upgrade'])->name('users.upgrade');
     Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
 
     Route::get('/profile', function () {
@@ -274,6 +275,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/cbc-report', [SdashboardController::class, 'cbcReport'])->name('cbc.report');
     Route::post('/cbc-report/view', [SdashboardController::class, 'viewCBCReport'])->name('cbc-report.view');
+    Route::post('/cbc-reports/batch', [SdashboardController::class, 'generateBulkReports'])->name('cbc.reports.batch');
+
+
 
     //terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
@@ -323,10 +327,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/fee-structure', [FeeStructureController::class, 'index'])->name('fee-structure')->middleware('auth');
 
-    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
+    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee-structure.store');
     Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
-    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
-    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
+    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->name('fee-structure.update');
+    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->name('fee-structure.delete');
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
 
     Route::resource('fee-payments', FeePaymentsController::class);

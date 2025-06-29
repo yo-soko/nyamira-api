@@ -202,9 +202,11 @@
                     <tr>
                         <td><strong>Average Score</strong></td>
                         @for ($i = 1; $i <= 3; $i++)
-                            <td><strong>{{ $rubricCode($summary["avg_$i"]) }}</strong></td>
+                            @php $avg = $summary["avg_$i"] ?? null; @endphp
+                            <td><strong>{{ $rubricCode($avg) }}</strong></td>
                             <td></td>
                         @endfor
+
                     </tr>
 
                     </tbody>

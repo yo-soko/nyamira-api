@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('term_id');
             $table->unsignedBigInteger('level_id');
             $table->timestamps();
-
+            $table->tinyInteger('status')->default(0); 
             $table->unique(['exam_id', 'subject_id', 'level_id','term_id']);
         });
     }
