@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('fee_payments', function (Blueprint $table) {
             $table->id('payment_id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('class_id'); // refers to school_classes
             $table->unsignedBigInteger('term_id');

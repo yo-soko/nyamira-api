@@ -347,6 +347,20 @@ Route::middleware(['auth'])->group(function () {
     // ✅ Get students by class (used in payment modal)
     Route::get('/students/by-class/{classId}', [StudentController::class, 'getByClass'])->name('students.byClass');
 
+    // Route to fetch students by class only (for filters)
+    Route::get('/filter/students/by-class/{classId}', function ($classId) {
+        return \App\Models\Student::where('class_id', $classId)
+            ->select('id', 'first_name', 'last_name')
+            ->get()
+            ->map(function ($student) {
+                return [
+                    'id' => $student->id,
+                    'full_name' => "{$student->first_name} {$student->last_name}",
+                ];
+            });
+    })->name('filter.students.by.class');
+
+
     // ✅ Get student balance for a specific term
     Route::get('/students/{studentId}/balance/{termId}', [StudentController::class, 'getBalance'])->name('students.balance');
 

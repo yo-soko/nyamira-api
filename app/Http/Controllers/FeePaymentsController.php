@@ -26,6 +26,12 @@ class FeePaymentsController extends Controller
             });
         }
 
+
+        if ($request->filled('filter_class_id')) {
+            $query->where('class_id', $request->filter_class_id);
+        }
+
+
         // Filter by Student
         if ($request->filled('student_id')) {
             $query->where('student_id', $request->student_id);

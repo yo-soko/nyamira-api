@@ -448,6 +448,7 @@ class StudentController extends Controller
         return response()->json($students);
     }
 
+
     // AJAX: Get balance for student and term
     public function getBalance($studentId, $termId)
     {
