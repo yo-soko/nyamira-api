@@ -113,7 +113,27 @@
                                 </ul>
                             </li>
                         @endhasanyrole
-
+                        @hasanyrole('admin|developer|manager|director|supervisor')
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">Fee Management</h6>
+                                <ul>
+                                    <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                    <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
+                                </ul>
+                            </li>
+                        @endhasanyrole
+                        @hasanyrole('admin|developer|manager|director|supervisor|transport')
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">Transport</h6>
+                                <ul>
+                                    <li class="{{ request()->is('transport*') ? 'active' : '' }}">
+                                        <a href="{{ route('transport') }}">
+                                            <i class="fas fa-bus me-2"></i><span>Manage Transport</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endhasanyrole
                         <li class="submenu-open">
                             <h6 class="submenu-hdr">Assessments & Results</h6>
                             <ul>
@@ -186,29 +206,11 @@
                                 </ul>
                             </li>
                         @endhasanyrole
-                       @hasanyrole('admin|developer|manager|director|supervisor|transport')
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Transport</h6>
-                                <li class="{{ request()->is('transport*') ? 'active' : '' }}">
-                                    <a href="{{ route('transport') }}">
-                                        <i class="fas fa-bus me-2"></i><span>Manage Transport</span>
-                                    </a>
-                                </li>
-                            </li>
-                        @endhasanyrole
+                       
                     </ul>
                 </li>
 
-                @hasanyrole('admin|developer|manager|director|supervisor')
-                <li class="submenu-open">
-                    <h6 class="submenu-hdr">Fee Management</h6>
-                    <ul>
-
-                        <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
-                        <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
-                    </ul>
-                </li>
-                @endhasanyrole
+                
                 @hasanyrole('admin|developer|manager|director|supervisor')
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>

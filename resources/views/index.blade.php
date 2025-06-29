@@ -196,7 +196,7 @@
                     else return 'Below Expectation';
                 }
 
-                $gradeText = gradeLabel($topClass['average']);
+                $gradeText = gradeLabel($topClass['average'] ?? ' ');
                 $topClassGrade = gradeLabel($topClass['average'] ?? 0);
                 $topStudentGrade = gradeLabel($topStudent['average'] ?? 0);
             @endphp

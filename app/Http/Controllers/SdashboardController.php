@@ -38,6 +38,7 @@ class SdashboardController extends Controller
 
         $examId = $latestExamResult->exam_id;
         $termId = $latestExamResult->term_id;
+
         // Get student's class and level
         $studentClass = $student->class;
         $studentLevelId = $studentClass->level_id ?? null;
@@ -56,12 +57,13 @@ class SdashboardController extends Controller
             ->whereHas('student.class', fn($q) => $q->where('level_id', $studentLevelId))
             ->whereNotNull('marks')
             ->avg('marks');
-                // Fetch all marks for that student in this exam
-                $marks = Result::with('subject')
-                    ->where('student_id', $studentId)
-                    ->where('exam_id', $examId)
-                    ->where('term_id', $termId)
-                    ->get();
+
+        // Fetch all marks for that student in this exam
+        $marks = Result::with('subject')
+            ->where('student_id', $studentId)
+            ->where('exam_id', $examId)
+            ->where('term_id', $termId)
+            ->get();
 
         // Grade fallback converter
         $gradeToScore = function ($grade) {
@@ -74,31 +76,26 @@ class SdashboardController extends Controller
             };
         };
 
-        // Get assigned subjects
-        $assignedSubjectIds = DB::table('student_subjects')
-            ->where('student_id', $studentId)
-            ->pluck('subject_id')
-            ->toArray();
-
+        // Calculate average only from subjects that have results
         $totalScore = 0;
-        $countSubjects = count($assignedSubjectIds);
+        $countSubjectsWithResults = 0;
 
-        foreach ($assignedSubjectIds as $subjectId) {
-            $result = $marks->firstWhere('subject_id', $subjectId);
+        foreach ($marks as $result) {
+            $score = null;
 
-            if ($result) {
-                if (!is_null($result->marks)) {
-                    $totalScore += $result->marks;
-                } elseif (!empty($result->grade)) {
-                    $score = $gradeToScore($result->grade);
-                    $totalScore += $score ?? 0;
-                }
-            } else {
-                $totalScore += 0; // Treat as zero if no result exists
+            if (!is_null($result->marks)) {
+                $score = $result->marks;
+            } elseif (!empty($result->grade)) {
+                $score = $gradeToScore($result->grade);
+            }
+
+            if (!is_null($score)) {
+                $totalScore += $score;
+                $countSubjectsWithResults++;
             }
         }
 
-        $average = $countSubjects > 0 ? round($totalScore / $countSubjects, 2) : 0;
+        $average = $countSubjectsWithResults > 0 ? round($totalScore / $countSubjectsWithResults, 2) : 0;
 
         $overallGrade = match (true) {
             $average >= 80 => 'E.E',
@@ -109,7 +106,7 @@ class SdashboardController extends Controller
         };
 
         $summary = [
-            'total_subjects' => $countSubjects,
+            'total_subjects' => $countSubjectsWithResults,
             'total_marks' => $totalScore,
             'average' => $average,
             'grade' => $overallGrade,
@@ -125,9 +122,16 @@ class SdashboardController extends Controller
             ];
         });
 
-        return view('sdashboard', compact('marks', 'summary', 'student', 'chartData', 'classAverage',
-          'levelAverage'));
+        return view('sdashboard', compact(
+            'marks',
+            'summary',
+            'student',
+            'chartData',
+            'classAverage',
+            'levelAverage'
+        ));
     }
+
     private function getRubricCode($score)
     {
         return match((int) $score) {

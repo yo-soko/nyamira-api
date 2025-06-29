@@ -8,18 +8,18 @@
             margin: 3mm;
         }
         .print-footer {
-        display: block;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 12pt;
-        padding: 5px 0;
-        background: white;
-        border-top: 1px solid #000;
-        z-index: 999;
-    }
+            display: block;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12pt;
+            padding: 5px 0;
+            background: white;
+            border-top: 1px solid #000;
+            z-index: 999;
+        }
         body {
             margin: 0 !important;
             font-family: Georgia, 'Times New Roman', serif;
