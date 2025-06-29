@@ -52,7 +52,6 @@
                     <h6 class="submenu-hdr">SCHOOL MANAGEMENT</h6>
                     <ul>
                         <li class="submenu-open">
-                            <h6 class="submenu-hdr">Dashboards</h6>
                             <ul>
                                 @hasanyrole('admin|developer|manager|director|supervisor')
                                 <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}">
@@ -98,7 +97,7 @@
 
                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
                             <li class="submenu-open">
-                                <h6 class="submenu-hdr">Learning</h6>
+                                <h6 class="submenu-hdr">Learners Management</h6>
                                 <ul>
                                     <li class="{{ Request::is('students') ? 'active' : '' }}">
                                         <a href="{{ url('students') }}">
