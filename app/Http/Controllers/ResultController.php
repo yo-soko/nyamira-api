@@ -333,8 +333,6 @@ class ResultController extends Controller
     }
 
 
-
-
     /**
      * Display the specified resource.
      */

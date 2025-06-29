@@ -7,43 +7,50 @@
     $chartData = $chartData ?? collect();
     $classAverage = $classAverage ?? 0;
     $levelAverage = $levelAverage ?? 0;
+
+    
 @endphp
 
-        <div class="container-report bg-white p-4"> 
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div class="text-start">
-                    <img src="{{ asset('build/img/school-logo.png') }}" alt="School Logo" class="logo-img" style="height: 70px;">
+        <div class="container-report bg-white p-4 page-break"> 
+           <div class="d-flex align-items-center justify-content-between mb-2" style="flex-wrap: nowrap;">
+         
+                <div style="flex: 0 0 120px;">
+                    <img src="{{ asset('build/img/school-logo.png') }}" alt="School Logo" class="logo-img" style="height: 70px; width: auto;">
                 </div>
-                <div class="text-center w-100">
-                    <h4>MINISTRY OF EDUCATION</h4>
-                    <h5>STATE DEPARTMENT OF MIDDLE LEARNING AND BASIC EDUCATION</h5>
-                    <h6>SCHOOL TERM SUMMATIVE REPORT FOR EARLY YEARS EDUCATION</h6>
+
+                <div style="flex: 1; text-align: center;">
+                    <h4 class="mb-1">MINISTRY OF EDUCATION</h4>
+                    <h5 class="mb-1">STATE DEPARTMENT OF MIDDLE LEARNING AND BASIC EDUCATION</h5>
+                    <h6 class="mb-0">SCHOOL TERM SUMMATIVE REPORT FOR EARLY YEARS EDUCATION</h6>
                 </div>
-                <div class="text-end">
-                    <img src="{{ asset('build/img/kenya-logo.png') }}" alt="Kenya Logo" class="logo-img" style="height: 70px;">
+
+                <div style="flex: 0 0 120px; text-align: right;">
+                    <img src="{{ asset('build/img/kenya-logo.png') }}" alt="Kenya Logo" class="logo-img" style="height: 70px; width: auto;">
                 </div>
             </div>
 
-           
             <div class="table-responsive">
                 <table class="table table-bordered small">
-                    <tr>
-                        <td>Name of Learner:</td><td>{{ $student->first_name ?? '' }} {{ $student->second_name ?? '' }} {{ $student->last_name ?? '' }}</td>
-                        <td>Grade:</td><td>{{ $student->class->level->level_name ?? '' }} {{ $student->class->stream->name ?? '' }}</td>
-                    </tr>
-                    <tr>
-                        <td>School Name:</td><td>{{ $student->school ?? 'JEMMAPP PREPARATORY SCHOOL' }}</td>
-                        <td>Term:</td><td>{{ $summary['term_name']}}</td>
-                    </tr>
-                    <tr>
-                        <td>UPI No.:</td><td>{{ $student->upi ?? ' ' }}</td>
-                        <td>Year:</td><td>{{ date('Y') }}</td>
-                    </tr>
-                    <tr>
-                        <td>Facilitator’s Name:</td><td colspan="3">{{ $facilitatorName ?? ' '}}</td>
-                    </tr>
+                
+                        <tr>
+                            <td>Name of Learner:</td><td>{{ $student->first_name ?? '' }} {{ $student->second_name ?? '' }} {{ $student->last_name ?? '' }}</td>
+                            <td>Grade:</td><td>{{ $student->class->level->level_name ?? '' }} {{ $student->class->stream->name ?? '' }}</td>
+                        </tr>
+                        <tr>
+                            <td>School Name:</td><td>{{ $student->school ?? 'JEMMAPP PREPARATORY SCHOOL' }}</td>
+                            <td>Term:</td><td>{{ $summary['term_name']}}</td>
+                        </tr>
+                        <tr>
+                            <td>UPI No.:</td><td>{{ $student->upi ?? ' ' }}</td>
+                            <td>Year:</td><td>{{ date('Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Facilitator’s Name:</td><td colspan="3">{{ $facilitatorName ?? ' '}}</td>
+                        </tr>
+                   
                 </table>
             </div>
+            </br>
             <div class="table-responsive">
 
                 <table class="table table-bordered text-center align-middle small">
@@ -55,9 +62,9 @@
                             <th colspan="2">Assessment 3</th>
                         </tr>
                         <tr>
-                            <th>Rubric</th><th>Comment</th>
-                            <th>Rubric</th><th>Comment</th>
-                            <th>Rubric</th><th>Comment</th>
+                            <th></th><th>Comment</th>
+                            <th></th><th>Comment</th>
+                            <th></th><th>Comment</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,7 +94,8 @@
             </div>
            
             <div class="my-4">
-                <canvas id="performanceChart" height="150"></canvas>
+                <canvas id="performanceChart_{{ $student->id }}" height="150"></canvas>
+
             </div>
 
             <div class="row mt-4">
@@ -127,3 +135,94 @@
                 </div>
             </div>
         </div>
+<script src="{{ asset('build/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('build/plugins/chartjs/chart.min.js') }}"></script>
+<script>
+    (function() {
+        const ctx = document.getElementById('performanceChart_{{ $student->id }}')?.getContext('2d');
+        if (!ctx) return;
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($chartData->pluck('subject')) !!},
+                datasets: [
+                    {
+                        label: 'Student Score',
+                        data: {!! json_encode($chartData->pluck('score')) !!},
+                        backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: false
+                    },
+                    {
+                        label: 'Class Avg',
+                        data: new Array({{ $chartData->count() }}).fill({{ round($classAverage ?? 0, 2) }}),
+                        borderColor: 'rgb(17, 238, 28)',
+                        borderWidth: 2,
+                        borderDash: [10, 5],
+                        pointRadius: 0,
+                        fill: false
+                    },
+                    {
+                        label: 'Level Avg',
+                        data: new Array({{ $chartData->count() }}).fill({{ round($levelAverage ?? 0, 2) }}),
+                        borderColor: 'rgb(243, 123, 10)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            callback: function (value) {
+                                if (value == 100) return ' ';
+                                if (value >= 80) return 'E.E';
+                                if (value >= 60) return 'M.E';
+                                if (value >= 40) return 'A.E';
+                                if (value > 0) return 'B.E';
+                                return ' ';
+                            },
+                            stepSize: 20
+                        },
+                        title: {
+                            display: true,
+                            text: 'Grade'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Subjects'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let score = context.parsed.y;
+                                let label = context.dataset.label;
+                                let grade = '-';
+                                if (score >= 80) grade = 'E.E';
+                                else if (score >= 60) grade = 'M.E';
+                                else if (score >= 40) grade = 'A.E';
+                                else if (score > 0) grade = 'B.E';
+
+                                return `${label}: ${score} (${grade})`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+</script>

@@ -64,7 +64,7 @@
                                 @hasanyrole('developer|class_teacher')
                                 <li class="{{ Request::is('tdashboard') ? 'active' : '' }}">
                                     <a href="{{ url('tdashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i><span>Teacher Dashboard</span>
+                                        <i class="fas fa-tachometer-alt me-2"></i><span>Class Teacher Dashboard</span>
                                     </a>
                                 </li>
                                 @endhasanyrole
@@ -151,7 +151,7 @@
                         <li class="submenu-open">
                             <h6 class="submenu-hdr">Library</h6>
                             <ul>
-                                
+
                                 <li><a href="{{ route('library.index') }}"><i class="ti ti-book me-2"></i> <span>Library</span></a></li>
                                 @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                                 <li><a href="{{ route('library-categories.index') }}"><i class="ti ti-tag"></i> <span>Book Categories</span></a></li>

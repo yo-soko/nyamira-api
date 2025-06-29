@@ -2,98 +2,104 @@
 @section('content')
 @include('layout.toast') 
 <style>
-@media print {
-    @page {
-        size: A4 portrait;
-        margin: 20mm;
-    }
+    @media print {
+        @page {
+            size: A4 portrait;
+            margin: 3mm;
+        }
 
-    body {
-        margin: 0 !important;
-        font-family: Georgia, 'Times New Roman', serif;
-        font-size: 13pt;
-        background: white;
-        color: black;
-    }
+        body {
+            margin: 0 !important;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 15pt;
+            background: white;
+            color: black;
+        }
 
-    body * {
-        visibility: hidden;
-    }
+        body * {
+            visibility: hidden;
+        }
 
-    .container-report, .container-report * {
-        visibility: visible;
-    }
+        .container-report, .container-report * {
+            visibility: visible;
+        }
 
-    .container-report {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        min-height: 100%;
-        background: white;
-        box-sizing: border-box;
-    }
+        .container-report {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            min-height: 100%;
+            background: white;
+            box-sizing: border-box;
+        }
 
-    .page-header,
-    .footer,
-    .d-print-none {
-        display: none !important;
-    }
+        .page-header,
+        .footer,
+        .d-print-none {
+            display: none !important;
+            
+        }
 
-    h4, h5, h6 {
-        font-size: 14pt;
-        margin: 4px 0;
-        text-align: center;
-    }
+        h4, h5, h6 {
+            font-size: 16pt;
+            margin: 4px 0;
+            text-align: center;
+        }
 
-    table {
-        width: 100%;
-        border-collapse: collapse !important;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse !important;
+        }
 
-    th, td {
-        padding: 6px;
-        border: 1px solid #000 !important;
-        text-align: left;
-        vertical-align: middle;
-        font-size: 13pt;
-    }
+        th, td {
+            padding: 6px;
+            border: 1px solid #000 !important;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 15pt;
+        }
 
-    .table th {
-        background: #f0f0f0;
-    }
+        .table th {
+            background: #f0f0f0;
+        }
 
-    .row {
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
 
-    .col-6, .col-md-6 {
-        width: 50%;
-    }
+        .col-6, .col-md-6 {
+            width: 50%;
+        }
 
-    canvas {
-        page-break-inside: avoid;
-        display: block;
-        margin: 0 auto;
-    }
 
-    ul {
-        padding-left: 1rem;
-    }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            page-break-inside: avoid;
+            image-rendering: crisp-edges; /* Enhance rendering */
+            image-rendering: pixelated;   /* For pixel-based sharpness */
+            -webkit-print-color-adjust: exact; /* Ensures full color in Chrome */
+            print-color-adjust: exact;
+        }
 
-    ul li {
-        margin-bottom: 2px;
+        ul {
+            padding-left: 1rem;
+        }
+
+        ul li {
+            margin-bottom: 2px;
+        }
+        .logo-img {
+            height: 200px;
+            width: 175px;
+            /* max-height: 100px; */
+        }
+        
     }
-     .logo-img {
-        height: 30mm;
-        max-height: 100px;
-    }
-}
 </style>
-
-
 
 <div class="page-wrapper">
     <div class="content">
@@ -155,23 +161,26 @@
            
             <div class="table-responsive">
                 <table class="table table-bordered small">
-                    <tr>
-                        <td>Name of Learner:</td><td>{{ $student->first_name ?? '' }} {{ $student->second_name ?? '' }} {{ $student->last_name ?? '' }}</td>
-                        <td>Grade:</td><td>{{ $student->class->level->level_name ?? '' }} {{ $student->class->stream->name ?? '' }}</td>
-                    </tr>
-                    <tr>
-                        <td>School Name:</td><td>{{ $student->school ?? 'JEMMAPP PREPARATORY SCHOOL' }}</td>
-                        <td>Term:</td><td>{{ $summary['term_name']}}</td>
-                    </tr>
-                    <tr>
-                        <td>UPI No.:</td><td>{{ $student->upi ?? ' ' }}</td>
-                        <td>Year:</td><td>{{ date('Y') }}</td>
-                    </tr>
-                    <tr>
-                        <td>Facilitator’s Name:</td><td colspan="3">{{ $facilitatorName ?? ' '}}</td>
-                    </tr>
+                
+                        <tr>
+                            <td>Name of Learner:</td><td>{{ $student->first_name ?? '' }} {{ $student->second_name ?? '' }} {{ $student->last_name ?? '' }}</td>
+                            <td>Grade:</td><td>{{ $student->class->level->level_name ?? '' }} {{ $student->class->stream->name ?? '' }}</td>
+                        </tr>
+                        <tr>
+                            <td>School Name:</td><td>{{ $student->school ?? 'JEMMAPP PREPARATORY SCHOOL' }}</td>
+                            <td>Term:</td><td>{{ $summary['term_name']}}</td>
+                        </tr>
+                        <tr>
+                            <td>UPI No.:</td><td>{{ $student->upi ?? ' ' }}</td>
+                            <td>Year:</td><td>{{ date('Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Facilitator’s Name:</td><td colspan="3">{{ $facilitatorName ?? ' '}}</td>
+                        </tr>
+                   
                 </table>
             </div>
+            </br>
             <div class="table-responsive">
 
                 <table class="table table-bordered text-center align-middle small">
@@ -183,9 +192,9 @@
                             <th colspan="2">Assessment 3</th>
                         </tr>
                         <tr>
-                            <th>Rubric</th><th>Comment</th>
-                            <th>Rubric</th><th>Comment</th>
-                            <th>Rubric</th><th>Comment</th>
+                            <th></th><th>Comment</th>
+                            <th></th><th>Comment</th>
+                            <th></th><th>Comment</th>
                         </tr>
                     </thead>
                     <tbody>

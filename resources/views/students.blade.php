@@ -627,7 +627,8 @@
 <!-- Modal -->
 <div class="modal fade" id="printReportsModal" tabindex="-1" aria-labelledby="printReportsLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form method="POST" action="{{ route('cbc.reports.batch') }}">
+        <form method="GET" action="{{ route('cbc.reports.bulk.html') }}" target="_blank">
+
             @csrf
             <div class="modal-content">
                 <div class="modal-header">

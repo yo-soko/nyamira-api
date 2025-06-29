@@ -1,6 +1,4 @@
-@extends('layout.mainlayout')
-@section('content')
-@include('layout.toast') 
+
 <style>
 @media print {
     @page {
@@ -99,4 +97,3 @@
 @endforeach
 
 
-@endsection
