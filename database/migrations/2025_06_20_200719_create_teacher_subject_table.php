@@ -10,6 +10,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('teacher_id')->constrained()->onDelete('cascade');
             $table->foreignId('subject_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('class_id')->nullable();
             $table->timestamps();
         });
     }

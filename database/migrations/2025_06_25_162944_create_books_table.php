@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->year('published_year')->nullable();
             $table->foreignId('uploaded_by')->constrained('users')->onDelete('cascade');
-            $table->text('table_of_contents')->nullable()->after('description');
+            $table->text('table_of_contents')->nullable();
             $table->timestamps();
         });
     }

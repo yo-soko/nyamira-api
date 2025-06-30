@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Teacher;
 use App\Models\TeacherSubject;
 use App\Models\Subject;
-use App\Models\Schoolclass;
+use App\Models\SchoolClass;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use App\Models\User;
 
 class TeacherController extends Controller
 {
@@ -19,9 +18,9 @@ class TeacherController extends Controller
         $teachers = Teacher::with(['subjects'])->get();
         $subjects = Subject::all();
         $schoolclasses = SchoolClass::with(['stream', 'level'])->where('status', 1)->get();
-        return view('teachers', compact('teachers', 'subjects', 'schoolclasses'));
+        $departments = \App\Models\Department::all();
+        return view('teachers', compact('teachers', 'subjects', 'schoolclasses', 'departments'));
     }
-
 
     public function store(Request $request)
     {
@@ -38,14 +37,14 @@ class TeacherController extends Controller
             'gender' => 'required|string|max:50',
             'department' => 'required|integer|exists:departments,id',
             'status' => 'required|boolean',
-            'subjects' => 'nullable|array',
-            'subjects.*' => 'integer|exists:subjects,id',
+            'subject_class' => 'nullable|array',
+            'subject_class.*.subject_id' => 'required|integer|exists:subjects,id',
+            'subject_class.*.class_id' => 'required|integer|exists:school_classes,id',
         ]);
 
         DB::beginTransaction();
 
         try {
-     
             $teacher = Teacher::create([
                 'first_name' => $validated['first_name'],
                 'last_name' => $validated['last_name'],
@@ -61,32 +60,31 @@ class TeacherController extends Controller
                 'status' => $validated['status'],
             ]);
 
-            // Create User for the teacher
+            // Create User
             $user = User::create([
-                'code' => 'TCHR' . str_pad($teacher->id, 5, '0', STR_PAD_LEFT),  // e.g. TCHR00001
+                'code' => 'TCHR' . str_pad($teacher->id, 5, '0', STR_PAD_LEFT),
                 'role' => 'teacher',
                 'email' => $teacher->email,
                 'name' => $teacher->first_name . ' ' . $teacher->last_name,
                 'phone' => $teacher->phone,
-                'password' => Hash::make('Password'), // Default password - consider sending password reset email
+                'password' => Hash::make('Password'), // default password
                 'status' => true,
             ]);
 
-            // Link user_id in teacher record
             $teacher->update(['user_id' => $user->id]);
 
-            // Attach subjects
-            if (!empty($validated['subjects'])) {
-                foreach ($validated['subjects'] as $subjectId) {
+            // Attach subject-class pairs
+            if (!empty($validated['subject_class'])) {
+                foreach ($validated['subject_class'] as $pair) {
                     TeacherSubject::create([
                         'teacher_id' => $teacher->id,
-                        'subject_id' => $subjectId,
+                        'subject_id' => $pair['subject_id'],
+                        'class_id'   => $pair['class_id'],
                     ]);
                 }
             }
 
             DB::commit();
-
             return redirect()->back()->with('success', 'Teacher added successfully.');
 
         } catch (\Exception $e) {
@@ -95,56 +93,4 @@ class TeacherController extends Controller
             return redirect()->back()->with('error', 'An error occurred while adding the teacher.');
         }
     }
-    public function migrateTeachersToUsers()
-    {
-        DB::beginTransaction();
-
-        try {
-            $teachers = Teacher::whereNull('user_id')->get();
-
-            foreach ($teachers as $teacher) {
-                // Check if teacher is assigned as a class teacher
-                $isClassTeacher = DB::table('school_classes')
-                    ->where('class_teacher', $teacher->id)
-                    ->exists();
-
-                // Determine role
-                $role = $isClassTeacher ? 'class_teacher' : 'teacher';
-
-                // Create the user
-                $user = User::create([
-                    'code' => 'TCHR' . str_pad($teacher->id, 5, '0', STR_PAD_LEFT),
-                    'role' => $role,
-                    'email' => $teacher->email,
-                    'name' => $teacher->first_name . ' ' . $teacher->last_name,
-                    'phone' => $teacher->phone,
-                    'password' => Hash::make($teacher->id_no), // Use ID number as password
-                    'status' => true,
-                ]);
-
-                // Link user to teacher
-                $teacher->update([
-                    'user_id' => $user->id
-                ]);
-
-                // If class teacher, update school_classes.class_teacher to user_id
-               if ($isClassTeacher) {
-    $affected = DB::table('school_classes')
-        ->where('class_teacher', $teacher->id)
-        ->update(['class_teacher' => $user->id]);
-    \Log::info("Updated school_classes.class_teacher for teacher_id {$teacher->id}, affected rows: $affected");
-}
-
-            }
-
-            DB::commit();
-            return response()->json(['message' => 'Teachers migrated to users successfully.']);
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error('Migration failed: ' . $e->getMessage());
-            return response()->json(['error' => 'An error occurred during migration.'], 500);
-        }
-    }
-
 }

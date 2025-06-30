@@ -33,18 +33,21 @@ class SchoolClass extends Model
         return $this->belongsTo(User::class, 'class_teacher');
     }
 
+    public function classPrefect()
+    {
+        return $this->belongsTo(Student::class, 'class_prefect');
+    }
+
     public function students()
     {
         return $this->hasMany(Student::class, 'class_id');
     }
 
-    public function classPrefect()
-    {
-        return $this->belongsTo(Student::class, 'class_prefect');
-    }
     public function teachers()
     {
-        return $this->belongsToMany(Teacher::class);
+        return $this->belongsToMany(Teacher::class, 'teacher_subject', 'class_id', 'teacher_id')
+            ->withPivot('subject_id')
+            ->withTimestamps();
     }
 
     public function subjects()

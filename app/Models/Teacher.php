@@ -13,7 +13,7 @@ class Teacher extends Model
     ];
 
     /**
-     * Get all subjects taught by the teacher, with class_id on the pivot
+     * Get all subjects taught by the teacher with class_id on the pivot
      */
     public function subjects()
     {
@@ -23,7 +23,16 @@ class Teacher extends Model
     }
 
     /**
-     * Get the teacher's department
+     * Get all classes taught by the teacher
+     */
+    public function classes()
+    {
+        return $this->belongsToMany(SchoolClass::class, 'teacher_subject', 'teacher_id', 'class_id')
+            ->distinct();
+    }
+
+    /**
+     * The department the teacher belongs to
      */
     public function department()
     {
@@ -31,7 +40,7 @@ class Teacher extends Model
     }
 
     /**
-     * If you want to work directly with the teacher_subject table rows
+     * In case you need direct teacher_subject rows
      */
     public function teacherSubjects()
     {

@@ -35,4 +35,13 @@ class TeacherSubject extends Model
     {
         return $this->belongsTo(SchoolClass::class, 'class_id');
     }
+       public function level()
+    {
+        return $this->belongsTo(ClassLevel::class, 'level_id');
+    }
+
+    public function stream()
+    {
+        return $this->belongsTo(Stream::class, 'stream_id');
+    }
 }
