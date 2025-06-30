@@ -49,20 +49,28 @@ class TeacherDashboardController extends Controller
             ->get();
 
         // add the teacher's class from pivot to each
-        $assignedExamSubjects = collect();
+     $assignedExamSubjects = collect();
+
         foreach ($examSubjects as $exam) {
             foreach ($subjectClassPairs as $pair) {
                 if ($pair['subject_id'] == $exam->subject_id) {
-                    $assignedExamSubjects->push((object)[
-                        'exam_id' => $exam->exam_id,
-                        'exam_name' => $exam->exam_name,
-                        'subject_id' => $exam->subject_id,
-                        'subject_name' => $exam->subject_name,
-                        'class_id' => $pair['class_id'],
-                    ]);
+                    $key = $exam->exam_id . '-' . $exam->subject_id . '-' . $pair['class_id'];
+                    if (!$assignedExamSubjects->has($key)) {
+                        $assignedExamSubjects->put($key, (object)[
+                            'exam_id'      => $exam->exam_id,
+                            'exam_name'    => $exam->exam_name,
+                            'subject_id'   => $exam->subject_id,
+                            'subject_name' => $exam->subject_name,
+                            'class_id'     => $pair['class_id'],
+                        ]);
+                    }
                 }
             }
         }
+
+        // convert back to values collection
+        $assignedExamSubjects = $assignedExamSubjects->values();
+
 
         // submitted exams with subject+class
         $submittedExams = DB::table('results')
