@@ -7,6 +7,7 @@ use App\Models\Result;
 use App\Models\Student;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\FeePayment;
 
 class SdashboardController extends Controller
 {
@@ -27,12 +28,22 @@ class SdashboardController extends Controller
             ->orderByDesc('created_at')
             ->first();
 
+        $recentPayments = FeePayment::where('student_id', $student->id)
+        ->with(['term'])
+        ->latest()
+        ->take(5)
+        ->get();
+
+
         if (!$latestExamResult) {
+
+            $balance = $student->current_balance ?? 0;
             return view('sdashboard', [
                 'marks' => collect(),
                 'summary' => [],
                 'student' => $student,
                 'chartData' => collect(),
+                'balance' => $balance,
             ]);
         }
 
@@ -122,14 +133,10 @@ class SdashboardController extends Controller
             ];
         });
 
-        return view('sdashboard', compact(
-            'marks',
-            'summary',
-            'student',
-            'chartData',
-            'classAverage',
-            'levelAverage'
-        ));
+        $balance = $student->current_balance ?? 0;
+
+        return view('sdashboard', compact('marks', 'summary', 'student', 'chartData', 'classAverage',
+          'levelAverage', 'balance', 'recentPayments'));
     }
 
     private function getRubricCode($score)

@@ -11,7 +11,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-
                         <!-- Class Level -->
                         <div class="col-md-6 mb-3">
                             <label for="class_id" class="form-label">Stream</label>
@@ -84,7 +83,6 @@
                             <input type="number" name="amount_paid" id="amount_paid" class="form-control" step="0.01" min="1" required>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="submit" id="savePaymentBtn" class="btn btn-primary">Save Payment</button>

@@ -44,8 +44,10 @@
                                 <th>Amount (KSh)</th>
                                 <th>Description</th>
                                 <th>Status</th>
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <th>Date Created</th>
                                 <th class="text-end">Actions</th>
+                                @endhasanyrole
                             </tr>
                         </thead>
                         <tbody>
@@ -62,6 +64,7 @@
                                         {{ ucfirst($fee->status) }}
                                     </span>
                                 </td>
+                                @hasanyrole('admin|developer|manager|director|supervisor')
                                 <td>{{ \Carbon\Carbon::parse($fee->created_at)->format('d M Y') }}</td>
                                 <td class="text-end">
                                     {{-- Blade-controlled modal triggers --}}
@@ -72,6 +75,7 @@
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </td>
+                                @endhasanyrole
                             </tr>
 
                             {{-- Edit Modal --}}

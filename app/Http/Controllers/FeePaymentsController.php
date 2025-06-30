@@ -63,7 +63,6 @@ class FeePaymentsController extends Controller
     public function fetchStudents(Request $request)
     {
         $students = Student::where('class_id', $request->class_id)
-            ->where('term_id', $request->term_id)
             ->get()
             ->map(function ($student) {
                 return [
@@ -75,46 +74,32 @@ class FeePaymentsController extends Controller
         return response()->json($students);
     }
 
+
     public function fetchBalance(Request $request)
     {
         $studentId = $request->student_id;
-        $termId = $request->term_id;
-        $classId = $request->class_id;
 
-        if (!$studentId || !$termId || !$classId) {
+        if (!$studentId) {
             return response()->json(['balance' => 0.00]);
         }
 
-        $student = Student::with(['meal', 'transport', 'class.level'])->find($studentId);
-        $levelId = $student->class->level_id ?? null;
+        $student = Student::find($studentId);
 
-        if (!$levelId) {
+        if (!$student) {
             return response()->json(['balance' => 0.00]);
         }
-
-        $feeStructure = FeeStructure::where('level_id', $levelId)
-            ->where('term_id', $termId)
-            ->sum('amount');
-
-        $mealFee = $student->meal?->meal_fee ?? 0;
-        $transportFee = $student->transport?->transport_fee ?? 0;
-
-        $totalExpected = $feeStructure + $mealFee + $transportFee;
-
-        $paid = FeePayment::where('student_id', $studentId)
-            ->where('term_id', $termId)
-            ->sum('amount_paid');
 
         return response()->json([
-            'balance' => number_format($totalExpected - $paid, 2)
+            'balance' => number_format($student->current_balance, 2)
         ]);
     }
+
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'class_id' => 'required|exists:school_classes,id',
-            'term_id' => 'required|exists:terms,id',
+            'term_id' => 'nullable|exists:terms,id',
             'student_id' => 'required|exists:students,id',
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
@@ -123,8 +108,8 @@ class FeePaymentsController extends Controller
         ]);
 
         try {
-
             \Log::info('Attempting to create fee payment', $validated);
+
             $payment = FeePayment::create([
                 'class_id' => $validated['class_id'],
                 'term_id' => $validated['term_id'],
@@ -133,16 +118,22 @@ class FeePaymentsController extends Controller
                 'amount_paid' => $validated['amount_paid'],
                 'description' => $validated['description'] ?? null,
                 'receipt_number' => $validated['receipt_number'] ?? null,
+                'user_id' => auth()->id(),
             ]);
 
-
+            // Deduct from student balance
+            $student = Student::find($validated['student_id']);
+            $student->current_balance -= $validated['amount_paid'];
+            $student->save();
 
             return redirect()->back()->with('success', 'Payment recorded successfully.');
         } catch (\Exception $e) {
-
+            \Log::error('Payment creation error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to record payment. Please try again.');
         }
+
     }
+
 
     public function update(Request $request, $id)
     {
@@ -157,14 +148,36 @@ class FeePaymentsController extends Controller
         ]);
 
         $payment = FeePayment::findOrFail($id);
-        $payment->update($request->all());
+        $student = Student::findOrFail($request->student_id);
+
+        $originalAmount = $payment->amount_paid;
+
+        $payment->update([
+            'class_id' => $request->class_id,
+            'term_id' => $request->term_id,
+            'student_id' => $request->student_id,
+            'payment_mode' => $request->payment_mode,
+            'amount_paid' => $request->amount_paid,
+            'description' => $request->description,
+            'receipt_number' => $request->receipt_number,
+        ]);
+
+        // Update student balance
+        $difference = $request->amount_paid - $originalAmount;
+        $student->current_balance -= $difference;
+        $student->save();
 
         return redirect()->route('fee-payments.index')->with('success', 'Payment updated successfully!');
     }
 
     public function destroy(FeePayment $fee_payment)
     {
+        $student = Student::find($fee_payment->student_id);
+        $student->current_balance += $fee_payment->amount_paid;
+        $student->save();
+
         $fee_payment->delete();
+
         return redirect()->back()->with('success', 'Payment deleted successfully!');
     }
 

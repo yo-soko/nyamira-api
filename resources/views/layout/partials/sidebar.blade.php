@@ -116,11 +116,25 @@
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Fee Management</h6>
                                 <ul>
-                                    <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Fee Structure</span></a></li>
-                                    <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Fee Payments</span></a></li>
+                                    <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                    <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-receipt-2 fs-16 me-2"></i><span>Fee Payments</span></a></li>
                                 </ul>
                             </li>
                         @endhasanyrole
+                        @hasanyrole('student|developer')
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">Fee Management</h6>
+                                <ul>
+                                    <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                    <li class="{{ request()->routeIs('student.fee-payments') ? 'active' : '' }}">
+                                        <a href="{{ route('student.fee-payments') }}">
+                                            <i class="ti ti-receipt-2 me-2"></i><span>Fee Payments</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @endhasanyrole
+
                         @hasanyrole('admin|developer|manager|director|supervisor|transport')
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Transport</h6>
@@ -149,7 +163,7 @@
                                     <a href="{{ url('submit-results') }}">
                                         <i class="fas fa-upload me-2"></i><span>Submit Results</span>
                                     </a>
-                                </li>     
+                                </li>
                                 <li class="{{ Request::is('results-filter', 'results-view') ? 'active' : '' }}">
                                     <a href="{{ url('results-filter') }}">
                                         <i class="fas fa-search me-2"></i><span>View Results</span>
@@ -205,11 +219,11 @@
                                 </ul>
                             </li>
                         @endhasanyrole
-                       
+
                     </ul>
                 </li>
 
-                
+
                 @hasanyrole('admin|developer|manager|director|supervisor')
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
@@ -224,7 +238,7 @@
                     <h6 class="submenu-hdr">Accounts</h6>
                     <ul>
                         <li class="{{ Request::is('profile') ? 'active' : '' }}"><a href="{{url('profile')}}"><i class="ti ti-user-circle fs-16 me-2"></i><span>Profile</span></a></li>
-                   
+
                         <li class="{{ Request::is('signout') ? 'active' : '' }}"><a href="{{ route('signout') }}"><i class="ti ti-logout me-2"></i><span>log out</span></a></li>
                     </ul>
                 </li>

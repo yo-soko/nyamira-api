@@ -338,6 +338,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/fee-payments/store', [FeePaymentsController::class, 'store'])->name('fee-payments.store');
 
 
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/student/fee-payments', [App\Http\Controllers\SFeePaymentsController::class, 'index'])->name('student.fee-payments');
+    });
 
 
     //Fees

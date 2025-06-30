@@ -1,7 +1,7 @@
 <?php $page = 'dashboard'; ?>
 @extends('layout.mainlayout')
 @section('content')
-@include('layout.toast') 
+@include('layout.toast')
 @php
     $hour = date('H');
     if ($hour < 12) {
@@ -11,12 +11,12 @@
     } else {
         $greeting = 'Good Evening';
     }
-@endphp    
+@endphp
 <div class="page-wrapper">
     <div class="content">
         <div class="d-lg-flex align-items-center justify-content-between mb-4">
             <div>
-             
+
                 <h2 class="mb-1">
                 <img src="{{URL::asset('build/img/icons/hand01.svg')}}" class="hand-img" alt="img">
                     {{ $greeting }} <span class="text-primary fw-bold"> {{ auth()->user()->name }}</span>
@@ -45,7 +45,7 @@
             </div>
             <div class="d-flex align-items-center flex-wrap mb-1">
                 <a href="{{url('profile')}}" class="btn btn-dark btn-md me-2 mb-2">Profile</a>
-             
+
                 <a href="{{url('general-settings')}}" class="btn btn-light btn-md mb-2">Settings</a>
             </div>
         </div>
@@ -53,76 +53,109 @@
             <img src="{{URL::asset('build/img/bg/welcome-bg-02.svg')}}" alt="img" class="welcome-bg-01">
             <img src="{{URL::asset('build/img/bg/welcome-bg-01.svg')}}" alt="img" class="welcome-bg-03">
         </div>
-    </div>	
+    </div>
     <!-- /Welcome Wrap -->
 
     <div class="row">
+        <div class="col-xl-3 col-sm-6 d-flex">
+            <div class="card flex-fill" style="background-color: #6f42c1;"> <!-- light yellow -->
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between"></div>
+                    <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        @if($balance > 0)
+                            <h2 class="mb-1 text-danger">Ksh {{ number_format($balance, 2) }}</h2>
+                            <p class="fs-13 text-dark">Outstanding Balance</p>
+                        @elseif($balance == 0)
+                            <h2 class="mb-1 text-success">No Balance</h2>
+                            <p class="fs-13 text-dark">You have cleared your fees</p>
+                        @else
+                            <h2 class="mb-1 text-teal">Ksh {{ number_format($balance, 2) }}</h2>
+                            <p class="fs-13 text-dark">Over Paid</p>
+                        @endif
+                    </div>
 
-    <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-secondary-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                 
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
+
                         <div>
-                            <h2 class="mb-1">{{ $summary['total_subjects'] ?? '-'}}</h2>
-                            <p class="fs-13">Total Subjects</p>
+                            <a href="{{ route('student.fee-payments') }}" class="btn btn-light btn-sm mt-2">
+                                View Payment History
+                            </a>
+
                         </div>
-                        <div class="company-bar1"></div>
                     </div>
                 </div>
             </div>
-        </div>    
+        </div>
+
+    </div>
+
+    <div class="row">
         <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-secondary-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                 
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $summary['term_name'] ?? '-' }}</h2>
-                            <p class="fs-13">Term</p>
+                <div class="card flex-fill bg-secondary-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+
                         </div>
-                        <div class="company-bar1"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $summary['total_subjects'] ?? '-'}}</h2>
+                                <p class="fs-13">Total Subjects</p>
+                            </div>
+                            <div class="company-bar1"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> 
             <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-secondary-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                 
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1"> {{ $student->class->level->level_name ?? '' }} - {{ $student->class->stream->name ?? '' }}</h2>
-                            <p class="fs-13">Class</p>
+                <div class="card flex-fill bg-secondary-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+
                         </div>
-                        <div class="company-bar1"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $summary['term_name'] ?? '-' }}</h2>
+                                <p class="fs-13">Term</p>
+                            </div>
+                            <div class="company-bar1"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> 
-        <div class="col-xl-3 col-sm-6 d-flex">
-            <div class="card flex-fill bg-secondary-gradient">
-                <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                 
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h2 class="mb-1">{{ $summary['grade'] ?? '-'}}</h2>
-                            <p class="fs-13">Grade</p>
+                <div class="col-xl-3 col-sm-6 d-flex">
+                <div class="card flex-fill bg-secondary-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+
                         </div>
-                        <div class="company-bar1"></div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1"> {{ $student->class->level->level_name ?? '' }} - {{ $student->class->stream->name ?? '' }}</h2>
+                                <p class="fs-13">Class</p>
+                            </div>
+                            <div class="company-bar1"></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div> 
-      <div class="row mt-4">
+                    <div class="col-xl-3 col-sm-6 d-flex">
+                <div class="card flex-fill bg-secondary-gradient">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <h2 class="mb-1">{{ $summary['grade'] ?? '-'}}</h2>
+                                <p class="fs-13">Grade</p>
+                            </div>
+                            <div class="company-bar1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="row mt-4">
     <!-- Chart Column -->
     <div class="col-lg-6 mb-4">
         <div class="card h-100">
