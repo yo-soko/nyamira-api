@@ -184,6 +184,7 @@
                             <select class="form-control" id="reportType">
                                 <option value="attendance">Attendance Report</option>
                                 <option value="billing">Billing Report</option>
+                                <option value="usage">Transport Usage Report</option>
                             </select>
                         </div>
                         <div class="col-md-3">
@@ -198,14 +199,18 @@
                             <input type="month" class="form-control" id="reportMonth" value="{{ date('Y-m') }}">
                         </div>
                         <div class="col-md-3">
-                            <button class="btn btn-primary" id="generateReport">Generate Report</button>
-                            <button class="btn btn-success" id="exportReport">Export</button>
+                            <button class="btn btn-primary" id="generateReport">
+                                <i class="fas fa-sync-alt mr-1"></i> Generate
+                            </button>
+                            <button class="btn btn-success" id="exportReport">
+                                <i class="fas fa-download mr-1"></i> Export
+                            </button>
                         </div>
                     </div>
 
                     <div id="reportResults">
                         <div class="alert alert-info">
-                            Select report type and parameters to generate a report
+                            <i class="fas fa-info-circle mr-2"></i> Select report type and parameters to generate a report
                         </div>
                     </div>
                 </div>
@@ -647,18 +652,41 @@
         function getCurrentLocation(callback) {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const {
-                            latitude,
-                            longitude
-                        } = position.coords;
-                        callback(`Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`);
-                    },
-                    (error) => {
-                        console.warn('Geolocation error:', error.message);
-                        const fallback = currentSession === 'pickup' ? 'School Gate' : 'Designated Stop';
-                        callback(fallback);
-                    }
+                    async (position) => {
+                            const {
+                                latitude,
+                                longitude
+                            } = position.coords;
+
+                            try {
+                                const response = await fetch(
+                                    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${OPENCAGE_API_KEY}`
+                                );
+                                const data = await response.json();
+                                const result = data?.results?.[0];
+                                const components = result?.components || {};
+
+                                // Prioritize specific local identifiers
+                                const areaName =
+                                    components.neighbourhood || // e.g., Jogoo, Mwembe
+                                    components.suburb || // e.g., Daraja Mbili
+                                    components.village || // fallback if rural
+                                    components.town || // e.g., Kisii
+                                    components.city || // e.g., Kisii Town
+                                    result.formatted || // fallback to full address
+                                    `Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`;
+
+                                callback(areaName);
+                            } catch (err) {
+                                console.error('OpenCage error:', err);
+                                callback(`Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`);
+                            }
+                        },
+                        (error) => {
+                            console.warn('Geolocation error:', error.message);
+                            const fallback = currentSession === 'pickup' ? 'School Gate' : 'Designated Stop';
+                            callback(fallback);
+                        }
                 );
             } else {
                 const fallback = currentSession === 'pickup' ? 'School Gate' : 'Designated Stop';
@@ -666,6 +694,7 @@
                 callback(fallback);
             }
         }
+
 
         // Route CRUD Operations
         $('.edit-route').click(function() {
