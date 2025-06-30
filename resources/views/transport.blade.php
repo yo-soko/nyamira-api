@@ -125,7 +125,7 @@
                     </div>
                 </div>
 
-                <!-- Attendance Tab - Enhanced with auto-loading and auto-removal -->
+                <!-- Attendance Tab - Enhanced with separate pickup/dropoff tracking -->
                 <div class="tab-pane fade" id="attendance" role="tabpanel">
                     <div class="row mb-3 mt-3">
                         <div class="col-md-4">
@@ -161,7 +161,7 @@
                                     <th>Student</th>
                                     <th>Class</th>
                                     <th>Stop</th>
-                                    <th id="sessionHeader">{{ now()->hour < 12 ? 'Pickup' : 'Dropoff' }}</th>
+                                    <th id="sessionHeader">{{ now()->hour < 12 ? 'Pickup Status' : 'Dropoff Status' }}</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -177,7 +177,7 @@
                     </div>
                 </div>
 
-                <!-- Reports Tab -->
+                <!-- Reports Tab - Fixed functionality -->
                 <div class="tab-pane fade" id="reports" role="tabpanel">
                     <div class="row mb-3 mt-3">
                         <div class="col-md-3">
@@ -385,15 +385,33 @@
 
 <script>
     $(document).ready(function() {
+
+        // Debugging - log all AJAX requests
+        $(document).ajaxSend(function(event, jqxhr, settings) {
+            console.log('Sending AJAX request to:', settings.url);
+            console.log('Request data:', settings.data);
+        });
+
+        $(document).ajaxComplete(function(event, xhr, settings) {
+            console.log('Completed AJAX request to:', settings.url);
+            console.log('Response:', xhr.responseText);
+        });
         // Initialize DataTables
         $('#routesTable').DataTable();
 
-        // Update session header based on current time
+        // Current session management
+        let currentSession = getCurrentSession();
+
+        function getCurrentSession() {
+            const hours = new Date().getHours();
+            return hours < 12 ? 'pickup' : 'dropoff';
+        }
+
         function updateSessionHeader() {
-            const isMorning = new Date().getHours() < 12;
-            $('#currentSession').text(isMorning ? 'Pickup' : 'Dropoff');
-            $('#sessionHeader').text(isMorning ? 'Pickup' : 'Dropoff');
-            return isMorning ? 'pickup' : 'dropoff';
+            currentSession = getCurrentSession();
+            $('#currentSession').text(currentSession === 'pickup' ? 'Pickup' : 'Dropoff');
+            $('#sessionHeader').text(currentSession === 'pickup' ? 'Pickup Status' : 'Dropoff Status');
+            return currentSession;
         }
 
         // Auto-load students when route is selected
@@ -421,101 +439,128 @@
 
             showLoadingState();
 
-            $.get(`/transport/attendance`, {
+            $.ajax({
+                url: '/transport/attendance',
+                type: 'GET',
+                data: {
                     route_id: routeId,
                     date: date,
                     session_type: sessionType
-                })
-                .done(function(data) {
-                    if (data.error) {
-                        showErrorState(data.message || 'Failed to load students');
+                },
+                success: function(response) {
+                    console.log('Full attendance response:', response); // Detailed log
+
+                    if (response.error) {
+                        showErrorState(response.message || 'Failed to load students');
                         return;
                     }
 
-                    if (!data.students || data.students.length === 0) {
+                    // Check if students array exists and has data
+                    if (!response.students || response.students.length === 0) {
                         showEmptyState('No students found for this route');
                         return;
                     }
 
-                    renderStudentsTable(data.students, sessionType);
-                })
-                .fail(function(xhr) {
-                    console.error('Attendance load error:', xhr.responseText);
+                    // Log first student for debugging
+                    if (response.students.length > 0) {
+                        console.log('Sample student data:', response.students[0]);
+                    }
+
+                    renderStudentsTable(response.students, sessionType);
+                },
+                error: function(xhr) {
+                    console.error('Full error response:', xhr.responseJSON); // Detailed error log
                     showErrorState('Failed to load students. Please try again.');
-                });
+                }
+            });
         }
 
         // Helper functions for UI states
         function showLoadingState() {
             $('#attendanceTableBody').html(`
-        <tr>
-            <td colspan="5" class="text-center py-4">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="sr-only">Loading...</span>
-                </div>
-                <p>Loading students...</p>
-            </td>
-        </tr>
-    `);
+                <tr>
+                    <td colspan="5" class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <p>Loading students...</p>
+                    </td>
+                </tr>
+            `);
         }
 
         function showEmptyState(message) {
             $('#attendanceTableBody').html(`
-        <tr>
-            <td colspan="5" class="text-center text-muted py-4">
-                <i class="fas fa-info-circle fa-2x mb-2"></i>
-                <p>${message}</p>
-            </td>
-        </tr>
-    `);
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        <i class="fas fa-info-circle fa-2x mb-2"></i>
+                        <p>${message}</p>
+                    </td>
+                </tr>
+            `);
         }
 
         function showErrorState(message) {
             $('#attendanceTableBody').html(`
-        <tr>
-            <td colspan="5" class="text-center text-danger py-4">
-                <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
-                <p>${message}</p>
-                <button class="btn btn-sm btn-primary mt-2" onclick="loadStudentsForRoute()">
-                    <i class="fas fa-sync-alt"></i> Retry
-                </button>
-            </td>
-        </tr>
-    `);
+                <tr>
+                    <td colspan="5" class="text-center text-danger py-4">
+                        <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
+                        <p>${message}</p>
+                        <button class="btn btn-sm btn-primary mt-2" onclick="loadStudentsForRoute()">
+                            <i class="fas fa-sync-alt"></i> Retry
+                        </button>
+                    </td>
+                </tr>
+            `);
         }
 
         function renderStudentsTable(students, sessionType) {
             let html = '';
 
             students.forEach(student => {
+                // Safely handle potentially undefined attendance data
                 const attendance = student.attendance || {};
-                const isPresent = attendance.status === 'present';
-                const isMarked = attendance.id &&
-                    ((sessionType === 'pickup' && attendance.pickup_time) ||
-                        (sessionType === 'dropoff' && attendance.dropoff_time));
+                const isPickupMarked = attendance.pickup_status !== null && attendance.pickup_status !== undefined;
+                const isDropoffMarked = attendance.dropoff_status !== null && attendance.dropoff_status !== undefined;
 
-                // Skip already marked students for this session
-                if (isMarked) return;
+                // Skip if already marked for current session
+                if ((sessionType === 'pickup' && isPickupMarked) ||
+                    (sessionType === 'dropoff' && isDropoffMarked)) {
+                    return;
+                }
+
+                const currentStatus = sessionType === 'pickup' ?
+                    (attendance.pickup_status || 'absent') :
+                    (attendance.dropoff_status || 'absent');
+
+                // Safely handle stop data
+                const stopName = student.stop ? (student.stop.stop_name || student.stop.name || 'Not Specified') : 'Not Specified';
 
                 html += `
-        <tr id="student-row-${student.id}" data-student-id="${student.id}">
-            <td>${student.full_name}</td>
-           <td>${student.class_name || 'N/A'}</td>
-            <td>${student.stop?.stop_name || 'Not Specified'}</td>
-            <td>
-                <span class="badge badge-${isPresent ? 'success' : 'danger'}">
-                    ${isPresent ? 'Present' : 'Absent'}
-                </span>
-            </td>
-            <td>
-                <button class="btn btn-sm btn-primary mark-attendance"
-                    data-student-id="${student.id}"
-                    data-attendance-id="${attendance.id || ''}"
-                    data-status="${attendance.status || 'absent'}">
-                    <i class="fas fa-check"></i> Mark ${isPresent ? 'Absent' : 'Present'}
-                </button>
-            </td>
-        </tr>`;
+            <tr id="student-row-${student.id}" data-student-id="${student.id}">
+                <td>${student.full_name || 'Unknown Student'}</td>
+                <td>${student.class_name || 'N/A'}</td>
+                <td>${stopName}</td>
+                <td>
+                    <span class="badge badge-${currentStatus === 'present' ? 'success' : 'danger'}">
+                        ${currentStatus === 'present' ? 'Present' : 'Absent'}
+                    </span>
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button class="btn btn-success mark-present"
+                            data-student-id="${student.id}"
+                            data-attendance-id="${attendance.id || ''}">
+                            <i class="fas fa-check"></i> Present
+                        </button>
+                        <button class="btn btn-danger mark-absent"
+                            data-student-id="${student.id}"
+                            data-attendance-id="${attendance.id || ''}">
+                            <i class="fas fa-times"></i> Absent
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
             });
 
             if (html === '') {
@@ -524,61 +569,103 @@
                 $('#attendanceTableBody').html(html);
             }
         }
-
         // Handle attendance marking
-        $(document).on('click', '.mark-attendance', function() {
+        $(document).on('click', '.mark-present, .mark-absent', function() {
             const studentId = $(this).data('student-id');
             const attendanceId = $(this).data('attendance-id');
-            const currentStatus = $(this).data('status');
             const routeId = $('#attendanceRoute').val();
             const date = $('#attendanceDate').val();
-            const sessionType = updateSessionHeader();
-            const newStatus = currentStatus === 'present' ? 'absent' : 'present';
+            const sessionType = currentSession;
+            const status = $(this).hasClass('mark-present') ? 'present' : 'absent';
 
-            // Get the student row for removal after marking
             const studentRow = $(`#student-row-${studentId}`);
             const studentName = studentRow.find('td:eq(0)').text();
-            const className = studentRow.find('td:eq(1)').text();
-            const stopName = studentRow.find('td:eq(2)').text();
 
-            $.ajax({
-                url: attendanceId ? `/transport/attendance/${attendanceId}` : '/transport/attendance',
-                type: attendanceId ? 'PUT' : 'POST',
-                data: {
+            if (!routeId || !studentId) {
+                toastr.error('Missing required data to mark attendance');
+                return;
+            }
+
+            getCurrentLocation(function(location) {
+                const data = {
                     student_id: studentId,
                     route_id: routeId,
                     date: date,
-                    status: newStatus,
                     session_type: sessionType,
                     _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    // Remove the student row after successful marking
-                    studentRow.fadeOut(300, function() {
-                        $(this).remove();
+                };
 
-                        // If no students left, show message
-                        if ($('#attendanceTableBody tr').length === 0) {
-                            $('#attendanceTableBody').html(`
-                        <tr>
-                            <td colspan="5" class="text-center text-success py-4">
-                                <i class="fas fa-check-circle fa-2x mb-2"></i>
-                                <p>All students marked for ${sessionType}</p>
-                            </td>
-                        </tr>
-                    `);
-                        }
-                    });
-
-                    // Show notification
-                    toastr.success(`${studentName}'s ${sessionType} marked as ${newStatus}`);
-                },
-                error: function(xhr) {
-                    console.error(xhr);
-                    toastr.error('Failed to mark attendance');
+                if (sessionType === 'pickup') {
+                    data.pickup_status = status;
+                    data.pickup_location = location;
+                } else {
+                    data.dropoff_status = status;
+                    data.dropoff_location = location;
                 }
+
+                const url = attendanceId ? `/transport/attendance/${attendanceId}` : '/transport/attendance';
+                const method = attendanceId ? 'PUT' : 'POST';
+
+                console.log('Sending attendance data:', data); // Debug log
+
+                $.ajax({
+                    url: url,
+                    type: method,
+                    data: data,
+                    success: function(response) {
+                        console.log('Attendance response:', response); // Debug log
+
+                        if (!response || !response.success) {
+                            toastr.error(response?.message || 'Failed to mark attendance');
+                            return;
+                        }
+
+                        studentRow.fadeOut(300, function() {
+                            $(this).remove();
+                            if ($('#attendanceTableBody tr').length === 0) {
+                                showEmptyState(`All students marked for ${sessionType}`);
+                            }
+                        });
+
+                        toastr.success(`${studentName} marked as ${status} for ${sessionType}`);
+                    },
+                    error: function(xhr) {
+                        console.error('Full error response:', xhr.responseJSON); // Detailed error log
+                        toastr.error('Failed to mark attendance. ' +
+                            (xhr.responseJSON?.message || 'Please try again.'));
+                    }
+                });
             });
         });
+
+        /**
+         * Gets the current geolocation (lat, lng) and passes a human-readable fallback.
+         * @param {Function} callback Receives location string e.g. "Lat: -1.2833, Lng: 36.8167"
+         */
+        const OPENCAGE_API_KEY = 'acbfa6ada6af4021824a67c0b9ebdaa6';
+
+        function getCurrentLocation(callback) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const {
+                            latitude,
+                            longitude
+                        } = position.coords;
+                        callback(`Lat: ${latitude.toFixed(5)}, Lng: ${longitude.toFixed(5)}`);
+                    },
+                    (error) => {
+                        console.warn('Geolocation error:', error.message);
+                        const fallback = currentSession === 'pickup' ? 'School Gate' : 'Designated Stop';
+                        callback(fallback);
+                    }
+                );
+            } else {
+                const fallback = currentSession === 'pickup' ? 'School Gate' : 'Designated Stop';
+                console.warn('Geolocation not supported.');
+                callback(fallback);
+            }
+        }
 
         // Route CRUD Operations
         $('.edit-route').click(function() {
@@ -591,7 +678,7 @@
                 $('#editRouteModal').modal('show');
             }).fail(function(xhr) {
                 console.error(xhr);
-                alert('Failed to load route data');
+                toastr.error('Failed to load route data');
             });
         });
 
@@ -607,12 +694,14 @@
             e.preventDefault();
             const formData = $(this).serialize();
 
-            $.post('/transport/routes', formData, function(response) {
-                $('#addRouteModal').modal('hide');
-                location.reload();
-            }).fail(function(xhr) {
-                alert('Error: ' + xhr.responseJSON.message);
-            });
+            $.post('/transport/routes', formData)
+                .done(function(response) {
+                    $('#addRouteModal').modal('hide');
+                    location.reload();
+                })
+                .fail(function(xhr) {
+                    toastr.error('Error: ' + (xhr.responseJSON?.message || 'Failed to save route'));
+                });
         });
 
         // Edit Route Form Submission
@@ -630,7 +719,7 @@
                     location.reload();
                 },
                 error: function(xhr) {
-                    alert('Error: ' + xhr.responseJSON.message);
+                    toastr.error('Error: ' + (xhr.responseJSON?.message || 'Failed to update route'));
                 }
             });
         });
@@ -658,96 +747,143 @@
                     location.reload();
                 },
                 error: function(xhr) {
-                    alert('Error: ' + xhr.responseJSON.message);
+                    toastr.error('Error: ' + (xhr.responseJSON?.message || 'Failed to delete'));
                 }
             });
         });
 
-        // Report Generation
+        // Report Generation - Fixed functionality
         $('#generateReport').click(function() {
             const reportType = $('#reportType').val();
             const routeId = $('#reportRoute').val();
             const month = $('#reportMonth').val();
 
-            $.get(`/transport/reports`, {
-                type: reportType,
-                route_id: routeId,
-                month: month
-            }, function(data) {
-                let html = '';
+            // Show loading state
+            $('#reportResults').html(`
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <p>Generating report...</p>
+                </div>
+            `);
 
-                if (reportType === 'attendance') {
-                    html = `
-                    <h5>Attendance Report - ${month}</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>Class</th>
-                                <th>Route</th>
-                                <th>Stop</th>
-                                <th>Present Days</th>
-                                <th>Absent Days</th>
-                                <th>Attendance Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+            $.ajax({
+                url: '/transport/reports',
+                type: 'GET',
+                data: {
+                    type: reportType,
+                    route_id: routeId,
+                    month: month
+                },
+                success: function(data) {
+                    if (data.error) {
+                        $('#reportResults').html(`
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle"></i> ${data.message}
+                            </div>
+                        `);
+                        return;
+                    }
 
-                    data.forEach(item => {
-                        const totalDays = item.present_days + item.absent_days;
-                        const rate = totalDays > 0 ? Math.round((item.present_days / totalDays) * 100) : 0;
+                    let html = '';
 
-                        html += `
-                        <tr>
-                            <td>${item.student.full_name}</td>
-                            <td>${item.class.name}</td>
-                            <td>${item.route.route_name}</td>
-                            <td>${item.stop.stop_name}</td>
-                            <td>${item.present_days}</td>
-                            <td>${item.absent_days}</td>
-                            <td>${rate}%</td>
-                        </tr>`;
-                    });
+                    if (reportType === 'attendance') {
+                        if (!data.length) {
+                            html = `
+                                <div class="alert alert-info">
+                                    No attendance data found for the selected period
+                                </div>`;
+                        } else {
+                            html = `
+                                <h5>Attendance Report - ${month}</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Student</th>
+                                                <th>Class</th>
+                                                <th>Route</th>
+                                                <th>Stop</th>
+                                                <th>Present Days</th>
+                                                <th>Absent Days</th>
+                                                <th>Attendance Rate</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>`;
 
-                    html += `</tbody></table>`;
-                } else if (reportType === 'billing') {
-                    html = `
-                    <h5>Billing Report - ${month}</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Student</th>
-                                <th>Class</th>
-                                <th>Route</th>
-                                <th>Fee</th>
-                                <th>Balance</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
+                            data.forEach(item => {
+                                html += `
+                                    <tr>
+                                        <td>${item.student}</td>
+                                        <td>${item.class}</td>
+                                        <td>${item.route}</td>
+                                        <td>${item.stop}</td>
+                                        <td>${item.present_days}</td>
+                                        <td>${item.absent_days}</td>
+                                        <td>${item.attendance_rate}</td>
+                                    </tr>`;
+                            });
 
-                    data.forEach(item => {
-                        html += `
-                        <tr>
-                            <td>${item.student.full_name}</td>
-                            <td>${item.class.name}</td>
-                            <td>${item.route.route_name}</td>
-                            <td>KSh ${item.transport_fee.toFixed(2)}</td>
-                            <td class="${item.balance > 0 ? 'text-danger' : 'text-success'}">
-                                KSh ${item.balance.toFixed(2)}
-                            </td>
-                            <td>
-                                <span class="badge badge-${item.balance > 0 ? 'warning' : 'success'}">
-                                    ${item.balance > 0 ? 'Pending' : 'Paid'}
-                                </span>
-                            </td>
-                        </tr>`;
-                    });
+                            html += `</tbody></table></div>`;
+                        }
+                    } else if (reportType === 'billing') {
+                        if (!data.length) {
+                            html = `
+                                <div class="alert alert-info">
+                                    No billing data found for the selected period
+                                </div>`;
+                        } else {
+                            html = `
+                                <h5>Billing Report - ${month}</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>Student</th>
+                                                <th>Class</th>
+                                                <th>Route</th>
+                                                <th>Fee (KSh)</th>
+                                                <th>Paid (KSh)</th>
+                                                <th>Balance (KSh)</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>`;
 
-                    html += `</tbody></table>`;
+                            data.forEach(item => {
+                                html += `
+                                    <tr>
+                                        <td>${item.student}</td>
+                                        <td>${item.class}</td>
+                                        <td>${item.route}</td>
+                                        <td>${item.fee.toFixed(2)}</td>
+                                        <td>${item.paid.toFixed(2)}</td>
+                                        <td class="${item.balance > 0 ? 'text-danger' : 'text-success'}">
+                                            ${item.balance.toFixed(2)}
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-${item.balance > 0 ? 'warning' : 'success'}">
+                                                ${item.status}
+                                            </span>
+                                        </td>
+                                    </tr>`;
+                            });
+
+                            html += `</tbody></table></div>`;
+                        }
+                    }
+
+                    $('#reportResults').html(html);
+                },
+                error: function(xhr) {
+                    console.error('Report generation error:', xhr.responseText);
+                    $('#reportResults').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle"></i> Failed to generate report. Please try again.
+                        </div>
+                    `);
                 }
-
-                $('#reportResults').html(html);
             });
         });
 
@@ -781,11 +917,13 @@
         opacity: 0.7;
     }
 
-    .mark-attendance {
+    .mark-present,
+    .mark-absent {
         transition: all 0.2s;
     }
 
-    .mark-attendance:hover {
+    .mark-present:hover,
+    .mark-absent:hover {
         transform: scale(1.05);
     }
 
@@ -797,7 +935,8 @@
             display: none;
         }
 
-        .mark-attendance {
+        .mark-present,
+        .mark-absent {
             padding: 0.25rem 0.5rem;
             font-size: 0.8rem;
         }
@@ -836,11 +975,13 @@
         background-color: #f8f9fc;
     }
 
-    .mark-attendance {
+    .mark-present,
+    .mark-absent {
         transition: all 0.2s;
     }
 
-    .mark-attendance:hover {
+    .mark-present:hover,
+    .mark-absent:hover {
         transform: translateY(-2px);
         box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
@@ -917,6 +1058,12 @@
 
     #attendanceResults table td {
         vertical-align: middle;
+    }
+
+    .btn-group-sm>.btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
     }
 </style>
 @endsection

@@ -24,11 +24,23 @@ class TransportController extends Controller
         $routes = TransportRoute::with(['stops', 'vehicle'])->get();
         $vehicles = Vehicle::with('route')->get();
         $studentCount = StudentTransport::count();
-        $todayAttendance = TransportAttendance::whereDate('date', today())->where('status', 'present')->count();
+
+        // Calculate today's attendance based on current session
+        $currentSession = (now()->hour < 12) ? 'pickup' : 'dropoff';
+        $todayAttendance = TransportAttendance::whereDate('date', today())
+            ->where(function ($query) use ($currentSession) {
+                if ($currentSession === 'pickup') {
+                    $query->whereNotNull('pickup_status')->where('pickup_status', 'present');
+                } else {
+                    $query->whereNotNull('dropoff_status')->where('dropoff_status', 'present');
+                }
+            })
+            ->count();
+
         $classes = SchoolClass::all();
         $terms = Term::all();
         $studentTransports = StudentTransport::with(['student', 'route', 'stop', 'class'])->get();
-        $students = Student::with('class')->get(); // Added for student dropdown
+        $students = Student::with('class')->get();
 
         return view('transport', compact(
             'routes',
@@ -86,383 +98,7 @@ class TransportController extends Controller
         return response()->json(['success' => 'Route deleted']);
     }
 
-    // Stop Management
-    public function getStops($routeId)
-    {
-        $route = TransportRoute::findOrFail($routeId);
-        $stops = $route->stops()->orderBy('stop_order')->get();
-        return response()->json([
-            'route' => $route,
-            'stops' => $stops
-        ]);
-    }
-
-    public function storeStop(Request $request)
-    {
-        $validated = $request->validate([
-            'route_id' => 'required|exists:transport_routes,id',
-            'stop_name' => 'required|string|max:255',
-            'pickup_time' => 'nullable|date_format:H:i',
-            'dropoff_time' => 'nullable|date_format:H:i',
-        ]);
-
-        $lastStop = TransportStop::where('route_id', $validated['route_id'])
-            ->orderBy('stop_order', 'desc')
-            ->first();
-
-        $validated['stop_order'] = $lastStop ? $lastStop->stop_order + 1 : 1;
-
-        $stop = TransportStop::create($validated);
-        return response()->json($stop);
-    }
-
-    public function updateStop(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'stop_name' => 'required|string|max:255',
-            'pickup_time' => 'nullable|date_format:H:i',
-            'dropoff_time' => 'nullable|date_format:H:i',
-        ]);
-
-        $stop = TransportStop::findOrFail($id);
-        $stop->update($validated);
-        return response()->json($stop);
-    }
-
-    public function destroyStop($id)
-    {
-        TransportStop::destroy($id);
-        return response()->json(['success' => 'Stop deleted']);
-    }
-
-    // Vehicle Management
-    public function storeVehicle(Request $request)
-    {
-        $validated = $request->validate([
-            'registration_number' => 'required|string|max:50|unique:vehicles',
-            'model' => 'nullable|string|max:100',
-            'capacity' => 'required|integer|min:1',
-            'insurance_expiry' => 'nullable|date',
-        ]);
-
-        $vehicle = Vehicle::create($validated);
-        return response()->json($vehicle);
-    }
-
-    public function editVehicle($id)
-    {
-        $vehicle = Vehicle::findOrFail($id);
-        return response()->json($vehicle);
-    }
-
-    public function updateVehicle(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'registration_number' => 'required|string|max:50|unique:vehicles,registration_number,' . $id,
-            'model' => 'nullable|string|max:100',
-            'capacity' => 'required|integer|min:1',
-            'insurance_expiry' => 'nullable|date',
-        ]);
-
-        $vehicle = Vehicle::findOrFail($id);
-        $vehicle->update($validated);
-        return response()->json($vehicle);
-    }
-
-    public function destroyVehicle($id)
-    {
-        Vehicle::destroy($id);
-        return response()->json(['success' => 'Vehicle deleted']);
-    }
-
-    // Driver Management
-    public function getDriver($vehicleId)
-    {
-        $vehicle = Vehicle::findOrFail($vehicleId);
-        $driver = $vehicle->currentDriver;
-        return response()->json([
-            'driver' => $driver,
-            'vehicle' => $vehicle
-        ]);
-    }
-
-    public function assignDriver(Request $request)
-    {
-        $validated = $request->validate([
-            'vehicle_id' => 'required|exists:vehicles,id',
-            'driver_name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'assigned_from' => 'required|date',
-            'assigned_to' => 'nullable|date|after:assigned_from',
-        ]);
-
-        DriverAssignment::where('vehicle_id', $validated['vehicle_id'])
-            ->whereNull('assigned_to')
-            ->update(['assigned_to' => now()]);
-
-        $assignment = DriverAssignment::create($validated);
-        return response()->json($assignment);
-    }
-
-    // Student Transport Management
-    public function storeStudentTransport(Request $request)
-    {
-        $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'term_id' => 'required|exists:terms,id',
-            'class_id' => 'required|exists:classes,id',
-            'route_id' => 'required|exists:transport_routes,id',
-            'stop_id' => 'nullable|exists:transport_stops,id',
-            'transport_type' => 'required|in:one_way,two_way',
-            'transport_fee' => 'required|numeric|min:0',
-        ]);
-
-        $validated['balance'] = $validated['transport_fee'];
-        $transport = StudentTransport::create($validated);
-        return response()->json($transport);
-    }
-
-    public function editStudentTransport($id)
-    {
-        $transport = StudentTransport::with(['student', 'route', 'stop', 'class'])->findOrFail($id);
-        return response()->json($transport);
-    }
-
-    public function updateStudentTransport(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'term_id' => 'required|exists:terms,id',
-            'class_id' => 'required|exists:classes,id',
-            'route_id' => 'required|exists:transport_routes,id',
-            'stop_id' => 'nullable|exists:transport_stops,id',
-            'transport_type' => 'required|in:one_way,two_way',
-            'transport_fee' => 'required|numeric|min:0',
-        ]);
-
-        $transport = StudentTransport::findOrFail($id);
-
-        if ($transport->transport_fee != $validated['transport_fee']) {
-            $paid = $transport->transport_fee - $transport->balance;
-            $validated['balance'] = $validated['transport_fee'] - $paid;
-        }
-
-        $transport->update($validated);
-        return response()->json($transport);
-    }
-
-    public function destroyStudentTransport($id)
-    {
-        StudentTransport::destroy($id);
-        return response()->json(['success' => 'Transport assignment removed']);
-    }
-
-    // Payment Management
-    public function getPaymentInfo($id)
-    {
-        $transport = StudentTransport::with(['student', 'route'])->findOrFail($id);
-        return response()->json($transport);
-    }
-
-    public function recordPayment(Request $request, $id)
-    {
-        $transport = StudentTransport::findOrFail($id);
-
-        $validated = $request->validate([
-            'amount' => 'required|numeric|min:0.01|max:' . $transport->balance,
-            'payment_date' => 'required|date',
-            'payment_method' => 'required|string|max:50',
-            'reference' => 'nullable|string|max:100',
-            'notes' => 'nullable|string',
-        ]);
-
-        TransportPayment::create([
-            'student_transport_id' => $transport->id,
-            'amount' => $validated['amount'],
-            'payment_date' => $validated['payment_date'],
-            'payment_method' => $validated['payment_method'],
-            'reference' => $validated['reference'],
-            'notes' => $validated['notes'],
-        ]);
-
-        $transport->decrement('balance', $validated['amount']);
-        return response()->json($transport);
-    }
-
     // Attendance Management
-    // public function getAttendance(Request $request)
-    // {
-    //     $request->validate([
-    //         'route_id' => 'required|exists:transport_routes,id',
-    //         'date' => 'required|date',
-    //     ]);
-
-    //     $students = StudentTransport::with(['student', 'class', 'stop'])
-    //         ->where('route_id', $request->route_id)
-    //         ->get();
-
-    //     $attendanceRecords = TransportAttendance::where('route_id', $request->route_id)
-    //         ->whereDate('date', $request->date)
-    //         ->get()
-    //         ->keyBy('student_id');
-
-    //     return response()->json([
-    //         'students' => $students->map(function ($student) use ($attendanceRecords) {
-    //             return [
-    //                 'student' => $student->student,
-    //                 'class' => $student->class,
-    //                 'stop' => $student->stop,
-    //                 'attendance' => $attendanceRecords[$student->student_id] ?? null
-    //             ];
-    //         })
-    //     ]);
-    // }
-
-    // public function saveAttendance(Request $request)
-    // {
-    //     $request->validate([
-    //         'route_id' => 'required|exists:transport_routes,id',
-    //         'date' => 'required|date',
-    //         'students' => 'required|array',
-    //         'students.*.student_id' => 'required|exists:students,id',
-    //         'students.*.status' => 'required|in:present,absent',
-    //     ]);
-
-    //     foreach ($request->students as $student) {
-    //         TransportAttendance::updateOrCreate(
-    //             [
-    //                 'student_id' => $student['student_id'],
-    //                 'route_id' => $request->route_id,
-    //                 'date' => $request->date,
-    //             ],
-    //             [
-    //                 'status' => $student['status'],
-    //                 'marked_at' => now(),
-    //             ]
-    //         );
-    //     }
-
-    //     return response()->json(['success' => 'Attendance saved']);
-    // }
-
-    // Reports
-    public function generateReport(Request $request)
-    {
-        $request->validate([
-            'type' => 'required|in:daily,monthly,payments,vehicle',
-            'date' => 'required_if:type,daily|date',
-            'month' => 'required_if:type,monthly|date_format:Y-m',
-        ]);
-
-        $reportType = $request->type;
-        $results = [];
-
-        switch ($reportType) {
-            case 'daily':
-                $date = $request->date;
-                $results = TransportRoute::withCount([
-                    'attendance as present' => function ($query) use ($date) {
-                        $query->whereDate('date', $date)
-                            ->where('status', 'present');
-                    },
-                    'attendance as absent' => function ($query) use ($date) {
-                        $query->whereDate('date', $date)
-                            ->where('status', 'absent');
-                    }
-                ])->get();
-                break;
-
-            case 'monthly':
-                $month = $request->month;
-                $results = TransportRoute::with(['attendance' => function ($query) use ($month) {
-                    $query->whereMonth('date', Carbon::parse($month)->month)
-                        ->whereYear('date', Carbon::parse($month)->year);
-                }])->get()->map(function ($route) {
-                    $attendance = $route->attendance->groupBy(function ($item) {
-                        return $item->date->format('Y-m-d');
-                    });
-
-                    $dailyRates = $attendance->map(function ($day) {
-                        $present = $day->where('status', 'present')->count();
-                        $total = $day->count();
-                        return [
-                            'date' => $day->first()->date->format('Y-m-d'),
-                            'rate' => $total > 0 ? round(($present / $total) * 100) : 0
-                        ];
-                    });
-
-                    $bestDay = $dailyRates->sortByDesc('rate')->first();
-                    $worstDay = $dailyRates->sortBy('rate')->first();
-
-                    return [
-                        'route_name' => $route->route_name,
-                        'total_students' => StudentTransport::where('route_id', $route->id)->count(),
-                        'avg_attendance' => $dailyRates->avg('rate') ?? 0,
-                        'best_day' => $bestDay ?? ['date' => 'N/A', 'rate' => 0],
-                        'worst_day' => $worstDay ?? ['date' => 'N/A', 'rate' => 0],
-                    ];
-                });
-                break;
-
-            case 'payments':
-                $results = StudentTransport::with(['student', 'class', 'route'])
-                    ->where('balance', '>', 0)
-                    ->get();
-                break;
-
-            case 'vehicle':
-                $results = Vehicle::with(['route', 'studentTransports'])
-                    ->get()
-                    ->map(function ($vehicle) {
-                        $students = $vehicle->route ? $vehicle->route->studentTransports->count() : 0;
-                        return [
-                            'registration_number' => $vehicle->registration_number,
-                            'model' => $vehicle->model,
-                            'capacity' => $vehicle->capacity,
-                            'route_name' => $vehicle->route ? $vehicle->route->route_name : 'Not Assigned',
-                            'students' => $students,
-                        ];
-                    });
-                break;
-        }
-
-        return response()->json($results);
-    }
-
-    public function exportReport(Request $request)
-    {
-        $report = $this->generateReport($request)->getData();
-        $type = $request->type;
-        $date = $type === 'monthly' ? $request->month : $request->date;
-
-        $pdf = PDF::loadView('pdf.transport-report', [
-            'report' => $report,
-            'type' => $type,
-            'date' => $date
-        ]);
-
-        return $pdf->download("transport-report-{$type}-{$date}.pdf");
-    }
-
-    public function getDashboardCounters()
-    {
-        return response()->json([
-            'activeRoutes' => TransportRoute::where('status', true)->count(),
-            'studentCount' => StudentTransport::count(),
-            'availableVehicles' => Vehicle::count(),
-            'todayAttendance' => TransportAttendance::whereDate('date', today())->where('status', 'present')->count()
-        ]);
-    }
-
-    public function getInitialData()
-    {
-        return response()->json([
-            'classes' => SchoolClass::all(),
-            'terms' => Term::all(),
-            'students' => Student::with('class')->get()
-        ]);
-    }
-
     public function getAttendance(Request $request)
     {
         try {
@@ -476,7 +112,6 @@ class TransportController extends Controller
             $date = $request->date ?: now()->toDateString();
             $sessionType = $request->session_type;
 
-            // Load transports with student and nested class-level-stream relations
             $transports = StudentTransport::with([
                 'student:id,first_name,last_name,class_id',
                 'student.class.level:id,level_name',
@@ -494,7 +129,6 @@ class TransportController extends Controller
 
                 $student = $transport->student;
                 $class = $student->class;
-
                 $attendance = $student->transportAttendances->first();
 
                 return [
@@ -504,21 +138,22 @@ class TransportController extends Controller
                         (optional($class->level)->level_name ?? '') . ' ' .
                             (optional($class->stream)->name ?? '')
                     ) ?: 'N/A',
-                    'stop' => $transport->stop ? [
-                        'stop_name' => $transport->stop->stop_name
-                    ] : null,
+                    'stop' => $transport->stop,
                     'attendance' => $attendance ? [
                         'id' => $attendance->id,
-                        'status' => $attendance->status ?? 'absent',
+                        'pickup_status' => $attendance->pickup_status,
+                        'dropoff_status' => $attendance->dropoff_status,
                         'pickup_time' => $attendance->pickup_time,
                         'dropoff_time' => $attendance->dropoff_time,
+                        'pickup_location' => $attendance->pickup_location,
+                        'dropoff_location' => $attendance->dropoff_location
                     ] : null
                 ];
             })->filter();
 
             return response()->json([
                 'students' => $students,
-                'stops' => TransportStop::where('route_id', $routeId)->get(['id', 'stop_name'])
+                'current_session' => $sessionType
             ]);
         } catch (\Throwable $e) {
             Log::error('Attendance loading error', [
@@ -529,12 +164,10 @@ class TransportController extends Controller
 
             return response()->json([
                 'error' => true,
-                'message' => 'Failed to load attendance data',
-                'debug' => config('app.debug') ? $e->getMessage() : null
+                'message' => 'Failed to load attendance data'
             ], 500);
         }
     }
-
 
     public function saveAttendance(Request $request)
     {
@@ -542,15 +175,17 @@ class TransportController extends Controller
             'student_id' => 'required|exists:students,id',
             'route_id' => 'required|exists:transport_routes,id',
             'date' => 'required|date',
-            'status' => 'required|in:present,absent',
-            'session_type' => 'required|in:pickup,dropoff'
+            'session_type' => 'required|in:pickup,dropoff',
+            'pickup_status' => 'nullable|in:present,absent',
+            'dropoff_status' => 'nullable|in:present,absent',
+            'pickup_location' => 'nullable|string',
+            'dropoff_location' => 'nullable|string',
         ]);
 
         try {
             $studentId = $request->student_id;
             $routeId = $request->route_id;
             $date = $request->date;
-            $status = $request->status;
             $sessionType = $request->session_type;
 
             $transport = StudentTransport::with('stop')
@@ -567,19 +202,18 @@ class TransportController extends Controller
 
             $attendance = TransportAttendance::firstOrNew([
                 'student_id' => $studentId,
+                'route_id' => $routeId,
                 'date' => $date,
             ]);
 
-            $attendance->route_id = $routeId; // Optional, depending on schema
-            $attendance->status = $status;
-            $attendance->marked_at = now();
-
             if ($sessionType === 'pickup') {
+                $attendance->pickup_status = $request->pickup_status;
                 $attendance->pickup_time = now()->format('H:i:s');
-                $attendance->pickup_location = $transport->stop->stop_name ?? null;
+                $attendance->pickup_location = $request->pickup_location ?? ($transport->stop->stop_name ?? 'School');
             } else {
+                $attendance->dropoff_status = $request->dropoff_status;
                 $attendance->dropoff_time = now()->format('H:i:s');
-                $attendance->dropoff_location = $transport->stop->stop_name ?? null;
+                $attendance->dropoff_location = $request->dropoff_location ?? ($transport->stop->stop_name ?? 'School');
             }
 
             $attendance->save();
@@ -587,20 +221,172 @@ class TransportController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Attendance recorded successfully',
-                'attendance_id' => $attendance->id
+                'attendance' => $attendance
             ]);
         } catch (\Exception $e) {
             Log::error('Attendance saving error', [
                 'student_id' => $request->student_id,
                 'route_id' => $request->route_id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to record attendance: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function generateReport(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:attendance,billing',
+            'route_id' => 'nullable|exists:transport_routes,id',
+            'month' => 'required|date_format:Y-m',
+        ]);
+
+        try {
+            $reportType = $request->type;
+            $routeId = $request->route_id;
+            $month = Carbon::parse($request->month);
+            $startDate = $month->copy()->startOfMonth();
+            $endDate = $month->copy()->endOfMonth();
+
+            if ($reportType === 'attendance') {
+                $query = TransportAttendance::with(['student', 'route', 'student.class'])
+                    ->whereBetween('date', [$startDate, $endDate]);
+
+                if ($routeId) {
+                    $query->where('route_id', $routeId);
+                }
+
+                $attendances = $query->get()
+                    ->groupBy('student_id')
+                    ->map(function ($records, $studentId) {
+                        $student = $records->first()->student;
+                        $presentDays = $records->filter(function ($record) {
+                            return $record->pickup_status === 'present' ||
+                                $record->dropoff_status === 'present';
+                        })->count();
+
+                        $absentDays = $records->filter(function ($record) {
+                            return $record->pickup_status === 'absent' ||
+                                $record->dropoff_status === 'absent';
+                        })->count();
+
+                        $totalDays = $presentDays + $absentDays;
+                        $rate = $totalDays > 0 ? round(($presentDays / $totalDays) * 100) : 0;
+
+                        return [
+                            'student' => $student->full_name,
+                            'class' => optional($student->class)->name ?? 'N/A',
+                            'route' => $records->first()->route->route_name,
+                            'stop' => optional($student->transport->stop)->stop_name ?? 'N/A',
+                            'present_days' => $presentDays,
+                            'absent_days' => $absentDays,
+                            'attendance_rate' => $rate . '%'
+                        ];
+                    })->values();
+
+                return response()->json($attendances);
+            } else {
+                // Billing report
+                $query = StudentTransport::with(['student', 'route', 'stop', 'payments'])
+                    ->whereHas('route')
+                    ->when($routeId, function ($query) use ($routeId) {
+                        return $query->where('route_id', $routeId);
+                    });
+
+                $transports = $query->get()
+                    ->map(function ($transport) use ($month) {
+                        $payments = $transport->payments()
+                            ->whereMonth('payment_date', $month)
+                            ->sum('amount');
+
+                        return [
+                            'student' => $transport->student->full_name,
+                            'class' => optional($transport->student->class)->name ?? 'N/A',
+                            'route' => $transport->route->route_name,
+                            'fee' => $transport->transport_fee ?? 0,
+                            'paid' => $payments,
+                            'balance' => ($transport->transport_fee ?? 0) - $payments,
+                            'status' => (($transport->transport_fee ?? 0) - $payments) <= 0 ? 'Paid' : 'Pending'
+                        ];
+                    });
+
+                return response()->json($transports);
+            }
+        } catch (\Exception $e) {
+            Log::error('Report generation error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'error' => true,
+                'message' => 'Failed to generate report: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateAttendance(Request $request, $id)
+    {
+        $request->validate([
+            'student_id' => 'required|exists:students,id',
+            'route_id' => 'required|exists:transport_routes,id',
+            'date' => 'required|date',
+            'session_type' => 'required|in:pickup,dropoff',
+            'pickup_status' => 'nullable|in:present,absent',
+            'dropoff_status' => 'nullable|in:present,absent',
+        ]);
+
+        try {
+            $attendance = TransportAttendance::findOrFail($id);
+
+            if ($request->session_type === 'pickup') {
+                $attendance->pickup_status = $request->pickup_status;
+                $attendance->pickup_time = now()->format('H:i:s');
+                $attendance->pickup_location = $request->pickup_location ?? $attendance->pickup_location;
+            } else {
+                $attendance->dropoff_status = $request->dropoff_status;
+                $attendance->dropoff_time = now()->format('H:i:s');
+                $attendance->dropoff_location = $request->dropoff_location ?? $attendance->dropoff_location;
+            }
+
+            $attendance->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Attendance updated successfully',
+                'attendance' => $attendance
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Attendance update error', [
+                'attendance_id' => $id,
                 'error' => $e->getMessage()
             ]);
 
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to record attendance',
-                'error' => config('app.debug') ? $e->getMessage() : null
+                'message' => 'Failed to update attendance'
             ], 500);
         }
+    }
+
+
+    public function exportReport(Request $request)
+    {
+        $report = $this->generateReport($request)->getData();
+        $type = $request->type;
+        $month = $request->month;
+
+        $pdf = PDF::loadView('pdf.transport-report', [
+            'report' => $report,
+            'type' => $type,
+            'month' => $month
+        ]);
+
+        return $pdf->download("transport-{$type}-report-{$month}.pdf");
     }
 }

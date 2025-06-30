@@ -8,22 +8,20 @@ class TransportAttendance extends Model
 {
     protected $fillable = [
         'student_id',
+        'route_id',
         'date',
-        'status',
-        'marked_at',
         'pickup_location',
         'dropoff_location',
         'pickup_time',
         'dropoff_time',
-        'created_at',
-        'updated_at',
+        'pickup_status',
+        'dropoff_status',
     ];
 
     protected $casts = [
         'date' => 'date',
-        'marked_at' => 'datetime',
-        'pickup_time' => 'datetime:H:i:s',
-        'dropoff_time' => 'datetime:H:i:s',
+        'pickup_time' => 'string',       // stored as TIME in MySQL
+        'dropoff_time' => 'string',
     ];
 
     public function student()
@@ -33,13 +31,26 @@ class TransportAttendance extends Model
 
     public function route()
     {
-        // Not directly stored in transport_attendances table anymore — handled via student_transport
         return $this->belongsTo(TransportRoute::class, 'route_id');
     }
 
     public function stop()
     {
-        // Optional: if you ever add stop_id column
+        // Reserved for future use if stop_id is ever added to this model
         return $this->belongsTo(TransportStop::class, 'stop_id');
+    }
+
+    // Optional: Computed general status if needed
+    public function getStatusAttribute()
+    {
+        if ($this->pickup_status === 'present' || $this->dropoff_status === 'present') {
+            return 'present';
+        }
+
+        if ($this->pickup_status === 'absent' && $this->dropoff_status === 'absent') {
+            return 'absent';
+        }
+
+        return 'partial'; // covers one session marked, one not marked
     }
 }

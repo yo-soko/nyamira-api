@@ -10,11 +10,15 @@ return new class extends Migration {
         Schema::create('transport_attendances', function (Blueprint $table) {
             $table->id();
 
-            // Foreign key to student_transports.student_id
+            // Foreign keys and relationships
             $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('route_id');
+
             $table->date('date');
-            $table->enum('status', ['present', 'absent'])->default('absent');
-            $table->timestamp('marked_at')->nullable();
+
+            // Attendance status per session
+            $table->enum('pickup_status', ['present', 'absent'])->nullable();
+            $table->enum('dropoff_status', ['present', 'absent'])->nullable();
 
             // Snapshot data for audit
             $table->string('pickup_location')->nullable();
@@ -26,7 +30,7 @@ return new class extends Migration {
 
             // Constraints
             $table->foreign('student_id')->references('student_id')->on('student_transports')->onDelete('cascade');
-            $table->unique(['student_id', 'date']); // Prevent duplicate attendance
+            $table->unique(['student_id', 'date']);
         });
     }
 
