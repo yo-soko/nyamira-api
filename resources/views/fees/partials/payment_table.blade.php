@@ -12,8 +12,11 @@
                         <th>Amount Paid</th>
                         <th>Balance</th>
                         <th>Receipt Number</th>
+                        <th>Paid For</th>
                         <th>Date</th>
+                        @hasanyrole('admin|developer|director|supervisor')
                         <th>Action</th>
+                        @endhasanyrole
                     </tr>
                 </thead>
                 <tbody>
@@ -42,9 +45,10 @@
                             @endif
                         </td>
                         <td>{{ $payment->receipt_number }}</td>
+                        <td>{{ $payment->payment_for ?? 'N/A' }}</td>
                         <td>{{ $payment->created_at ? $payment->created_at->format('d M Y') : 'N/A' }}</td>
 
-
+                        @hasanyrole('admin|developer|director|supervisor')
                         <td class="text-end">
                             {{-- Edit Button --}}
                             <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editPaymentModal{{ $payment->id }}">
@@ -56,6 +60,7 @@
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
+                        @endhasanyrole
 
                     </tr>
                     <!-- Delete Modal -->
@@ -147,11 +152,16 @@
                                             <input type="text" name="receipt_number" class="form-control" value="{{ $payment->receipt_number }}">
                                         </div>
 
-                                        <!-- Description -->
+                                        <!-- Payment For -->
                                         <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <textarea name="description" class="form-control">{{ $payment->description }}</textarea>
+                                            <label class="form-label">Payment For</label>
+                                            <select name="payment_for" class="form-select" required>
+                                                <option value="Tuition Fee" {{ $payment->payment_for === 'Tuition Fee' ? 'selected' : '' }}>Tuition Fee</option>
+                                                <option value="Meals" {{ $payment->payment_for === 'Meals' ? 'selected' : '' }}>Meals</option>
+                                                <option value="Transport" {{ $payment->payment_for === 'Transport' ? 'selected' : '' }}>Transport</option>
+                                            </select>
                                         </div>
+
 
                                         <!-- Amount -->
                                         <div class="mb-3">

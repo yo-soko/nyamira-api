@@ -337,6 +337,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('/student/fee-payments', [App\Http\Controllers\SFeePaymentsController::class, 'index'])->name('student.fee-payments');
     });
+    // routes/web.php
+    Route::post('/student/payment-options', [StudentController::class, 'getPaymentOptions'])->name('get.payment.options');
+
 
 
     //Fees

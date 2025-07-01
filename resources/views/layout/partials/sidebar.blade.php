@@ -116,6 +116,12 @@
                         <li class="submenu-open">
                             <h6 class="submenu-hdr">Fee Management</h6>
                             <ul>
+                                <li class="{{ Request::is('fee-dashboard') ? 'active' : '' }}">
+                                    <a href="{{ url('fee-dashboard') }}">
+                                        <i class="ti ti-layout-dashboard fs-16 me-2"></i>
+                                        <span>Fee Dashboard</span>
+                                    </a>
+                                </li>
                                 <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
                                 <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-receipt-2 fs-16 me-2"></i><span>Fee Payments</span></a></li>
                             </ul>

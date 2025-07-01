@@ -175,9 +175,55 @@
             }
         }
 
+        function fetchPaymentOptions() {
+            const classId = classSelect.value;
+            const termId = termSelect.value;
+            const studentId = studentSelect.value;
+            const descriptionSelect = document.getElementById('description');
+
+            descriptionSelect.innerHTML = '<option value="">Loading...</option>';
+
+            if (classId && termId && studentId) {
+                fetch("{{ route('get.payment.options') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                    },
+                    body: JSON.stringify({
+                        class_id: classId,
+                        term_id: termId,
+                        student_id: studentId
+                    })
+                })
+                .then(res => res.json())
+                .then(options => {
+                    descriptionSelect.innerHTML = '<option value="">-- Select Payment Purpose --</option>';
+                    options.forEach(option => {
+                        let value = option;
+                        descriptionSelect.innerHTML += `<option value="${value}">${option}</option>`;
+                    });
+
+                    // Pre-select "Tuition Fee" if it exists
+                    if (options.includes('Tuition Fee')) {
+                        descriptionSelect.value = 'Tuition Fee';
+                    }
+                })
+                .catch(err => {
+                    console.error("Failed to fetch payment options:", err);
+                    descriptionSelect.innerHTML = '<option value="">-- Error Loading --</option>';
+                });
+            }
+        }
+
+
         classSelect.addEventListener('change', fetchStudents);
         termSelect.addEventListener('change', fetchStudents);
-        studentSelect.addEventListener('change', fetchBalance);
+        studentSelect.addEventListener('change', function () {
+            fetchBalance();
+            fetchPaymentOptions();
+        });
+
     });
     </script>
 

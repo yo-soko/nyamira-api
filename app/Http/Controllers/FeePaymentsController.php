@@ -117,6 +117,8 @@ class FeePaymentsController extends Controller
             'amount_paid' => 'required|numeric|min:1',
             'description' => 'nullable|string|max:255',
             'receipt_number' => 'nullable|string|unique:fee_payments,receipt_number',
+
+
         ]);
 
         try {
@@ -150,13 +152,15 @@ class FeePaymentsController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'class_id' => 'required|exists:class_levels,id',
+            'class_id' => 'required|exists:school_classes,id',
             'term_id' => 'required|exists:terms,id',
             'student_id' => 'required|exists:students,id',
             'receipt_number' => 'nullable|string',
             'description' => 'nullable|string',
             'amount_paid' => 'required|numeric',
             'payment_mode' => 'required|in:Cash,Mpesa,Bank',
+            'payment_for' => 'required|in:Tuition Fee,Meals,Transport',
+
         ]);
 
         $payment = FeePayment::findOrFail($id);

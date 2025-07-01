@@ -348,6 +348,37 @@ class StudentController extends Controller
         }
     }
 
+    // StudentController.php
+    public function getPaymentOptions(Request $request)
+    {
+        $studentId = $request->student_id;
+        $termId = $request->term_id;
+        $classId = $request->class_id;
+
+        $student = Student::findOrFail($studentId);
+
+        $options = [];
+
+        // Always include Fees
+        $options[] = 'Tuition Fee';
+
+        $hasMeals = StudentMeal::where('student_id', $studentId)
+            ->where('term_id', $termId)
+            ->where('class_id', $classId)
+            ->exists();
+
+        $hasTransport = StudentTransport::where('student_id', $studentId)
+            ->where('term_id', $termId)
+            ->where('class_id', $classId)
+            ->exists();
+
+        if ($hasMeals) $options[] = 'Meals';
+        if ($hasTransport) $options[] = 'Transport';
+
+        return response()->json($options);
+    }
+
+
     public function migrateStudentsToUsers()
     {
         DB::beginTransaction();
