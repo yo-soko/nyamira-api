@@ -3,61 +3,86 @@
 @section('content')
 @include('layout.toast')
 <div class="page-wrapper">
-    <div class="row mb-4 p-3 mt-3">
-        <div class="col-md-12">
-            <h2>Transport Reports</h2> {{-- missing <h2> --}}
-        </div>
-    </div>
-
-    <!-- Reports Card -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Generate Transport Reports</h6>
-        </div>
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-3 col-sm-6 mb-2">
-                    <select class="form-control" id="reportType">
-                        <option value="attendance">Attendance Report</option>
-                        <option value="billing">Billing Report</option>
-                        <option value="usage">Transport Usage Report</option>
-                    </select>
-                </div>
-                <div class="col-md-3 col-sm-6 mb-2">
-                    <select class="form-control" id="reportRoute">
-                        <option value="">All Routes</option>
-                        @foreach($routes as $route)
-                        <option value="{{ $route->id }}">{{ $route->route_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-3 col-sm-6 mb-2">
-                    <input type="month" class="form-control" id="reportMonth" value="{{ date('Y-m') }}">
-                </div>
-                <div class="col-md-3 col-sm-6 mb-2">
-                    <div class="btn-group w-100" role="group">
-                        <button class="btn btn-primary" id="generateReport">
-                            <i class="fas fa-sync-alt mr-1"></i> Generate
-                        </button>
-                        <button class="btn btn-success" id="exportReport">
-                            <i class="fas fa-download mr-1"></i> Export
-                        </button>
-                    </div>
+    <div class="content container-fluid">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h3 class="page-title">Transport Reports</h3>
                 </div>
             </div>
+        </div>
+        <!-- /Page Header -->
 
-            <div id="reportResults">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle mr-2"></i> Select report type and parameters to generate a report
+        <!-- Reports Card -->
+        <div class="card">
+            <div class="card-header bg-light border-bottom">
+                <h5 class="card-title mb-0"><i class="fas fa-file-alt mr-2"></i>Generate Transport Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4 g-3">
+                    <div class="col-lg-3 col-md-6">
+                        <label for="reportType" class="form-label">Report Type</label>
+                        <select class="form-select" id="reportType">
+                            <option value="attendance">Attendance Report</option>
+                            <option value="billing">Billing Report</option>
+                            <option value="usage">Transport Usage Report</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <label for="reportRoute" class="form-label">Route</label>
+                        <select class="form-select" id="reportRoute">
+                            <option value="">All Routes</option>
+                            @foreach($routes as $route)
+                            <option value="{{ $route->id }}">{{ $route->route_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <label for="reportMonth" class="form-label">Month</label>
+                        <input type="month" class="form-control" id="reportMonth" value="{{ date('Y-m') }}">
+                    </div>
+                    <div class="col-lg-3 col-md-6 d-flex align-items-end">
+                        <div class="d-flex w-100 gap-2">
+                            <button class="btn btn-primary flex-grow-1" id="generateReport">
+                                <i class="fas fa-sync-alt mr-1"></i> Generate
+                            </button>
+                            <button class="btn btn-outline-secondary flex-grow-1" id="exportReport">
+                                <i class="fas fa-download mr-1"></i> Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reportResults">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle mr-2"></i> Select report type and parameters to generate a report
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
@@ -78,50 +103,46 @@
                     <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
-                    <h5>Generating ${reportType.replace(/^\w/, c => c.toUpperCase())} Report...</h5>
+                    <h5>Generating Report...</h5>
                     <p class="text-muted">This may take a few moments</p>
                 </div>
             `);
 
-           $.ajax({
-    url: '{{ route('transport.reports.search') }}',
-    type: 'GET',
-    data: {
-        type: reportType,
-        route_id: routeId,
-        month: month,
-    },
-    headers: {
-        'Accept': 'application/json' // ✅ Forces Laravel to return JSON
-    },
-    success: function(response) {
-        if (response.error) {
-            $('#reportResults').html(`
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle mr-2"></i>
-                    ${response.message || 'Error generating report'}
-                </div>
-            `);
-            return;
-        }
-
-        renderReport(response, reportType, month); // ✅ Should now receive an array
-    },
-    error: function(xhr) {
-        let errorMsg = 'Failed to generate report. Please try again.';
-
-        if (xhr.responseJSON && xhr.responseJSON.message) {
-            errorMsg = xhr.responseJSON.message;
-        }
-
-        $('#reportResults').html(`
-            <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle mr-2"></i> ${errorMsg}
-            </div>
-        `);
-    }
-});
-
+            $.ajax({
+                url: '{{ route('transport.reports.search') }}',
+                type: 'GET',
+                data: {
+                    type: reportType,
+                    route_id: routeId,
+                    month: month,
+                },
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function(response) {
+                    if (response.error) {
+                        $('#reportResults').html(`
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                ${response.message || 'Error generating report'}
+                            </div>
+                        `);
+                        return;
+                    }
+                    renderReport(response, reportType, month);
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Failed to generate report. Please try again.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMsg = xhr.responseJSON.message;
+                    }
+                    $('#reportResults').html(`
+                        <div class="alert alert-danger">
+                            <i class="fas fa-exclamation-circle mr-2"></i> ${errorMsg}
+                        </div>
+                    `);
+                }
+            });
         });
 
         // Function to render the report based on type
@@ -143,7 +164,7 @@
                     html = renderUsageReport(data, monthName);
                     break;
                 default:
-                   if (!Array.isArray(data)) {
+                    if (!Array.isArray(data)) {
                         $('#reportResults').html(`
                             <div class="alert alert-danger">
                                 <i class="fas fa-exclamation-circle mr-2"></i>
@@ -152,7 +173,6 @@
                         `);
                         return;
                     }
-
             }
 
             $('#reportResults').html(html);
@@ -171,55 +191,43 @@
 
             let html = `
                 <div class="report-header mb-4">
-                    <h4 class="font-weight-bold text-primary">
-                        <i class="fas fa-clipboard-check mr-2"></i>
-                        Attendance Report - ${monthName}
-                    </h4>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <small class="text-muted">Generated on ${new Date().toLocaleString()}</small>
-                        <span class="badge badge-info">${data.length} records</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-clipboard-check mr-2"></i>
+                            Attendance Report - ${monthName}
+                        </h5>
+                        <div class="text-muted small">Generated on ${new Date().toLocaleString()}</div>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="attendanceReportTable">
-                        <thead class="thead-light">
+                    <table class="table table-hover w-100" id="attendanceReportTable">
+                        <thead>
                             <tr>
                                 <th>Student</th>
                                 <th>Class</th>
                                 <th>Route</th>
-                                <th>Present Days</th>
-                                <th>Absent Days</th>
-                                <th>Attendance Rate</th>
+                                <th class="text-end">Present</th>
+                                <th class="text-end">Absent</th>
+                                <th class="text-center">Rate</th>
                             </tr>
                         </thead>
                         <tbody>`;
 
             data.forEach(item => {
                 const attendanceRate = parseInt(item.attendance_rate) || 0;
-                const progressColor = attendanceRate >= 90 ? 'success' :
-                    attendanceRate >= 75 ? 'primary' :
-                    attendanceRate >= 50 ? 'warning' : 'danger';
+                const progressColor = attendanceRate >= 90 ? 'bg-success' :
+                    attendanceRate >= 75 ? 'bg-primary' :
+                    attendanceRate >= 50 ? 'bg-warning' : 'bg-danger';
 
                 html += `
                     <tr>
                         <td>${item.student || 'N/A'}</td>
                         <td>${item.class || 'N/A'}</td>
                         <td>${item.route || 'N/A'}</td>
-                        <td>${item.present_days || 0}</td>
-                        <td>${item.absent_days || 0}</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="progress flex-grow-1" style="height: 20px;">
-                                    <div class="progress-bar bg-${progressColor}"
-                                         role="progressbar"
-                                         style="width: ${attendanceRate}%"
-                                         aria-valuenow="${attendanceRate}"
-                                         aria-valuemin="0"
-                                         aria-valuemax="100">
-                                        ${attendanceRate}%
-                                    </div>
-                                </div>
-                            </div>
+                        <td class="text-end">${item.present_days || 0}</td>
+                        <td class="text-end">${item.absent_days || 0}</td>
+                        <td class="text-center">
+                            <span class="badge ${progressColor}">${attendanceRate}%</span>
                         </td>
                     </tr>`;
             });
@@ -244,26 +252,25 @@
 
             let html = `
                 <div class="report-header mb-4">
-                    <h4 class="font-weight-bold text-primary">
-                        <i class="fas fa-file-invoice-dollar mr-2"></i>
-                        Billing Report - ${monthName}
-                    </h4>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <small class="text-muted">Generated on ${new Date().toLocaleString()}</small>
-                        <span class="badge badge-info">${data.length} records</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-file-invoice-dollar mr-2"></i>
+                            Billing Report - ${monthName}
+                        </h5>
+                        <div class="text-muted small">Generated on ${new Date().toLocaleString()}</div>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover" id="billingReportTable">
-                        <thead class="thead-light">
+                    <table class="table table-hover w-100" id="billingReportTable">
+                        <thead>
                             <tr>
                                 <th>Student</th>
                                 <th>Class</th>
                                 <th>Route</th>
-                                <th>Fee (KSh)</th>
-                                <th>Paid (KSh)</th>
-                                <th>Balance (KSh)</th>
-                                <th>Status</th>
+                                <th class="text-end">Fee (KSh)</th>
+                                <th class="text-end">Paid (KSh)</th>
+                                <th class="text-end">Balance (KSh)</th>
+                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>`;
@@ -277,7 +284,7 @@
                 totalPaid += paid;
                 totalBalance += balance;
 
-                const statusClass = balance <= 0 ? 'badge-success' : 'badge-danger';
+                const statusClass = balance <= 0 ? 'bg-success' : 'bg-danger';
                 const statusText = balance <= 0 ? 'Paid' : 'Pending';
 
                 html += `
@@ -285,12 +292,12 @@
                         <td>${item.student || 'N/A'}</td>
                         <td>${item.class || 'N/A'}</td>
                         <td>${item.route || 'N/A'}</td>
-                        <td class="text-right">${fee.toFixed(2)}</td>
-                        <td class="text-right">${paid.toFixed(2)}</td>
-                        <td class="text-right ${balance > 0 ? 'text-danger font-weight-bold' : 'text-success'}">
-                            ${balance.toFixed(2)}
+                        <td class="text-end">${fee.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="text-end">${paid.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="text-end ${balance > 0 ? 'text-danger fw-semibold' : 'text-success'}">
+                            ${balance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                         </td>
-                        <td>
+                        <td class="text-center">
                             <span class="badge ${statusClass}">${statusText}</span>
                         </td>
                     </tr>`;
@@ -298,13 +305,13 @@
 
             html += `
                 </tbody>
-                <tfoot class="font-weight-bold">
+                <tfoot class="fw-semibold">
                     <tr>
-                        <td colspan="3" class="text-right">Totals:</td>
-                        <td class="text-right">${totalFee.toFixed(2)}</td>
-                        <td class="text-right">${totalPaid.toFixed(2)}</td>
-                        <td class="text-right ${totalBalance > 0 ? 'text-danger' : 'text-success'}">
-                            ${totalBalance.toFixed(2)}
+                        <td colspan="3" class="text-end">Totals:</td>
+                        <td class="text-end">${totalFee.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="text-end">${totalPaid.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="text-end ${totalBalance > 0 ? 'text-danger' : 'text-success'}">
+                            ${totalBalance.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                         </td>
                         <td></td>
                     </tr>
@@ -317,16 +324,52 @@
 
         // Initialize DataTables for reports
         function initializeReportDataTable() {
-            $('table[id$="ReportTable"]').DataTable({
-                dom: '<"top"Bf>rt<"bottom"lip><"clear">',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ],
-                responsive: true,
-                pageLength: 25,
-                order: [
-                    [0, 'asc']
-                ]
+            $('table[id$="ReportTable"]').each(function() {
+                $(this).DataTable({
+                    dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                         "<'row'<'col-sm-12'tr>>" +
+                         "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>" +
+                         "<'row'<'col-sm-12'B>>",
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            className: 'btn btn-sm btn-outline-secondary',
+                            text: '<i class="fas fa-copy mr-1"></i> Copy'
+                        },
+                        {
+                            extend: 'excel',
+                            className: 'btn btn-sm btn-outline-secondary',
+                            text: '<i class="fas fa-file-excel mr-1"></i> Excel'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'btn btn-sm btn-outline-secondary',
+                            text: '<i class="fas fa-file-pdf mr-1"></i> PDF'
+                        },
+                        {
+                            extend: 'print',
+                            className: 'btn btn-sm btn-outline-secondary',
+                            text: '<i class="fas fa-print mr-1"></i> Print'
+                        }
+                    ],
+                    responsive: true,
+                    pageLength: 25,
+                    lengthMenu: [10, 25, 50, 100],
+                    order: [[0, 'asc']],
+                    language: {
+                        search: "_INPUT_",
+                        searchPlaceholder: "Search...",
+                        lengthMenu: "Show _MENU_ entries",
+                        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                        infoEmpty: "Showing 0 to 0 of 0 entries",
+                        infoFiltered: "(filtered from _MAX_ total entries)",
+                        zeroRecords: "No matching records found"
+                    },
+                    initComplete: function() {
+                        $('.dataTables_filter input').addClass('form-control form-control-sm');
+                        $('.dataTables_length select').addClass('form-select form-select-sm');
+                    }
+                });
             });
         }
 
@@ -388,114 +431,100 @@
 </script>
 
 <style>
-    /* Responsive Report Styles */
-    @media (max-width: 768px) {
-        .card-header h6 {
-            font-size: 1rem;
-        }
-
-        .report-header h4 {
-            font-size: 1.25rem;
-        }
-
-        #reportType,
-        #reportRoute,
-        #reportMonth {
-            margin-bottom: 10px;
-        }
-
-        .btn-group {
-            flex-wrap: wrap;
-        }
-
-        .btn-group .btn {
-            flex: 1 0 45%;
-            margin: 2px;
-        }
-
-        table {
-            font-size: 0.85rem;
-        }
-
-        .progress {
-            height: 15px;
-        }
+    /* Clean, Professional Styles */
+    .card {
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        border-radius: 0.375rem;
     }
 
-    /* Enhanced Report Table Styles */
-    #reportResults table {
-        width: 100%;
-        margin-bottom: 1rem;
-        color: #212529;
+    .card-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 1rem 1.25rem;
     }
 
-    #reportResults table th {
-        background-color: #f8f9fc;
+    .table {
+        font-size: 0.875rem;
+        border-color: #e0e0e0;
+    }
+
+    .table th {
         font-weight: 600;
-        border-bottom: 2px solid #e3e6f0;
+        text-transform: none;
+        background-color: #f8f9fa;
+        border-bottom-width: 1px;
+        padding: 0.75rem 1rem;
     }
 
-    #reportResults table td,
-    #reportResults table th {
-        padding: 0.75rem;
-        vertical-align: top;
-        border-top: 1px solid #e3e6f0;
+    .table td {
+        padding: 0.75rem 1rem;
+        vertical-align: middle;
+        border-top: 1px solid #e0e0e0;
     }
 
-    #reportResults table tbody tr:hover {
-        background-color: rgba(78, 115, 223, 0.05);
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,0.02);
     }
 
     .badge {
         font-weight: 500;
         padding: 0.35em 0.65em;
         font-size: 0.75em;
+        border-radius: 0.25rem;
     }
 
-    .progress {
-        background-color: #eaecf4;
-        border-radius: 0.35rem;
+    .btn {
+        font-weight: 500;
     }
 
-    .progress-bar {
-        border-radius: 0.35rem;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+    .form-select, .form-control {
+        border-radius: 0.375rem;
+        border: 1px solid #ced4da;
     }
 
     .alert {
-        border-left: 4px solid;
+        border-radius: 0.375rem;
+        border-left: none;
     }
 
-    .alert-info {
-        border-left-color: #36b9cc;
+    /* DataTables Customization */
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 0.375rem;
+        border: 1px solid #ced4da;
+        padding: 0.25rem 0.5rem;
     }
 
-    .alert-danger {
-        border-left-color: #e74a3b;
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 0.375rem;
+        border: 1px solid #ced4da;
+        padding: 0.25rem 0.5rem;
     }
 
-    .alert-warning {
-        border-left-color: #f6c23e;
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #dee2e6;
     }
 
-    .text-success {
-        color: #1cc88a !important;
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #0d6efd;
+        color: white !important;
+        border-color: #0d6efd;
     }
 
-    .text-danger {
-        color: #e74a3b !important;
-    }
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .table-responsive {
+            border: none;
+        }
 
-    .text-primary {
-        color: #4e73df !important;
-    }
-
-    .text-muted {
-        color: #858796 !important;
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+            text-align: left;
+            margin-bottom: 0.5rem;
+        }
     }
 </style>
 @endsection
