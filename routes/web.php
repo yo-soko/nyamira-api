@@ -185,10 +185,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
     Route::get('/users', [UserController::class, 'index'])->name('users');
-    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
-    Route::put('/users/{id}', [UserController::class, 'upgrade'])->name('users.upgrade');
     Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
 
     Route::get('/profile', function () {
@@ -276,10 +275,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/cbc-report', [SdashboardController::class, 'cbcReport'])->name('cbc.report');
     Route::post('/cbc-report/view', [SdashboardController::class, 'viewCBCReport'])->name('cbc-report.view');
-    Route::post('/cbc-reports/batch', [SdashboardController::class, 'generateBulkReports'])->name('cbc.reports.batch');
-    Route::get('/cbc-reports/html-bulk', [SdashboardController::class, 'viewBulkReports'])->name('cbc.reports.bulk.html');
-
-
 
     //terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
@@ -319,7 +314,9 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('library-categories', BookCategoryController::class)->except(['show']);
     });
     //teacher dash
-    Route::get('/teacher.dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+    Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('teacher.dashboard');
 
 
 
@@ -327,10 +324,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/fee-structure', [FeeStructureController::class, 'index'])->name('fee-structure')->middleware('auth');
 
-    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee-structure.store');
+    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
     Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
-    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->name('fee-structure.update');
-    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->name('fee-structure.delete');
+    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
+    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
 
     Route::resource('fee-payments', FeePaymentsController::class);
@@ -349,20 +346,6 @@ Route::middleware(['auth'])->group(function () {
 
     // ✅ Get students by class (used in payment modal)
     Route::get('/students/by-class/{classId}', [StudentController::class, 'getByClass'])->name('students.byClass');
-
-    // Route to fetch students by class only (for filters)
-    Route::get('/filter/students/by-class/{classId}', function ($classId) {
-        return \App\Models\Student::where('class_id', $classId)
-            ->select('id', 'first_name', 'last_name')
-            ->get()
-            ->map(function ($student) {
-                return [
-                    'id' => $student->id,
-                    'full_name' => "{$student->first_name} {$student->last_name}",
-                ];
-            });
-    })->name('filter.students.by.class');
-
 
     // ✅ Get student balance for a specific term
     Route::get('/students/{studentId}/balance/{termId}', [StudentController::class, 'getBalance'])->name('students.balance');

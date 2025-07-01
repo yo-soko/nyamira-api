@@ -15,7 +15,7 @@ class LibraryController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Book::with('category');
+        $query = Book::with('category', 'uploader'); // include uploader relation for clarity
 
         if ($request->filled('search')) {
             $query->where('title', 'like', '%' . $request->search . '%');
@@ -29,19 +29,6 @@ class LibraryController extends Controller
         $categories = BookCategory::all();
 
         return view('library.index', compact('items', 'categories'));
-    }
-
-    /**
-     * Show the form for creating a new library item.
-     */
-    public function create()
-    {
-        if (!in_array(auth()->user()->role, ['teacher', 'developer', 'admin'])) {
-            abort(403, 'Unauthorized');
-        }
-
-        $categories = BookCategory::all();
-        return view('library.create', compact('categories'));
     }
 
     /**
@@ -62,7 +49,7 @@ class LibraryController extends Controller
 
         $filePath = $request->file('file')->store('library', 'public');
 
-        // Attempt to extract TOC
+        // Attempt to extract Table of Contents
         $toc = null;
         try {
             $parser = new Parser();
@@ -91,7 +78,7 @@ class LibraryController extends Controller
     }
 
     /**
-     * Display the specified library item.
+     * Display a specific book.
      */
     public function show(Book $library)
     {
@@ -101,7 +88,7 @@ class LibraryController extends Controller
     }
 
     /**
-     * Remove the specified library item from storage.
+     * Remove the specified library item.
      */
     public function destroy(Book $library)
     {
