@@ -18,9 +18,18 @@ class Kernel extends ConsoleKernel
     {
         // Run daily at 11:55 PM (or change time as needed)
         $schedule->command('attendance:autoclockout')->dailyAt('23:55');
+
+        $schedule->command('attendance:send-reminders')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->runInBackground();
+
+        $schedule->command('reminders:generate-voice')
+            ->weekly()
+            ->at('02:00');
     }
     protected $routeMiddleware = [
-    // other middleware...
-    'admin' => \App\Http\Middleware\Admin::class,
+        // other middleware...
+        'admin' => \App\Http\Middleware\Admin::class,
     ];
 }

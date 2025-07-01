@@ -41,13 +41,13 @@ use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SchoolCalendarController;
 use App\Http\Controllers\TimetableController;
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SdashboardController;
 use App\Http\Controllers\TdashboardController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\TransportController;
+use App\Http\Controllers\NotificationsController;
 
 
 
@@ -164,6 +164,11 @@ Route::middleware(['auth'])->group(function () {
 
     /*===========================Transport======================================================*/
 
+    /*===========================Notifications======================================================*/
+
+    Route::get('/notifications/unread', [NotificationsController::class, 'unread']);
+    Route::post('/notifications/mark-read', [NotificationsController::class, 'markAsRead']);
+    /*===========================Notifications======================================================*/
 
     Route::get('/general-settings', function () {
         return view('general-settings');
