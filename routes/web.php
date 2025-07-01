@@ -278,8 +278,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/tdashboard', [TdashboardController::class, 'index'])->name('tdashboard');
 
+  
     Route::get('/cbc-report', [SdashboardController::class, 'cbcReport'])->name('cbc.report');
     Route::post('/cbc-report/view', [SdashboardController::class, 'viewCBCReport'])->name('cbc-report.view');
+    Route::post('/cbc-reports/batch', [SdashboardController::class, 'generateBulkReports'])->name('cbc.reports.batch');
+    Route::get('/cbc-reports/html-bulk', [SdashboardController::class, 'viewBulkReports'])->name('cbc.reports.bulk.html');
 
     //terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
