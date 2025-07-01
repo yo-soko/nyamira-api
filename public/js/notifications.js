@@ -2,7 +2,7 @@ class NotificationHandler {
     constructor() {
         this.audioElements = {};
         this.initServiceWorker();
-        this.requestPermissions();
+        this.deferPermissionRequest(); // ⬅️ New: smarter permission strategy
         this.startMobileMonitoring();
     }
 
@@ -16,30 +16,30 @@ class NotificationHandler {
         }
     }
 
-    requestPermissions() {
-        if ('Notification' in window) {
-            Notification.requestPermission().then(permission => {
-                console.log('🔐 Notification permission:', permission);
-            });
+    deferPermissionRequest() {
+        // Only request if not already granted or denied
+        if (Notification.permission === 'default') {
+            document.addEventListener('click', () => {
+                Notification.requestPermission().then(permission => {
+                    console.log('🔐 Notification permission:', permission);
+                });
+            }, { once: true });
         }
     }
 
     startMobileMonitoring() {
         if ('serviceWorker' in navigator && 'periodicSync' in Registration.prototype) {
             navigator.serviceWorker.ready.then(reg => {
-                // Register periodic background sync (every 1 hour)
                 reg.periodicSync.register('check-attendance', {
                     minInterval: 60 * 60 * 1000 // 1 hour
                 }).catch(console.error);
 
-                // Immediate manual check at startup
-                this.checkAttendanceTimeManually();
+                this.checkAttendanceTimeManually(); // immediate check
             });
         } else {
-            // Fallback to interval polling if periodicSync not supported
             console.warn('⚠️ periodicSync not supported. Falling back to manual polling.');
             this.checkNotifications();
-            setInterval(() => this.checkNotifications(), 30000); // fallback
+            setInterval(() => this.checkNotifications(), 30000);
         }
     }
 
@@ -47,14 +47,13 @@ class NotificationHandler {
         const now = new Date();
         const hours = now.getHours();
 
-        // Only check during attendance windows
         if ((hours >= 8 && hours < 12) || (hours >= 14 && hours < 18)) {
             if (navigator.serviceWorker.controller) {
                 navigator.serviceWorker.controller.postMessage({
                     type: 'check-attendance-now'
                 });
             } else {
-                this.checkNotifications(); // fallback if no controller
+                this.checkNotifications();
             }
         }
     }
@@ -140,11 +139,11 @@ class NotificationHandler {
             </button>
         `;
         document.body.appendChild(alertDiv);
-
         setTimeout(() => alertDiv.remove(), 7000);
     }
 }
 
+// ✅ Initialize after DOM load
 document.addEventListener('DOMContentLoaded', () => {
     new NotificationHandler();
 });
