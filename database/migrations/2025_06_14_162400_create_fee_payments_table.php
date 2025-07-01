@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('fee_payments', function (Blueprint $table) {
             $table->id('payment_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('class_id'); // refers to school_classes
+            $table->unsignedBigInteger('class_id');
             $table->unsignedBigInteger('term_id');
             $table->decimal('amount_paid', 10, 2);
             $table->string('payment_mode');
             $table->string('description')->nullable();
-            $table->string('receipt_number')->nullable(); // if generating this, must be in store()
+            $table->string('receipt_number')->nullable();
             $table->timestamps();
 
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
