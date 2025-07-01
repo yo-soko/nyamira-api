@@ -96,56 +96,66 @@
                         </li>
 
                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher')
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Learners Management</h6>
-                                <ul>
-                                    <li class="{{ Request::is('students') ? 'active' : '' }}">
-                                        <a href="{{ url('students') }}">
-                                            <i class="fas fa-user-graduate me-2"></i><span>Learners</span>
-                                        </a>
-                                    </li>
-                                    <li class="{{ Request::is('attendance', 'attendance-all') ? 'active' : '' }}">
-                                        <a href="{{ url('attendance') }}">
-                                            <i class="fas fa-user-check me-2"></i><span>Attendance</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <li class="submenu-open">
+                            <h6 class="submenu-hdr">Learners Management</h6>
+                            <ul>
+                                <li class="{{ Request::is('students') ? 'active' : '' }}">
+                                    <a href="{{ url('students') }}">
+                                        <i class="fas fa-user-graduate me-2"></i><span>Learners</span>
+                                    </a>
+                                </li>
+                                <li class="{{ Request::is('attendance', 'attendance-all') ? 'active' : '' }}">
+                                    <a href="{{ url('attendance') }}">
+                                        <i class="fas fa-user-check me-2"></i><span>Attendance</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         @endhasanyrole
                         @hasanyrole('admin|developer|manager|director|supervisor')
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Fee Management</h6>
-                                <ul>
-                                    <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
-                                    <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-receipt-2 fs-16 me-2"></i><span>Fee Payments</span></a></li>
-                                </ul>
-                            </li>
+                        <li class="submenu-open">
+                            <h6 class="submenu-hdr">Fee Management</h6>
+                            <ul>
+                                <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                <li class="{{ Request::is('fee-payments') ? 'active' : '' }}"> <a href="{{url('fee-payments')}}"><i class="ti ti-receipt-2 fs-16 me-2"></i><span>Fee Payments</span></a></li>
+                            </ul>
+                        </li>
                         @endhasanyrole
                         @hasanyrole('student|developer')
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Fee Management</h6>
-                                <ul>
-                                    <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
-                                    <li class="{{ request()->routeIs('student.fee-payments') ? 'active' : '' }}">
-                                        <a href="{{ route('student.fee-payments') }}">
-                                            <i class="ti ti-receipt-2 me-2"></i><span>Fee Payments</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <li class="submenu-open">
+                            <h6 class="submenu-hdr">Fee Management</h6>
+                            <ul>
+                                <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
+                                <li class="{{ request()->routeIs('student.fee-payments') ? 'active' : '' }}">
+                                    <a href="{{ route('student.fee-payments') }}">
+                                        <i class="ti ti-receipt-2 me-2"></i><span>Fee Payments</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         @endhasanyrole
 
                         @hasanyrole('admin|developer|manager|director|supervisor|transport')
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Transport</h6>
-                                <ul>
-                                    <li class="{{ request()->is('transport*') ? 'active' : '' }}">
-                                        <a href="{{ route('transport') }}">
-                                            <i class="fas fa-bus me-2"></i><span>Manage Transport</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
+                        <li class="submenu-open">
+                            <h6 class="submenu-hdr">Transport</h6>
+                            <ul>
+                                {{-- Manage Transport --}}
+                                <li class="{{ request()->routeIs('transport') ? 'active' : '' }}">
+                                    <a href="{{ route('transport') }}">
+                                        <i class="fas fa-bus me-2"></i>
+                                        <span>Manage Transport</span>
+                                    </a>
+                                </li>
+
+                                {{-- Transport Reports --}}
+                                <li class="{{ request()->routeIs('transport.reports') ? 'active' : '' }}">
+                                    <a href="{{ route('transport.reports') }}">
+                                        <i class="fas fa-chart-line me-2"></i>
+                                        <span>Transport Reports</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         @endhasanyrole
                         <li class="submenu-open">
                             <h6 class="submenu-hdr">Assessments & Results</h6>
@@ -205,19 +215,19 @@
                         </li>
 
                         @hasanyrole('admin|developer|manager|director|supervisor')
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Academic Setup</h6>
-                                <ul>
-                                    <li class="{{ Request::is('subjects') ? 'active' : '' }}"><a href="{{ url('subjects') }}"><i class="fas fa-book-open me-2"></i> Learning Areas</a></li>
-                                    <li class="{{ Request::is('class-levels') ? 'active' : '' }}"><a href="{{ url('class-levels') }}"><i class="fas fa-layer-group me-2"></i> Grades Setup</a></li>
-                                    <li class="{{ Request::is('streams') ? 'active' : '' }}"><a href="{{ url('streams') }}"><i class="fas fa-stream me-2"></i> Streams Setup</a></li>
-                                    <li class="{{ Request::is('terms') ? 'active' : '' }}"><a href="{{ url('terms') }}"><i class="fas fa-calendar-alt me-2"></i><span>Terms</span></a></li>
-                                    <li class="{{ Request::is('school-classes') ? 'active' : '' }}"><a href="{{ url('school-classes') }}"><i class="fas fa-chalkboard me-2"></i><span>Classrooms</span></a></li>
-                                    <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{ url('department-grid') }}"><i class="fas fa-compass me-2"></i><span>Departments</span></a></li>
-                                    <li class="{{ Request::is('guardians') ? 'active' : '' }}"><a href="{{ url('guardians') }}"><i class="fas fa-user-shield me-2"></i><span>Parent/Guardian</span></a></li>
-                                    <li class="{{ Request::is('teachers') ? 'active' : '' }}"><a href="{{ url('teachers') }}"><i class="fas fa-chalkboard-teacher me-2"></i><span>Teachers</span></a></li>
-                                </ul>
-                            </li>
+                        <li class="submenu-open">
+                            <h6 class="submenu-hdr">Academic Setup</h6>
+                            <ul>
+                                <li class="{{ Request::is('subjects') ? 'active' : '' }}"><a href="{{ url('subjects') }}"><i class="fas fa-book-open me-2"></i> Learning Areas</a></li>
+                                <li class="{{ Request::is('class-levels') ? 'active' : '' }}"><a href="{{ url('class-levels') }}"><i class="fas fa-layer-group me-2"></i> Grades Setup</a></li>
+                                <li class="{{ Request::is('streams') ? 'active' : '' }}"><a href="{{ url('streams') }}"><i class="fas fa-stream me-2"></i> Streams Setup</a></li>
+                                <li class="{{ Request::is('terms') ? 'active' : '' }}"><a href="{{ url('terms') }}"><i class="fas fa-calendar-alt me-2"></i><span>Terms</span></a></li>
+                                <li class="{{ Request::is('school-classes') ? 'active' : '' }}"><a href="{{ url('school-classes') }}"><i class="fas fa-chalkboard me-2"></i><span>Classrooms</span></a></li>
+                                <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{ url('department-grid') }}"><i class="fas fa-compass me-2"></i><span>Departments</span></a></li>
+                                <li class="{{ Request::is('guardians') ? 'active' : '' }}"><a href="{{ url('guardians') }}"><i class="fas fa-user-shield me-2"></i><span>Parent/Guardian</span></a></li>
+                                <li class="{{ Request::is('teachers') ? 'active' : '' }}"><a href="{{ url('teachers') }}"><i class="fas fa-chalkboard-teacher me-2"></i><span>Teachers</span></a></li>
+                            </ul>
+                        </li>
                         @endhasanyrole
 
                     </ul>

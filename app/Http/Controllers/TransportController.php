@@ -14,8 +14,8 @@ use App\Models\SchoolClass;
 use App\Models\TransportPayment;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use PDF;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class TransportController extends Controller
 {
@@ -240,6 +240,18 @@ class TransportController extends Controller
 
     public function generateReport(Request $request)
     {
+        // Handle initial empty view (GET visit without filters)
+        if (!$request->has(['type', 'month'])) {
+            return view('transport-reports', [
+                'reportType' => null,
+                'month' => null,
+                'routeId' => null,
+                'routes' => TransportRoute::all(),
+                'reportData' => collect(),
+            ]);
+        }
+
+        // Validate only when filters are submitted
         $request->validate([
             'type' => 'required|in:attendance,billing',
             'route_id' => 'nullable|exists:transport_routes,id',
@@ -253,6 +265,8 @@ class TransportController extends Controller
             $startDate = $month->copy()->startOfMonth();
             $endDate = $month->copy()->endOfMonth();
 
+            $data = [];
+
             if ($reportType === 'attendance') {
                 $query = TransportAttendance::with(['student', 'route', 'student.class'])
                     ->whereBetween('date', [$startDate, $endDate]);
@@ -261,72 +275,80 @@ class TransportController extends Controller
                     $query->where('route_id', $routeId);
                 }
 
-                $attendances = $query->get()
+                $data = $query->get()
                     ->groupBy('student_id')
-                    ->map(function ($records, $studentId) {
+                    ->map(function ($records) {
                         $student = $records->first()->student;
-                        $presentDays = $records->filter(function ($record) {
-                            return $record->pickup_status === 'present' ||
-                                $record->dropoff_status === 'present';
-                        })->count();
-
-                        $absentDays = $records->filter(function ($record) {
-                            return $record->pickup_status === 'absent' ||
-                                $record->dropoff_status === 'absent';
-                        })->count();
-
+                        $presentDays = $records->filter(fn($r) =>
+                        $r->pickup_status === 'present' || $r->dropoff_status === 'present')->count();
+                        $absentDays = $records->filter(fn($r) =>
+                        $r->pickup_status === 'absent' || $r->dropoff_status === 'absent')->count();
                         $totalDays = $presentDays + $absentDays;
                         $rate = $totalDays > 0 ? round(($presentDays / $totalDays) * 100) : 0;
 
                         return [
                             'student' => $student->full_name,
-                            'class' => optional($student->class)->name ?? 'N/A',
+                            'class' => optional($student->class)->name,
                             'route' => $records->first()->route->route_name,
                             'stop' => optional($student->transport->stop)->stop_name ?? 'N/A',
                             'present_days' => $presentDays,
                             'absent_days' => $absentDays,
-                            'attendance_rate' => $rate . '%'
+                            'attendance_rate' => $rate . '%',
                         ];
                     })->values();
-
-                return response()->json($attendances);
             } else {
-                // Billing report
+                // Billing Report
                 $query = StudentTransport::with(['student', 'route', 'stop', 'payments'])
                     ->whereHas('route')
-                    ->when($routeId, function ($query) use ($routeId) {
-                        return $query->where('route_id', $routeId);
-                    });
+                    ->when($routeId, fn($q) => $q->where('route_id', $routeId));
 
-                $transports = $query->get()
+                $data = $query->get()
                     ->map(function ($transport) use ($month) {
                         $payments = $transport->payments()
                             ->whereMonth('payment_date', $month)
                             ->sum('amount');
 
+                        $fee = $transport->transport_fee ?? 0;
+
                         return [
                             'student' => $transport->student->full_name,
                             'class' => optional($transport->student->class)->name ?? 'N/A',
                             'route' => $transport->route->route_name,
-                            'fee' => $transport->transport_fee ?? 0,
+                            'fee' => $fee,
                             'paid' => $payments,
-                            'balance' => ($transport->transport_fee ?? 0) - $payments,
-                            'status' => (($transport->transport_fee ?? 0) - $payments) <= 0 ? 'Paid' : 'Pending'
+                            'balance' => $fee - $payments,
+                            'status' => ($fee - $payments) <= 0 ? 'Paid' : 'Pending',
                         ];
                     });
-
-                return response()->json($transports);
             }
+
+            // ✅ AJAX Request → return JSON
+            if ($request->ajax()) {
+                return response()->json($data);
+            }
+
+            // ✅ Normal Request → return Blade view
+            return view('transport-reports', [
+                'reportType' => $reportType,
+                'month' => $month->format('Y-m'),
+                'routeId' => $routeId,
+                'routes' => TransportRoute::all(),
+                'reportData' => $data,
+            ]);
         } catch (\Exception $e) {
             Log::error('Report generation error', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
 
-            return response()->json([
-                'error' => true,
-                'message' => 'Failed to generate report: ' . $e->getMessage()
-            ], 500);
+            if ($request->ajax()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Failed to generate report: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->withErrors('Failed to generate report: ' . $e->getMessage());
         }
     }
 
@@ -374,19 +396,197 @@ class TransportController extends Controller
         }
     }
 
+    public function report(Request $request)
+    {
+        // Handle initial empty view (GET visit without filters)
+        if (!$request->has(['type', 'month'])) {
+            return view('transport-reports', [
+                'reportType' => null,
+                'month' => null,
+                'routeId' => null,
+                'routes' => TransportRoute::all(),
+                'reportData' => collect(),
+            ]);
+        }
+
+        // Validate only when filters are submitted
+        $request->validate([
+            'type' => 'required|in:attendance,billing',
+            'route_id' => 'nullable|exists:transport_routes,id',
+            'month' => 'required|date_format:Y-m',
+        ]);
+
+        try {
+            $reportType = $request->type;
+            $routeId = $request->route_id;
+            $month = Carbon::parse($request->month);
+            $startDate = $month->copy()->startOfMonth();
+            $endDate = $month->copy()->endOfMonth();
+
+            $data = [];
+
+            if ($reportType === 'attendance') {
+                $query = TransportAttendance::with(['student', 'route', 'student.class'])
+                    ->whereBetween('date', [$startDate, $endDate]);
+
+                if ($routeId) {
+                    $query->where('route_id', $routeId);
+                }
+
+                $data = $query->get()
+                    ->groupBy('student_id')
+                    ->map(function ($records) {
+                        $student = $records->first()->student;
+                        $presentDays = $records->filter(fn($r) =>
+                        $r->pickup_status === 'present' || $r->dropoff_status === 'present')->count();
+                        $absentDays = $records->filter(fn($r) =>
+                        $r->pickup_status === 'absent' || $r->dropoff_status === 'absent')->count();
+                        $totalDays = $presentDays + $absentDays;
+                        $rate = $totalDays > 0 ? round(($presentDays / $totalDays) * 100) : 0;
+
+                        return [
+                            'student' => $student->full_name,
+                            'class' => optional($student->class)->name ?? 'N/A',
+                            'route' => $records->first()->route->route_name,
+                            'present_days' => $presentDays,
+                            'absent_days' => $absentDays,
+                            'attendance_rate' => $rate . '%',
+                        ];
+                    })->values();
+            } else {
+                // Billing Report
+                $query = StudentTransport::with(['student', 'route', 'stop', 'payments'])
+                    ->whereHas('route')
+                    ->when($routeId, fn($q) => $q->where('route_id', $routeId));
+
+                $data = $query->get()
+                    ->map(function ($transport) use ($month) {
+                        $payments = $transport->payments()
+                            ->whereMonth('payment_date', $month)
+                            ->sum('amount');
+
+                        $fee = $transport->transport_fee ?? 0;
+
+                        return [
+                            'student' => $transport->student->full_name,
+                            'class' => optional($transport->student->class)->name ?? 'N/A',
+                            'route' => $transport->route->route_name,
+                            'fee' => $fee,
+                            'paid' => $payments,
+                            'balance' => $fee - $payments,
+                            'status' => ($fee - $payments) <= 0 ? 'Paid' : 'Pending',
+                        ];
+                    });
+            }
+
+            // ✅ If AJAX request, return raw data
+            if ($request->ajax()) {
+                return response()->json($data);
+            }
+
+            // ✅ Otherwise, render view
+            return view('transport-reports', [
+                'reportType' => $reportType,
+                'month' => $month->format('Y-m'),
+                'routeId' => $routeId,
+                'routes' => TransportRoute::all(),
+                'reportData' => $data,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Report generation error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'Failed to generate report: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->withErrors('Failed to generate report: ' . $e->getMessage());
+        }
+    }
 
     public function exportReport(Request $request)
     {
-        $report = $this->generateReport($request)->getData();
-        $type = $request->type;
-        $month = $request->month;
+        $type = $request->input('type');
+        $routeId = $request->input('route_id');
+        $month = $request->input('month');
+        $date = $request->input('date') ?? now()->format('Y-m-d');
 
-        $pdf = PDF::loadView('pdf.transport-report', [
-            'report' => $report,
+        $query = TransportAttendance::with(['student', 'route']);
+
+        // Handle filtering
+        if ($type === 'pickup') {
+            $query->whereDate('date', $date)->whereNotNull('pickup_status');
+        } elseif ($type === 'dropoff') {
+            $query->whereDate('date', $date)->whereNotNull('dropoff_status');
+        } elseif ($type === 'attendance') {
+            $query->whereDate('date', $date);
+        } elseif ($type === 'daily') {
+            // Build daily summary (grouped by route)
+            $raw = TransportAttendance::whereDate('date', $date)->with('route')->get();
+            $report = $raw->groupBy('route.route_name')->map(function ($records, $routeName) {
+                $present = $records->filter(fn($r) => $r->pickup_status === 'present' || $r->dropoff_status === 'present')->count();
+                $absent = $records->filter(fn($r) => $r->pickup_status === 'absent' && $r->dropoff_status === 'absent')->count();
+                return [
+                    'route_name' => $routeName,
+                    'present' => $present,
+                    'absent' => $absent,
+                ];
+            })->values();
+            return Pdf::loadView('pdf.transport-report', compact('type', 'date', 'report'))->download("transport_report_{$type}_{$date}.pdf");
+        } elseif ($type === 'monthly' && $month) {
+            [$year, $monthNum] = explode('-', $month);
+            $raw = TransportAttendance::whereYear('date', $year)->whereMonth('date', $monthNum)->with('route')->get();
+            $report = $raw->groupBy('route.route_name')->map(function ($records, $routeName) {
+                $total = $records->count();
+                $presentCount = $records->filter(fn($r) => $r->pickup_status === 'present' || $r->dropoff_status === 'present')->count();
+                $avg = $total > 0 ? round(($presentCount / $total) * 100) : 0;
+
+                $byDay = $records->groupBy(fn($r) => $r->date->format('Y-m-d'));
+                $dailyRates = $byDay->map(function ($dayRecords) {
+                    $dayTotal = $dayRecords->count();
+                    $present = $dayRecords->filter(fn($r) => $r->pickup_status === 'present' || $r->dropoff_status === 'present')->count();
+                    return [
+                        'date' => $dayRecords->first()->date->format('Y-m-d'),
+                        'rate' => $dayTotal > 0 ? round(($present / $dayTotal) * 100) : 0,
+                    ];
+                });
+
+                return [
+                    'route_name' => $routeName,
+                    'total_students' => $total,
+                    'avg_attendance' => $avg,
+                    'best_day' => $dailyRates->sortByDesc('rate')->first(),
+                    'worst_day' => $dailyRates->sortBy('rate')->first(),
+                ];
+            })->values();
+
+            return Pdf::loadView('pdf.transport-report', [
+                'type' => $type,
+                'date' => $month,
+                'report' => $report,
+            ])->download("transport_report_{$type}_{$month}.pdf");
+        }
+
+        // Default query if above does not return early
+        if ($routeId) {
+            $query->where('route_id', $routeId);
+        }
+
+        $report = $query->get();
+
+        if ($report->isEmpty()) {
+            return back()->with('error', 'No records found for this report.');
+        }
+
+        return Pdf::loadView('pdf.transport-report', [
             'type' => $type,
-            'month' => $month
-        ]);
-
-        return $pdf->download("transport-{$type}-report-{$month}.pdf");
+            'date' => $date,
+            'report' => $report,
+        ])->download("transport_report_{$type}_" . now()->format('Ymd_His') . ".pdf");
     }
 }

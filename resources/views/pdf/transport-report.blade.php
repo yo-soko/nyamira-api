@@ -11,12 +11,13 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            font-size: 12px;
         }
 
         th,
         td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 6px;
             text-align: left;
         }
 
@@ -46,7 +47,62 @@
     <h1>Transport Report - {{ ucfirst($type) }}</h1>
     <h3>Date: {{ $date }}</h3>
 
-    @if($type === 'daily')
+    @if($type === 'pickup' || $type === 'dropoff')
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Route</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($report as $item)
+            <tr>
+                <td>{{ $item->student->full_name ?? 'N/A' }}</td>
+                <td>{{ $item->route->route_name ?? 'N/A' }}</td>
+                <td>{{ $type === 'pickup' ? $item->pickup_status : $item->dropoff_status }}</td>
+                <td>{{ $type === 'pickup' ? $item->pickup_time : $item->dropoff_time }}</td>
+                <td>{{ $type === 'pickup' ? $item->pickup_location : $item->dropoff_location }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    @elseif($type === 'attendance')
+    <table>
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Route</th>
+                <th>Pickup Status</th>
+                <th>Pickup Time</th>
+                <th>Pickup Location</th>
+                <th>Dropoff Status</th>
+                <th>Dropoff Time</th>
+                <th>Dropoff Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($report as $item)
+            <tr>
+                <td>{{ $item->student->full_name ?? 'N/A' }}</td>
+                <td>{{ $item->route->route_name ?? 'N/A' }}</td>
+                <td>{{ $item->pickup_status ?? '-' }}</td>
+                <td>{{ $item->pickup_time ?? '-' }}</td>
+                <td>{{ $item->pickup_location ?? '-' }}</td>
+                <td>{{ $item->dropoff_status ?? '-' }}</td>
+                <td>{{ $item->dropoff_time ?? '-' }}</td>
+                <td>{{ $item->dropoff_location ?? '-' }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    @elseif($type === 'daily')
+    <!-- Daily Summary View -->
     <table>
         <thead>
             <tr>
@@ -67,6 +123,7 @@
             @endforeach
         </tbody>
     </table>
+
     @elseif($type === 'monthly')
     <table>
         <thead>
@@ -90,6 +147,7 @@
             @endforeach
         </tbody>
     </table>
+
     @elseif($type === 'payments')
     <table>
         <thead>
@@ -105,9 +163,9 @@
         <tbody>
             @foreach($report as $item)
             <tr>
-                <td>{{ $item->student->full_name }}</td>
-                <td>{{ $item->class->name }}</td>
-                <td>{{ $item->route->route_name }}</td>
+                <td>{{ $item->student->full_name ?? 'N/A' }}</td>
+                <td>{{ $item->class->name ?? 'N/A' }}</td>
+                <td>{{ $item->route->route_name ?? 'N/A' }}</td>
                 <td class="text-right">KSh {{ number_format($item->transport_fee, 2) }}</td>
                 <td class="text-right {{ $item->balance > 0 ? 'text-danger' : 'text-success' }}">
                     KSh {{ number_format($item->balance, 2) }}
@@ -123,6 +181,7 @@
             @endforeach
         </tbody>
     </table>
+
     @elseif($type === 'vehicle')
     <table>
         <thead>
@@ -146,6 +205,9 @@
             @endforeach
         </tbody>
     </table>
+
+    @else
+    <p><strong>No valid report type selected.</strong></p>
     @endif
 
     <div style="margin-top: 20px; font-size: 0.8em; text-align: right;">

@@ -157,7 +157,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/attendance/{id}', [TransportController::class, 'updateAttendance'])->name('transport.attendance.update');
 
         // Reports
-        Route::get('/reports', [TransportController::class, 'generateReport'])->name('transport.reports');
+        Route::get('/reports', [TransportController::class, 'genera  teReport'])->name('transport.reports');
+        Route::get('/reports-search', [TransportController::class, 'report'])->name('transport.reports.search');
         Route::get('/reports/export', [TransportController::class, 'exportReport'])->name('transport.reports.export');
     });
 

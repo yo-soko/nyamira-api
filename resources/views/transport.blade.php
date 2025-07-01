@@ -3,14 +3,14 @@
 @section('content')
 @include('layout.toast')
 <div class="page-wrapper">
-    <div class="row mb-4">
+    <div class="row mb-4 p-3 mt-3">
         <div class="col-md-12">
-            <h2><i class="fas fa-bus"></i> School Transport Management</h2>
+            <h2>Transport Management</h2>
         </div>
     </div>
 
     <!-- Transport Dashboard Cards -->
-    <div class="row mb-4">
+    <div class="row mb-4 p-3">
         <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
@@ -67,6 +67,9 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
             <h6 class="m-0 font-weight-bold text-primary">Transport System</h6>
+            <a href="{{ route('transport.reports') }}" class="btn btn-sm btn-info">
+                <i class="fas fa-file-alt mr-1"></i> View Reports
+            </a>
         </div>
         <div class="card-body">
             <ul class="nav nav-tabs" id="transportTabs" role="tablist">
@@ -75,9 +78,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="attendance-tab" data-toggle="tab" href="#attendance" role="tab">Attendance</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="reports-tab" data-toggle="tab" href="#reports" role="tab">Reports</a>
                 </li>
             </ul>
 
@@ -125,7 +125,7 @@
                     </div>
                 </div>
 
-                <!-- Attendance Tab - Enhanced with separate pickup/dropoff tracking -->
+                <!-- Attendance Tab -->
                 <div class="tab-pane fade" id="attendance" role="tabpanel">
                     <div class="row mb-3 mt-3">
                         <div class="col-md-4">
@@ -160,58 +160,19 @@
                                 <tr>
                                     <th>Student</th>
                                     <th>Class</th>
-                                    <th>Stop</th>
                                     <th id="sessionHeader">{{ now()->hour < 12 ? 'Pickup Status' : 'Dropoff Status' }}</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="attendanceTableBody">
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">
+                                    <td colspan="4" class="text-center text-muted py-4">
                                         <i class="fas fa-info-circle fa-2x mb-2"></i>
                                         <p>Select a route to view students</p>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <!-- Reports Tab - Fixed functionality -->
-                <div class="tab-pane fade" id="reports" role="tabpanel">
-                    <div class="row mb-3 mt-3">
-                        <div class="col-md-3">
-                            <select class="form-control" id="reportType">
-                                <option value="attendance">Attendance Report</option>
-                                <option value="billing">Billing Report</option>
-                                <option value="usage">Transport Usage Report</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select class="form-control" id="reportRoute">
-                                <option value="">All Routes</option>
-                                @foreach($routes as $route)
-                                <option value="{{ $route->id }}">{{ $route->route_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="month" class="form-control" id="reportMonth" value="{{ date('Y-m') }}">
-                        </div>
-                        <div class="col-md-3">
-                            <button class="btn btn-primary" id="generateReport">
-                                <i class="fas fa-sync-alt mr-1"></i> Generate
-                            </button>
-                            <button class="btn btn-success" id="exportReport">
-                                <i class="fas fa-download mr-1"></i> Export
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="reportResults">
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle mr-2"></i> Select report type and parameters to generate a report
-                        </div>
                     </div>
                 </div>
             </div>
@@ -319,19 +280,9 @@
                         <input type="hidden" name="date" id="record_date">
                         <input type="hidden" name="session_type" id="session_type">
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Student</label>
-                                    <p class="form-control-static font-weight-bold" id="student_name"></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Stop</label>
-                                    <p class="form-control-static" id="stop_name"></p>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label>Student</label>
+                            <p class="form-control-static font-weight-bold" id="student_name"></p>
                         </div>
 
                         <div class="form-group">
@@ -390,17 +341,6 @@
 
 <script>
     $(document).ready(function() {
-
-        // Debugging - log all AJAX requests
-        $(document).ajaxSend(function(event, jqxhr, settings) {
-            console.log('Sending AJAX request to:', settings.url);
-            console.log('Request data:', settings.data);
-        });
-
-        $(document).ajaxComplete(function(event, xhr, settings) {
-            console.log('Completed AJAX request to:', settings.url);
-            console.log('Response:', xhr.responseText);
-        });
         // Initialize DataTables
         $('#routesTable').DataTable();
 
@@ -453,28 +393,19 @@
                     session_type: sessionType
                 },
                 success: function(response) {
-                    console.log('Full attendance response:', response); // Detailed log
-
                     if (response.error) {
                         showErrorState(response.message || 'Failed to load students');
                         return;
                     }
 
-                    // Check if students array exists and has data
                     if (!response.students || response.students.length === 0) {
                         showEmptyState('No students found for this route');
                         return;
                     }
 
-                    // Log first student for debugging
-                    if (response.students.length > 0) {
-                        console.log('Sample student data:', response.students[0]);
-                    }
-
                     renderStudentsTable(response.students, sessionType);
                 },
                 error: function(xhr) {
-                    console.error('Full error response:', xhr.responseJSON); // Detailed error log
                     showErrorState('Failed to load students. Please try again.');
                 }
             });
@@ -484,7 +415,7 @@
         function showLoadingState() {
             $('#attendanceTableBody').html(`
                 <tr>
-                    <td colspan="5" class="text-center py-4">
+                    <td colspan="4" class="text-center py-4">
                         <div class="spinner-border text-primary" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
@@ -497,7 +428,7 @@
         function showEmptyState(message) {
             $('#attendanceTableBody').html(`
                 <tr>
-                    <td colspan="5" class="text-center text-muted py-4">
+                    <td colspan="4" class="text-center text-muted py-4">
                         <i class="fas fa-info-circle fa-2x mb-2"></i>
                         <p>${message}</p>
                     </td>
@@ -508,7 +439,7 @@
         function showErrorState(message) {
             $('#attendanceTableBody').html(`
                 <tr>
-                    <td colspan="5" class="text-center text-danger py-4">
+                    <td colspan="4" class="text-center text-danger py-4">
                         <i class="fas fa-exclamation-circle fa-2x mb-2"></i>
                         <p>${message}</p>
                         <button class="btn btn-sm btn-primary mt-2" onclick="loadStudentsForRoute()">
@@ -523,12 +454,10 @@
             let html = '';
 
             students.forEach(student => {
-                // Safely handle potentially undefined attendance data
                 const attendance = student.attendance || {};
                 const isPickupMarked = attendance.pickup_status !== null && attendance.pickup_status !== undefined;
                 const isDropoffMarked = attendance.dropoff_status !== null && attendance.dropoff_status !== undefined;
 
-                // Skip if already marked for current session
                 if ((sessionType === 'pickup' && isPickupMarked) ||
                     (sessionType === 'dropoff' && isDropoffMarked)) {
                     return;
@@ -538,34 +467,30 @@
                     (attendance.pickup_status || 'absent') :
                     (attendance.dropoff_status || 'absent');
 
-                // Safely handle stop data
-                const stopName = student.stop ? (student.stop.stop_name || student.stop.name || 'Not Specified') : 'Not Specified';
-
                 html += `
-            <tr id="student-row-${student.id}" data-student-id="${student.id}">
-                <td>${student.full_name || 'Unknown Student'}</td>
-                <td>${student.class_name || 'N/A'}</td>
-                <td>${stopName}</td>
-                <td>
-                    <span class="badge badge-${currentStatus === 'present' ? 'success' : 'danger'}">
-                        ${currentStatus === 'present' ? 'Present' : 'Absent'}
-                    </span>
-                </td>
-                <td>
-                    <div class="btn-group btn-group-sm" role="group">
-                        <button class="btn btn-success mark-present"
-                            data-student-id="${student.id}"
-                            data-attendance-id="${attendance.id || ''}">
-                            <i class="fas fa-check"></i> Present
-                        </button>
-                        <button class="btn btn-danger mark-absent"
-                            data-student-id="${student.id}"
-                            data-attendance-id="${attendance.id || ''}">
-                            <i class="fas fa-times"></i> Absent
-                        </button>
-                    </div>
-                </td>
-            </tr>`;
+                <tr id="student-row-${student.id}" data-student-id="${student.id}">
+                    <td>${student.full_name || 'Unknown Student'}</td>
+                    <td>${student.class_name || 'N/A'}</td>
+                    <td>
+                        <span class="badge badge-${currentStatus === 'present' ? 'success' : 'danger'}">
+                            ${currentStatus === 'present' ? 'Present' : 'Absent'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button class="btn btn-success mark-present"
+                                data-student-id="${student.id}"
+                                data-attendance-id="${attendance.id || ''}">
+                                <i class="fas fa-check"></i> Present
+                            </button>
+                            <button class="btn btn-danger mark-absent"
+                                data-student-id="${student.id}"
+                                data-attendance-id="${attendance.id || ''}">
+                                <i class="fas fa-times"></i> Absent
+                            </button>
+                        </div>
+                    </td>
+                </tr>`;
             });
 
             if (html === '') {
@@ -574,6 +499,7 @@
                 $('#attendanceTableBody').html(html);
             }
         }
+
         // Handle attendance marking
         $(document).on('click', '.mark-present, .mark-absent', function() {
             const studentId = $(this).data('student-id');
@@ -695,7 +621,6 @@
             }
         }
 
-
         // Route CRUD Operations
         $('.edit-route').click(function() {
             const routeId = $(this).data('id');
@@ -706,7 +631,6 @@
                 $('#edit_status').val(data.status);
                 $('#editRouteModal').modal('show');
             }).fail(function(xhr) {
-                console.error(xhr);
                 toastr.error('Failed to load route data');
             });
         });
@@ -781,150 +705,6 @@
             });
         });
 
-        // Report Generation - Fixed functionality
-        $('#generateReport').click(function() {
-            const reportType = $('#reportType').val();
-            const routeId = $('#reportRoute').val();
-            const month = $('#reportMonth').val();
-
-            // Show loading state
-            $('#reportResults').html(`
-                <div class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                    <p>Generating report...</p>
-                </div>
-            `);
-
-            $.ajax({
-                url: '/transport/reports',
-                type: 'GET',
-                data: {
-                    type: reportType,
-                    route_id: routeId,
-                    month: month
-                },
-                success: function(data) {
-                    if (data.error) {
-                        $('#reportResults').html(`
-                            <div class="alert alert-danger">
-                                <i class="fas fa-exclamation-circle"></i> ${data.message}
-                            </div>
-                        `);
-                        return;
-                    }
-
-                    let html = '';
-
-                    if (reportType === 'attendance') {
-                        if (!data.length) {
-                            html = `
-                                <div class="alert alert-info">
-                                    No attendance data found for the selected period
-                                </div>`;
-                        } else {
-                            html = `
-                                <h5>Attendance Report - ${month}</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>Student</th>
-                                                <th>Class</th>
-                                                <th>Route</th>
-                                                <th>Stop</th>
-                                                <th>Present Days</th>
-                                                <th>Absent Days</th>
-                                                <th>Attendance Rate</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>`;
-
-                            data.forEach(item => {
-                                html += `
-                                    <tr>
-                                        <td>${item.student}</td>
-                                        <td>${item.class}</td>
-                                        <td>${item.route}</td>
-                                        <td>${item.stop}</td>
-                                        <td>${item.present_days}</td>
-                                        <td>${item.absent_days}</td>
-                                        <td>${item.attendance_rate}</td>
-                                    </tr>`;
-                            });
-
-                            html += `</tbody></table></div>`;
-                        }
-                    } else if (reportType === 'billing') {
-                        if (!data.length) {
-                            html = `
-                                <div class="alert alert-info">
-                                    No billing data found for the selected period
-                                </div>`;
-                        } else {
-                            html = `
-                                <h5>Billing Report - ${month}</h5>
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead class="thead-light">
-                                            <tr>
-                                                <th>Student</th>
-                                                <th>Class</th>
-                                                <th>Route</th>
-                                                <th>Fee (KSh)</th>
-                                                <th>Paid (KSh)</th>
-                                                <th>Balance (KSh)</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>`;
-
-                            data.forEach(item => {
-                                html += `
-                                    <tr>
-                                        <td>${item.student}</td>
-                                        <td>${item.class}</td>
-                                        <td>${item.route}</td>
-                                        <td>${item.fee.toFixed(2)}</td>
-                                        <td>${item.paid.toFixed(2)}</td>
-                                        <td class="${item.balance > 0 ? 'text-danger' : 'text-success'}">
-                                            ${item.balance.toFixed(2)}
-                                        </td>
-                                        <td>
-                                            <span class="badge badge-${item.balance > 0 ? 'warning' : 'success'}">
-                                                ${item.status}
-                                            </span>
-                                        </td>
-                                    </tr>`;
-                            });
-
-                            html += `</tbody></table></div>`;
-                        }
-                    }
-
-                    $('#reportResults').html(html);
-                },
-                error: function(xhr) {
-                    console.error('Report generation error:', xhr.responseText);
-                    $('#reportResults').html(`
-                        <div class="alert alert-danger">
-                            <i class="fas fa-exclamation-circle"></i> Failed to generate report. Please try again.
-                        </div>
-                    `);
-                }
-            });
-        });
-
-        // Export Report
-        $('#exportReport').click(function() {
-            const reportType = $('#reportType').val();
-            const routeId = $('#reportRoute').val();
-            const month = $('#reportMonth').val();
-
-            window.open(`/transport/reports/export?type=${reportType}&route_id=${routeId}&month=${month}`, '_blank');
-        });
-
         // Update session header every minute
         updateSessionHeader();
         setInterval(updateSessionHeader, 60000);
@@ -954,21 +734,6 @@
     .mark-present:hover,
     .mark-absent:hover {
         transform: scale(1.05);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-
-        #attendanceResults table th:nth-child(3),
-        #attendanceResults table td:nth-child(3) {
-            display: none;
-        }
-
-        .mark-present,
-        .mark-absent {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
     }
 
     /* Custom styling for attendance features */
@@ -1020,6 +785,16 @@
             margin-top: 10px;
             width: 100%;
         }
+
+        .nav-tabs .nav-link {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-group-sm>.btn {
+            padding: 0.2rem 0.4rem;
+            font-size: 0.75rem;
+        }
     }
 
     .modal-content {
@@ -1045,10 +820,6 @@
     }
 
     #attendanceResults table {
-        min-width: 100%;
-    }
-
-    #reportResults table {
         min-width: 100%;
     }
 
