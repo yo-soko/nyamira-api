@@ -316,20 +316,27 @@ class StudentController extends Controller
                 $student->subjects()->detach();
             }
 
-            // Optionally, recalculate current_balance here (same logic as in store method)
+            // Step 1: Get current balance before changes
+            $previousBalance = $student->current_balance;
+
+            // Step 2: Calculate new expected fees
             $feeStructure = FeeStructure::where('level_id', $student->class->level_id)
                 ->where('term_id', $request->studentTerm)
                 ->sum('amount');
 
             $mealFee = $student->meal->meal_fee ?? 0;
             $transportFee = $student->transport->transport_fee ?? 0;
+            $newExpected = $feeStructure + $mealFee + $transportFee;
 
-            $paid = FeePayment::where('student_id', $student->id)
+            // Step 3: Get total paid in the new term
+            $newTermPaid = FeePayment::where('student_id', $student->id)
                 ->where('term_id', $request->studentTerm)
                 ->sum('amount_paid');
 
-            $student->current_balance = ($feeStructure + $mealFee + $transportFee) - $paid;
+            // Step 4: Update current_balance (carry-forward logic)
+            $student->current_balance = ($newExpected - $newTermPaid) + $previousBalance;
             $student->save();
+
 
             DB::commit();
 

@@ -10,6 +10,7 @@
                         <th>Stream</th>
                         <th>Term</th>
                         <th>Amount Paid</th>
+                        <th>Balance</th>
                         <th>Receipt Number</th>
                         <th>Date</th>
                         <th>Action</th>
@@ -28,8 +29,22 @@
 
                         <td>{{ $payment->term->term_name ?? 'N/A' }}</td>
                         <td>KSh {{ number_format($payment->amount_paid, 2) }}</td>
+                        @php
+                            $bal = $payment->student->current_balance ?? 0;
+                        @endphp
+                        <td>
+                            @if($bal > 0)
+                                <span class="badge bg-danger">KSh {{ number_format($bal, 2) }}</span>
+                            @elseif($bal < 0)
+                                <span class="badge bg-success">Overpaid ({{ number_format(abs($bal), 2) }})</span>
+                            @else
+                                <span class="badge bg-primary">Cleared</span>
+                            @endif
+                        </td>
                         <td>{{ $payment->receipt_number }}</td>
                         <td>{{ $payment->created_at ? $payment->created_at->format('d M Y') : 'N/A' }}</td>
+
+
                         <td class="text-end">
                             {{-- Edit Button --}}
                             <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editPaymentModal{{ $payment->id }}">

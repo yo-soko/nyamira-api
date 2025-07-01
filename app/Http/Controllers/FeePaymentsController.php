@@ -57,7 +57,19 @@ class FeePaymentsController extends Controller
         $classLevels = SchoolClass::with(['level', 'stream'])->get();
         $terms = Term::orderBy('year', 'desc')->orderBy('term_name')->get();
 
-        return view('fees.fee-payments', compact('payments', 'students', 'streams', 'classLevels', 'terms'));
+        $balances = [];
+
+        foreach ($students as $student) {
+            $levelId = $student->schoolClass->level_id ?? null;
+
+            $totalFee = FeeStructure::where('level_id', $levelId)->sum('amount');
+            $totalPaid = FeePayment::where('student_id', $student->id)->sum('amount_paid');
+
+            $balances[$student->id] = $totalFee - $totalPaid; // can be negative (overpaid)
+        }
+
+        return view('fees.fee-payments', compact('payments', 'students', 'streams', 'classLevels', 'terms', 'balances'));
+
     }
 
     public function fetchStudents(Request $request)
