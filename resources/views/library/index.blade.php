@@ -106,7 +106,7 @@
         @csrf
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title">Upload New Book</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-red" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           @if ($errors->any())
