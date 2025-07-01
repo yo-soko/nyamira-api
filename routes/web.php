@@ -322,10 +322,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/fee-structure', [FeeStructureController::class, 'index'])->name('fee-structure')->middleware('auth');
 
-    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
+    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee-structure.store')->middleware('auth');
+
     Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
-    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
-    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
+    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->name('fee-structure.update')->middleware('auth');
+
+    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->name('fee-structure.delete')->middleware('auth');
+
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
 
     Route::resource('fee-payments', FeePaymentsController::class);

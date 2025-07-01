@@ -134,7 +134,7 @@
                                 <li class="{{ Request::is('fee-structure') ? 'active' : '' }}"><a href="{{url('fee-structure')}}"><i class="ti ti-receipt fs-16 me-2"></i><span>Fee Structure</span></a></li>
                                 <li class="{{ request()->routeIs('student.fee-payments') ? 'active' : '' }}">
                                     <a href="{{ route('student.fee-payments') }}">
-                                        <i class="ti ti-receipt-2 me-2"></i><span>Fee Payments</span>
+                                        <i class="ti ti-receipt-2 me-2"></i><span>Student Payments</span>
                                     </a>
                                 </li>
                             </ul>
