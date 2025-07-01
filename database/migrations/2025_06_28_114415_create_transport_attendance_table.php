@@ -28,9 +28,7 @@ return new class extends Migration {
            
             $table->timestamps();
 
-            // Constraints
-            $table->foreign('student_id')->references('student_id')->on('student_transports')->onDelete('cascade');
-            $table->unique(['student_id', 'date']);
+      
         });
     }
 

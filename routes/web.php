@@ -41,13 +41,13 @@ use App\Http\Controllers\GuardianController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SchoolCalendarController;
 use App\Http\Controllers\TimetableController;
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SdashboardController;
 use App\Http\Controllers\TdashboardController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\TransportController;
+use App\Http\Controllers\NotificationsController;
 
 
 
@@ -164,6 +164,11 @@ Route::middleware(['auth'])->group(function () {
 
     /*===========================Transport======================================================*/
 
+    /*===========================Notifications======================================================*/
+
+    Route::get('/notifications/unread', [NotificationsController::class, 'unread']);
+    Route::post('/notifications/mark-read', [NotificationsController::class, 'markAsRead']);
+    /*===========================Notifications======================================================*/
 
     Route::get('/general-settings', function () {
         return view('general-settings');
@@ -273,8 +278,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/tdashboard', [TdashboardController::class, 'index'])->name('tdashboard');
 
+  
     Route::get('/cbc-report', [SdashboardController::class, 'cbcReport'])->name('cbc.report');
     Route::post('/cbc-report/view', [SdashboardController::class, 'viewCBCReport'])->name('cbc-report.view');
+    Route::post('/cbc-reports/batch', [SdashboardController::class, 'generateBulkReports'])->name('cbc.reports.batch');
+    Route::get('/cbc-reports/html-bulk', [SdashboardController::class, 'viewBulkReports'])->name('cbc.reports.bulk.html');
 
     //terms
     Route::get('/terms', [TermController::class, 'index'])->name('terms.index');
@@ -324,10 +332,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/fee-structure', [FeeStructureController::class, 'index'])->name('fee-structure')->middleware('auth');
 
-    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->middleware('auth');
+    Route::post('/fee-structure/store', [FeeStructureController::class, 'store'])->name('fee-structure.store')->middleware('auth');
+
     Route::post('/fee-structure/show', [FeeStructureController::class, 'show'])->middleware('auth');
-    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->middleware('auth');
-    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->middleware('auth');
+    Route::post('/fee-structure/update', [FeeStructureController::class, 'update'])->name('fee-structure.update')->middleware('auth');
+
+    Route::post('/fee-structure/delete', [FeeStructureController::class, 'destroy'])->name('fee-structure.delete')->middleware('auth');
+
     Route::get('/fee-payments', [FeePaymentsController::class, 'index'])->name('fee-payments');
 
     Route::resource('fee-payments', FeePaymentsController::class);
@@ -339,6 +350,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('/student/fee-payments', [App\Http\Controllers\SFeePaymentsController::class, 'index'])->name('student.fee-payments');
     });
+    // routes/web.php
+    Route::post('/student/payment-options', [StudentController::class, 'getPaymentOptions'])->name('get.payment.options');
+
 
 
     //Fees

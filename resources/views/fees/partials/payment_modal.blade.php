@@ -73,9 +73,13 @@
 
                         <!-- Description -->
                         <div class="col-md-6 mb-3">
-                            <label for="description" class="form-label">Description (Optional)</label>
-                            <textarea type="text" name="description" id="description" rows="3" class="form-control" placeholder="Optional description"></textarea>
+                            <label for="description" class="form-label">Payment For</label>
+                            <select name="description" id="description" class="form-select" required>
+                                <option value="">-- Select Payment Purpose --</option>
+                                {{-- Options populated via JS --}}
+                            </select>
                         </div>
+
 
                         <!-- Amount Paid -->
                         <div class="col-md-6 mb-3">
