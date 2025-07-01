@@ -310,9 +310,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
     //library
     Route::middleware(['auth'])->group(function () {
-        Route::resource('library', LibraryController::class);
-        Route::resource('library-categories', BookCategoryController::class)->except(['show']);
-    });
+    Route::resource('library', LibraryController::class);
+    Route::resource('library-categories', BookCategoryController::class)->except(['show', 'edit', 'create']);
+
+    
+   });
     //teacher dash
     Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 

@@ -96,6 +96,10 @@
     </div>
 
   </div>
+   <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
+        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
+    </div>
 </div>
 
 {{-- Upload Book Modal --}}
@@ -167,9 +171,9 @@
       <form method="POST" id="deleteForm">
         @csrf
         @method('DELETE')
-        <div class="modal-header bg-danger text-white">
+        <div class="modal-header  text-white">
           <h5 class="modal-title">Confirm Delete</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close btn-close-red" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           Are you sure you want to delete <strong id="bookTitle"></strong>?

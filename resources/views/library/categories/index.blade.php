@@ -65,6 +65,10 @@
             </div>
         </div>  
     </div>
+    <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
+        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
+    </div>
 </div>
 
 <!-- Add Category Modal -->
@@ -99,7 +103,7 @@
         <form method="POST" id="editCategoryForm">
             @csrf
             @method('PUT')
-            <div class="modal-header bg-warning text-dark">
+            <div class="modal-header  text-dark">
                 <h5 class="modal-title">Edit Book Category</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -125,7 +129,7 @@
         <form method="POST" id="deleteCategoryForm">
             @csrf
             @method('DELETE')
-            <div class="modal-header text-white bg-danger">
+            <div class="modal-header text-white">
                 <h5 class="modal-title">Delete Category</h5>
                 <button type="button" class="btn-close btn-close-red" data-bs-dismiss="modal"></button>
             </div>

@@ -3,7 +3,7 @@
 @include('layout.toast')
 
 <div class="page-wrapper">
-    <div class="content">
+  <div class="content">
         <div class="page-header d-flex justify-content-between align-items-center">
             <div class="page-title">
                 <h4>Teachers</h4>
@@ -42,26 +42,26 @@
                                 <td>{{ $teacher->education_level }}</td>
                                 <td>{{ $teacher->department->name ?? '-' }}</td>
                                <td>
-    @if($teacher->subjects->count() > 0)
-        <ul class="mb-0 ps-3">
-            @foreach($teacher->subjects as $subject)
-                @php
-                    $class = \App\Models\SchoolClass::find($subject->pivot->class_id);
-                @endphp
-                <li>
-                    {{ $subject->subject_name }}
-                    @if($class)
-                        (Class: {{ $class->level->level_name ?? ' '}} {{ $class->stream->name ?? ' ' }})
-                    @else
-                        (Class: Unknown)
-                    @endif
-                </li>
-            @endforeach
-        </ul>
-    @else
-        <em>No subjects assigned</em>
-    @endif
-</td>
+                                    @if($teacher->subjects->count() > 0)
+                                        <ul class="mb-0 ps-3">
+                                            @foreach($teacher->subjects as $subject)
+                                                @php
+                                                    $class = \App\Models\SchoolClass::find($subject->pivot->class_id);
+                                                @endphp
+                                                <li>
+                                                    {{ $subject->subject_name }}
+                                                    @if($class)
+                                                        (Class: {{ $class->level->level_name ?? ' '}} {{ $class->stream->name ?? ' ' }})
+                                                    @else
+                                                        (Class: Unknown)
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <em>No subjects assigned</em>
+                                    @endif
+                                </td>
 
                                 <td>
                                     <span class="badge {{ $teacher->status ? 'bg-success' : 'bg-danger' }}">
@@ -76,6 +76,12 @@
             </div>
         </div>   
     </div>
+      <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
+        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
+        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
+    </div>
+    
+  </div>
 </div>
 
 
