@@ -268,7 +268,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/attendance/filter', [AttendanceController::class, 'filter'])->name('attendance.filter');
 
     Route::post('/attendance', [AttendanceController::class, 'attendanceAll'])->name('attendance-all');
+    //exams
     Route::get('/exams', [ExamController::class, 'index'])->name('exams');
+    Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
+    Route::put('/exams/{id}', [ExamController::class, 'update'])->name('exams.update');
+    Route::delete('/exams/{id}', [ExamController::class, 'destroy'])->name('exams.destroy');
 
     Route::get('/submit-results', [ResultController::class, 'filterForm'])->name('submit-results');
     Route::get('/results-entry', [ResultController::class, 'entryForm'])->name('results.entry');

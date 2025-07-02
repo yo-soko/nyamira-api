@@ -1,190 +1,253 @@
-<?php $page = 'holidays'; ?>
 @extends('layout.mainlayout')
 @section('content')
-@include('layout.toast')   
+@include('layout.toast')
 <div class="page-wrapper">
     <div class="content">
-        <div class="page-header">
-            <div class="add-item d-flex">
-                <div class="page-title">
-                    <h4>Manage Exams</h4>
-                    <h6>Manage your examinations</h6>
-                </div>						
+        <div class="page-header d-flex justify-content-between">
+            <div>
+                <h4>Manage Exams</h4>
+                <h6>Manage your examinations</h6>
             </div>
-            <ul class="table-top-head">
-                <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img src="{{URL::asset('build/img/icons/pdf.svg')}}" alt="img"></a>
-                </li>
-                <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Excel"><img src="{{URL::asset('build/img/icons/excel.svg')}}" alt="img"></a>
-                </li>						
-                <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Refresh"><i class="ti ti-refresh"></i></a>
-                </li>
-                <li>
-                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
-                </li>
-            </ul>
-            @can('add exams')
-            <div class="page-btn">
-                <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-holiday"><i class="ti ti-circle-plus me-1"></i>Add Exams</a>
-            </div>
-            @endcan
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-exam">
+                <i class="ti ti-plus"></i> Add Exam
+            </button>
         </div>
-        <!-- product list -->
-        <div class="card">
-            <div class="card-header d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                <div class="search-set">
-                    <div class="search-input">
-                        <span class="btn-searchset"><i class="ti ti-search fs-14 feather-search"></i></span>
-                    </div>
-                </div>
-                <div class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                    
-                    
-                    <div class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-md d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                             Status
-                        </a>
-                        <ul class="dropdown-menu  dropdown-menu-end p-3">
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Active</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);" class="dropdown-item rounded-1">Inactive</a>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                </div>
-            </div>
-            <div class="card-body p-0">
+
+        <div class="card mt-3">
+            <div class="card-body">
                 <div class="table-responsive">
                     <table class="table datatable">
-                        <thead class="thead-light">
+                        <thead>
                             <tr>
-                                <th class="no-sort">
-                                    <label class="checkboxs">
-                                        <input type="checkbox" id="select-all">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </th>
+                                <th>#</th>
                                 <th>Exam Name</th>
                                 <th>Term</th>
-                                <th>Classes</th>
                                 <th>Subjects</th>
+                                <th>Classes</th>
                                 <th>Status</th>
                                 <th>Analysed</th>
-                                <th class="no-sort"></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($exams as $exam)
+                            @foreach($exams as $index => $exam)
                             <tr>
-                                <td>
-                                    <label class="checkboxs">
-                                        <input type="checkbox">
-                                        <span class="checkmarks"></span>
-                                    </label>
-                                </td>
-                                <td class="text-gray-9">{{ $exam->name }}</td>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $exam->name }}</td>
                                 <td>{{ $exam->term->term_name ?? 'N/A' }}</td>
                                 <td>
-                                    @foreach($exam->examSubjects->pluck('level.level_name')->unique() as $level)
-                                        <span class="badge bg-info text-white">{{ $level }}</span>
+                                    @foreach($exam->examSubjectsClasses->pluck('subject.subject_name')->unique() as $subject)
+                                        <span class="badge bg-info">{{ $subject }}</span>
                                     @endforeach
                                 </td>
                                 <td>
-                                    @foreach($exam->examSubjects->pluck('subject.subject_name')->unique() as $subject)
-                                        <span class="badge bg-secondary">{{ $subject }}</span>
+                                    @foreach($exam->examSubjectsClasses->pluck('level.level_name')->unique() as $level)
+                                        <span class="badge bg-success">{{ $level }}</span>
                                     @endforeach
                                 </td>
                                 <td>
                                     @if($exam->status)
-                                        <span class="badge badge-success d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Active
-                                        </span>
+                                        <span class="badge bg-success">Active</span>
                                     @else
-                                        <span class="badge badge-danger d-inline-flex align-items-center badge-xs">
-                                            <i class="ti ti-point-filled me-1"></i>Inactive
-                                        </span>
+                                        <span class="badge bg-danger">Inactive</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if($exam->is_analysed)
-                                        <span class="badge bg-success">Yes</span>
+                                        <span class="badge bg-primary">Yes</span>
                                     @else
-                                        <span class="badge bg-warning text-dark">No</span>
+                                        <span class="badge bg-warning">No</span>
                                     @endif
                                 </td>
-                                <td class="action-table-data">
-                                    <div class="edit-delete-action">
-                                        <a class="me-2 p-2 edit-btn" href="#" 
-                                            data-id="{{ $exam->id }}"
-                                            data-name="{{ $exam->name }}"
-                                            data-status="{{ $exam->status }}"
-                                            data-is_analysed="{{ $exam->is_analysed }}"
-                                            data-term_id="{{ $exam->term_id }}"
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#edit-exam">
-                                            <i data-feather="edit" class="feather-edit"></i>
-                                        </a>
-                                        <a href="javascript:void(0);" 
-                                            class="delete-btn" 
-                                            data-id="{{ $exam->id }}"
-                                            data-bs-target="#delete-modal" data-bs-toggle="modal">
-                                            <i data-feather="trash-2" class="feather-trash-2"></i>
-                                        </a>
-                                    </div>
+                                <td>
+                                    <button class="btn btn-sm btn-warning edit-btn"
+                                        data-id="{{ $exam->id }}"
+                                        data-name="{{ $exam->name }}"
+                                        data-term_id="{{ $exam->term_id }}"
+                                        data-status="{{ $exam->status }}"
+                                        data-is_analysed="{{ $exam->is_analysed }}"
+                                        data-subjects="{{ json_encode($exam->examSubjectsClasses->pluck('subject_id')->unique()) }}"
+                                        data-classes="{{ json_encode($exam->examSubjectsClasses->pluck('level_id')->unique()) }}"
+                                        data-bs-toggle="modal" data-bs-target="#edit-exam">
+                                        Edit
+                                    </button>
+                                    <form action="{{ route('exams.destroy', $exam->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure?')">Delete</button>
+                                    </form>
                                 </td>
                             </tr>
-                            @empty
-                            
-                            @endforelse
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <!-- /product list -->
-    </div>
-    <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
-        <p class="mb-0">&copy; JavaPA. All Right Reserved</p>
-        <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.edit-btn').forEach(button => {
-            button.addEventListener('click', function () {
-                const id = this.dataset.id;
-                const holiday_name = this.dataset.holiday_name;
-                const from_date = this.dataset.from_date;
-                const to_date = this.dataset.to_date;
-                const days_count = this.dataset.days_count;
-                const description = this.dataset.description;
-                const status = this.dataset.status;
-        
-                document.getElementById('edit-id').value = id;
-                document.getElementById('holiday_name').value = holiday_name;
-                document.getElementById('from_date').value = from_date;
-                document.getElementById('to_date').value = to_date;
-                document.getElementById('days_count').value = days_count;
-                $('#summernote2').summernote('code', description);
-                document.getElementById('edit-status').checked = status == 1;
 
-                // Set form action dynamically
-                document.getElementById('editForm').action = `/holiday/${id}`;
+<!-- ADD MODAL -->
+<div class="modal fade" id="add-exam" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form action="{{ route('exams.store') }}" method="POST" class="modal-content">
+            @csrf
+            <div class="modal-header">
+                <h5 class="modal-title">Add Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body row g-3">
+                <div class="col-md-12">
+                    <label>Exam Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Term</label>
+                    <select name="term_id" class="form-select" required>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}">{{ $term->term_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Subjects</label>
+                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;">
+                        @foreach($subjects as $subject)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="subject_ids[]" value="{{ $subject->id }}">
+                            <label class="form-check-label">{{ $subject->subject_name }}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Classes</label>
+                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;">
+                        @foreach($levels as $level)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $level->id }}">
+                            <label class="form-check-label">{{ $level->level_name }}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Status</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="status" value="1"> Active
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Analysed</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_analysed" value="1"> Analysed
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal fade" id="edit-exam" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <form method="POST" id="editForm" class="modal-content">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="id" id="edit-id">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Exam</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body row g-3">
+                <div class="col-md-12">
+                    <label>Exam Name</label>
+                    <input type="text" name="name" id="edit-name" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Term</label>
+                    <select name="term_id" id="edit-term" class="form-select" required>
+                        @foreach($terms as $term)
+                            <option value="{{ $term->id }}">{{ $term->term_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Subjects</label>
+                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;" id="edit-subject-checkboxes">
+                        @foreach($subjects as $subject)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="subject_ids[]" value="{{ $subject->id }}" id="edit-subject{{ $subject->id }}">
+                            <label class="form-check-label" for="edit-subject{{ $subject->id }}">{{ $subject->subject_name }}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label>Classes</label>
+                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;" id="edit-class-checkboxes">
+                        @foreach($levels as $level)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $level->id }}" id="edit-class{{ $level->id }}">
+                            <label class="form-check-label" for="edit-class{{ $level->id }}">{{ $level->level_name }}</label>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Status</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="status" id="edit-status" value="1"> Active
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label>Analysed</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="is_analysed" id="edit-analysed" value="1"> Analysed
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            let id = this.dataset.id;
+            let name = this.dataset.name;
+            let term_id = this.dataset.term_id;
+            let status = this.dataset.status;
+            let analysed = this.dataset.is_analysed;
+            let subjects = JSON.parse(this.dataset.subjects);
+            let classes = JSON.parse(this.dataset.classes);
+
+            document.getElementById('edit-id').value = id;
+            document.getElementById('edit-name').value = name;
+            document.getElementById('edit-term').value = term_id;
+            document.getElementById('edit-status').checked = status == 1;
+            document.getElementById('edit-analysed').checked = analysed == 1;
+
+            document.querySelectorAll('#edit-subject-checkboxes input').forEach(cb => {
+                cb.checked = subjects.includes(parseInt(cb.value));
             });
+            document.querySelectorAll('#edit-class-checkboxes input').forEach(cb => {
+                cb.checked = classes.includes(parseInt(cb.value));
+            });
+
+            document.getElementById('editForm').action = `/exams/${id}`;
         });
     });
-document.addEventListener('DOMContentLoaded', function () {
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const id = this.dataset.id;
-                        document.getElementById('delete-id').value = id;
-                    });
-                });
-            });
+});
 </script>
 @endsection

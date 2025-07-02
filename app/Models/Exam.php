@@ -33,5 +33,9 @@ class Exam extends Model
     {
         return $this->hasMany(Result::class);
     }
+    public function examSubjectsClasses()
+    {
+        return $this->hasMany(\App\Models\ExamSubjectsClasses::class, 'exam_id', 'id');
+    }
 
 }
