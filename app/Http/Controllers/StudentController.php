@@ -271,41 +271,52 @@ class StudentController extends Controller
             );
 
             // Meals update or delete
-            if ($request->has('needs_meals') && $request->needs_meals == '1' && $request->filled('meal_plan_id')) {
-                $mealPlan = MealPlan::findOrFail($request->meal_plan_id);
+            if (
+                ($request->has('needs_meals') && $request->needs_meals == '1' && $request->filled('meal_plan_id')) ||
+                (!$request->has('needs_meals') && $hadMealsBefore)  // keep meal if previously selected and not unchecked
+            ) {
+                $mealPlanId = $request->meal_plan_id ?? $student->meal?->meal_plan_id;
+
+                $mealPlan = MealPlan::findOrFail($mealPlanId);
 
                 $student->meal()->updateOrCreate(
-                    ['student_id' => $student->id],
+                    ['student_id' => $student->id, 'term_id' => $request->studentTerm],
                     [
-                        'term_id' => $request->studentTerm,
                         'class_id' => $request->student_class,
                         'meal_plan_id' => $mealPlan->id,
                         'meal_fee' => $mealPlan->fee,
                     ]
                 );
             } else {
-                $student->meal()->delete();
+                $student->meal()->where('term_id', $request->studentTerm)->delete();
             }
 
+
             // Transport update or delete
-            if ($request->has('needs_transport') && $request->needs_transport == '1' && $request->filled('transport_route_id')) {
-                $route = TransportRoute::findOrFail($request->transport_route_id);
+            if (
+                ($request->has('needs_transport') && $request->needs_transport == '1' && $request->filled('transport_route_id')) ||
+                (!$request->has('needs_transport') && $hadTransportBefore)
+            ) {
+                $routeId = $request->transport_route_id ?? $student->transport?->route_id;
+                $route = TransportRoute::findOrFail($routeId);
+
                 $baseFee = $route->fee;
-                $fee = $request->transport_option === 'one_way' ? ($baseFee / 2) + 500 : $baseFee;
+                $transportOption = $request->transport_option ?? $student->transport?->transport_type ?? 'two_way';
+                $fee = $transportOption === 'one_way' ? ($baseFee / 2) + 500 : $baseFee;
 
                 $student->transport()->updateOrCreate(
-                    ['student_id' => $student->id],
+                    ['student_id' => $student->id, 'term_id' => $request->studentTerm],
                     [
-                        'term_id' => $request->studentTerm,
                         'class_id' => $request->student_class,
                         'route_id' => $route->id,
-                        'transport_type' => $request->transport_option,
+                        'transport_type' => $transportOption,
                         'transport_fee' => $fee,
                     ]
                 );
             } else {
-                $student->transport()->delete();
+                $student->transport()->where('term_id', $request->studentTerm)->delete();
             }
+
 
             // Subjects sync
             if ($request->filled('studentSubjects')) {
@@ -316,70 +327,102 @@ class StudentController extends Controller
                 $student->subjects()->detach();
             }
 
-            // Step 1: Get current balance before changes
-            $previousBalance = $student->current_balance;
+            // // Step 1: Get current balance before changes
+            // $previousBalance = $student->current_balance;
 
-            // Step 2: Calculate new expected fees
-            $feeStructure = FeeStructure::where('level_id', $student->class->level_id)
-                ->where('term_id', $request->studentTerm)
+            // // Step 2: Calculate new expected fees
+            // $feeStructure = FeeStructure::where('level_id', $student->class->level_id)
+            //     ->where('term_id', $request->studentTerm)
+            //     ->sum('amount');
+
+            // $mealFee = $student->meal->meal_fee ?? 0;
+            // $transportFee = $student->transport->transport_fee ?? 0;
+            // $newExpected = $feeStructure + $mealFee + $transportFee;
+
+            // // Step 3: Get total paid in the new term
+            // $newTermPaid = FeePayment::where('student_id', $student->id)
+            //     ->where('term_id', $request->studentTerm)
+            //     ->sum('amount_paid');
+
+            // // Step 4: Update current_balance (carry-forward logic)
+            // $student->current_balance = ($newExpected - $newTermPaid) + $previousBalance;
+            // $student->save();
+
+
+            // Step 1: Get updated student
+            $student = Student::findOrFail($request->student_id);
+            $oldTermId = $student->term_id;
+            $oldClassId = $student->class_id;
+
+            $hadMealsBefore = $student->meal()->where('term_id', $oldTermId)->exists();
+            $hadTransportBefore = $student->transport()->where('term_id', $oldTermId)->exists();
+
+            $currentTermId = (int) $request->studentTerm;
+            $currentClassId = (int) $request->student_class;
+            $currentLevelId = SchoolClass::find($currentClassId)?->level_id;
+
+            if (!$currentLevelId) {
+                $student->current_balance = 0;
+                $student->save();
+                return redirect()->back()->with('success', 'Student updated (no level detected).');
+            }
+
+            // Step 2: CURRENT TERM expected (for new class/level)
+            $currentTuition = FeeStructure::where('level_id', $currentLevelId)
+                ->where('term_id', $currentTermId)
                 ->sum('amount');
 
-            $mealFee = $student->meal->meal_fee ?? 0;
-            $transportFee = $student->transport->transport_fee ?? 0;
-            $newExpected = $feeStructure + $mealFee + $transportFee;
+            $currentMeal = StudentMeal::where('student_id', $student->id)
+                ->where('term_id', $currentTermId)
+                ->value('meal_fee') ?? 0;
 
-            // Step 3: Get total paid in the new term
-            $newTermPaid = FeePayment::where('student_id', $student->id)
-                ->where('term_id', $request->studentTerm)
+            $currentTransport = StudentTransport::where('student_id', $student->id)
+                ->where('term_id', $currentTermId)
+                ->value('transport_fee') ?? 0;
+
+
+            $currentExpected = $currentTuition + $currentMeal + $currentTransport;
+
+            // Step 3: Paid in current term
+            $currentPaid = FeePayment::where('student_id', $student->id)
+                ->where('term_id', $currentTermId)
                 ->sum('amount_paid');
 
-            // Step 4: Update current_balance (carry-forward logic)
-            $student->current_balance = ($newExpected - $newTermPaid) + $previousBalance;
+            // Step 4: CARRY FORWARD: from all previous terms/levels
+            $previousTerms = Term::where('id', '<', $currentTermId)->pluck('id');
+
+            // Get all fee structures for student's previous classes
+            $studentClasses = Student::where('id', $student->id)
+                ->pluck('class_id');
+
+            $previousLevels = SchoolClass::whereIn('id', $studentClasses)
+                ->pluck('level_id')
+                ->unique();
+
+            $previousTuition = FeeStructure::whereIn('level_id', $previousLevels)
+                ->whereIn('term_id', $previousTerms)
+                ->sum('amount');
+
+            $previousMeal = StudentMeal::where('student_id', $student->id)
+                ->whereIn('term_id', $previousTerms)
+                ->sum('meal_fee');
+
+            $previousTransport = StudentTransport::where('student_id', $student->id)
+                ->whereIn('term_id', $previousTerms)
+                ->sum('transport_fee');
+
+            $previousExpected = $previousTuition + $previousMeal + $previousTransport;
+
+            $previousPaid = FeePayment::where('student_id', $student->id)
+                ->whereIn('term_id', $previousTerms)
+                ->sum('amount_paid');
+
+            $carryForward = $previousExpected - $previousPaid;
+
+            // Step 5: Final balance
+            $student->current_balance = $currentExpected - $currentPaid + $carryForward;
             $student->save();
 
-
-            // // Calculate current term expected & paid
-            // $feeStructure = FeeStructure::where('level_id', $student->class->level_id)
-            // ->where('term_id', $request->studentTerm)
-            // ->sum('amount');
-
-            // $mealFee = optional($student->meal)->meal_fee ?? 0;
-            // $transportFee = optional($student->transport)->transport_fee ?? 0;
-            // $currentExpected = $feeStructure + $mealFee + $transportFee;
-
-            // $currentPaid = FeePayment::where('student_id', $student->id)
-            // ->where('term_id', $request->studentTerm)
-            // ->sum('amount_paid');
-
-            // // Carry forward: sum of unpaid balances from previous terms
-            // $previousUnpaid = FeePayment::where('student_id', $student->id)
-            // ->join('terms', 'fee_payments.term_id', '=', 'terms.id')
-            // ->where('terms.id', '<', $request->studentTerm)
-            // ->sum(DB::raw('0')); // placeholder, we'll fix this shortly
-
-            // $previousExpected = FeeStructure::where('level_id', $student->class->level_id)
-            // ->where('term_id', '<', $request->studentTerm)
-            // ->sum('amount');
-
-            // $previousMeal = StudentMeal::where('student_id', $student->id)
-            // ->where('term_id', '<', $request->studentTerm)
-            // ->sum('meal_fee');
-
-            // $previousTransport = StudentTransport::where('student_id', $student->id)
-            // ->where('term_id', '<', $request->studentTerm)
-            // ->sum('transport_fee');
-
-            // $previousExpected += $previousMeal + $previousTransport;
-
-            // $previousPaid = FeePayment::where('student_id', $student->id)
-            // ->where('term_id', '<', $request->studentTerm)
-            // ->sum('amount_paid');
-
-            // $carryForwardBalance = $previousExpected - $previousPaid;
-
-            // // Final total balance = carry forward + current balance
-            // $student->current_balance = ($currentExpected - $currentPaid) + $carryForwardBalance;
-            // $student->save();
 
 
 
