@@ -48,6 +48,7 @@ use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\TransportController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\FeeDashboardController;
 
 
 
@@ -278,7 +279,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/tdashboard', [TdashboardController::class, 'index'])->name('tdashboard');
 
-  
+
     Route::get('/cbc-report', [SdashboardController::class, 'cbcReport'])->name('cbc.report');
     Route::post('/cbc-report/view', [SdashboardController::class, 'viewCBCReport'])->name('cbc-report.view');
     Route::post('/cbc-reports/batch', [SdashboardController::class, 'generateBulkReports'])->name('cbc.reports.batch');
@@ -321,7 +322,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('library', LibraryController::class);
     Route::resource('library-categories', BookCategoryController::class)->except(['show', 'edit', 'create']);
 
-    
+
    });
     //teacher dash
     Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
@@ -352,6 +353,10 @@ Route::middleware(['auth'])->group(function () {
     });
     // routes/web.php
     Route::post('/student/payment-options', [StudentController::class, 'getPaymentOptions'])->name('get.payment.options');
+    Route::get('/fee-dashboard', [FeeDashboardController::class, 'dashboard'])->name('fee.dashboard')->middleware('auth');
+    Route::get('/fee-dashboard/print', [FeeDashboardController::class, 'print'])->name('fee.dashboard.print')->middleware('auth');
+    Route::get('/fee-dashboard/download', [\App\Http\Controllers\FeePaymentsController::class, 'download'])->name('fee.dashboard.download');
+    Route::post('/get-payment-options', [FeePaymentsController::class, 'getPaymentOptions'])->name('get.payment.options');
 
 
 

@@ -338,6 +338,51 @@ class StudentController extends Controller
             $student->save();
 
 
+            // // Calculate current term expected & paid
+            // $feeStructure = FeeStructure::where('level_id', $student->class->level_id)
+            // ->where('term_id', $request->studentTerm)
+            // ->sum('amount');
+
+            // $mealFee = optional($student->meal)->meal_fee ?? 0;
+            // $transportFee = optional($student->transport)->transport_fee ?? 0;
+            // $currentExpected = $feeStructure + $mealFee + $transportFee;
+
+            // $currentPaid = FeePayment::where('student_id', $student->id)
+            // ->where('term_id', $request->studentTerm)
+            // ->sum('amount_paid');
+
+            // // Carry forward: sum of unpaid balances from previous terms
+            // $previousUnpaid = FeePayment::where('student_id', $student->id)
+            // ->join('terms', 'fee_payments.term_id', '=', 'terms.id')
+            // ->where('terms.id', '<', $request->studentTerm)
+            // ->sum(DB::raw('0')); // placeholder, we'll fix this shortly
+
+            // $previousExpected = FeeStructure::where('level_id', $student->class->level_id)
+            // ->where('term_id', '<', $request->studentTerm)
+            // ->sum('amount');
+
+            // $previousMeal = StudentMeal::where('student_id', $student->id)
+            // ->where('term_id', '<', $request->studentTerm)
+            // ->sum('meal_fee');
+
+            // $previousTransport = StudentTransport::where('student_id', $student->id)
+            // ->where('term_id', '<', $request->studentTerm)
+            // ->sum('transport_fee');
+
+            // $previousExpected += $previousMeal + $previousTransport;
+
+            // $previousPaid = FeePayment::where('student_id', $student->id)
+            // ->where('term_id', '<', $request->studentTerm)
+            // ->sum('amount_paid');
+
+            // $carryForwardBalance = $previousExpected - $previousPaid;
+
+            // // Final total balance = carry forward + current balance
+            // $student->current_balance = ($currentExpected - $currentPaid) + $carryForwardBalance;
+            // $student->save();
+
+
+
             DB::commit();
 
             return redirect()->back()->with('success', 'Student updated successfully.');

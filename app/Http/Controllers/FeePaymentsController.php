@@ -11,6 +11,8 @@ use App\Models\Term;
 use App\Models\SchoolClass;
 use App\Models\Stream;
 use App\Models\FeeStructure;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FeePaymentsController extends Controller
 {
@@ -115,7 +117,7 @@ class FeePaymentsController extends Controller
             'student_id' => 'required|exists:students,id',
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
-            'description' => 'nullable|string|max:255',
+            'description' => 'required|string|in:Tuition Fee,Meals,Transport',
             'receipt_number' => 'nullable|string|unique:fee_payments,receipt_number',
 
 
@@ -130,8 +132,8 @@ class FeePaymentsController extends Controller
                 'student_id' => $validated['student_id'],
                 'payment_mode' => $validated['payment_mode'],
                 'amount_paid' => $validated['amount_paid'],
-                'description' => $validated['description'] ?? null,
-                'receipt_number' => $validated['receipt_number'] ?? null,
+                'description' => $validated['description'],
+                'receipt_number' => $validated['receipt_number'],
                 'user_id' => auth()->id(),
             ]);
 
@@ -196,6 +198,144 @@ class FeePaymentsController extends Controller
 
         return redirect()->back()->with('success', 'Payment deleted successfully!');
     }
+
+    public function dashboard(Request $request)
+    {
+        $year = $request->year;
+        $termId = $request->term_id;
+
+        $terms = Term::orderBy('year', 'desc')->get();
+        $years = Term::distinct()->pluck('year');
+
+        $currentTerm = Term::when($termId, fn($q) => $q->where('id', $termId))
+            ->when(!$termId, fn($q) => $q->whereDate('start_date', '<=', now())->whereDate('end_date', '>=', now()))
+            ->first();
+
+        $termIds = $termId
+            ? [$termId]
+            : ($year ? Term::where('year', $year)->pluck('id') : Term::pluck('id'));
+
+        $students = Student::with(['schoolClass.level', 'meal', 'transport'])->get();
+
+        // --- Calculate Expected ---
+        $expectedTuition = 0;
+        $expectedMeal = 0;
+        $expectedTransport = 0;
+
+        foreach ($students as $student) {
+            $levelId = $student->schoolClass->level_id ?? null;
+
+            if ($levelId) {
+                $expectedTuition += FeeStructure::where('level_id', $levelId)
+                    ->when($termId, fn($q) => $q->where('term_id', $termId))
+                    ->sum('amount');
+            }
+
+            if ($student->meal) {
+                $expectedMeal += $student->meal->meal_fee ?? 0;
+            }
+
+            if ($student->transport) {
+                $expectedTransport += $student->transport->transport_fee ?? 0;
+            }
+        }
+
+        // --- Calculate Paid ---
+        $actualPaidMeal = FeePayment::whereIn('term_id', $termIds)
+            ->where('description', 'Meals')
+            ->sum('amount_paid');
+
+        $actualPaidTransport = FeePayment::whereIn('term_id', $termIds)
+            ->where('description', 'Transport')
+            ->sum('amount_paid');
+
+        $actualPaidTuition = FeePayment::whereIn('term_id', $termIds)
+            ->where('description', 'Tuition Fee')
+            ->sum('amount_paid');
+
+
+        // --- Combine ---
+        $totalCollected = $actualPaidTuition + $actualPaidMeal + $actualPaidTransport;
+        $outstandingBalance = Student::sum('current_balance');
+        $totalStudents = $students->count();
+
+        $recentPayments = FeePayment::with(['student.schoolClass.level'])->latest()->take(10)->get();
+
+        // --- Per Level Breakdown ---
+        $levels = ClassLevel::all();
+        $levelData = [];
+
+        foreach ($levels as $level) {
+            $levelStudents = $students->filter(fn($s) => $s->schoolClass->level_id === $level->id);
+            $expected = 0;
+            $paid = 0;
+
+            foreach ($levelStudents as $student) {
+                $expected += FeeStructure::where('level_id', $level->id)
+                    ->when($termId, fn($q) => $q->where('term_id', $termId))
+                    ->sum('amount');
+
+                $paid += FeePayment::where('student_id', $student->id)
+                    ->whereIn('term_id', $termIds)
+                    ->sum('amount_paid');
+            }
+
+            $levelData[] = [
+                'name' => $level->level_name,
+                'expected' => $expected,
+                'paid' => $paid,
+                'balance' => $expected - $paid
+            ];
+        }
+
+        return view('fees.dashboard', compact(
+            'terms', 'years', 'termId', 'year', 'currentTerm',
+            'actualPaidTuition', 'actualPaidMeal', 'actualPaidTransport',
+            'expectedTuition', 'expectedMeal', 'expectedTransport',
+            'totalCollected', 'outstandingBalance', 'totalStudents',
+            'recentPayments', 'levelData'
+        ));
+    }
+
+    public function getPaymentOptions(Request $request)
+    {
+        return response()->json([
+            'Tuition Fee',
+            'Meals',
+            'Transport'
+        ]);
+    }
+
+
+
+    public function print(Request $request)
+    {
+        $data = $this->dashboard($request)->getData();
+        return view('fees.partials.dashboard-print', (array) $data);
+    }
+
+    public function download(Request $request)
+    {
+        // Reuse dashboard logic
+        $dashboard = $this->dashboard($request);
+
+        $data = $dashboard->getData();
+
+        if ($request->format === 'pdf') {
+            $pdf = Pdf::loadView('fees.partials.dashboard-print', (array) $data);
+            return $pdf->download('fee_dashboard.pdf');
+        }
+
+        if ($request->format === 'excel') {
+            return Excel::download(new \App\Exports\FeeDashboardExport((array) $data), 'fee_dashboard.xlsx');
+        }
+
+        return back()->with('error', 'Invalid format selected.');
+    }
+
+
+
+
 
 
 }
