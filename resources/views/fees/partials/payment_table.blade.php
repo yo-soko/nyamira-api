@@ -12,7 +12,7 @@
                         <th>Amount Paid</th>
                         <th>Balance</th>
                         <th>Receipt Number</th>
-                        <th>Paid For</th>
+                        <!-- <th>Paid For</th> -->
                         <th>Date</th>
                         @hasanyrole('admin|developer|director|supervisor')
                         <th>Action</th>
@@ -45,7 +45,7 @@
                             @endif
                         </td>
                         <td>{{ $payment->receipt_number }}</td>
-                        <td>{{ $payment->payment_for ?? 'N/A' }}</td>
+                        <!-- <td>{{ $payment->payment_for ?? 'N/A' }}</td> -->
                         <td>{{ $payment->created_at ? $payment->created_at->format('d M Y') : 'N/A' }}</td>
 
                         @hasanyrole('admin|developer|director|supervisor')
