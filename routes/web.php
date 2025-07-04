@@ -195,6 +195,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::post('/users/delete', [UserController::class, 'destroy'])->name('users.delete');
+        Route::post('/users/upgrade', [UserController::class, 'upgrade'])->name('users.upgrade');
+
 
     Route::get('/profile', function () {
         return view('profile');

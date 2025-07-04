@@ -20,7 +20,10 @@ class TransportRoute extends Model
         'fee' => 'decimal:2',
         'distance_km' => 'decimal:2',
     ];
-
+   protected $table = 'transport_routes';
+    protected $primaryKey = 'route_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
     public function stops()
     {
         return $this->hasMany(TransportStop::class, 'route_id');
