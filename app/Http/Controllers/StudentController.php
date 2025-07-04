@@ -559,20 +559,20 @@ class StudentController extends Controller
 
 
     // AJAX: Get students by class ID
-    // public function getByClass($classId)
-    // {
-    //     $students = Student::where('class_id', $classId)
-    //         ->select('id', 'first_name', 'middle_name', 'last_name')
-    //         ->get()
-    //         ->map(function ($student) {
-    //             return [
-    //                 'id' => $student->id,
-    //                 'full_name' => trim("{$student->first_name} {$student->middle_name} {$student->last_name}")
-    //             ];
-    //         });
+    public function getByClass($classId)
+    {
+        $students = Student::where('class_id', $classId)
+            ->select('id', 'first_name', 'middle_name', 'last_name')
+            ->get()
+            ->map(function ($student) {
+                return [
+                    'id' => $student->id,
+                    'full_name' => trim("{$student->first_name} {$student->middle_name} {$student->last_name}")
+                ];
+            });
 
-    //     return response()->json($students);
-    // }
+        return response()->json($students);
+    }
 
 
     // AJAX: Get balance for student and term
