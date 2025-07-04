@@ -27,11 +27,11 @@
 
             <div class="card-body p-0">
 
-            <div class="text-center mb-3">
+            <!-- <div class="text-center mb-3">
                 <h5 class="fw-bold">Filter Student Payment History</h5>
-            </div>
+            </div> -->
             {{-- Filter form --}}
-            <form method="GET" action="{{ route('fee-payments.index') }}" class="row justify-content-center g-3 mb-4">
+            <!-- <form method="GET" action="{{ route('fee-payments.index') }}" class="row justify-content-center g-3 mb-4">
                 <div class="col-md-4">
                     <label for="filter_class_id" class="form-label">Stream</label>
                     <select id="filter_class_id" name="filter_class_id" class="form-select">
@@ -55,7 +55,7 @@
                 <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100">Filter</button>
                 </div>
-            </form>
+            </form> -->
 
 
             @if(request('student_id'))
