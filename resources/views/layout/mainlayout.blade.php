@@ -125,66 +125,7 @@
 
 @component('components.modalpopup') @endcomponent
 
-@if ($showPwaPopup)
-<!-- 📱 PWA Install Modal -->
-<div id="pwa-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-[9999]">
-    <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
-        <h3 class="font-bold text-lg mb-2">Install JavaPA</h3>
-        <p class="text-gray-600 mb-4">For better experience with notifications</p>
-        <div class="flex justify-end space-x-3">
-            <button id="pwa-later" class="px-4 py-2 text-gray-600 hover:text-gray-800">Later</button>
-            <button id="pwa-install" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Install</button>
-        </div>
-    </div>
-</div>
 
-<script>
-    if ('serviceWorker' in navigator) {
-        let deferredPrompt;
-        const popup = document.getElementById('pwa-popup');
-        const installBtn = document.getElementById('pwa-install');
-        const laterBtn = document.getElementById('pwa-later');
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            if (!isMobile) return;
-
-            e.preventDefault();
-            deferredPrompt = e;
-
-            setTimeout(() => {
-                if (!localStorage.getItem('pwaPromptDismissed') && popup) {
-                    popup.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                }
-            }, 5000);
-        });
-
-        if (installBtn && laterBtn) {
-            installBtn.addEventListener('click', async () => {
-                popup.classList.add('hidden');
-                document.body.style.overflow = '';
-                localStorage.setItem('pwaPromptDismissed', 'true');
-
-                if (deferredPrompt) {
-                    try {
-                        await deferredPrompt.prompt();
-                        deferredPrompt = null;
-                    } catch (err) {
-                        console.error('Install failed:', err);
-                    }
-                }
-            });
-
-            laterBtn.addEventListener('click', () => {
-                popup.classList.add('hidden');
-                document.body.style.overflow = '';
-                localStorage.setItem('pwaPromptDismissed', 'true');
-            });
-        }
-    }
-</script>
-@endif
 
 @include('layout.partials.footer-scripts')
 </body>
