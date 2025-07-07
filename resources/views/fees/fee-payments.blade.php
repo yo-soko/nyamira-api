@@ -27,42 +27,7 @@
 
             <div class="card-body p-0">
 
-            <div class="text-center mb-3">
-                <h5 class="fw-bold">Filter Student Payment History</h5>
-            </div>
-            {{-- Filter form --}}
-            <form method="GET" action="{{ route('fee-payments.index') }}" class="row justify-content-center g-3 mb-4">
-                <div class="col-md-4">
-                    <label for="filter_class_id" class="form-label">Stream</label>
-                    <select id="filter_class_id" name="filter_class_id" class="form-select">
-                        <option value="">-- All Streams --</option>
-                        @foreach($classLevels as $class)
-                            <option value="{{ $class->id }}" {{ request('filter_class_id') == $class->id ? 'selected' : '' }}>
-                                {{ $class->level->level_name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
-                <div class="col-md-4">
-                    <label for="filter_student_id" class="form-label">Student</label>
-                    <select id="filter_student_id" name="student_id" class="form-select" o>
-                        <option value="">-- All Students --</option>
-                        {{-- JS will populate this --}}
-                    </select>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
-                </div>
-            </form>
-
-
-            @if(request('student_id'))
-                <div class="alert alert-info text-center">
-                    Showing payment history for <strong>{{ $students->firstWhere('id', request('student_id'))?->full_name ?? 'Selected Student' }}</strong>
-                </div>
-            @endif
 
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Payments Table</h5>
@@ -85,41 +50,7 @@
     document.addEventListener('DOMContentLoaded', function () {
 
 
-        // Filter Section Elements
-        const filterClassSelect = document.getElementById('filter_class_id');
-        const filterStudentSelect = document.getElementById('filter_student_id');
 
-        function loadFilteredStudents(classId) {
-            filterStudentSelect.innerHTML = '<option value="">-- All Students --</option>';
-            if (!classId) return;
-
-            fetch(`/filter/students/by-class/${classId}`)
-                .then(res => res.json())
-                .then(data => {
-                    data.forEach(student => {
-                        const option = document.createElement('option');
-                        option.value = student.id;
-                        option.textContent = student.full_name;
-
-                        if (student.id == "{{ request('student_id') }}") {
-                            option.selected = true;
-                        }
-
-                        filterStudentSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Failed to load students:', error);
-                });
-        }
-
-        if (filterClassSelect.value) {
-            loadFilteredStudents(filterClassSelect.value);
-        }
-
-        filterClassSelect.addEventListener('change', function () {
-            loadFilteredStudents(this.value);
-        });
 
 
         let classSelect = document.getElementById('class_id');
