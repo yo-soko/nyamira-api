@@ -45,7 +45,7 @@
                         <strong>{{ $class->level->level_name }} {{ $class->stream->name }}</strong>
                         <br>
                         @foreach($items->pluck('subject.subject_name')->unique() as $subject)
-                          <span class="badge text-white">{{ $subject }}</span>
+                          <span class="badge text-white ">{{ $subject }}</span>
                         @endforeach
                       </div>
                     @endif
@@ -58,8 +58,7 @@
                   <span class="badge bg-{{ $exam->is_analysed ? 'primary' : 'warning' }}">{{ $exam->is_analysed ? 'Yes' : 'No' }}</span>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-warning edit-btn"
-                  
+                  <button class="btn btn-sm btn-primary edit-btn"
                           data-id="{{ $exam->id }}"
                           data-name="{{ $exam->name }}"
                           data-term_id="{{ $exam->term_id }}"
@@ -75,11 +74,13 @@
                           data-bs-target="#edit-exam">
                     Edit
                   </button>
-                  <form action="{{ route('exams.destroy', $exam->id) }}" method="POST" style="display:inline;">
-                    @csrf @method('DELETE')
-                    <button class="btn btn-sm btn-danger"
-                            onclick="return confirm('Are you sure?')">Delete</button>
-                  </form>
+                  <button class="btn btn-sm btn-danger delete-btn"
+                          data-id="{{ $exam->id }}"
+                          data-name="{{ $exam->name }}"
+                          data-bs-toggle="modal"
+                          data-bs-target="#delete-confirmation">
+                    Delete
+                  </button>
                 </td>
               </tr>
               @endforeach
@@ -203,9 +204,29 @@
   </div>
 </div>
 
+<!-- DELETE CONFIRMATION MODAL -->
+<div class="modal fade" id="delete-confirmation" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <form id="delete-form" method="POST" class="modal-content">
+      @csrf @method('DELETE')
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">Delete Exam</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete <strong id="delete-exam-name"></strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger">Delete</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- SUBJECT SELECTION MODAL -->
 <div class="modal fade" id="subject-modal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered modal-md">  <!-- made smaller here -->
+  <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Select Subjects</h5>
@@ -224,7 +245,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
   const subjectModal = new bootstrap.Modal(document.getElementById('subject-modal'));
   const subjectModalBody = document.getElementById('subject-modal-body');
   let selectedSubjects = {};
@@ -232,12 +252,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function setupClassCheckboxes(containerId, isEdit = false) {
     const classCheckboxes = document.querySelectorAll(`${containerId} input[name="class_ids[]"]`);
-
     classCheckboxes.forEach(cb => {
       cb.addEventListener('change', function() {
         if (cb.checked) {
           currentClassId = cb.value;
-
           fetch(`/classes/${currentClassId}/subjects`)
             .then(res => res.json())
             .then(data => {
@@ -263,13 +281,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   setupClassCheckboxes('#class-checkboxes');
   setupClassCheckboxes('#edit-class-checkboxes', true);
-
-  document.getElementById('save-subject-selection').addEventListener('click', function() {
-    const checked = subjectModalBody.querySelectorAll('input[type="checkbox"]:checked');
-    const subjectIds = Array.from(checked).map(cb => cb.value);
-    selectedSubjects[currentClassId] = subjectIds;
-    subjectModal.hide();
-  });
 
   document.querySelector('#add-exam form').addEventListener('submit', function() {
     for (const [classId, subjectIds] of Object.entries(selectedSubjects)) {
@@ -318,10 +329,18 @@ document.addEventListener('DOMContentLoaded', function() {
       map.forEach(item => {
         if (!selectedSubjects[item.class_id]) selectedSubjects[item.class_id] = [];
         selectedSubjects[item.class_id].push(item.subject_id);
-
         const checkbox = document.querySelector(`#edit-class-checkboxes input[value="${item.class_id}"]`);
         if (checkbox) checkbox.checked = true;
       });
+    });
+  });
+
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const id = btn.dataset.id;
+      const name = btn.dataset.name;
+      document.querySelector('#delete-form').action = `/exams/${id}`;
+      document.querySelector('#delete-exam-name').textContent = name;
     });
   });
 
