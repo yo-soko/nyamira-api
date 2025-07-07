@@ -16,15 +16,14 @@ class ExamController extends Controller
         $exams = Exam::with([
             'term',
             'examSubjectsClasses.subject',
-            'examSubjectsClasses.level',
-            'examSubjectsClasses.schoolClass'
+            'examSubjectsClasses.schoolClass.level',
+            'examSubjectsClasses.schoolClass.stream',
         ])->get();
 
         $terms = Term::all();
-        $subjects = Subject::all();
         $classes = SchoolClass::with(['level', 'stream'])->get();
 
-        return view('exams', compact('exams', 'terms', 'subjects', 'classes'));
+        return view('exams', compact('exams', 'terms', 'classes'));
     }
 
     public function store(Request $request)
@@ -32,8 +31,7 @@ class ExamController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'term_id' => 'required|exists:terms,id',
-            'subject_ids' => 'required|array',
-            'class_ids' => 'required|array',
+            'subject_class_map' => 'required|array',
         ]);
 
         $exam = Exam::create([
@@ -44,19 +42,18 @@ class ExamController extends Controller
             'is_analysed' => $request->has('is_analysed'),
         ]);
 
-        foreach ($request->subject_ids as $subject_id) {
-            foreach ($request->class_ids as $class_id) {
-                $schoolClass = SchoolClass::with('level')->find($class_id);
-                if ($schoolClass) {
-                    ExamSubjectsClasses::create([
-                        'exam_id' => $exam->id,
-                        'subject_id' => $subject_id,
-                        'term_id' => $request->term_id,
-                        'level_id' => $schoolClass->level_id,
-                        'school_class_id' => $schoolClass->id,
-                        'status' => 1,
-                    ]);
-                }
+        foreach ($request->subject_class_map as $pair) {
+            [$class_id, $subject_id] = explode(':', $pair);
+            $schoolClass = SchoolClass::with('level')->find($class_id);
+            if ($schoolClass) {
+                ExamSubjectsClasses::create([
+                    'exam_id' => $exam->id,
+                    'subject_id' => $subject_id,
+                    'term_id' => $request->term_id,
+                    'level_id' => $schoolClass->level_id,
+                    'school_class_id' => $class_id,
+                    'status' => 1,
+                ]);
             }
         }
 
@@ -68,8 +65,7 @@ class ExamController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'term_id' => 'required|exists:terms,id',
-            'subject_ids' => 'required|array',
-            'class_ids' => 'required|array',
+            'subject_class_map' => 'required|array',
         ]);
 
         $exam = Exam::findOrFail($id);
@@ -81,22 +77,21 @@ class ExamController extends Controller
             'is_analysed' => $request->has('is_analysed'),
         ]);
 
-        // remove old subject-class combinations
+        // clear old links
         $exam->examSubjectsClasses()->delete();
 
-        foreach ($request->subject_ids as $subject_id) {
-            foreach ($request->class_ids as $class_id) {
-                $schoolClass = SchoolClass::with('level')->find($class_id);
-                if ($schoolClass) {
-                    ExamSubjectsClasses::create([
-                        'exam_id' => $exam->id,
-                        'subject_id' => $subject_id,
-                        'term_id' => $request->term_id,
-                        'level_id' => $schoolClass->level_id,
-                        'school_class_id' => $schoolClass->id,
-                        'status' => 1,
-                    ]);
-                }
+        foreach ($request->subject_class_map as $pair) {
+            [$class_id, $subject_id] = explode(':', $pair);
+            $schoolClass = SchoolClass::with('level')->find($class_id);
+            if ($schoolClass) {
+                ExamSubjectsClasses::create([
+                    'exam_id' => $exam->id,
+                    'subject_id' => $subject_id,
+                    'term_id' => $request->term_id,
+                    'level_id' => $schoolClass->level_id,
+                    'school_class_id' => $class_id,
+                    'status' => 1,
+                ]);
             }
         }
 
@@ -112,14 +107,10 @@ class ExamController extends Controller
         return redirect()->route('exams')->with('success', 'Exam deleted successfully.');
     }
 
-    /**
-     * Optional: if you want to filter subjects for specific classes dynamically
-     */
     public function getSubjectsForClasses($ids)
     {
         $classIds = explode(',', $ids);
 
-        // if you have subject-class pivot
         $subjects = Subject::whereHas('classes', function ($q) use ($classIds) {
             $q->whereIn('school_classes.id', $classIds);
         })->select('id', 'subject_name')->get();
