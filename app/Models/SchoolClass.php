@@ -60,3 +60,4 @@ class SchoolClass extends Model
         return $this->hasMany(StudentTransport::class);
     }
 }
+

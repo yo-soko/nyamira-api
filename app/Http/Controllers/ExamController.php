@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Exam;
 use App\Models\Term;
 use App\Models\Subject;
-use App\Models\ClassLevel;
+use App\Models\SchoolClass;
 use App\Models\ExamSubjectsClasses;
 use Illuminate\Http\Request;
 
@@ -13,12 +13,18 @@ class ExamController extends Controller
 {
     public function index()
     {
-        $exams = Exam::with(['term', 'examSubjectsClasses.subject', 'examSubjectsClasses.level'])->get();
+        $exams = Exam::with([
+            'term',
+            'examSubjectsClasses.subject',
+            'examSubjectsClasses.level',
+            'examSubjectsClasses.schoolClass'
+        ])->get();
+
         $terms = Term::all();
         $subjects = Subject::all();
-        $levels = ClassLevel::all();
+        $classes = SchoolClass::with(['level', 'stream'])->get();
 
-        return view('exams', compact('exams', 'terms', 'subjects', 'levels'));
+        return view('exams', compact('exams', 'terms', 'subjects', 'classes'));
     }
 
     public function store(Request $request)
@@ -39,14 +45,18 @@ class ExamController extends Controller
         ]);
 
         foreach ($request->subject_ids as $subject_id) {
-            foreach ($request->class_ids as $level_id) {
-                ExamSubjectsClasses::create([
-                    'exam_id' => $exam->id,
-                    'subject_id' => $subject_id,
-                    'term_id' => $request->term_id,
-                    'level_id' => $level_id,
-                    'status' => 1,
-                ]);
+            foreach ($request->class_ids as $class_id) {
+                $schoolClass = SchoolClass::with('level')->find($class_id);
+                if ($schoolClass) {
+                    ExamSubjectsClasses::create([
+                        'exam_id' => $exam->id,
+                        'subject_id' => $subject_id,
+                        'term_id' => $request->term_id,
+                        'level_id' => $schoolClass->level_id,
+                        'school_class_id' => $schoolClass->id,
+                        'status' => 1,
+                    ]);
+                }
             }
         }
 
@@ -71,18 +81,22 @@ class ExamController extends Controller
             'is_analysed' => $request->has('is_analysed'),
         ]);
 
-        // remove old
+        // remove old subject-class combinations
         $exam->examSubjectsClasses()->delete();
 
         foreach ($request->subject_ids as $subject_id) {
-            foreach ($request->class_ids as $level_id) {
-                ExamSubjectsClasses::create([
-                    'exam_id' => $exam->id,
-                    'subject_id' => $subject_id,
-                    'term_id' => $request->term_id,
-                    'level_id' => $level_id,
-                    'status' => 1,
-                ]);
+            foreach ($request->class_ids as $class_id) {
+                $schoolClass = SchoolClass::with('level')->find($class_id);
+                if ($schoolClass) {
+                    ExamSubjectsClasses::create([
+                        'exam_id' => $exam->id,
+                        'subject_id' => $subject_id,
+                        'term_id' => $request->term_id,
+                        'level_id' => $schoolClass->level_id,
+                        'school_class_id' => $schoolClass->id,
+                        'status' => 1,
+                    ]);
+                }
             }
         }
 
@@ -96,5 +110,20 @@ class ExamController extends Controller
         $exam->delete();
 
         return redirect()->route('exams')->with('success', 'Exam deleted successfully.');
+    }
+
+    /**
+     * Optional: if you want to filter subjects for specific classes dynamically
+     */
+    public function getSubjectsForClasses($ids)
+    {
+        $classIds = explode(',', $ids);
+
+        // if you have subject-class pivot
+        $subjects = Subject::whereHas('classes', function ($q) use ($classIds) {
+            $q->whereIn('school_classes.id', $classIds);
+        })->select('id', 'subject_name')->get();
+
+        return response()->json($subjects);
     }
 }

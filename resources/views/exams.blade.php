@@ -1,6 +1,7 @@
 @extends('layout.mainlayout')
 @section('content')
 @include('layout.toast')
+
 <div class="page-wrapper">
     <div class="content">
         <div class="page-header d-flex justify-content-between">
@@ -41,23 +42,26 @@
                                     @endforeach
                                 </td>
                                 <td>
-                                    @foreach($exam->examSubjectsClasses->pluck('level.level_name')->unique() as $level)
-                                        <span class="badge bg-success">{{ $level }}</span>
+                                    @foreach($exam->examSubjectsClasses->pluck('school_class_id')->unique() as $classId)
+                                        @php
+                                            $class = \App\Models\SchoolClass::with('level','stream')->find($classId);
+                                        @endphp
+                                        @if($class)
+                                            <span class="badge bg-success">
+                                                {{ $class->level->level_name ?? '' }} {{ $class->stream->name ?? '' }}
+                                            </span>
+                                        @endif
                                     @endforeach
                                 </td>
                                 <td>
-                                    @if($exam->status)
-                                        <span class="badge bg-success">Active</span>
-                                    @else
-                                        <span class="badge bg-danger">Inactive</span>
-                                    @endif
+                                    <span class="badge bg-{{ $exam->status ? 'success' : 'danger' }}">
+                                        {{ $exam->status ? 'Active' : 'Inactive' }}
+                                    </span>
                                 </td>
                                 <td>
-                                    @if($exam->is_analysed)
-                                        <span class="badge bg-primary">Yes</span>
-                                    @else
-                                        <span class="badge bg-warning">No</span>
-                                    @endif
+                                    <span class="badge bg-{{ $exam->is_analysed ? 'primary' : 'warning' }}">
+                                        {{ $exam->is_analysed ? 'Yes' : 'No' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <button class="btn btn-sm btn-warning edit-btn"
@@ -67,13 +71,12 @@
                                         data-status="{{ $exam->status }}"
                                         data-is_analysed="{{ $exam->is_analysed }}"
                                         data-subjects="{{ json_encode($exam->examSubjectsClasses->pluck('subject_id')->unique()) }}"
-                                        data-classes="{{ json_encode($exam->examSubjectsClasses->pluck('level_id')->unique()) }}"
+                                        data-classes="{{ json_encode($exam->examSubjectsClasses->pluck('school_class_id')->unique()) }}"
                                         data-bs-toggle="modal" data-bs-target="#edit-exam">
                                         Edit
                                     </button>
                                     <form action="{{ route('exams.destroy', $exam->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
+                                        @csrf @method('DELETE')
                                         <button class="btn btn-sm btn-danger"
                                             onclick="return confirm('Are you sure?')">Delete</button>
                                     </form>
@@ -112,22 +115,19 @@
                 </div>
                 <div class="col-md-6">
                     <label>Subjects</label>
-                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;">
-                        @foreach($subjects as $subject)
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="subject_ids[]" value="{{ $subject->id }}">
-                            <label class="form-check-label">{{ $subject->subject_name }}</label>
-                        </div>
-                        @endforeach
+                    <div class="border p-2 rounded" id="add-subject-checkboxes" style="max-height:200px;overflow:auto;">
+                        <div class="text-muted">Select classes to load subjects</div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <label>Classes</label>
-                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;">
-                        @foreach($levels as $level)
+                    <div class="border p-2 rounded" id="add-class-checkboxes" style="max-height:200px;overflow:auto;">
+                        @foreach($classes as $class)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $level->id }}">
-                            <label class="form-check-label">{{ $level->level_name }}</label>
+                            <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $class->id }}">
+                            <label class="form-check-label">
+                                {{ $class->level->level_name }} {{ $class->stream->name }}
+                            </label>
                         </div>
                         @endforeach
                     </div>
@@ -153,101 +153,43 @@
     </div>
 </div>
 
-<!-- EDIT MODAL -->
-<div class="modal fade" id="edit-exam" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form method="POST" id="editForm" class="modal-content">
-            @csrf
-            @method('PUT')
-            <input type="hidden" name="id" id="edit-id">
-            <div class="modal-header">
-                <h5 class="modal-title">Edit Exam</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body row g-3">
-                <div class="col-md-12">
-                    <label>Exam Name</label>
-                    <input type="text" name="name" id="edit-name" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label>Term</label>
-                    <select name="term_id" id="edit-term" class="form-select" required>
-                        @foreach($terms as $term)
-                            <option value="{{ $term->id }}">{{ $term->term_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label>Subjects</label>
-                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;" id="edit-subject-checkboxes">
-                        @foreach($subjects as $subject)
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="subject_ids[]" value="{{ $subject->id }}" id="edit-subject{{ $subject->id }}">
-                            <label class="form-check-label" for="edit-subject{{ $subject->id }}">{{ $subject->subject_name }}</label>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <label>Classes</label>
-                    <div class="border p-2 rounded" style="max-height:200px;overflow:auto;" id="edit-class-checkboxes">
-                        @foreach($levels as $level)
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $level->id }}" id="edit-class{{ $level->id }}">
-                            <label class="form-check-label" for="edit-class{{ $level->id }}">{{ $level->level_name }}</label>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <label>Status</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="status" id="edit-status" value="1"> Active
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <label>Analysed</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="is_analysed" id="edit-analysed" value="1"> Analysed
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary">Update</button>
-            </div>
-        </form>
-    </div>
-</div>
-
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            let id = this.dataset.id;
-            let name = this.dataset.name;
-            let term_id = this.dataset.term_id;
-            let status = this.dataset.status;
-            let analysed = this.dataset.is_analysed;
-            let subjects = JSON.parse(this.dataset.subjects);
-            let classes = JSON.parse(this.dataset.classes);
+document.addEventListener('DOMContentLoaded', function() {
+    const classCheckboxes = document.querySelectorAll('#add-class-checkboxes input[name="class_ids[]"]');
+    const subjectContainer = document.getElementById('add-subject-checkboxes');
 
-            document.getElementById('edit-id').value = id;
-            document.getElementById('edit-name').value = name;
-            document.getElementById('edit-term').value = term_id;
-            document.getElementById('edit-status').checked = status == 1;
-            document.getElementById('edit-analysed').checked = analysed == 1;
-
-            document.querySelectorAll('#edit-subject-checkboxes input').forEach(cb => {
-                cb.checked = subjects.includes(parseInt(cb.value));
-            });
-            document.querySelectorAll('#edit-class-checkboxes input').forEach(cb => {
-                cb.checked = classes.includes(parseInt(cb.value));
-            });
-
-            document.getElementById('editForm').action = `/exams/${id}`;
-        });
+    classCheckboxes.forEach(cb => {
+        cb.addEventListener('change', updateSubjects);
     });
+
+    function updateSubjects() {
+        let checkedClasses = Array.from(classCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+        if (checkedClasses.length === 0) {
+            subjectContainer.innerHTML = "<div class='text-muted'>Select classes to load subjects</div>";
+            return;
+        }
+
+        fetch(`/classes/${checkedClasses.join(',')}/subjects`)
+            .then(res => res.json())
+            .then(data => {
+                let uniqueSubjects = {};
+                data.forEach(subject => {
+                    uniqueSubjects[subject.id] = subject.subject_name;
+                });
+
+                let html = "";
+                for (const [id, name] of Object.entries(uniqueSubjects)) {
+                    html += `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="subject_ids[]" value="${id}" checked>
+                            <label class="form-check-label">${name}</label>
+                        </div>
+                    `;
+                }
+                subjectContainer.innerHTML = html;
+            });
+    }
 });
 </script>
 @endsection

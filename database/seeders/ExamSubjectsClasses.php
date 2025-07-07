@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Exam;
 use App\Models\Subject;
 use App\Models\ClassLevel;
+use App\Models\SchoolClass;
 use Illuminate\Support\Facades\DB;
 
 class ExamSubjectsClasses extends Seeder
@@ -24,20 +25,30 @@ class ExamSubjectsClasses extends Seeder
         $subjects = Subject::all();
         $levels = ClassLevel::all();
 
-        // For each level and subject, assign to the exam
         foreach ($levels as $level) {
-            foreach ($subjects as $subject) {
-                DB::table('exam_subjects_classes')->updateOrInsert(
-                    [
-                        'exam_id' => $exam->id,
-                        'term_id' => 1,
-                        'subject_id' => $subject->id,
-                        'level_id' => $level->id,
-                    ]
-                );
+            // get classes for this level
+            $classes = SchoolClass::where('level_id', $level->id)->get();
+
+            foreach ($classes as $class) {
+                foreach ($subjects as $subject) {
+                    DB::table('exam_subjects_classes')->updateOrInsert(
+                        [
+                            'exam_id' => $exam->id,
+                            'term_id' => 1,
+                            'subject_id' => $subject->id,
+                            'level_id' => $level->id,
+                            'school_class_id' => $class->id,
+                        ],
+                        [
+                            'status' => 1,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+                }
             }
         }
 
-        echo "Exam subjects and levels assigned successfully.\n";
+        echo "Exam subjects, levels, and school classes assigned successfully.\n";
     }
 }
