@@ -344,6 +344,17 @@ class FeePaymentsController extends Controller
     }
 
 
+    public function printBalances()
+    {
+        $students = \App\Models\Student::with(['schoolClass.level', 'schoolClass.stream'])
+            ->where('current_balance', '>', 0)
+            ->get();
+
+        return view('fees.partials.print_balances', compact('students'));
+    }
+
+
+
 
 
 

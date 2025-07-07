@@ -11,11 +11,16 @@
                 <h6>Manage Student Payments</h6>
             </div>
             @hasanyrole('admin|developer|manager|director|supervisor')
-            <div class="page-btn">
+            <div class="page-btn d-flex gap-2">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
                     <i class="ti ti-circle-plus me-1"></i>Add Fee Payment
                 </a>
+
+                <a href="{{ route('print.fee.balances') }}" target="_blank" class="btn btn-outline-secondary">
+                    <i class="ti ti-printer me-1"></i> Print Balances
+                </a>
             </div>
+
             @endhasanyrole
         </div>
 

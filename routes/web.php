@@ -366,6 +366,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fee-dashboard/print', [FeeDashboardController::class, 'print'])->name('fee.dashboard.print')->middleware('auth');
     Route::get('/fee-dashboard/download', [\App\Http\Controllers\FeePaymentsController::class, 'download'])->name('fee.dashboard.download');
     Route::post('/get-payment-options', [FeePaymentsController::class, 'getPaymentOptions'])->name('get.payment.options');
+    Route::get('/print/fee-balances', [App\Http\Controllers\FeePaymentsController::class, 'printBalances'])->name('print.fee.balances');
 
 
 
