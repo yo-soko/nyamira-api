@@ -38,10 +38,27 @@
                     <a href="#" data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a>
                 </div>
             </div>
+                <form method="GET" action="{{ route('fee-payments.index') }}" class="mb-3 row">
+                    <div class="col-md-4">
+                        <input type="text" name="search" class="form-control" placeholder="Search student..." value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+                @if(request('search'))
+                    <div class="alert alert-info">
+                        Showing results for "<strong>{{ request('search') }}</strong>".
+                        <a href="{{ route('fee-payments.index') }}">Clear search</a>
+                    </div>
+                @endif
+
+
 
                 <div class="table-responsive">
                     @include('fees.partials.payment_table')
                 </div>
+
             </div>
         </div>
     </div>
@@ -169,6 +186,23 @@
 
 {{-- Add Payment Modal --}}
 @include('fees.partials.payment_modal')
+
+{{-- Success Toast --}}
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                Payment saved successfully!
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+
+
 @endsection
+
+
 
 

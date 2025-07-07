@@ -14,6 +14,8 @@ use App\Models\FeeStructure;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 
+
+
 class FeePaymentsController extends Controller
 {
     public function index(Request $request)
@@ -39,7 +41,15 @@ class FeePaymentsController extends Controller
             $query->where('student_id', $request->student_id);
         }
 
-        $payments = $query->latest()->get();
+        if ($request->filled('search')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('first_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('student_reg_number', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $payments = $query->latest()->paginate(10);
 
         // Get all streams
         $streams = Stream::all();
@@ -118,7 +128,7 @@ class FeePaymentsController extends Controller
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
             'description' => 'required|string|in:Tuition Fee,Meals,Transport',
-            'receipt_number' => 'nullable|string|unique:fee_payments,receipt_number',
+            'receipt_number' => 'required|string|unique:fee_payments,receipt_number',
 
 
         ]);
@@ -157,7 +167,7 @@ class FeePaymentsController extends Controller
             'class_id' => 'required|exists:school_classes,id',
             'term_id' => 'required|exists:terms,id',
             'student_id' => 'required|exists:students,id',
-            'receipt_number' => 'nullable|string',
+            'receipt_number' => 'required|string',
             'description' => 'nullable|string',
             'amount_paid' => 'required|numeric',
             'payment_mode' => 'required|in:Cash,Mpesa,Bank',
