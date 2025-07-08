@@ -4,7 +4,7 @@
 @section('content')
 <div class="page-wrapper">
     <div class="content">
-    @include('layout.toast')
+    <!-- @include('layout.toast') -->
         <div class="page-header d-flex justify-content-between align-items-center">
             <div class="page-title">
                 <h4>Fee Payments</h4>
@@ -104,10 +104,26 @@
                     // Reset form
                     addPaymentForm.reset();
 
+                    // // Show success toast
+                    // const toastEl = document.getElementById('successToast');
+                    // const toast = new bootstrap.Toast(toastEl);
+                    // toast.show();
+
                     // Show success toast
-                    const toastEl = document.getElementById('successToast');
-                    const toast = new bootstrap.Toast(toastEl);
-                    toast.show();
+                    const toastEl = document.createElement('div');
+                    toastEl.className = 'toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 p-3';
+                    toastEl.role = 'alert';
+                    toastEl.innerHTML = `
+                        <div class="d-flex">
+                            <div class="toast-body">Payment saved successfully!</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                        </div>
+                    `;
+                    document.body.appendChild(toastEl);
+                    new bootstrap.Toast(toastEl).show();
+                    setTimeout(() => toastEl.remove(), 2000); //
+
+
 
                     // Refresh the payments table
                     fetch("{{ route('fee-payments.index') }}")
@@ -251,18 +267,6 @@
 
 {{-- Add Payment Modal --}}
 @include('fees.partials.payment_modal')
-
-{{-- Success Toast --}}
-<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
-    <div id="successToast" class="toast align-items-center text-bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body">
-                Payment saved successfully!
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-    </div>
-</div>
 
 
 
