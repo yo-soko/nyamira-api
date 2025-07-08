@@ -134,8 +134,6 @@ class FeePaymentsController extends Controller
         ]);
 
         try {
-            \Log::info('Attempting to create fee payment', $validated);
-
             $payment = FeePayment::create([
                 'class_id' => $validated['class_id'],
                 'term_id' => $validated['term_id'],
@@ -145,17 +143,15 @@ class FeePaymentsController extends Controller
                 'description' => $validated['description'],
                 'receipt_number' => $validated['receipt_number'],
                 'user_id' => auth()->id(),
-            ]);
+            ])->refresh();
 
-            // Deduct from student balance
             $student = Student::find($validated['student_id']);
             $student->current_balance -= $validated['amount_paid'];
             $student->save();
 
-            return redirect()->back()->with('success', 'Payment recorded successfully.');
+            return response()->json(['success' => true, 'payment_id' => $payment->id]);
         } catch (\Exception $e) {
-            \Log::error('Payment creation error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to record payment. Please try again.');
+            return response()->json(['success' => false, 'message' => 'Failed to record payment.']);
         }
 
     }

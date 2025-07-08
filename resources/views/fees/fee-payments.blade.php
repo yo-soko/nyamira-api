@@ -72,9 +72,69 @@
     document.addEventListener('DOMContentLoaded', function () {
 
 
+        const addPaymentForm = document.getElementById('addPaymentForm');
+        const savePaymentBtn = document.getElementById('savePaymentBtn');
+
+        addPaymentForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            savePaymentBtn.disabled = true;
+            savePaymentBtn.textContent = 'Saving...';
+
+            const formData = new FormData(addPaymentForm);
+
+            fetch(addPaymentForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Network response not ok");
+                return res.json(); // Expecting JSON response
+            })
+
+            .then(data => {
+                if (data.success) {
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addPaymentModal'));
+                    modal.hide();
+
+                    // Reset form
+                    addPaymentForm.reset();
+
+                    // Show success toast
+                    const toastEl = document.getElementById('successToast');
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+
+                    // Refresh the payments table
+                    fetch("{{ route('fee-payments.index') }}")
+                        .then(res => res.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, "text/html");
+                            const newTableHtml = doc.querySelector(".table-responsive").innerHTML;
+                            document.querySelector(".table-responsive").innerHTML = newTableHtml;
+                        });
+
+                } else {
+                    alert('Something went wrong: ' + (data.message || 'Unknown error'));
+                }
+            })
 
 
+            .catch(err => {
+                alert('Submission failed: ' + err.message);
+            })
+            .finally(() => {
+                savePaymentBtn.disabled = false;
+                savePaymentBtn.textContent = 'Save Payment';
+            });
+        });
 
+        //end
         let classSelect = document.getElementById('class_id');
         let termSelect = document.getElementById('term_id');
         let studentSelect = document.getElementById('student_id');
