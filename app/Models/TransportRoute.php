@@ -21,7 +21,6 @@ class TransportRoute extends Model
         'distance_km' => 'decimal:2',
     ];
    protected $table = 'transport_routes';
-    protected $primaryKey = 'route_id';
     public $incrementing = true;
     protected $keyType = 'int';
     public function stops()
