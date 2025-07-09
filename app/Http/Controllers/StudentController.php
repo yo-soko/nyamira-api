@@ -209,7 +209,7 @@ class StudentController extends Controller
                 'string',
                 'max:100',
                 Rule::unique('students', 'student_reg_number')->ignore($request->student_id),
-             ],
+            ],
             'studentStatus' => 'required|boolean',
             'studentGender' => 'required|string|max:10',
             'studentTerm' => 'required|exists:terms,id',
@@ -239,7 +239,11 @@ class StudentController extends Controller
         try {
             $student = Student::findOrFail($request->student_id);
 
-            // Update Student Main Info
+            // Normalize checkboxes
+            $needsMeals = $request->boolean('needs_meals');
+            $needsTransport = $request->boolean('needs_transport');
+
+            // Update main student info
             $student->update([
                 'first_name' => $request->first_name,
                 'second_name' => $request->second_name,
@@ -253,32 +257,25 @@ class StudentController extends Controller
                 'term_id' => $request->studentTerm,
             ]);
 
-            // Guardian update or create
-            $guardianData = [
-                'guardian_first_name' => $request->guardian_first_name,
-                'guardian_last_name' => $request->guardian_last_name,
-                'guardian_relationship' => $request->guardian_relationship,
-                'first_phone' => $request->guardian_first_phone,
-                'second_phone' => $request->guardian_second_phone,
-                'id_number' => $request->id_number,
-                'email' => $request->email,
-                'address' => $request->address,
-                'guardian_about' => $request->guardian_about,
-            ];
+            // Update or create guardian
             $student->guardian()->updateOrCreate(
                 ['student_id' => $student->id],
-                $guardianData
+                [
+                    'guardian_first_name' => $request->guardian_first_name,
+                    'guardian_last_name' => $request->guardian_last_name,
+                    'guardian_relationship' => $request->guardian_relationship,
+                    'first_phone' => $request->guardian_first_phone,
+                    'second_phone' => $request->guardian_second_phone,
+                    'id_number' => $request->id_number,
+                    'email' => $request->email,
+                    'address' => $request->address,
+                    'guardian_about' => $request->guardian_about,
+                ]
             );
 
-            // Meals update or delete
-            if (
-                ($request->has('needs_meals') && $request->needs_meals == '1' && $request->filled('meal_plan_id')) ||
-                (!$request->has('needs_meals') && $hadMealsBefore)  // keep meal if previously selected and not unchecked
-            ) {
-                $mealPlanId = $request->meal_plan_id ?? $student->meal?->meal_plan_id;
-
-                $mealPlan = MealPlan::findOrFail($mealPlanId);
-
+            // Handle Meals
+            if ($needsMeals && $request->filled('meal_plan_id')) {
+                $mealPlan = MealPlan::findOrFail($request->meal_plan_id);
                 $student->meal()->updateOrCreate(
                     ['student_id' => $student->id, 'term_id' => $request->studentTerm],
                     [
@@ -291,17 +288,11 @@ class StudentController extends Controller
                 $student->meal()->where('term_id', $request->studentTerm)->delete();
             }
 
-
-            // Transport update or delete
-            if (
-                ($request->has('needs_transport') && $request->needs_transport == '1' && $request->filled('transport_route_id')) ||
-                (!$request->has('needs_transport') && $hadTransportBefore)
-            ) {
-                $routeId = $request->transport_route_id ?? $student->transport?->route_id;
-                $route = TransportRoute::findOrFail($routeId);
-
+            // Handle Transport
+            if ($needsTransport && $request->filled('transport_route_id')) {
+                $route = TransportRoute::findOrFail($request->transport_route_id);
+                $transportOption = $request->transport_option ?? 'two_way';
                 $baseFee = $route->fee;
-                $transportOption = $request->transport_option ?? $student->transport?->transport_type ?? 'two_way';
                 $fee = $transportOption === 'one_way' ? ($baseFee / 2) + 500 : $baseFee;
 
                 $student->transport()->updateOrCreate(
@@ -317,46 +308,15 @@ class StudentController extends Controller
                 $student->transport()->where('term_id', $request->studentTerm)->delete();
             }
 
-
-            // Subjects sync
+            // Subjects
             if ($request->filled('studentSubjects')) {
-
                 $student->subjects()->sync($request->studentSubjects);
-
             } else {
                 $student->subjects()->detach();
             }
 
-            // // Step 1: Get current balance before changes
-            // $previousBalance = $student->current_balance;
-
-            // // Step 2: Calculate new expected fees
-            // $feeStructure = FeeStructure::where('level_id', $student->class->level_id)
-            //     ->where('term_id', $request->studentTerm)
-            //     ->sum('amount');
-
-            // $mealFee = $student->meal->meal_fee ?? 0;
-            // $transportFee = $student->transport->transport_fee ?? 0;
-            // $newExpected = $feeStructure + $mealFee + $transportFee;
-
-            // // Step 3: Get total paid in the new term
-            // $newTermPaid = FeePayment::where('student_id', $student->id)
-            //     ->where('term_id', $request->studentTerm)
-            //     ->sum('amount_paid');
-
-            // // Step 4: Update current_balance (carry-forward logic)
-            // $student->current_balance = ($newExpected - $newTermPaid) + $previousBalance;
-            // $student->save();
-
-
-            // Step 1: Get updated student
+            // Recalculate current_balance
             $student = Student::findOrFail($request->student_id);
-            $oldTermId = $student->term_id;
-            $oldClassId = $student->class_id;
-
-            $hadMealsBefore = $student->meal()->where('term_id', $oldTermId)->exists();
-            $hadTransportBefore = $student->transport()->where('term_id', $oldTermId)->exists();
-
             $currentTermId = (int) $request->studentTerm;
             $currentClassId = (int) $request->student_class;
             $currentLevelId = SchoolClass::find($currentClassId)?->level_id;
@@ -364,10 +324,11 @@ class StudentController extends Controller
             if (!$currentLevelId) {
                 $student->current_balance = 0;
                 $student->save();
+                DB::commit();
                 return redirect()->back()->with('success', 'Student updated (no level detected).');
             }
 
-            // Step 2: CURRENT TERM expected (for new class/level)
+            // Current term fees
             $currentTuition = FeeStructure::where('level_id', $currentLevelId)
                 ->where('term_id', $currentTermId)
                 ->sum('amount');
@@ -380,21 +341,15 @@ class StudentController extends Controller
                 ->where('term_id', $currentTermId)
                 ->value('transport_fee') ?? 0;
 
-
             $currentExpected = $currentTuition + $currentMeal + $currentTransport;
 
-            // Step 3: Paid in current term
             $currentPaid = FeePayment::where('student_id', $student->id)
                 ->where('term_id', $currentTermId)
                 ->sum('amount_paid');
 
-            // Step 4: CARRY FORWARD: from all previous terms/levels
+            // Carry forward from previous terms
             $previousTerms = Term::where('id', '<', $currentTermId)->pluck('id');
-
-            // Get all fee structures for student's previous classes
-            $studentClasses = Student::where('id', $student->id)
-                ->pluck('class_id');
-
+            $studentClasses = Student::where('id', $student->id)->pluck('class_id');
             $previousLevels = SchoolClass::whereIn('id', $studentClasses)
                 ->pluck('level_id')
                 ->unique();
@@ -419,12 +374,9 @@ class StudentController extends Controller
 
             $carryForward = $previousExpected - $previousPaid;
 
-            // Step 5: Final balance
+            // Final balance
             $student->current_balance = $currentExpected - $currentPaid + $carryForward;
             $student->save();
-
-
-
 
             DB::commit();
 
