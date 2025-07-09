@@ -275,6 +275,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/exams', [ExamController::class, 'store'])->name('exams.store');
     Route::put('/exams/{id}', [ExamController::class, 'update'])->name('exams.update');
     Route::delete('/exams/{id}', [ExamController::class, 'destroy'])->name('exams.destroy');
+    Route::get('/classes/{ids}/subjects', [ExamController::class, 'getSubjectsForClasses']);
+    Route::get('/exam/class-subjects/{classId}', [App\Http\Controllers\ExamController::class, 'getClassSubjects'])->name('exam.class-subjects');
+
 
     Route::get('/submit-results', [ResultController::class, 'filterForm'])->name('submit-results');
     Route::get('/results-entry', [ResultController::class, 'entryForm'])->name('results.entry');
@@ -363,6 +366,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/fee-dashboard/print', [FeeDashboardController::class, 'print'])->name('fee.dashboard.print')->middleware('auth');
     Route::get('/fee-dashboard/download', [\App\Http\Controllers\FeePaymentsController::class, 'download'])->name('fee.dashboard.download');
     Route::post('/get-payment-options', [FeePaymentsController::class, 'getPaymentOptions'])->name('get.payment.options');
+    Route::get('/print/fee-balances', [App\Http\Controllers\FeePaymentsController::class, 'printBalances'])->name('print.fee.balances');
 
 
 

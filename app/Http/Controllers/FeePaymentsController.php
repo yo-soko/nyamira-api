@@ -14,6 +14,8 @@ use App\Models\FeeStructure;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
 
+
+
 class FeePaymentsController extends Controller
 {
     public function index(Request $request)
@@ -39,7 +41,15 @@ class FeePaymentsController extends Controller
             $query->where('student_id', $request->student_id);
         }
 
-        $payments = $query->latest()->get();
+        if ($request->filled('search')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('first_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('last_name', 'like', '%' . $request->search . '%')
+                  ->orWhere('student_reg_number', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        $payments = $query->latest()->paginate(10);
 
         // Get all streams
         $streams = Stream::all();
@@ -118,14 +128,12 @@ class FeePaymentsController extends Controller
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
             'description' => 'required|string|in:Tuition Fee,Meals,Transport',
-            'receipt_number' => 'nullable|string|unique:fee_payments,receipt_number',
+            'receipt_number' => 'required|string|unique:fee_payments,receipt_number',
 
 
         ]);
 
         try {
-            \Log::info('Attempting to create fee payment', $validated);
-
             $payment = FeePayment::create([
                 'class_id' => $validated['class_id'],
                 'term_id' => $validated['term_id'],
@@ -135,17 +143,15 @@ class FeePaymentsController extends Controller
                 'description' => $validated['description'],
                 'receipt_number' => $validated['receipt_number'],
                 'user_id' => auth()->id(),
-            ]);
+            ])->refresh();
 
-            // Deduct from student balance
             $student = Student::find($validated['student_id']);
             $student->current_balance -= $validated['amount_paid'];
             $student->save();
 
-            return redirect()->back()->with('success', 'Payment recorded successfully.');
+            return response()->json(['success' => true, 'payment_id' => $payment->id]);
         } catch (\Exception $e) {
-            \Log::error('Payment creation error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to record payment. Please try again.');
+            return response()->json(['success' => false, 'message' => 'Failed to record payment.']);
         }
 
     }
@@ -157,7 +163,7 @@ class FeePaymentsController extends Controller
             'class_id' => 'required|exists:school_classes,id',
             'term_id' => 'required|exists:terms,id',
             'student_id' => 'required|exists:students,id',
-            'receipt_number' => 'nullable|string',
+            'receipt_number' => 'required|string',
             'description' => 'nullable|string',
             'amount_paid' => 'required|numeric',
             'payment_mode' => 'required|in:Cash,Mpesa,Bank',
@@ -332,6 +338,17 @@ class FeePaymentsController extends Controller
 
         return back()->with('error', 'Invalid format selected.');
     }
+
+
+    public function printBalances()
+    {
+        $students = \App\Models\Student::with(['schoolClass.level', 'schoolClass.stream'])
+            ->where('current_balance', '>', 0)
+            ->get();
+
+        return view('fees.partials.print_balances', compact('students'));
+    }
+
 
 
 

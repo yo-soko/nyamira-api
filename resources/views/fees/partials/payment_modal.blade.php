@@ -68,7 +68,7 @@
                         <!-- Receipt Number -->
                         <div class="col-md-6 mb-3">
                             <label for="receipt_number" class="form-label">Receipt Number</label>
-                            <input type="text" name="receipt_number" id="receipt_number" class="form-control" placeholder="Enter receipt number">
+                            <input type="text" name="receipt_number" id="receipt_number" class="form-control" placeholder="Enter receipt number" required>
                         </div>
 
                         <!-- Description -->

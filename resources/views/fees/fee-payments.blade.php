@@ -4,18 +4,23 @@
 @section('content')
 <div class="page-wrapper">
     <div class="content">
-    @include('layout.toast')
+    <!-- @include('layout.toast') -->
         <div class="page-header d-flex justify-content-between align-items-center">
             <div class="page-title">
                 <h4>Fee Payments</h4>
                 <h6>Manage Student Payments</h6>
             </div>
             @hasanyrole('admin|developer|manager|director|supervisor')
-            <div class="page-btn">
+            <div class="page-btn d-flex gap-2">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">
                     <i class="ti ti-circle-plus me-1"></i>Add Fee Payment
                 </a>
+
+                <a href="{{ route('print.fee.balances') }}" target="_blank" class="btn btn-outline-secondary">
+                    <i class="ti ti-printer me-1"></i> Print Balances
+                </a>
             </div>
+
             @endhasanyrole
         </div>
 
@@ -27,42 +32,7 @@
 
             <div class="card-body p-0">
 
-            <div class="text-center mb-3">
-                <h5 class="fw-bold">Filter Student Payment History</h5>
-            </div>
-            {{-- Filter form --}}
-            <form method="GET" action="{{ route('fee-payments.index') }}" class="row justify-content-center g-3 mb-4">
-                <div class="col-md-4">
-                    <label for="filter_class_id" class="form-label">Stream</label>
-                    <select id="filter_class_id" name="filter_class_id" class="form-select">
-                        <option value="">-- All Streams --</option>
-                        @foreach($classLevels as $class)
-                            <option value="{{ $class->id }}" {{ request('filter_class_id') == $class->id ? 'selected' : '' }}>
-                                {{ $class->level->level_name ?? 'No Level' }} - {{ $class->stream->name ?? 'No Stream' }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
-                <div class="col-md-4">
-                    <label for="filter_student_id" class="form-label">Student</label>
-                    <select id="filter_student_id" name="student_id" class="form-select" o>
-                        <option value="">-- All Students --</option>
-                        {{-- JS will populate this --}}
-                    </select>
-                </div>
-
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filter</button>
-                </div>
-            </form>
-
-
-            @if(request('student_id'))
-                <div class="alert alert-info text-center">
-                    Showing payment history for <strong>{{ $students->firstWhere('id', request('student_id'))?->full_name ?? 'Selected Student' }}</strong>
-                </div>
-            @endif
 
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Payments Table</h5>
@@ -73,10 +43,27 @@
                     <a href="#" data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a>
                 </div>
             </div>
+                <form method="GET" action="{{ route('fee-payments.index') }}" class="mb-3 row">
+                    <div class="col-md-4">
+                        <input type="text" name="search" class="form-control" placeholder="Search student..." value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+                @if(request('search'))
+                    <div class="alert alert-info">
+                        Showing results for "<strong>{{ request('search') }}</strong>".
+                        <a href="{{ route('fee-payments.index') }}">Clear search</a>
+                    </div>
+                @endif
+
+
 
                 <div class="table-responsive">
                     @include('fees.partials.payment_table')
                 </div>
+
             </div>
         </div>
     </div>
@@ -85,43 +72,85 @@
     document.addEventListener('DOMContentLoaded', function () {
 
 
-        // Filter Section Elements
-        const filterClassSelect = document.getElementById('filter_class_id');
-        const filterStudentSelect = document.getElementById('filter_student_id');
+        const addPaymentForm = document.getElementById('addPaymentForm');
+        const savePaymentBtn = document.getElementById('savePaymentBtn');
 
-        function loadFilteredStudents(classId) {
-            filterStudentSelect.innerHTML = '<option value="">-- All Students --</option>';
-            if (!classId) return;
+        addPaymentForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
 
-            fetch(`/filter/students/by-class/${classId}`)
-                .then(res => res.json())
-                .then(data => {
-                    data.forEach(student => {
-                        const option = document.createElement('option');
-                        option.value = student.id;
-                        option.textContent = student.full_name;
+            savePaymentBtn.disabled = true;
+            savePaymentBtn.textContent = 'Saving...';
 
-                        if (student.id == "{{ request('student_id') }}") {
-                            option.selected = true;
-                        }
+            const formData = new FormData(addPaymentForm);
 
-                        filterStudentSelect.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Failed to load students:', error);
-                });
-        }
+            fetch(addPaymentForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Network response not ok");
+                return res.json(); // Expecting JSON response
+            })
 
-        if (filterClassSelect.value) {
-            loadFilteredStudents(filterClassSelect.value);
-        }
+            .then(data => {
+                if (data.success) {
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addPaymentModal'));
+                    modal.hide();
 
-        filterClassSelect.addEventListener('change', function () {
-            loadFilteredStudents(this.value);
+                    // Reset form
+                    addPaymentForm.reset();
+
+                    // // Show success toast
+                    // const toastEl = document.getElementById('successToast');
+                    // const toast = new bootstrap.Toast(toastEl);
+                    // toast.show();
+
+                    // Show success toast
+                    const toastEl = document.createElement('div');
+                    toastEl.className = 'toast align-items-center text-bg-success border-0 position-fixed bottom-0 end-0 p-3';
+                    toastEl.role = 'alert';
+                    toastEl.innerHTML = `
+                        <div class="d-flex">
+                            <div class="toast-body">Payment saved successfully!</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                        </div>
+                    `;
+                    document.body.appendChild(toastEl);
+                    new bootstrap.Toast(toastEl).show();
+                    setTimeout(() => toastEl.remove(), 2000); //
+
+
+
+                    // Refresh the payments table
+                    fetch("{{ route('fee-payments.index') }}")
+                        .then(res => res.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, "text/html");
+                            const newTableHtml = doc.querySelector(".table-responsive").innerHTML;
+                            document.querySelector(".table-responsive").innerHTML = newTableHtml;
+                        });
+
+                } else {
+                    alert('Something went wrong: ' + (data.message || 'Unknown error'));
+                }
+            })
+
+
+            .catch(err => {
+                alert('Submission failed: ' + err.message);
+            })
+            .finally(() => {
+                savePaymentBtn.disabled = false;
+                savePaymentBtn.textContent = 'Save Payment';
+            });
         });
 
-
+        //end
         let classSelect = document.getElementById('class_id');
         let termSelect = document.getElementById('term_id');
         let studentSelect = document.getElementById('student_id');
@@ -238,6 +267,11 @@
 
 {{-- Add Payment Modal --}}
 @include('fees.partials.payment_modal')
+
+
+
 @endsection
+
+
 
 

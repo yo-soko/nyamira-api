@@ -39,6 +39,17 @@ class Subject extends Model
     public function stream()
     {
         return $this->belongsTo(Stream::class, 'stream_id');
+
     }
+
+    public function subjectLevels()
+    {
+        return $this->hasMany(SubjectLevel::class, 'subject_id');
+    }
+    public function levels()
+    {
+        return $this->belongsToMany(ClassLevel::class, 'subject_levels', 'subject_id', 'level_id');
+    }
+
 }
 

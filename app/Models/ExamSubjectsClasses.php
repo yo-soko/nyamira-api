@@ -13,26 +13,32 @@ class ExamSubjectsClasses extends Model
         'subject_id',
         'term_id',
         'level_id',
+        'school_class_id',
         'status',
     ];
 
     public function subject()
     {
-        return $this->belongsTo(Subject::class, 'subject_id', 'id');
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function exam()
     {
-        return $this->belongsTo(Exam::class, 'exam_id', 'id');
+        return $this->belongsTo(Exam::class, 'exam_id');
     }
 
     public function level()
     {
-        return $this->belongsTo(ClassLevel::class, 'level_id', 'id');
+        return $this->belongsTo(ClassLevel::class, 'level_id');
     }
 
     public function term()
     {
-        return $this->belongsTo(Term::class, 'term_id', 'id');
+        return $this->belongsTo(Term::class, 'term_id');
+    }
+
+    public function schoolClass()
+    {
+        return $this->belongsTo(SchoolClass::class, 'school_class_id');
     }
 }
