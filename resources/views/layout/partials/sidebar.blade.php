@@ -56,28 +56,32 @@
                                 @hasanyrole('admin|developer|manager|director|supervisor')
                                 <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}">
                                     <a href="{{ url('index') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i><span>Admin Dashboard</span>
+                                        <i class="fas fa-user-shield me-2"></i><span>Admin Dashboard</span>
                                     </a>
                                 </li>
+                                <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}">
+                                    <a href="{{url('index')}}">
+                                        <i class="fas fa-users-cog fs-16 me-2"></i><span>HRM Dashboard</span>
+                                    </a></li>
                                 @endhasanyrole
                                 @hasanyrole('developer|class_teacher')
                                 <li class="{{ Request::is('tdashboard') ? 'active' : '' }}">
                                     <a href="{{ url('tdashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i><span>Class Teacher Dashboard</span>
+                                        <i class="fas fa-chalkboard-teacher me-2"></i><span>Class Teacher Dashboard</span>
                                     </a>
                                 </li>
                                 @endhasanyrole
                                 @hasanyrole('developer|teacher')
                                 <li class="{{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('teacher.dashboard') }}">
-                                        <i class="bi bi-speedometer2"></i><span>Teacher Dashboard</span>
+                                        <i class="fas fa-user-tie"></i><span>Teacher Dashboard</span>
                                     </a>
                                 </li>
                                 @endhasanyrole
                                 @hasanyrole('student|developer')
                                 <li class="{{ Request::is('sdashboard') ? 'active' : '' }}">
                                     <a href="{{ url('sdashboard') }}">
-                                        <i class="fas fa-tachometer-alt me-2"></i><span>Student Dashboard</span>
+                                        <i class="fas fa-user-graduate me-2"></i><span>Student Dashboard</span>
                                     </a>
                                 </li>
                                 @endhasanyrole
@@ -236,6 +240,44 @@
                         </li>
                         @endhasanyrole
 
+                    </ul>
+                </li>
+
+
+                <li class="submenu-open">
+                    <h6 class="submenu-hdr">HRM</h6>
+                    <ul>
+                            <li class="{{ Request::is('employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('employees-list')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
+                            <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
+                            <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
+                            <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
+                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                            <li class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span></a></li>
+                            @endhasanyrole
+                            <li class="submenu">
+                                    <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
+                                    <ul>
+                                            @hasanyrole('admin|developer|manager|director|supervisor')
+                                            <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
+                                            @endhasanyrole
+
+                                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                                            <li><a href="{{url('leaves')}}" class="{{ Request::is('leaves') ? 'active' : '' }}">My Leaves</a></li>
+
+                                            <li><a href="{{url('leave-types')}}" class="{{ Request::is('leave-types') ? 'active' : '' }}">Leave Types</a></li>
+                                            @endhasanyrole
+                                    </ul>
+                            </li>
+                            <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
+                            </li>
+                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                            <li class="submenu">
+                                    <a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary','payslip') ? 'active' : '' }}"><i class="ti ti-file-dollar fs-16 me-2"></i><span>Payroll</span><span class="menu-arrow"></span></a>
+                                    <ul>
+                                            <li><a href="{{url('employee-salary')}}" class="{{ Request::is('employee-salary') ? 'active' : '' }}">Employee Salary</a></li>
+                                    </ul>
+                            </li>
+                            @endhasanyrole
                     </ul>
                 </li>
 

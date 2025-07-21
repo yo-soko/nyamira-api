@@ -385,6 +385,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/get-students', [FeePaymentsController::class, 'fetchStudents'])->name('get.students');
     Route::post('/get-balance', [FeePaymentsController::class, 'fetchBalance'])->name('get.balance');
+
+
+    //human resource management
+
+
 });
 
 

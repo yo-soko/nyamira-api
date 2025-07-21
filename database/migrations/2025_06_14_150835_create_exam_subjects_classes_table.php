@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subject_id');
             $table->unsignedBigInteger('term_id');
             $table->unsignedBigInteger('level_id');
-            $table->unsignedBigInteger('school_class_id'); // 👈 added
+            $table->unsignedBigInteger('school_class_id');
             $table->timestamps();
             $table->tinyInteger('status')->default(0);
 
