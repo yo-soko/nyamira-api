@@ -324,6 +324,10 @@ Route::middleware(['auth'])->group(function () {
     //teachers
     Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
     Route::post('/teachers', [TeacherController::class, 'store'])->name('teachers.store');
+    Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
+    Route::put('/teachers/{id}', [TeacherController::class, 'update'])->name('teachers.update');
+    Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
+
     Route::get('/migrate-teachers', [TeacherController::class, 'migrateTeachersToUsers']);
     Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
     //library

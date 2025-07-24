@@ -19,10 +19,10 @@ class AttendanciesController extends Controller
         $activeEmployees = Employee::where('status', 1)->count(); // assuming 1 = active
         $inactiveEmployees = Employee::where('status', 0)->count(); // assuming 0 = inactive
         $newJoiners = Employee::where('joining_date', '>=', Carbon::now()->subDays(30))->count();
-      
-        if (auth()->user()->hasRole('employee')) {
+
+        if (auth()->user()->hasAnyRole('employee','teacher')) {
             $employees = Employee::where('user_id', auth()->id())->get();
-        } 
+        }
         elseif (auth()->user()->hasAnyRole(['admin', 'superadmin', 'director', 'developer', 'manager', 'supervisor'])) {
             $employees = Employee::latest()->get();
         }
@@ -55,7 +55,7 @@ class AttendanciesController extends Controller
             ->whereDate('to_date', '>=', $today)
             ->count();
 
-        
+
         $graceMinutes = 30;
 
         $lateCount = 0;
@@ -96,7 +96,7 @@ class AttendanciesController extends Controller
         // Fetch all employees
         $employees = Employee::with(['department', 'designation'])->get();
          // If you have a large dataset, you can use pagination instead
-        
+
         return view('index', compact('employees','onLeave','presentToday', 'lateCount','In', 'greeting', 'totalEmployees', 'activeEmployees', 'inactiveEmployees', 'newJoiners'));
     }
 
@@ -132,7 +132,7 @@ class AttendanciesController extends Controller
         //auto clock out the record
         if ($alreadyClockedIn && !$attendance->clock_out) {
             $shift = Shift::find($attendance->shift_id);
-            
+
             if ($shift) {
                 $clockInDate = Carbon::parse($attendance->clock_in)->toDateString();
                 $shiftStart = Carbon::parse($clockInDate . ' ' . $shift->start_time);
@@ -181,7 +181,7 @@ class AttendanciesController extends Controller
             }
         }
         $totalWorkingDays = $totalDays - $sundays;
-    
+
         // 2. Count days present (at least one clock-in record)
         $presentDays = Attendancies::where('employee_id', $employee->id)
             ->whereBetween('date', [$start, $end])
@@ -192,7 +192,7 @@ class AttendanciesController extends Controller
         // 3. Absent = working days – present days
         $absentDays = $totalWorkingDays - $presentDays;
         //4 late days
-    
+
         $graceMinutes = 30;
         $lateDays = 0;
 
@@ -216,27 +216,27 @@ class AttendanciesController extends Controller
                 $lateDays++;
             }
         }
-        
+
         // Fetch total half days in the current month
         $halfDays = Attendancies::where('employee_id', $employee->id)
             ->whereBetween('date', [$start, $end])
             ->whereRaw('TIME_TO_SEC(total_hours) < ?', [4*3600])
             ->distinct('date')
             ->count('date');
-    
+
 
             $period = new \DatePeriod(
             $start,
             new \DateInterval('P1D'),
             $end->copy()->addDay()
         );
-    
+
         $holidayDays = 0;
-    
+
         foreach ($period as $day) {
             // wrap in Carbon
             $date = Carbon::instance($day)->toDateString();
-    
+
             if (Holiday::where('from_date', '<=', $date)
                         ->where('to_date', '>=',  $date)
                         ->exists()) {
@@ -267,7 +267,7 @@ class AttendanciesController extends Controller
 
 
         return view('attendance-employee', compact('employee', 'greeting', 'alreadyClockedIn',
-        'onBreak','attendance','totalWorkingDays', 'absentDays', 'presentDays', 'halfDays', 
+        'onBreak','attendance','totalWorkingDays', 'absentDays', 'presentDays', 'halfDays',
         'holidayDays','previousMonth','attendanceRecords','lateDays'));
     }
 
@@ -286,7 +286,7 @@ class AttendanciesController extends Controller
             session()->flash('error', 'Employee or assigned shift not found.');
             return redirect()->route('attendance.mark');
         }
-        
+
         // Find the shift based on the shift_id from the employee's shift field
         $shift = Shift::find($employee->shift_id);  // Accessing the shift using the shift field directly
         if (!$shift) {
@@ -306,23 +306,23 @@ class AttendanciesController extends Controller
         $today = Carbon::today();
         $shiftStart = Carbon::parse($today->toDateString() . ' ' . $shift->start_time);
         $shiftEnd = Carbon::parse($today->toDateString() . ' ' . $shift->end_time);
-        
+
         // Step 2: Handle overnight shift (e.g., 10PM to 6AM)
         if ($shiftEnd->lessThanOrEqualTo($shiftStart)) {
             $shiftEnd->addDay(); // end time is tomorrow
         }
-        
+
         // Step 3: Calculate grace window (start 30 mins before, end 7.5 hrs after shift start)
         $startWindow = $shiftStart->copy()->subMinutes($graceBefore);
         $endWindow = $shiftStart->copy()->addMinutes($graceAfter);
-        
+
         // Step 4: Check if now is within clock-in window
         if (!$now->between($startWindow, $endWindow)) {
             session()->put('employee_id', $employeeId);
             session()->flash('error', 'Clock-in not allowed outside shift grace period.');
             return redirect()->route('attendance.mark');
         }
-        
+
         // Prevent duplicate clock-in for the same shift window
         $alreadyClocked = Attendancies::where('employee_id', $employeeId)
             ->where('shift_id', $shift->id)
@@ -376,7 +376,7 @@ class AttendanciesController extends Controller
         session()->put('employee_id', $employeeId);
         session()->flash('success', 'Its nice to take a break!');
         return redirect()->route('attendance.mark');
-       
+
     }
 
     public function backFromBreak(Request $request)
@@ -411,34 +411,34 @@ class AttendanciesController extends Controller
     public function clockOut(Request $request)
     {
         $employeeId = $request->input('employee_id');
-    
+
         if (!$employeeId) {
             return back()->with('error', 'Employee ID is required.');
         }
-    
+
         // Retrieve attendance record for today
         $attendance = Attendancies::where('employee_id', $employeeId)
             ->whereDate('date', now()->toDateString())
             ->whereNull('clock_out')  // Ensure the employee is not already clocked out
             ->first();
-    
+
         if (!$attendance) {
             session()->put('employee_id', $employeeId);
             session()->flash('error', 'Employee already clocked out or not clocked in for the shift.');
             return redirect()->route('attendance.mark');
         }
-    
+
         // Check if the attendance has a valid shift relationship
         if (!$attendance->shift) {
             session()->put('employee_id', $employeeId);
             session()->flash('error', 'No shift associated with this attendance.');
             return redirect()->route('attendance.mark');
         }
-    
+
         // Record clock-out time
         $clockOutTime = now();
         $attendance->clock_out = $clockOutTime;
-    
+
         // Ensure clock-in time exists
         $clockInTime = Carbon::parse($attendance->clock_in);
         if (!$clockInTime) {
@@ -446,53 +446,53 @@ class AttendanciesController extends Controller
             session()->flash('error', 'Invalid clock-in time.');
             return redirect()->route('attendance.mark');
         }
-    
+
         // Handle case for shifts spanning over midnight
         $shiftStart = Carbon::parse($attendance->shift->start_time);
         $shiftEnd = Carbon::parse($attendance->shift->end_time);
-    
+
         // If the shift crosses midnight (e.g., 10:00 PM to 6:00 AM), adjust the clock-out time accordingly
         if ($shiftEnd->lessThan($shiftStart)) {
             // Shift ends after midnight, adjust to the next day
             $shiftEnd->addDay();
         }
-    
+
         // Calculate total work duration in seconds
         if ($clockOutTime->lt($shiftStart)) {
             $clockOutTime->addDay(); // Add a day to the clock-out time if it's before the shift start
         }
-    
+
         // Calculate the work duration (in seconds)
         $workDuration = $clockInTime->diffInSeconds($clockOutTime);
-    
+
         // Calculate break duration if applicable
         $breakDuration = 0; // Default break duration if not applicable
         $breakStart = $attendance->break_start ? Carbon::parse($attendance->break_start) : null;
         $breakEnd = $attendance->break_end ? Carbon::parse($attendance->break_end) : null;
-    
+
         if ($breakStart && $breakEnd) {
             if ($breakStart->greaterThan($breakEnd)) {
                 session()->put('employee_id', $employeeId);
                 session()->flash('error', 'Invalid break time: Break start cannot be later than break end.');
                 return redirect()->route('attendance.mark');
             }
-    
+
             $breakDuration = $breakEnd->diffInSeconds($breakStart);
         }
-    
+
         // Subtract break duration from total work duration
         $workDuration -= $breakDuration;
-    
+
         // Format the total work time (H:i:s)
         $attendance->total_hours = gmdate("H:i:s", $workDuration);
-    
+
         // Save the updated attendance record
         $attendance->save();
-    
+
         session()->put('employee_id', $employeeId);
         session()->flash('success', 'Clock Out time recorded successfully!');
         return redirect()->route('attendance.mark');
-    }   
+    }
 
 
     public function autoClockOutForgottenEmployees()
