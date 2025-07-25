@@ -13,4 +13,8 @@ return [
             'interval' => 15,
         ],
     ],
+
+    'lat' => env('ATTENDANCE_LAT', -0.6741667),
+    'lng' => env('ATTENDANCE_LNG', 34.7833333),
+    'radius' => env('ATTENDANCE_RADIUS_METERS', 500), // in meters
 ];

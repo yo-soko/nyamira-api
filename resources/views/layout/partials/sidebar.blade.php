@@ -251,8 +251,23 @@
                             <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
                             <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                             <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
-                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                            <!-- @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                             <li class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span></a></li>
+                            @endhasanyrole -->
+
+                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                            <li class="submenu">
+                                    <a href="javascript:void(0);" class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Teachers Attendance</span><span class="menu-arrow"></span></a>
+                                    <ul>
+                                        @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                                        <li class="{{ Request::is('attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence Dashboard</span></a></li>
+                                        @endhasanyrole
+                                        @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                                        <li class="{{ Request::is('attendance-employee') ? 'active' : '' }}"> <a href="{{url('attendance-employee')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Clock-in/Clock-out</span></a></li>
+                                        @endhasanyrole
+                                    </ul>
+                            </li>
+
                             @endhasanyrole
                             <li class="submenu">
                                     <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>

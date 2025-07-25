@@ -20,7 +20,7 @@
                   <h3>{{ $greeting }},<span> {{ $employee->first_name .' '. $employee->last_name }}</span></h3>
                 </div>
                 <div>
-                    <ul class="table-top-head">	
+                    <ul class="table-top-head">
                         <li class="me-2">
                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img src="{{URL::asset('build/img/icons/pdf.svg')}}" alt="img"></a>
                         </li>
@@ -34,7 +34,7 @@
                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                         </li>
                     </ul>
-                   
+
                 </div>
             </div>
             <div class="row">
@@ -52,37 +52,43 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
+
                                 @if (!$alreadyClockedIn)
                                     <!-- CLOCK IN -->
-                                    <form action="{{ route('attendance-employee.clockIn') }}" method="POST" class="w-100 me-2">
+                                    <form id="clockInForm" action="{{ route('attendance-employee.clockIn') }}" method="POST" class="w-100 me-2">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn btn-primary w-100 me-2">Clock In</button>
+                                        <button type="button" onclick="checkLocationAndSubmit('clockInForm')" class="btn btn-primary w-100 me-2">Clock In</button>
                                     </form>
+
                                 @elseif ($onBreak)
                                     <!-- BACK FROM BREAK -->
-                                    <form action="{{ route('attendance-employee.backFromBreak') }}" method="POST" class="w-100 me-2">
+                                    <form id="backFromBreakForm" action="{{ route('attendance-employee.backFromBreak') }}" method="POST" class="w-100 me-2">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
+                                        <button type="button" onclick="checkLocationAndSubmit('backFromBreakForm')" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
                                     </form>
+
                                 @else
                                     @if (is_null($attendance->break_end))
-                                    <!-- BREAK -->
-                                    <form action="{{ route('attendance-employee.break') }}" method="POST" class="w-100 me-2">
-                                        @csrf
-                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn btn-secondary w-100 me-2">Break</button>
-                                    </form>
+                                        <!-- BREAK -->
+                                        <form id="breakForm" action="{{ route('attendance-employee.break') }}" method="POST" class="w-100 me-2">
+                                            @csrf
+                                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                            <button type="button" onclick="checkLocationAndSubmit('breakForm')" class="btn btn-secondary w-100 me-2">Break</button>
+                                        </form>
                                     @endif
+
                                     <!-- CLOCK OUT -->
-                                    <form action="{{ route('attendance-employee.clockOut') }}" method="POST" class="w-100 me-2">
+                                    <form id="clockOutForm" action="{{ route('attendance-employee.clockOut') }}" method="POST" class="w-100 me-2">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="submit" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
+                                        <button type="button" onclick="checkLocationAndSubmit('clockOutForm')" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
                                     </form>
                                 @endif
+
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -248,10 +254,88 @@
         </div>
     </div>
     <script>
-    setInterval(() => {
-        const now = new Date();
-        const formatted = now.toLocaleTimeString();
-        document.getElementById('clock').innerText = formatted;
-    }, 1000);
-</script>
+        setInterval(() => {
+            const now = new Date();
+            const formatted = now.toLocaleTimeString();
+            document.getElementById('clock').innerText = formatted;
+        }, 1000);
+    </script>
+
+    <script>
+        function toRad(x) {
+            return x * Math.PI / 180;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3;
+            const φ1 = toRad(lat1);
+            const φ2 = toRad(lat2);
+            const Δφ = toRad(lat2 - lat1);
+            const Δλ = toRad(lon2 - lon1);
+            const a = Math.sin(Δφ / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        const allowedLat = -0.6741667;
+        const allowedLng = 34.7833333;
+        const allowedRadius = 500;
+
+        function checkLocationAndSubmit(formId) {
+            if (!navigator.geolocation) {
+                showToast("Geolocation is not supported by your browser.", "error");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+
+                    const distance = calculateDistance(userLat, userLng, allowedLat, allowedLng);
+
+                    if (distance <= allowedRadius) {
+                        document.getElementById(formId).submit();
+                    } else {
+                        showToast(`❌ You are ${Math.round(distance)}m away. Clocking allowed only within ${allowedRadius}m.`, "error");
+                    }
+                },
+                function (error) {
+                    showToast("❌ Location error: " + error.message, "error");
+                }
+            );
+        }
+
+        function showToast(message, type = 'info') {
+            const bgColor = {
+                success: 'bg-success text-white',
+                error: 'bg-danger text-white',
+                warning: 'bg-warning text-dark',
+                info: 'bg-info text-dark'
+            }[type] || 'bg-secondary text-white';
+
+            const toastId = 'toast-' + Date.now();
+            const toastHTML = `
+                <div id="${toastId}" class="toast align-items-center ${bgColor} border-0 mb-2" role="alert"
+                    aria-live="assertive" aria-atomic="true"
+                    data-bs-autohide="true" data-bs-delay="3000">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close ${type === 'warning' || type === 'info' ? '' : 'btn-close-white'} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+
+            const container = document.getElementById('js-toast-container');
+            container.insertAdjacentHTML('beforeend', toastHTML);
+
+            const toastElement = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
+            // Remove from DOM after hidden
+            toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
+        }
+    </script>
+
 @endsection

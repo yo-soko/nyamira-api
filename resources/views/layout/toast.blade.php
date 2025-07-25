@@ -23,6 +23,12 @@
         @endif
     @endforeach
 </div>
+
+toast.blade
+<!-- geo-location: -->
+
+<div id="js-toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999"></div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const toastElements = document.querySelectorAll('.toast');
