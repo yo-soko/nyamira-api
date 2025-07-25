@@ -12,15 +12,19 @@
         $greeting = 'Good Evening';
     }
 @endphp
-    <div class="page-wrapper">
-        <div class="content">
+<div class="">
+   <div class="page-wrapper pos-pg-wrapper ms-0">
+    <div class="content pos-design p-5">
             <div class="attendance-header">
                 <div class="attendance-content">
                 <img src="{{URL::asset('build/img/icons/hand01.svg')}}" class="hand-img" alt="img">
-                  <h3>{{ $greeting }},<span> {{ $employee->first_name .' '. $employee->last_name }}</span></h3>
+                  <h2>{{ $greeting }},<span> {{ $employee->first_name .' '. $employee->last_name }}</span></h3>
                 </div>
+                 <a href="{{route('pos')}}" class="btn btn-sm btn-outline-primary mt-2">
+                    <i class="ti ti-arrow-left me-1"></i> Return Home
+                 </a>
                 <div>
-                    <ul class="table-top-head">
+                    <ul class="table-top-head">	
                         <li class="me-2">
                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Pdf"><img src="{{URL::asset('build/img/icons/pdf.svg')}}" alt="img"></a>
                         </li>
@@ -34,7 +38,7 @@
                             <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                         </li>
                     </ul>
-
+                   
                 </div>
             </div>
             <div class="row">
@@ -52,46 +56,42 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center">
-
                                 @if (!$alreadyClockedIn)
                                     <!-- CLOCK IN -->
-                                    <form id="clockInForm" action="{{ route('attendance-employee.clockIn') }}" method="POST" class="w-100 me-2">
+                                    <form action="{{ route('clock.clockIn') }}" method="POST" class="w-100 me-2">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="button" onclick="checkLocationAndSubmit('clockInForm')" class="btn btn-primary w-100 me-2">Clock In</button>
+                                        <input type="hidden" name="return_url" value="{{ url()->current() }}">
+                                        <button type="submit" class="btn btn-primary w-100 me-2">Clock In</button>
                                     </form>
-
                                 @elseif ($onBreak)
                                     <!-- BACK FROM BREAK -->
-                                    <form id="backFromBreakForm" action="{{ route('attendance-employee.backFromBreak') }}" method="POST" class="w-100 me-2">
+                                    <form action="{{ route('clock.backFromBreak') }}" method="POST" class="w-100 me-2">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="button" onclick="checkLocationAndSubmit('backFromBreakForm')" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
+                                        <button type="submit" class="btn bg-info-gradient w-100 me-2">Back From Break</button>
                                     </form>
-
                                 @else
                                     @if (is_null($attendance->break_end))
-                                        <!-- BREAK -->
-                                        <form id="breakForm" action="{{ route('attendance-employee.break') }}" method="POST" class="w-100 me-2">
-                                            @csrf
-                                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                            <button type="button" onclick="checkLocationAndSubmit('breakForm')" class="btn btn-secondary w-100 me-2">Break</button>
-                                        </form>
-                                    @endif
-
-                                    <!-- CLOCK OUT -->
-                                    <form id="clockOutForm" action="{{ route('attendance-employee.clockOut') }}" method="POST" class="w-100 me-2">
+                                    <!-- BREAK -->
+                                    <form action="{{ route('clock.break') }}" method="POST" class="w-100 me-2">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                                        <button type="button" onclick="checkLocationAndSubmit('clockOutForm')" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
+                                        <button type="submit" class="btn btn-secondary w-100 me-2">Break</button>
+                                    </form>
+                                    @endif
+                                    <!-- CLOCK OUT -->
+                                    <form action="{{ route('clock.clockOut') }}" method="POST" class="w-100 me-2">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                                        <button type="submit" class="btn bg-danger-gradient w-100 me-2">Clock Out</button>
                                     </form>
                                 @endif
-
                             </div>
-
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-xl-8 col-lg-12 d-flex">
                     <div class="card w-100">
                         <div class="card-body">
@@ -216,7 +216,7 @@
                                     </td>
                                     <td>{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('h:i A') : '-' }}</td>
                                     <td>{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('h:i A') : '-' }}</td>
-                                    <td>{{ $attendance->total_hours }} hrs</td>
+                                    <td>{{ $attendance->total_hours ?? '' }} hrs</td>
 
 
                                     @php
@@ -253,89 +253,12 @@
             <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
         </div>
     </div>
+    </div>
     <script>
-        setInterval(() => {
-            const now = new Date();
-            const formatted = now.toLocaleTimeString();
-            document.getElementById('clock').innerText = formatted;
-        }, 1000);
-    </script>
-
-    <script>
-        function toRad(x) {
-            return x * Math.PI / 180;
-        }
-
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371e3;
-            const φ1 = toRad(lat1);
-            const φ2 = toRad(lat2);
-            const Δφ = toRad(lat2 - lat1);
-            const Δλ = toRad(lon2 - lon1);
-            const a = Math.sin(Δφ / 2) ** 2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            return R * c;
-        }
-
-        const allowedLat = -0.67778;
-        const allowedLng = 34.78222;
-        const allowedRadius = 100;
-
-        function checkLocationAndSubmit(formId) {
-            if (!navigator.geolocation) {
-                showToast("Geolocation is not supported by your browser.", "error");
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const userLat = position.coords.latitude;
-                    const userLng = position.coords.longitude;
-
-                    const distance = calculateDistance(userLat, userLng, allowedLat, allowedLng);
-
-                    if (distance <= allowedRadius) {
-                        document.getElementById(formId).submit();
-                    } else {
-                        showToast(`❌ You are ${Math.round(distance)}m away. Clocking allowed only within ${allowedRadius}m.`, "error");
-                    }
-                },
-                function (error) {
-                    showToast("❌ Location error: " + error.message, "error");
-                }
-            );
-        }
-
-        function showToast(message, type = 'info') {
-            const bgColor = {
-                success: 'bg-success text-white',
-                error: 'bg-danger text-white',
-                warning: 'bg-warning text-dark',
-                info: 'bg-info text-dark'
-            }[type] || 'bg-secondary text-white';
-
-            const toastId = 'toast-' + Date.now();
-            const toastHTML = `
-                <div id="${toastId}" class="toast align-items-center ${bgColor} border-0 mb-2" role="alert"
-                    aria-live="assertive" aria-atomic="true"
-                    data-bs-autohide="true" data-bs-delay="3000">
-                    <div class="d-flex">
-                        <div class="toast-body">${message}</div>
-                        <button type="button" class="btn-close ${type === 'warning' || type === 'info' ? '' : 'btn-close-white'} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                </div>
-            `;
-
-            const container = document.getElementById('js-toast-container');
-            container.insertAdjacentHTML('beforeend', toastHTML);
-
-            const toastElement = document.getElementById(toastId);
-            const toast = new bootstrap.Toast(toastElement);
-            toast.show();
-
-            // Remove from DOM after hidden
-            toastElement.addEventListener('hidden.bs.toast', () => toastElement.remove());
-        }
-    </script>
-
+    setInterval(() => {
+        const now = new Date();
+        const formatted = now.toLocaleTimeString();
+        document.getElementById('clock').innerText = formatted;
+    }, 1000);
+</script>
 @endsection

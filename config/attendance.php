@@ -14,7 +14,7 @@ return [
         ],
     ],
 
-    'lat' => env('ATTENDANCE_LAT', -0.6777778),
-    'lng' => env('ATTENDANCE_LNG', 34.7822222),
+    'lat' => env('ATTENDANCE_LAT', -0.67778),
+    'lng' => env('ATTENDANCE_LNG', 34.78222),
     'radius' => env('ATTENDANCE_RADIUS_METERS', 100), // in meters
 ];

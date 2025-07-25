@@ -18,8 +18,47 @@
         <!-- Header Menu -->
         <ul class="nav user-menu">
 
+
+            <!-- Search -->
+            <li class="nav-item time-nav">
+                <span id="realtime-clock" style="font-weight: bold;" class="btn bg-purple"></span>
+            </li>
+
+            @push('scripts')
+            <script>
+                function updateClock() {
+                    const now = new Date();
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds()).padStart(2, '0');
+                    const timeString = `${hours}:${minutes}:${seconds}`;
+                    document.getElementById('realtime-clock').textContent = timeString;
+                }
+
+                setInterval(updateClock, 1000); // Update every second
+                updateClock(); // Initial call
+            </script>
+            @endpush
+
+            <li class="nav-item pos-nav">
+                <a href="{{ url('signout') }}" class="btn btn-purple btn-md d-inline-flex align-items-center gap-2">
+                    <i class="ti ti-logout"></i> Logout
+                </a>
+            </li>
+            <!-- /Search -->
+            <li class="nav-item pos-nav">
+                <form action="{{ route('attendance-employee') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <input type="hidden" name="employee_id" value="{{ auth()->user()->employee->id ?? '' }}">
+                    <button type="submit" class="btn bg-success btn-lg d-inline-flex align-items-center">
+                        <img src="{{ URL::asset('build/img/icons/clock-icon.svg') }}" alt="img" class="me-2">
+                        Clock-in/Clock-out
+                    </button>
+                </form>
+            </li>
+
            <!-- Search -->
-					<li class="nav-item nav-searchinputs">
+					<!-- <li class="nav-item nav-searchinputs">
 						<div class="top-nav-search">
 							<a href="javascript:void(0);" class="responsive-search">
 								<i class="fa fa-search"></i>
@@ -37,7 +76,7 @@
 								
 							</form>
 						</div>
-					</li>
+					</li> -->
 					<!-- /Search -->
 
             

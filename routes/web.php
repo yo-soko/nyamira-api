@@ -219,6 +219,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/employee-salary/update', [EmployeeSalaryController::class, 'update'])->name('employee-salary.update');
     Route::post('/employee-salary/delete', [EmployeeSalaryController::class, 'destroy'])->name('employee-salary.delete');
 
+    Route::get('/hrdashboard', [AttendanciesController::class, 'indexx']);
     Route::get('attendance-admin/', [AttendanciesController::class, 'index'])->name('attendance-admin.index');
     Route::get('/attendance-employee', [AttendanciesController::class, 'markAttendance'])->name('attendance.mark');
     Route::post('attendance-employee', [AttendanciesController::class, 'markAttendance'])->name('attendance-employee');

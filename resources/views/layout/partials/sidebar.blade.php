@@ -59,7 +59,7 @@
                                         <i class="fas fa-user-shield me-2"></i><span>Admin Dashboard</span>
                                     </a>
                                 </li>
-                                <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}">
+                                <li class="{{ Request::is( 'dashboard') ? 'active' : '' }}">
                                     <a href="{{url('index')}}">
                                         <i class="fas fa-users-cog fs-16 me-2"></i><span>HRM Dashboard</span>
                                     </a></li>
@@ -262,9 +262,27 @@
                                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                                         <li class="{{ Request::is('attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence Dashboard</span></a></li>
                                         @endhasanyrole
-                                        @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
-                                        <li class="{{ Request::is('attendance-employee') ? 'active' : '' }}"> <a href="{{url('attendance-employee')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Clock-in/Clock-out</span></a></li>
+
+                                       @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                                        <li class="{{ request()->routeIs('attendance-employee') ? 'active' : '' }}">
+                                            <form action="{{ route('attendance-employee') }}" method="POST" style="margin: 0; padding: 0;">
+                                                @csrf
+                                                <input type="hidden" name="employee_id" value="{{ Auth::user()->employee->id ?? '' }}">
+                                                <button type="submit" style="
+                                                    all: unset;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    width: 100%;
+                                                    padding: 8px 15px;
+                                                    cursor: pointer;
+                                                " onmouseover="this.style.backgroundColor='#f5f5f5'" onmouseout="this.style.backgroundColor='transparent' ? 'acitve' :'' ">
+                                                    <i class="ti ti-user-cog fs-16 me-2"></i>
+                                                    <span>Clock-in/Clock-out</span>
+                                                </button>
+                                            </form>
+                                        </li>
                                         @endhasanyrole
+
                                     </ul>
                             </li>
 
