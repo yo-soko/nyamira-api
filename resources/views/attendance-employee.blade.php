@@ -277,9 +277,9 @@
             return R * c;
         }
 
-        const allowedLat = -0.6741667;
-        const allowedLng = 34.7833333;
-        const allowedRadius = 500;
+        const allowedLat = -0.6777778;
+        const allowedLng = 34.7822222;
+        const allowedRadius = 100;
 
         function checkLocationAndSubmit(formId) {
             if (!navigator.geolocation) {
