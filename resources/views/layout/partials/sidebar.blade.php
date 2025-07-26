@@ -255,7 +255,7 @@
                             <li class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span></a></li>
                             @endhasanyrole -->
 
-                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+
                             <li class="submenu">
                                     <a href="javascript:void(0);" class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Teachers Attendance</span><span class="menu-arrow"></span></a>
                                     <ul>
@@ -263,7 +263,7 @@
                                         <li class="{{ Request::is('attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence Dashboard</span></a></li>
                                         @endhasanyrole
 
-                                       @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
+                                       @hasanyrole('developer|class_teacher|teacher')
                                         <li class="{{ request()->routeIs('attendance-employee') ? 'active' : '' }}">
                                             <form action="{{ route('attendance-employee') }}" method="POST" style="margin: 0; padding: 0;">
                                                 @csrf
@@ -286,7 +286,7 @@
                                     </ul>
                             </li>
 
-                            @endhasanyrole
+
                             <li class="submenu">
                                     <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
                                     <ul>

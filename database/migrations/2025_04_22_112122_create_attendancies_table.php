@@ -23,7 +23,7 @@ return new class extends Migration
             $table->dateTime('break_start')->nullable(); // e.g. 1h 13m
             $table->dateTime('break_end')->nullable(); // e.g. 1h 13m
             $table->string('overtime')->nullable(); // e.g. 00h 50m
-            $table->dateTime('total_hours')->nullable(); // e.g. 09h 50m
+            $table->time('total_hours')->nullable(); // e.g. 09h 50m
             $table->json('progress')->nullable(); // could store percentage values
             $table->timestamps();
         });

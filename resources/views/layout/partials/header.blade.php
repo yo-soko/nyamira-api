@@ -1,10 +1,10 @@
-	
+
 @if(!Route::is(['pos','pos-2','pos-3','pos-4','pos-5']))
 <div class="header">
     <div class="main-header">
         <!-- Logo -->
         <div class="header-left active">
-           
+
         </div>
         <!-- /Logo -->
         <a id="mobile_btn" class="mobile_btn" href="#sidebar">
@@ -46,6 +46,7 @@
                 </a>
             </li>
             <!-- /Search -->
+            @hasanyrole('developer|class_teacher|teacher')
             <li class="nav-item pos-nav">
                 <form action="{{ route('attendance-employee') }}" method="POST" style="display: inline;">
                     @csrf
@@ -56,6 +57,7 @@
                     </button>
                 </form>
             </li>
+            @endhasanyrole
 
            <!-- Search -->
 					<!-- <li class="nav-item nav-searchinputs">
@@ -73,13 +75,13 @@
 										<kbd class="d-flex align-items-center"><img src="{{URL::asset('build/img/icons/command.svg')}}" alt="img" class="me-1">K</kbd>
 									</span>
 								</div>
-								
+
 							</form>
 						</div>
 					</li> -->
 					<!-- /Search -->
 
-            
+
 
             <!-- Flag -->
             <li class="nav-item dropdown has-arrow flag-nav nav-item-box">
@@ -88,7 +90,7 @@
                     <img src="{{URL::asset('build/img/flags/ke.png')}}" alt="Language" class="img-fluid">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-                   
+
                     <a href="javascript:void(0);" class="dropdown-item">
                         <img src="{{URL::asset('build/img/flags/ke.png')}}" alt="Img" height="16">Kenya
                     </a>
@@ -120,7 +122,7 @@
                         <h5 class="notification-title">Notifications</h5>
                         <a href="javascript:void(0)" class="clear-noti">Mark all as read</a>
                     </div>
-                    
+
                     <div class="topnav-dropdown-footer d-flex align-items-center gap-3">
                         <a href="#" class="btn btn-secondary btn-md w-100">Cancel</a>
                         <a href="#" class="btn btn-primary btn-md w-100">View all</a>
