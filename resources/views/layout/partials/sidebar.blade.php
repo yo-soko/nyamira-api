@@ -243,21 +243,23 @@
                     </ul>
                 </li>
 
-
+                @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">HRM</h6>
                     <ul>
-                            <li class="{{ Request::is('employees-list','add-employee','edit-employee','employee-details') ? 'active' : '' }}"><a href="{{url('employees-list')}}"><i class="ti ti-user fs-16 me-2"></i><span>Employees</span></a></li>
-                            <li class="{{ Request::is('department-grid') ? 'active' : '' }}"><a href="{{url('department-grid')}}"><i class="ti ti-compass fs-16 me-2"></i><span>Departments</span></a></li>
+                            @hasanyrole('admin|developer|manager|director|supervisor')
                             <li class="{{ Request::is('designation') ? 'active' : '' }}"><a href="{{url('designation')}}"><i class="ti ti-git-merge fs-16 me-2"></i><span>Designation</span></a></li>
                             <li class="{{ Request::is('shift') ? 'active' : '' }}"><a href="{{url('shift')}}"><i class="ti ti-arrows-shuffle fs-16 me-2"></i><span>Shifts</span></a></li>
+                            @endhasanyrole
                             <!-- @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                             <li class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence</span></a></li>
                             @endhasanyrole -->
 
 
                             <li class="submenu">
+                                    @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                                     <a href="javascript:void(0);" class="{{ Request::is('attendance-employee','attendance-admin') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Teachers Attendance</span><span class="menu-arrow"></span></a>
+                                     @endhasanyrole
                                     <ul>
                                         @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                                         <li class="{{ Request::is('attendance-admin') ? 'active' : '' }}"> <a href="{{url('attendance-admin')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Attendence Dashboard</span></a></li>
@@ -288,7 +290,9 @@
 
 
                             <li class="submenu">
+                                    @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                                     <a href="javascript:void(0);" class="{{ Request::is('leaves-admin','leaves','leave-types') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Leaves</span><span class="menu-arrow"></span></a>
+                                    @endhasanyrole
                                     <ul>
                                             @hasanyrole('admin|developer|manager|director|supervisor')
                                             <li><a href="{{url('leaves-admin')}}" class="{{ Request::is('leaves-admin') ? 'active' : '' }}">Leave Applications</a></li>
@@ -301,7 +305,9 @@
                                             @endhasanyrole
                                     </ul>
                             </li>
+                            @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                             <li class="{{ Request::is('holidays') ? 'active' : '' }}"><a href="{{url('holidays')}}" ><i class="ti ti-calendar-share fs-16 me-2"></i><span>Holidays</span></a>
+                            @endhasanyrole
                             </li>
                             @hasanyrole('admin|developer|manager|director|supervisor|class_teacher|teacher')
                             <li class="submenu">
@@ -313,7 +319,7 @@
                             @endhasanyrole
                     </ul>
                 </li>
-
+                @endhasanyrole
 
                 @hasanyrole('admin|developer|manager|director|supervisor')
                 <li class="submenu-open">
