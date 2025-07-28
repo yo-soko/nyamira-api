@@ -32,10 +32,10 @@ class TeacherToEmployeeSeeder extends Seeder
         }
 
         // Get designations IDs for later
-        $designationAdmin = \DB::table('designations')->where('name', 'admin')->first();
-        $designationSuperadmin = \DB::table('designations')->where('name', 'superadmin')->first();
-        $designationDeveloper = \DB::table('designations')->where('name', 'developer')->first();
-        $designationTeacher = \DB::table('designations')->where('name', 'teacher')->first();
+        $designationAdmin = \DB::table('designations')->where('designation', 'admin')->first();
+        $designationSuperadmin = \DB::table('designations')->where('designation', 'superadmin')->first();
+        $designationDeveloper = \DB::table('designations')->where('designation', 'developer')->first();
+        $designationTeacher = \DB::table('designations')->where('designation', 'teacher')->first();
 
         // 2. Seed the shift (8:00 AM to 6:30 PM)
         $shift = Shift::updateOrCreate(
