@@ -26,7 +26,7 @@ class TeacherToEmployeeSeeder extends Seeder
 
         foreach ($roles as $roleData) {
             \DB::table('designations')->updateOrInsert(
-                ['name' => $roleData['name']],
+                ['designation' => $roleData['name']],
                 ['description' => $roleData['description'], 'created_at' => now(), 'updated_at' => now()]
             );
         }
