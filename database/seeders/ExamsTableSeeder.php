@@ -15,9 +15,8 @@ class ExamsTableSeeder extends Seeder
 
         if ($term) {
             $exams = [
-                ['name' => 'First CAT', 'term_id' => $term->id, 'is_analysed' => 1, 'status' => 1,'user_id'=>1],
-                ['name' => 'Mid Term', 'term_id' => $term->id, 'is_analysed' => 0, 'status' => 1,'user_id'=>1],
-                ['name' => 'End Term', 'term_id' => $term->id, 'is_analysed' => 1, 'status' => 1,'user_id'=>1],
+                ['name' => 'Assesment 1', 'term_id' => $term->id, 'is_analysed' => 1, 'status' => 1,'user_id'=>1],
+                ['name' => 'Assesment 3', 'term_id' => $term->id, 'is_analysed' => 0, 'status' => 1,'user_id'=>1],
             ];
 
             foreach ($exams as $exam) {
