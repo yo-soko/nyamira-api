@@ -71,9 +71,13 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <a href="{{ route('teachers.edit', $teacher->id) }}" class="btn btn-sm btn-info" title="Edit">
+                                        <button
+                                            class="btn btn-sm btn-info"
+                                            title="Edit"
+                                            onclick='editTeacher(@json($teacher))'>
                                             <i class="ti ti-pencil"></i>
-                                        </a>
+                                        </button>
+
                                         <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this teacher?')">
                                             @csrf
                                             @method('DELETE')
@@ -190,7 +194,7 @@
 
             <div class="col-12">
               <label class="form-label">Subjects and Classes to Teach</label>
-              <div id="teaching-area">
+              <div id="teaching-area" class="teaching-area">
                 <div class="row align-items-end teaching-entry mb-2">
                     <div class="col-md-5">
                         <select name="subject_class[0][subject_id]" class="form-select" required>
@@ -227,10 +231,12 @@
   </div>
 </div>
 
+@foreach ($teachers as $teacher)
+
 <!-- Teacher Edit Modal -->
 <div class="modal fade" id="editTeacherModal" tabindex="-1" aria-labelledby="editTeacherModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-scrollable">
-    <form id="editTeacherForm" method="POST">
+    <form method="POST" action="{{ route('teachers.update', $teacher->id) }}">
       @csrf
       @method('PUT')
       <input type="hidden" name="teacher_id" id="edit_teacher_id">
@@ -242,87 +248,122 @@
         </div>
 
         <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label for="edit_first_name" class="form-label">First Name</label>
-              <input type="text" class="form-control" name="first_name" id="edit_first_name" required>
-            </div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label for="edit_first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" name="first_name" id="edit_first_name" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_last_name" class="form-label">Last Name</label>
-              <input type="text" class="form-control" name="last_name" id="edit_last_name" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" name="last_name" id="edit_last_name" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_date_of_birth" class="form-label">Date of Birth</label>
-              <input type="date" class="form-control" name="date_of_birth" id="edit_date_of_birth" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_date_of_birth" class="form-label">Date of Birth</label>
+                <input type="date" class="form-control" name="date_of_birth" id="edit_date_of_birth" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_email" class="form-label">Email</label>
-              <input type="email" class="form-control" name="email" id="edit_email" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_email" class="form-label">Email</label>
+                <input type="email" class="form-control" name="email" id="edit_email" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_phone" class="form-label">Phone</label>
-              <input type="text" class="form-control" name="phone" id="edit_phone" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_phone" class="form-label">Phone</label>
+                <input type="text" class="form-control" name="phone" id="edit_phone" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_id_no" class="form-label">ID Number</label>
-              <input type="text" class="form-control" name="id_no" id="edit_id_no" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_id_no" class="form-label">ID Number</label>
+                <input type="text" class="form-control" name="id_no" id="edit_id_no" required>
+                </div>
 
-            <div class="col-12">
-              <label for="edit_address" class="form-label">Address</label>
-              <textarea class="form-control" name="address" id="edit_address" rows="2" required></textarea>
-            </div>
+                <div class="col-12">
+                <label for="edit_address" class="form-label">Address</label>
+                <textarea class="form-control" name="address" id="edit_address" rows="2" required></textarea>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_education_level" class="form-label">Education Level</label>
-              <input type="text" class="form-control" name="education_level" id="edit_education_level" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_education_level" class="form-label">Education Level</label>
+                <input type="text" class="form-control" name="education_level" id="edit_education_level" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_years_of_experience" class="form-label">Years of Experience</label>
-              <input type="number" class="form-control" name="years_of_experience" id="edit_years_of_experience" min="0" required>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_years_of_experience" class="form-label">Years of Experience</label>
+                <input type="number" class="form-control" name="years_of_experience" id="edit_years_of_experience" min="0" required>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_gender" class="form-label">Gender</label>
-              <select class="form-select" name="gender" id="edit_gender" required>
-                <option disabled value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_gender" class="form-label">Gender</label>
+                <select class="form-select" name="gender" id="edit_gender" required>
+                    <option disabled value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_department" class="form-label">Department</label>
-              <select name="department" id="edit_department" class="form-select" required>
-                <option disabled value="">Select Department</option>
-                @foreach($departments as $dept)
-                <option value="{{ $dept->id }}">{{ $dept->name }}</option>
-                @endforeach
-              </select>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_department" class="form-label">Department</label>
+                <select name="department" id="edit_department" class="form-select" required>
+                    <option disabled value="">Select Department</option>
+                    @foreach($departments as $dept)
+                    <option value="{{ $dept->id }}">{{ $dept->name }}</option>
+                    @endforeach
+                </select>
+                </div>
 
-            <div class="col-md-6">
-              <label for="edit_status" class="form-label">Status</label>
-              <select name="status" id="edit_status" class="form-select" required>
-                <option value="1">Active</option>
-                <option value="0">Inactive</option>
-              </select>
-            </div>
+                <div class="col-md-6">
+                <label for="edit_status" class="form-label">Status</label>
+                <select name="status" id="edit_status" class="form-select" required>
+                    <option value="1">Active</option>
+                    <option value="0">Inactive</option>
+                </select>
+                </div>
 
-            {{-- Teaching area will be dynamically loaded --}}
-            <div class="col-12">
-              <label class="form-label">Subjects and Classes to Teach</label>
-              <div id="edit-teaching-area"></div>
-            </div>
+                {{-- Teaching area will be dynamically loaded --}}
+                <div class="col-12">
+                    <label class="form-label">Subjects and Classes to Teach</label>
+                    <div id="edit-teaching-area">
+                        @foreach($teacher->subjects as $index => $subject)
+                            @php $class_id = $subject->pivot->class_id; @endphp
+                            <div class="row align-items-end teaching-entry mb-2">
+                                <div class="col-md-5">
+                                    <select name="subject_class[{{ $index }}][subject_id]" class="form-select" required>
+                                        <option value="" disabled>Select Subject</option>
+                                        @foreach($subjects as $subj)
+                                            <option value="{{ $subj->id }}" {{ $subj->id == $subject->id ? 'selected' : '' }}>
+                                                {{ $subj->subject_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-          </div>
+                                <div class="col-md-5">
+                                    <select name="subject_class[{{ $index }}][class_id]" class="form-select" required>
+                                        <option value="" disabled>Select Class</option>
+                                        @foreach($schoolclasses as $class)
+                                            <option value="{{ $class->id }}" {{ $class->id == $class_id ? 'selected' : '' }}>
+                                                {{ $class->level->level_name ?? '' }} {{ $class->stream->name ?? '' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button>
+                                </div>
+                            </div>
+                        @endforeach
+
+                        <!-- Add button for new entries -->
+                        <div>
+                        <button type="button" class="btn btn-success add-subject-class"><i class="ti ti-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="modal-footer">
@@ -333,44 +374,72 @@
     </form>
   </div>
 </div>
-
+@endforeach
 
 <script>
-    let teachingIndex = 1;
-    document.addEventListener('click', function(e) {
-        if(e.target.closest('.add-subject-class')) {
-            const container = document.getElementById('teaching-area');
-            const html = `
-            <div class="row align-items-end teaching-entry mb-2">
-                <div class="col-md-5">
-                    <select name="subject_class[${teachingIndex}][subject_id]" class="form-select" required>
-                        <option value="" disabled selected>Select Subject</option>
-                        @foreach($subjects as $subject)
-                            <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-5">
-                    <select name="subject_class[${teachingIndex}][class_id]" class="form-select" required>
-                        <option value="" disabled selected>Select Class</option>
-                        @foreach($schoolclasses as $class)
-                            <option value="{{ $class->id }}">{{ $class->level->level_name }} {{ $class->stream->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button>
-                </div>
-            </div>`;
-            container.insertAdjacentHTML('beforeend', html);
-            teachingIndex++;
-        }
-        if(e.target.closest('.remove-subject-class')) {
-            e.target.closest('.teaching-entry').remove();
-        }
+let teachingIndex = 1;
+
+document.addEventListener('click', function(e) {
+    // ADD subject-class
+    const addBtn = e.target.closest('.add-subject-class');
+    if (addBtn) {
+        // Find closest modal container
+        const modal = addBtn.closest('.modal');
+        const container = modal.querySelector('.teaching-area');
+
+        const html = `
+        <div class="row align-items-end teaching-entry mb-2">
+            <div class="col-md-5">
+                <select name="subject_class[${teachingIndex}][subject_id]" class="form-select" required>
+                    <option value="" disabled selected>Select Subject</option>
+                    @foreach($subjects as $subject)
+                        <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-5">
+                <select name="subject_class[${teachingIndex}][class_id]" class="form-select" required>
+                    <option value="" disabled selected>Select Class</option>
+                    @foreach($schoolclasses as $class)
+                        <option value="{{ $class->id }}">{{ $class->level->level_name }} {{ $class->stream->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button>
+            </div>
+        </div>`;
+        container.insertAdjacentHTML('beforeend', html);
+        teachingIndex++;
+    }
+
+    // REMOVE subject-class
+    const removeBtn = e.target.closest('.remove-subject-class');
+    if (removeBtn) {
+        removeBtn.closest('.teaching-entry').remove();
+    }
+});
+
+$(document).on('click', '.editTeacherBtn', function () {
+    const teacherId = $(this).data('id');
+
+    // Set the form action dynamically
+    $('#editTeacherForm').attr('action', '/teachers/' + teacherId);
+
+    // Set hidden input for ID
+    $('#edit_teacher_id').val(teacherId);
+
+    // Now fetch subject-class data
+    $.get('/teachers/' + teacherId + '/subjects', function (data) {
+        $('#edit-teaching-area').html(data);
     });
 
-    function editTeacher(teacher) {
+    // Show the modal
+    $('#editTeacherModal').modal('show');
+});
+
+// Handle Edit Modal Population
+function editTeacher(teacher) {
     $('#edit_teacher_id').val(teacher.id);
     $('#edit_first_name').val(teacher.first_name);
     $('#edit_last_name').val(teacher.last_name);
@@ -385,32 +454,39 @@
     $('#edit_department').val(teacher.department_id);
     $('#edit_status').val(teacher.status);
 
-    // You can make AJAX call to fetch their subject-class assignments
-    $.get(`/teachers/${teacher.id}/subjects`, function(data) {
-      $('#edit-teaching-area').html(data); // Load a partial view or HTML string
+    // Fetch subject-class assignments
+    $.get(`/teachers/${teacher.id}/subjects`, function(html) {
+        $('#edit-teaching-area').html(html);
     });
 
     $('#editTeacherModal').modal('show');
-  }
+}
 
-  $('#editTeacherForm').on('submit', function(e) {
-    e.preventDefault();
-    const form = $(this);
-    const id = $('#edit_teacher_id').val();
-    const url = `/teachers/${id}`;
+// Handle Edit Submit
+$('#editTeacherForm').on('submit', function(e) {
+  e.preventDefault();
+  const form = $(this);
+  const id = $('#edit_teacher_id').val();
+  const url = `/teachers/${id}`;
 
-    $.ajax({
-      url: url,
-      type: 'POST',
-      data: form.serialize(),
-      success: function(response) {
-        location.reload(); // or update the row in the table dynamically
-      },
-      error: function(xhr) {
-        alert('Error updating teacher');
-        console.error(xhr.responseText);
-      }
-    });
+  $.ajax({
+    url: url,
+    type: 'POST', // Laravel still requires POST here...
+    data: form.serialize(),
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    },
+    success: function(response) {
+      location.reload(); // or update the UI dynamically
+    },
+    error: function(xhr) {
+      alert('Error updating teacher');
+      console.error(xhr.responseText);
+    }
   });
+});
+
 </script>
+
+
 @endsection

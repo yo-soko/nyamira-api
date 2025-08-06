@@ -124,103 +124,212 @@ class TeacherController extends Controller
         }
     }
 
-    public function edit($id)
-    {
-        $teacher = Teacher::with(['subjects', 'classes'])->findOrFail($id);
-        $subjects = Subject::all();
-        $schoolclasses = SchoolClass::with(['stream', 'level'])->where('status', 1)->get();
-        $departments = \App\Models\Department::all();
-
-        return view('teachers.edit', compact('teacher', 'subjects', 'schoolclasses', 'departments'));
-    }
-
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        $request->validate([
+            // Personal Info
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'date_of_birth' => 'required|date',
-            'email' => 'required|email|unique:users,email,' . $id . ',id',
-            'phone' => 'required|string|max:100',
-            'id_no' => 'required|string|max:255',
-            'address' => 'required|string',
-            'education_level' => 'required|string|max:255',
-            'years_of_experience' => 'required|integer|min:0',
-            'gender' => 'required|string|max:50',
-            'department' => 'required|integer|exists:departments,id',
-            'status' => 'required|boolean',
-            'subject_class' => 'nullable|array',
+            'date_of_birth' => 'required|date|before:today',
+            'email' => 'nullable|email|max:255',
+            'phone' => 'nullable|string|max:20',
+            'id_no' => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:255',
+
+            // Employment Info
+            'education_level' => 'nullable|string|max:100',
+            'years_of_experience' => 'nullable|integer|min:0|max:100',
+            'gender' => 'required|in:Male,Female,Other',
+            'department' => 'required|exists:departments,id',
+            'status' => 'required|in:0,1',
+
+            // Subject-Class Assignments
+            'subject_class' => 'required|array|min:1',
             'subject_class.*.subject_id' => 'required|integer|exists:subjects,id',
             'subject_class.*.class_id' => 'required|integer|exists:school_classes,id',
         ]);
 
-        DB::beginTransaction();
 
-        try {
-            $teacher = Teacher::findOrFail($id);
+        $teacher = Teacher::findOrFail($id);
+        $teacher->first_name = $request->first_name;
+        $teacher->last_name = $request->last_name;
+        $teacher->email = $request->email;
+        // update other fields...
+        $teacher->save();
 
-            $teacher->update([
-                'first_name' => $validated['first_name'],
-                'last_name' => $validated['last_name'],
-                'date_of_birth' => $validated['date_of_birth'],
-                'email' => $validated['email'],
-                'phone' => $validated['phone'],
-                'id_no' => $validated['id_no'],
-                'address' => $validated['address'],
-                'education_level' => $validated['education_level'],
-                'years_of_experience' => $validated['years_of_experience'],
-                'gender' => $validated['gender'],
-                'department_id' => $validated['department'],
-                'status' => $validated['status'],
-            ]);
+        // Delete old assignments
+        TeacherSubject::where('teacher_id', $teacher->id)->delete();
 
-            // Update User
-            $user = User::find($teacher->user_id);
-            if ($user) {
-                $user->update([
-                    'email' => $teacher->email,
-                    'name' => $teacher->first_name . ' ' . $teacher->last_name,
-                    'phone' => $teacher->phone,
+        if ($request->has('subject_class')) {
+            foreach ($request->subject_class as $entry) {
+                TeacherSubject::create([
+                    'teacher_id' => $teacher->id,
+                    'subject_id' => $entry['subject_id'],
+                    'class_id' => $entry['class_id'],
                 ]);
             }
-
-            // Update Employee if exists
-            $employee = \App\Models\Employee::where('user_id', $user->id)->first();
-            if ($employee) {
-                $employee->update([
-                    'first_name' => $teacher->first_name,
-                    'last_name' => $teacher->last_name,
-                    'email' => $teacher->email,
-                    'contact_number' => $teacher->phone,
-                    'dob' => $teacher->date_of_birth,
-                    'gender' => $teacher->gender,
-                    'address' => $teacher->address,
-                    'department_id' => $teacher->department_id,
-                ]);
-            }
-
-            // Sync subject-class pairs
-            TeacherSubject::where('teacher_id', $teacher->id)->delete();
-
-            if (!empty($validated['subject_class'])) {
-                foreach ($validated['subject_class'] as $pair) {
-                    TeacherSubject::create([
-                        'teacher_id' => $teacher->id,
-                        'subject_id' => $pair['subject_id'],
-                        'class_id'   => $pair['class_id'],
-                    ]);
-                }
-            }
-
-            DB::commit();
-            return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error('Error updating teacher: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while updating the teacher.');
         }
+
+
+        return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
     }
+
+
+    public function editSubjects(Teacher $teacher)
+    {
+        $subjects = Subject::all();
+        $schoolclasses = SchoolClass::with(['level', 'stream'])->get();
+
+        return view('teachers.partials.subject_class_edit', compact('teacher', 'subjects', 'schoolclasses'))->render();
+    }
+
+    public function getSubjects($id)
+    {
+        $teacher = Teacher::with(['subjects' => function ($query) {
+            $query->withPivot('class_id');
+        }])->findOrFail($id);
+
+        $subjects = Subject::all();
+        $schoolclasses = SchoolClass::with(['level', 'stream'])->get();
+
+        return view('teachers.partials.edit-subject-class', compact('teacher', 'subjects', 'schoolclasses'))->render();
+    }
+
+
+  public function getSubjectClassMap(Teacher $teacher)
+    {
+        $assignments = TeacherSubject::with(['subject', 'class'])
+            ->where('teacher_id', $teacher->id)
+            ->get();
+
+        $subjects = Subject::all();
+        $schoolclasses = SchoolClass::with(['level', 'stream'])->get();
+
+        $html = '';
+
+        foreach ($assignments as $index => $assignment) {
+            $html .= '<div class="row align-items-end teaching-entry mb-2">';
+            $html .= '<div class="col-md-5">';
+            $html .= '<select name="subject_class[' . $index . '][subject_id]" class="form-select" required>';
+            $html .= '<option value="" disabled>Select Subject</option>';
+            foreach ($subjects as $subject) {
+                $selected = $assignment->subject_id == $subject->id ? 'selected' : '';
+                $html .= '<option value="' . $subject->id . '" ' . $selected . '>' . $subject->subject_name . '</option>';
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+
+            $html .= '<div class="col-md-5">';
+            $html .= '<select name="subject_class[' . $index . '][class_id]" class="form-select" required>';
+            $html .= '<option value="" disabled>Select Class</option>';
+            foreach ($schoolclasses as $class) {
+                $selected = $assignment->class_id == $class->id ? 'selected' : '';
+                $html .= '<option value="' . $class->id . '" ' . $selected . '>';
+                $html .= ($class->level->level_name ?? '') . ' ' . ($class->stream->name ?? '');
+                $html .= '</option>';
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+
+            $html .= '<div class="col-md-2">';
+            $html .= '<button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button>';
+            $html .= '</div>';
+            $html .= '</div>';
+        }
+
+        return response($html);
+    }
+
+
+
+
+    // public function update(Request $request, $id)
+    // {
+    //     $validated = $request->validate([
+    //         'first_name' => 'required|string|max:255',
+    //         'last_name' => 'required|string|max:255',
+    //         'date_of_birth' => 'required|date',
+    //         'email' => 'required|email|unique:users,email,' . $id . ',id',
+    //         'phone' => 'required|string|max:100',
+    //         'id_no' => 'required|string|max:255',
+    //         'address' => 'required|string',
+    //         'education_level' => 'required|string|max:255',
+    //         'years_of_experience' => 'required|integer|min:0',
+    //         'gender' => 'required|string|max:50',
+    //         'department' => 'required|integer|exists:departments,id',
+    //         'status' => 'required|boolean',
+    //         'subject_class' => 'nullable|array',
+    //         'subject_class.*.subject_id' => 'required|integer|exists:subjects,id',
+    //         'subject_class.*.class_id' => 'required|integer|exists:school_classes,id',
+    //     ]);
+
+    //     DB::beginTransaction();
+
+    //     try {
+    //         $teacher = Teacher::findOrFail($id);
+
+    //         $teacher->update([
+    //             'first_name' => $validated['first_name'],
+    //             'last_name' => $validated['last_name'],
+    //             'date_of_birth' => $validated['date_of_birth'],
+    //             'email' => $validated['email'],
+    //             'phone' => $validated['phone'],
+    //             'id_no' => $validated['id_no'],
+    //             'address' => $validated['address'],
+    //             'education_level' => $validated['education_level'],
+    //             'years_of_experience' => $validated['years_of_experience'],
+    //             'gender' => $validated['gender'],
+    //             'department_id' => $validated['department'],
+    //             'status' => $validated['status'],
+    //         ]);
+
+    //         // Update User
+    //         $user = User::find($teacher->user_id);
+    //         if ($user) {
+    //             $user->update([
+    //                 'email' => $teacher->email,
+    //                 'name' => $teacher->first_name . ' ' . $teacher->last_name,
+    //                 'phone' => $teacher->phone,
+    //             ]);
+    //         }
+
+    //         // Update Employee if exists
+    //         $employee = \App\Models\Employee::where('user_id', $user->id)->first();
+    //         if ($employee) {
+    //             $employee->update([
+    //                 'first_name' => $teacher->first_name,
+    //                 'last_name' => $teacher->last_name,
+    //                 'email' => $teacher->email,
+    //                 'contact_number' => $teacher->phone,
+    //                 'dob' => $teacher->date_of_birth,
+    //                 'gender' => $teacher->gender,
+    //                 'address' => $teacher->address,
+    //                 'department_id' => $teacher->department_id,
+    //             ]);
+    //         }
+
+    //         // Sync subject-class pairs
+    //         TeacherSubject::where('teacher_id', $teacher->id)->delete();
+
+    //         if (!empty($validated['subject_class'])) {
+    //             foreach ($validated['subject_class'] as $pair) {
+    //                 TeacherSubject::create([
+    //                     'teacher_id' => $teacher->id,
+    //                     'subject_id' => $pair['subject_id'],
+    //                     'class_id'   => $pair['class_id'],
+    //                 ]);
+    //             }
+    //         }
+
+    //         DB::commit();
+    //         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         \Log::error('Error updating teacher: ' . $e->getMessage());
+    //         return redirect()->back()->with('error', 'An error occurred while updating the teacher.');
+    //     }
+    // }
 
     public function destroy($id)
     {
