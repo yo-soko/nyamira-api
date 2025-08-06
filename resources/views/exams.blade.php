@@ -95,7 +95,8 @@
 <!-- ADD MODAL -->
 <div class="modal fade" id="add-exam" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-lg">
-    <form action="{{ route('exams.store') }}" method="POST" class="modal-content">
+    <form id="exam-form" action="{{ route('exams.store') }}" method="POST" class="modal-content">
+
       @csrf
       <div class="modal-header">
         <h5 class="modal-title">Add Exam</h5>
@@ -119,7 +120,8 @@
           <div class="border p-2 rounded" id="class-checkboxes" style="max-height:200px;overflow:auto;">
             @foreach($classes as $class)
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $class->id }}">
+              <input class="form-check-input class-checkbox" type="checkbox" name="class_ids[]" value="{{ $class->id }}">
+
               <label class="form-check-label">
                 {{ $class->level->level_name }} {{ $class->stream->name }}
               </label>
@@ -142,7 +144,9 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+
+
       </div>
     </form>
   </div>
@@ -224,7 +228,7 @@
   </div>
 </div>
 
-<!-- SUBJECT SELECTION MODAL -->
+<!-- SUBJECT SELECTION MODAL
 <div class="modal fade" id="subject-modal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered modal-md">
     <div class="modal-content">
@@ -241,7 +245,8 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -250,49 +255,52 @@ document.addEventListener('DOMContentLoaded', function() {
   let selectedSubjects = {};
   let currentClassId = null;
 
-  function setupClassCheckboxes(containerId, isEdit = false) {
-    const classCheckboxes = document.querySelectorAll(`${containerId} input[name="class_ids[]"]`);
-    classCheckboxes.forEach(cb => {
-      cb.addEventListener('change', function() {
-        if (cb.checked) {
-          currentClassId = cb.value;
-          fetch(`/classes/${currentClassId}/subjects`)
-            .then(res => res.json())
-            .then(data => {
-              let html = "";
-              data.forEach(subject => {
-                const isChecked = selectedSubjects[currentClassId]?.includes(subject.id) ? "checked" : "";
-                html += `
-                  <div class="form-check col-md-4">
-                    <input class="form-check-input" type="checkbox" value="${subject.id}" ${isChecked}>
-                    <label class="form-check-label">${subject.subject_name}</label>
-                  </div>
-                `;
-              });
-              subjectModalBody.innerHTML = html;
-              subjectModal.show();
-            });
-        } else {
-          delete selectedSubjects[cb.value];
-        }
-      });
-    });
-  }
+//   function setupClassCheckboxes(containerId, isEdit = false) {
+//     const classCheckboxes = document.querySelectorAll(`${containerId} .class-checkbox`);
+//     classCheckboxes.forEach(cb => {
+//       cb.addEventListener('change', function() {
+//         if (cb.checked) {
+//           currentClassId = cb.value;
+//           fetch(`/classes/${currentClassId}/subjects`)
+//             .then(res => res.json())
+//             .then(data => {
+//               let html = "";
+//               data.forEach(subject => {
+//                 const isChecked = selectedSubjects[currentClassId]?.includes(subject.id) ? "checked" : "";
+//                 html += `
+//                   <div class="form-check col-md-4">
+//                     <input class="form-check-input" type="checkbox" value="${subject.id}" ${isChecked}>
+//                     <label class="form-check-label">${subject.subject_name}</label>
+//                   </div>
+//                 `;
+//               });
+//               subjectModalBody.innerHTML = html;
+//               subjectModal.show();
+//             });
+//         } else {
+//           delete selectedSubjects[cb.value];
+//         }
+//       });
+//     });
+//   }
 
   setupClassCheckboxes('#class-checkboxes');
   setupClassCheckboxes('#edit-class-checkboxes', true);
 
-  document.querySelector('#add-exam form').addEventListener('submit', function() {
-    for (const [classId, subjectIds] of Object.entries(selectedSubjects)) {
-      subjectIds.forEach(subjectId => {
-        const hidden = document.createElement('input');
-        hidden.type = 'hidden';
-        hidden.name = 'subject_class_map[]';
-        hidden.value = `${classId}:${subjectId}`;
-        this.appendChild(hidden);
-      });
-    }
-  });
+    document.querySelector('#add-exam form').addEventListener('submit', function () {
+        const selectedClassIds = Array.from(this.querySelectorAll('.class-checkbox:checked'))
+            .map(cb => cb.value);
+
+        selectedClassIds.forEach(classId => {
+            const hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'class_ids[]';
+            hidden.value = classId;
+            this.appendChild(hidden);
+        });
+    });
+
+
 
   document.querySelector('#edit-exam-form').addEventListener('submit', function() {
     for (const [classId, subjectIds] of Object.entries(selectedSubjects)) {

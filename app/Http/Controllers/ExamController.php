@@ -31,7 +31,8 @@ class ExamController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'term_id' => 'required|exists:terms,id',
-            'subject_class_map' => 'required|array',
+            'class_ids' => 'required|array',
+
         ]);
 
         $exam = Exam::create([
@@ -42,20 +43,22 @@ class ExamController extends Controller
             'is_analysed' => $request->has('is_analysed'),
         ]);
 
-        foreach ($request->subject_class_map as $pair) {
-            [$class_id, $subject_id] = explode(':', $pair);
-            $schoolClass = SchoolClass::with('level')->find($class_id);
+        foreach ($request->class_ids as $class_id) {
+            $schoolClass = SchoolClass::with('level', 'subjects')->find($class_id);
             if ($schoolClass) {
-                ExamSubjectsClasses::create([
-                    'exam_id' => $exam->id,
-                    'subject_id' => $subject_id,
-                    'term_id' => $request->term_id,
-                    'level_id' => $schoolClass->level_id,
-                    'school_class_id' => $class_id,
-                    'status' => 1,
-                ]);
+                foreach ($schoolClass->subjects as $subject) {
+                    ExamSubjectsClasses::create([
+                        'exam_id' => $exam->id,
+                        'subject_id' => $subject->id,
+                        'term_id' => $request->term_id,
+                        'level_id' => $schoolClass->level_id,
+                        'school_class_id' => $class_id,
+                        'status' => 1,
+                    ]);
+                }
             }
         }
+
 
         return redirect()->route('exams')->with('success', 'Exam created successfully.');
     }
