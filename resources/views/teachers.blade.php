@@ -81,9 +81,14 @@
                                         <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this teacher?')">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                            <button type="button"
+                                                    class="btn btn-sm btn-danger delete-btn"
+                                                    data-id="{{ $teacher->id }}"
+                                                    data-name="{{ $teacher->first_name }} {{ $teacher->last_name }}"
+                                                    title="Delete">
                                                 <i class="ti ti-trash"></i>
                                             </button>
+
                                         </form>
                                     </div>
                                 </td>
@@ -340,6 +345,31 @@
   </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteTeacherModal" tabindex="-1" aria-labelledby="deleteTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteTeacherModalLabel">Confirm Delete</h5>
+                <button type="button" class="btn-close bg-white text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong id="teacherName"></strong>? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <form id="deleteTeacherForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 <script>
@@ -400,6 +430,28 @@ document.addEventListener('click', function(e) {
         }
 
         entry.remove();
+    }
+});
+
+
+//deleting modal
+
+document.addEventListener('click', function(e) {
+    const deleteBtn = e.target.closest('.delete-btn');
+    if (deleteBtn) {
+        const teacherId = deleteBtn.getAttribute('data-id');
+        const teacherName = deleteBtn.getAttribute('data-name');
+
+        // Set form action
+        const form = document.getElementById('deleteTeacherForm');
+        form.setAttribute('action', `/teachers/${teacherId}`);
+
+        // Set teacher name in modal
+        document.getElementById('teacherName').textContent = teacherName;
+
+        // Show modal
+        const modal = new bootstrap.Modal(document.getElementById('deleteTeacherModal'));
+        modal.show();
     }
 });
 
