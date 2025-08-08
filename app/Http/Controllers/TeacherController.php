@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
+
 
 class TeacherController extends Controller
 {
@@ -131,7 +133,7 @@ class TeacherController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'date_of_birth' => 'required|date|before:today',
-            'email' => 'nullable|email|max:255',
+            'email' => ['required', 'email', Rule::unique('teachers')->ignore($id)],
             'phone' => 'nullable|string|max:20',
             'id_no' => 'nullable|string|max:50',
             'address' => 'nullable|string|max:255',
@@ -185,60 +187,133 @@ class TeacherController extends Controller
 
     public function getSubjects($id)
     {
-        $teacher = Teacher::with(['subjects' => function ($query) {
-            $query->withPivot('class_id');
-        }])->findOrFail($id);
+        $teacher = Teacher::with('subjects')->findOrFail($id);
+        $allSubjects = Subject::where('status', 1)->get();
+        $allClasses = SchoolClass::where('status', 1)->get();
 
-        $subjects = Subject::all();
-        $schoolclasses = SchoolClass::with(['level', 'stream'])->get();
+        // Fetch subject-class combinations assigned to the teacher
+        $subjectClasses = DB::table('teacher_subject_class')
+            ->where('teacher_id', $id)
+            ->get();
 
-        return view('teachers.partials.edit-subject-class', compact('teacher', 'subjects', 'schoolclasses'))->render();
+        // Return raw HTML to be injected into the modal
+        $html = '';
+        $loopIndex = 0;
+        foreach ($subjectClasses as $entry) {
+            $html .= '<div class="row mb-2">';
+            $html .= '<div class="col-md-6">';
+            $html .= '<select name="subject_class[' . $loopIndex . '][subject_id]" class="form-control" required>';
+            foreach ($allSubjects as $subject) {
+                $selected = $subject->id == $entry->subject_id ? 'selected' : '';
+                $html .= "<option value='{$subject->id}' {$selected}>{$subject->name}</option>";
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+
+            $html .= '<div class="col-md-6">';
+            $html .= '<select name="subject_class[' . $loopIndex . '][class_id]" class="form-control" required>';
+            foreach ($allClasses as $class) {
+                $selected = $class->id == $entry->class_id ? 'selected' : '';
+                $html .= "<option value='{$class->id}' {$selected}>{$class->name}</option>";
+            }
+            $html .= '</select>';
+            $html .= '</div>';
+            $html .= '</div>';
+
+            $loopIndex++;
+        }
+
+        return response($html);
     }
 
 
-  public function getSubjectClassMap(Teacher $teacher)
+    public function getSubjectClassMap(Teacher $teacher)
     {
-        $assignments = TeacherSubject::with(['subject', 'class'])
-            ->where('teacher_id', $teacher->id)
-            ->get();
-
+        $teacher->load('subjects');
         $subjects = Subject::all();
         $schoolclasses = SchoolClass::with(['level', 'stream'])->get();
 
         $html = '';
 
-        foreach ($assignments as $index => $assignment) {
+        foreach ($teacher->subjects as $index => $subject) {
+            $class_id = $subject->pivot->class_id;
+
             $html .= '<div class="row align-items-end teaching-entry mb-2">';
-            $html .= '<div class="col-md-5">';
-            $html .= '<select name="subject_class[' . $index . '][subject_id]" class="form-select" required>';
+            $html .= '<div class="col-md-5"><select name="subject_class['.$index.'][subject_id]" class="form-select" required>';
             $html .= '<option value="" disabled>Select Subject</option>';
-            foreach ($subjects as $subject) {
-                $selected = $assignment->subject_id == $subject->id ? 'selected' : '';
-                $html .= '<option value="' . $subject->id . '" ' . $selected . '>' . $subject->subject_name . '</option>';
-            }
-            $html .= '</select>';
-            $html .= '</div>';
 
-            $html .= '<div class="col-md-5">';
-            $html .= '<select name="subject_class[' . $index . '][class_id]" class="form-select" required>';
+            foreach ($subjects as $subj) {
+                $selected = $subj->id == $subject->id ? 'selected' : '';
+                $html .= '<option value="'.$subj->id.'" '.$selected.'>'.$subj->subject_name.'</option>';
+            }
+
+            $html .= '</select></div>';
+
+            $html .= '<div class="col-md-5"><select name="subject_class['.$index.'][class_id]" class="form-select" required>';
             $html .= '<option value="" disabled>Select Class</option>';
-            foreach ($schoolclasses as $class) {
-                $selected = $assignment->class_id == $class->id ? 'selected' : '';
-                $html .= '<option value="' . $class->id . '" ' . $selected . '>';
-                $html .= ($class->level->level_name ?? '') . ' ' . ($class->stream->name ?? '');
-                $html .= '</option>';
-            }
-            $html .= '</select>';
-            $html .= '</div>';
 
-            $html .= '<div class="col-md-2">';
-            $html .= '<button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button>';
-            $html .= '</div>';
+            foreach ($schoolclasses as $class) {
+                $selected = $class->id == $class_id ? 'selected' : '';
+                $html .= '<option value="'.$class->id.'" '.$selected.'>'
+                    . ($class->level->level_name ?? '') . ' ' . ($class->stream->name ?? '') . '</option>';
+            }
+
+            $html .= '</select></div>';
+
+            $html .= '<div class="col-md-2"><button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button></div>';
             $html .= '</div>';
         }
 
+        // Add the plus button at the end
+        $html .= '<div><button type="button" class="btn btn-success add-subject-class"><i class="ti ti-plus"></i></button></div>';
+
         return response($html);
     }
+
+
+//   public function getSubjectClassMap(Teacher $teacher)
+//     {
+//         $assignments = TeacherSubject::with(['subject', 'class'])
+//             ->where('teacher_id', $teacher->id)
+//             ->get();
+
+//         $subjects = Subject::all();
+//         $schoolclasses = SchoolClass::with(['level', 'stream'])->get();
+
+//         $html = '';
+
+//         foreach ($assignments as $index => $assignment) {
+//             $html .= '<div class="row align-items-end teaching-entry mb-2">';
+//             $html .= '<div class="col-md-5">';
+//             $html .= '<select name="subject_class[' . $index . '][subject_id]" class="form-select" required>';
+//             $html .= '<option value="" disabled>Select Subject</option>';
+//             foreach ($subjects as $subject) {
+//                 $selected = $assignment->subject_id == $subject->id ? 'selected' : '';
+//                 $html .= '<option value="' . $subject->id . '" ' . $selected . '>' . $subject->subject_name . '</option>';
+//             }
+//             $html .= '</select>';
+//             $html .= '</div>';
+
+//             $html .= '<div class="col-md-5">';
+//             $html .= '<select name="subject_class[' . $index . '][class_id]" class="form-select" required>';
+//             $html .= '<option value="" disabled>Select Class</option>';
+//             foreach ($schoolclasses as $class) {
+//                 $selected = $assignment->class_id == $class->id ? 'selected' : '';
+//                 $html .= '<option value="' . $class->id . '" ' . $selected . '>';
+//                 $html .= ($class->level->level_name ?? '') . ' ' . ($class->stream->name ?? '');
+//                 $html .= '</option>';
+//             }
+//             $html .= '</select>';
+//             $html .= '</div>';
+
+//             $html .= '<div class="col-md-2">';
+//             $html .= '<button type="button" class="btn btn-danger remove-subject-class"><i class="ti ti-minus"></i></button>';
+//             $html .= '</div>';
+//             $html .= '</div>';
+//         }
+
+//         return response($html);
+//     }
 
 
 
