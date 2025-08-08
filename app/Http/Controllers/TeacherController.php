@@ -146,34 +146,100 @@ class TeacherController extends Controller
     }
 
 
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         // Personal Info
+    //         'first_name' => 'required|string|max:255',
+    //         'last_name' => 'required|string|max:255',
+    //         'date_of_birth' => 'required|date|before:today',
+    //         'email' => ['required', 'email', Rule::unique('teachers')->ignore($id)],
+    //         'phone' => 'nullable|string|max:20',
+    //         'id_no' => 'nullable|string|max:50',
+    //         'address' => 'nullable|string|max:255',
+
+    //         // Employment Info
+    //         'education_level' => 'nullable|string|max:100',
+    //         'years_of_experience' => 'nullable|integer|min:0|max:100',
+    //         'gender' => 'required|in:Male,Female,Other',
+    //         'department' => 'required|exists:departments,id',
+    //         'status' => 'required|in:0,1',
+
+    //         // Subject-Class Assignments
+    //         'subject_class' => 'required|array|min:1',
+    //         'subject_class.*.subject_id' => 'required|integer|exists:subjects,id',
+    //         'subject_class.*.class_id' => 'required|integer|exists:school_classes,id',
+    //     ]);
+
+    //     $teacher = Teacher::findOrFail($id);
+
+    //     // Update teacher info (use the correct column names)
+    //     $teacher->update([
+    //         'first_name' => $request->first_name,
+    //         'last_name'  => $request->last_name,
+    //         'date_of_birth' => $request->date_of_birth,
+    //         'email'      => $request->email,
+    //         'phone'      => $request->phone,
+    //         'id_no'      => $request->id_no,
+    //         'address'    => $request->address,
+    //         'education_level' => $request->education_level,
+    //         'years_of_experience' => $request->years_of_experience,
+    //         'gender'     => $request->gender,
+    //         'department_id' => $request->department,   // <-- correct column name
+    //         'status'     => $request->status,
+    //     ]);
+
+    //     // Replace old mappings with the new ones
+    //     TeacherSubject::where('teacher_id', $teacher->id)->delete();
+
+    //     foreach ($request->subject_class as $entry) {
+    //         TeacherSubject::create([
+    //             'teacher_id' => $teacher->id,
+    //             'subject_id' => $entry['subject_id'],
+    //             'class_id'   => $entry['class_id'],
+    //         ]);
+    //     }
+
+    //     return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+    // }
+
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            // Personal Info
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'date_of_birth' => 'required|date|before:today',
-            'email' => ['required', 'email', Rule::unique('teachers')->ignore($id)],
-            'phone' => 'nullable|string|max:20',
-            'id_no' => 'nullable|string|max:50',
-            'address' => 'nullable|string|max:255',
+{
+    // load teacher first so we can base validation on its user_id
+    $teacher = Teacher::findOrFail($id);
 
-            // Employment Info
-            'education_level' => 'nullable|string|max:100',
-            'years_of_experience' => 'nullable|integer|min:0|max:100',
-            'gender' => 'required|in:Male,Female,Other',
-            'department' => 'required|exists:departments,id',
-            'status' => 'required|in:0,1',
+    // validate (note: unique check on users.email, ignoring the linked user if exists)
+    $request->validate([
+        // Personal Info
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+        'date_of_birth' => 'required|date|before:today',
+        'email' => [
+            'required',
+            'email',
+            Rule::unique('users', 'email')->ignore($teacher->user_id)
+        ],
+        'phone' => 'nullable|string|max:20',
+        'id_no' => 'nullable|string|max:50',
+        'address' => 'nullable|string|max:255',
 
-            // Subject-Class Assignments
-            'subject_class' => 'required|array|min:1',
-            'subject_class.*.subject_id' => 'required|integer|exists:subjects,id',
-            'subject_class.*.class_id' => 'required|integer|exists:school_classes,id',
-        ]);
+        // Employment Info
+        'education_level' => 'nullable|string|max:100',
+        'years_of_experience' => 'nullable|integer|min:0|max:100',
+        'gender' => 'required|in:Male,Female,Other',
+        'department' => 'required|exists:departments,id',
+        'status' => 'required|in:0,1',
 
-        $teacher = Teacher::findOrFail($id);
+        // Subject-Class Assignments
+        'subject_class' => 'required|array|min:1',
+        'subject_class.*.subject_id' => 'required|integer|exists:subjects,id',
+        'subject_class.*.class_id' => 'required|integer|exists:school_classes,id',
+    ]);
 
-        // Update teacher info (use the correct column names)
+    DB::beginTransaction();
+
+    try {
+        // Update teacher (use correct column names)
         $teacher->update([
             'first_name' => $request->first_name,
             'last_name'  => $request->last_name,
@@ -185,23 +251,61 @@ class TeacherController extends Controller
             'education_level' => $request->education_level,
             'years_of_experience' => $request->years_of_experience,
             'gender'     => $request->gender,
-            'department_id' => $request->department,   // <-- correct column name
+            'department_id' => $request->department,
             'status'     => $request->status,
         ]);
 
-        // Replace old mappings with the new ones
-        TeacherSubject::where('teacher_id', $teacher->id)->delete();
-
-        foreach ($request->subject_class as $entry) {
-            TeacherSubject::create([
-                'teacher_id' => $teacher->id,
-                'subject_id' => $entry['subject_id'],
-                'class_id'   => $entry['class_id'],
-            ]);
+        // Update or create linked User record so users table remains in sync
+        $user = null;
+        if ($teacher->user_id) {
+            $user = User::find($teacher->user_id);
         }
 
+        if ($user) {
+            // update existing user
+            $user->name  = $request->first_name . ' ' . $request->last_name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            // keep role as 'teacher' if you want; only update status (mirror teacher)
+            $user->status = (bool) $request->status;
+            $user->save();
+        } else {
+            // no user linked: create one and attach to teacher
+            $newUser = User::create([
+                'code' => 'TCHR' . str_pad($teacher->id, 5, '0', STR_PAD_LEFT),
+                'role' => 'teacher',
+                'email' => $request->email,
+                'name' => $request->first_name . ' ' . $request->last_name,
+                'phone' => $request->phone,
+                'password' => Hash::make('Password'),
+                'status' => (bool) $request->status,
+            ]);
+            $teacher->user_id = $newUser->id;
+            $teacher->save();
+        }
+
+        // Replace old subject-class mappings
+        TeacherSubject::where('teacher_id', $teacher->id)->delete();
+
+        if ($request->has('subject_class')) {
+            foreach ($request->subject_class as $entry) {
+                TeacherSubject::create([
+                    'teacher_id' => $teacher->id,
+                    'subject_id' => $entry['subject_id'],
+                    'class_id'   => $entry['class_id'],
+                ]);
+            }
+        }
+
+        DB::commit();
         return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error('Error updating teacher: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'An error occurred while updating the teacher.');
     }
+}
+
 
 
 

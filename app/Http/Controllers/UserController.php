@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User; 
+use App\Models\User;
 class UserController extends Controller
 {
     /**
@@ -40,7 +40,7 @@ class UserController extends Controller
             'phone' => 'nullable|string',
             'role' => 'required',
             'code' => 'required',
-       
+
             'password' => 'required|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -56,7 +56,7 @@ class UserController extends Controller
             'phone' => $request->phone,
             'code' => $request->code,
             'role' => $request->role,
-    
+
             'status' => $request->has('status'),
             'profile_picture' => $imagePath,
             'password' => Hash::make($request->password),
@@ -72,7 +72,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         return view('users.show', compact('user'));
-     
+
 
     }
 
@@ -85,12 +85,12 @@ class UserController extends Controller
         $user = User::findOrFail($request->id);
         return view('users.edit', compact('user'));
     }
-    
+
 
     /**
      * Update the specified resource in storage.
      */
-  
+
     public function update(Request $request)
     {
         $user = auth()->user();
@@ -131,7 +131,7 @@ class UserController extends Controller
             'phone' => 'nullable|string',
             'role' => 'required',
             'code' => 'nullable',
-            
+
             'password' => 'nullable|confirmed',
             'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -148,7 +148,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-      
+
         $user->role = $request->role;
         $user->status = $request->has('status');
 
@@ -172,7 +172,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($request->id);
         $user->delete();
-    
+
         return redirect()->back()->with('success', 'User deleted successfully!');
     }
 }

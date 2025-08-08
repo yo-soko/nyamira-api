@@ -1095,7 +1095,7 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger fs-13 fw-medium p-2 px-3">Yes Delete</button>
                         </form>
-                    </div>						
+                    </div>
                 </div>
             </div>
         </div>
@@ -1117,7 +1117,7 @@
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>					
+                </div>
                 <form action="{{url('index')}}">
                     <div class="modal-body">
                         <div class="row">
@@ -1210,8 +1210,8 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">	
-					<div class="new-employee-field">	
+				<div class="modal-body">
+					<div class="new-employee-field">
 						<div class="modal-title-head people-cust-avatar">
 							<h6>Variant Thumbnail</h6>
 						</div>
@@ -1229,7 +1229,7 @@
 								<p class="mt-2">JPEG, PNG up to 2 MB</p>
 							</div>
 						</div>
-					</div>	
+					</div>
 					<div class="row">
 						<div class="col-lg-6 pe-0">
 							<div class="mb-3">
@@ -1334,7 +1334,7 @@
 								<label class="form-label">Discount Value<span class="text-danger ms-1">*</span></label>
 								<input type="text" class="form-control">
 							</div>
-						</div>								
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -1358,7 +1358,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 					</div>
 				</div>
 			</div>
@@ -1440,7 +1440,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -1546,14 +1546,14 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-		  
+
 @endif
 
 @if (Route::is(['category-list']))
@@ -1648,7 +1648,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -1746,10 +1746,10 @@
                         <div class="mb-3">
                             <div class="add-image-upload">
                                 <div class="add-image p-1 border-solid">
-                                
+
                                         <img src="{{URL::asset('build/img/products/laptop.png')}}" alt="image">
                                         <a href="javascript:void(0);"><i data-feather="x" class="x-square-add image-close remove-product fs-12 text-white bg-danger rounded-1"></i></a>
-                        
+
                                 </div>
                                 <div class="new-employee-field">
                                     <div class="mb-0">
@@ -1815,7 +1815,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -1938,7 +1938,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -1980,7 +1980,7 @@
 									</div>
 
 								</form>
-								
+
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -2007,7 +2007,7 @@
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
-							<div class="modal-body">		
+							<div class="modal-body">
 								<form action="{{url('units')}}">
 									<div class="mb-3">
 										<label class="form-label">Unit<span class="text-danger ms-1">*</span></label>
@@ -2024,7 +2024,7 @@
 											<label for="user3" class="checktoggle"></label>
 										</div>
 									</div>
-			
+
 								</form>
 							</div>
 							<div class="modal-footer">
@@ -2036,7 +2036,7 @@
 				</div>
 			</div>
 		</div>
-		  
+
 
 		<!-- /Edit Unit -->
 
@@ -2052,7 +2052,7 @@
 									<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 										<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-									</div>						
+									</div>
 							</div>
 						</div>
 					</div>
@@ -2154,7 +2154,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 						</div>
 					</div>
 				</div>
@@ -2205,7 +2205,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="mb-0">
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
@@ -2295,7 +2295,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2319,7 +2319,7 @@
 					<div class="modal-body pb-0">
 						<div class="d-flex justify-content-end">
 							<a href="javascript:void(0);" class="btn btn-cancel close-btn btn-danger shadow-none">
-							<span><i class="fas fa-print me-2"></i></span>                                  
+							<span><i class="fas fa-print me-2"></i></span>
 							Print Barcode</a>
 						</div>
 						<div class="barcode-scan-header">
@@ -2332,11 +2332,11 @@
 									<p>
 										Nike Jordan
 									</p>
-									<p>Price: $400</p> 
+									<p>Price: $400</p>
 									<div class="barscaner-img">
 										<img src="{{URL::asset('build/img/barcode/barcode-01.png')}}" alt="Barcode" class="img-fluid">
-									</div>                                           
-								</div>                                                
+									</div>
+								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="barcode-scanner-link text-center">
@@ -2344,11 +2344,11 @@
 									<p>
 										Nike Jordan
 									</p>
-									<p>Price: $400</p> 
+									<p>Price: $400</p>
 									<div class="barscaner-img">
 										<img src="{{URL::asset('build/img/barcode/barcode-01.png')}}" alt="Barcode" class="img-fluid">
-									</div>                                           
-								</div>                                                
+									</div>
+								</div>
 							</div>
 							<div class="col-sm-4">
 								<div class="barcode-scanner-link text-center">
@@ -2356,14 +2356,14 @@
 									<p>
 										Nike Jordan
 									</p>
-									<p>Price: $400</p> 
+									<p>Price: $400</p>
 									<div class="barscaner-img">
 										<img src="{{URL::asset('build/img/barcode/barcode-01.png')}}" alt="Barcode" class="img-fluid">
-									</div>                                           
-								</div>                                                
+									</div>
+								</div>
 							</div>
-						</div>   
-						
+						</div>
+
 						<div class="barcode-scan-header">
 							<h5>Apple Series 5 Watch</h5>
 						</div>
@@ -2374,13 +2374,13 @@
 									<p>
 										Apple Series 5 Watch
 									</p>
-									<p>Price: $300</p> 
+									<p>Price: $300</p>
 									<div class="barscaner-img">
 										<img src="{{URL::asset('build/img/barcode/barcode-02.png')}}" alt="Barcode" class="img-fluid">
-									</div>                                           
-								</div>                                                
+									</div>
+								</div>
 							</div>
-						</div>  
+						</div>
 					</div>
 				</div>
 			</div>
@@ -2399,7 +2399,7 @@
 								<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 									<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 									<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-								</div>						
+								</div>
 						</div>
 					</div>
 				</div>
@@ -2423,7 +2423,7 @@
                 <div class="modal-body pb-0">
                     <div class="d-flex justify-content-end">
                         <a href="javascript:void(0);" class="btn btn-cancel close-btn bg-danger text-white shadow-none">
-                        <span><i class="fas fa-print me-2"></i></span>                                  
+                        <span><i class="fas fa-print me-2"></i></span>
                         Print QR Code</a>
                     </div>
                     <div class="barcode-scan-header">
@@ -2434,11 +2434,11 @@
                             <div class="barcode-scanner-link text-center">
                                 <div class="barscaner-img">
                                     <img src="{{URL::asset('./build/img/barcode/qr-code.png')}}" alt="Barcode" class="img-fluid">
-                                </div> 
-                                <p class="fs-12">Ref No :32RRR554 </p>                                           
-                            </div>                                                
+                                </div>
+                                <p class="fs-12">Ref No :32RRR554 </p>
+                            </div>
                         </div>
-                    </div>        
+                    </div>
                 </div>
             </div>
         </div>
@@ -2457,7 +2457,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -2521,7 +2521,7 @@
 						<label class="form-label">Category<span class="text-danger ms-1">*</span></label>
 						<input type="text" class="form-control">
 					</div>
-			
+
 				</div>
 				<div class="modal-footer">
 					<a href="javascript:void(0);" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
@@ -2544,7 +2544,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 					</div>
 				</div>
 			</div>
@@ -2578,7 +2578,7 @@
 									<div class="image-uploads">
 										<h4>Upload Image</h4>
 									</div>
-									
+
 								</div>
 								<p class="mt-2">JPEG, PNG up to 2 MB</p>
 							</div>
@@ -2685,7 +2685,7 @@
 								<label class="form-label">Discount Value<span class="text-danger ms-1">*</span></label>
 								<input type="text" class="form-control">
 							</div>
-						</div>								
+						</div>
 					</div>
 
 				</div>
@@ -2972,7 +2972,7 @@
 									<a href="#" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</a>
 									<a href="#" class="btn btn-primary">Delete</a>
 								</div>
-							</div>																				
+							</div>
 						</div>
 					</div>
 				</div>
@@ -3017,18 +3017,18 @@
 										we achieve inner peace while we hike at a local park.</p>
 
 									<p class="badged high"><i class="fas fa-circle"></i> High</p>
-								</div>	
+								</div>
 								<div class="modal-footer edit-footer-menu">
 									<a href="#" class="btn btn-primary me-2" data-bs-dismiss="modal">Close</a>
 								</div>
 							</div>
-						</div>	
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<!-- /View Note -->
-  
+
 
 
 @endif
@@ -3055,7 +3055,7 @@
 											<div class="mb-3">
 												<label class="form-label">Note Title</label>
 												<input type="text" class="form-control">
-											</div>											
+											</div>
 										</div>
 										<div class="col-12">
 											<div class="mb-3">
@@ -3092,11 +3092,11 @@
 												<label class="form-label">Descriptions</label>
 												<div id="summernote"></div>
 												<p>Maximum 60 Characters</p>
-											</div>											
+											</div>
 										</div>
 
-									</div>	
-								
+									</div>
+
 									<div class="modal-footer-btn">
 										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-submit">Submit</button>
@@ -3148,7 +3148,7 @@
 											<div class="mb-3">
 												<label>Note Title</label>
 												<input type="text" class="form-control" placeholder="Meet Lisa to discuss project details">
-											</div>											
+											</div>
 										</div>
 										<div class="col-12">
 											<div class="mb-3">
@@ -3185,12 +3185,12 @@
 												<label class="form-label">Descriptions</label>
 												<div id="summernote2"></div>
 												<p>Maximum 60 Characters</p>
-											</div>											
+											</div>
 										</div>
 
-									</div>									
+									</div>
 
-									
+
 									<div class="modal-footer-btn">
 										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-submit">Save Changes</button>
@@ -3222,7 +3222,7 @@
 									<a href="#" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</a>
 									<a href="#" class="btn btn-submit">Delete</a>
 								</div>
-							</div>																				
+							</div>
 						</div>
 					</div>
 				</div>
@@ -3270,14 +3270,14 @@
 													we achieve inner peace while we hike at a local park.</p>
 
 												<p class="badged low"><i class="fas fa-circle"></i> Low</p>
-											</div>	
+											</div>
 											<div class="modal-footer-btn edit-footer-menu">
 												<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Close</button>
 											</div>
 										</div>
-									</div>	
-								</form>							
-								
+									</div>
+								</form>
+
 							</div>
 						</div>
 					</div>
@@ -6079,7 +6079,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="mb-3">
@@ -6087,7 +6087,7 @@
                                     <div class="input-groupicon select-code">
                                         <input type="text" value="0" class="form-control p-2">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
@@ -6212,7 +6212,7 @@
                                                     <img src="{{URL::asset('build/img/products/product6.jpg')}}" alt="product">
                                                 </a>
                                                 <a href="javascript:void(0);">Apple Earpods</a>
-                                            </div>													
+                                            </div>
                                         </td>
                                         <td>300</td>
                                         <td>400</td>
@@ -6228,7 +6228,7 @@
                                                     <img src="{{URL::asset('build/img/products/product7.jpg')}}" alt="product">
                                                 </a>
                                                 <a href="javascript:void(0);">Apple Earpods</a>
-                                            </div>													
+                                            </div>
                                         </td>
                                         <td>150</td>
                                         <td>500</td>
@@ -6265,7 +6265,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="mb-3">
@@ -6273,7 +6273,7 @@
                                     <div class="input-groupicon select-code">
                                         <input type="text" value="0" class="form-control p-2">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
@@ -6332,12 +6332,12 @@
                 <div>
                     <label class="form-label">Customer <span class="text-danger">*</span></label>
                     <input type="text" class="form-control">
-                </div>												
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                 <button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Customer</button>
-            </div>						
+            </div>
         </form>
     </div>
 </div>
@@ -6365,7 +6365,7 @@
         </div>
     </div>
 </div>
-<!-- /Delete -->    
+<!-- /Delete -->
 @endif
 
 @if (Route::is(['quotation-list']))
@@ -6452,28 +6452,28 @@
 												<tbody>
 													<tr style="background: #ffffff;">
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 														<td class="p-5">
-			
+
 														</td>
 													</tr>
 												</tbody>
@@ -6616,7 +6616,7 @@
 															<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 														</a>
 														<a href="javascript:void(0);">Nike Jordan</a>
-													</div>												
+													</div>
 												</td>
 												<td>
 													<div class="product-quantity bg-light border-0">
@@ -6641,7 +6641,7 @@
 															<img src="{{URL::asset('build/img/products/stock-img-03.png')}}" alt="product">
 														</a>
 														<a href="javascript:void(0);">Apple Series 5 Watch</a>
-													</div>												
+													</div>
 												</td>
 												<td>
 													<div class="product-quantity bg-light border-0">
@@ -6666,7 +6666,7 @@
 															<img src="{{URL::asset('build/img/products/stock-img-05.png')}}" alt="product">
 														</a>
 														<a href="javascript:void(0);">Lobar Handy</a>
-													</div>												
+													</div>
 												</td>
 												<td>
 													<div class="product-quantity bg-light border-0">
@@ -6687,7 +6687,7 @@
 										</tbody>
 									</table>
 								</div>
-	
+
 								<div class="row">
 									<div class="col-lg-6 ms-auto">
 										<div class="total-order w-100 max-widthauto m-auto mb-4">
@@ -6712,7 +6712,7 @@
 										</div>
 									</div>
 								</div>
-								
+
 								<div class="row">
 									<div class="col-lg-3 col-sm-6 col-12">
 										<div class="mb-3">
@@ -6944,7 +6944,7 @@
                         <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
                             <span class="badge bg-dark fs-12">Order ID : #45698</span>
                             <p class="fs-16">Number of Products : 02</p>
-                        </div>								
+                        </div>
                         <div class="product-wrap h-auto">
                             <div class="product-list bg-white align-items-center justify-content-between">
                                 <div class="d-flex align-items-center product-info" data-bs-toggle="modal" data-bs-target="#products">
@@ -6971,7 +6971,7 @@
                                 <p class="text-teal fw-bold">$3000</p>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -7033,7 +7033,7 @@
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-md btn-primary">Submit</button>
                 </div>
-            </form>					
+            </form>
         </div>
     </div>
 </div>
@@ -7143,8 +7143,8 @@
                                 </select>
                             </div>
                         </div>
-                    </div>	
-                </div>										
+                    </div>
+                </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                    <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -7909,7 +7909,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -7970,7 +7970,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -7987,7 +7987,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -8020,7 +8020,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -8035,7 +8035,7 @@
                                                 <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 24 Dec 2024 13:39:11</p>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -8068,7 +8068,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -8083,11 +8083,11 @@
                                                 <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 23 Dec 2024 13:39:11</p>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -8276,8 +8276,8 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
                         <button type="button" class="btn btn-md btn-light flex-fill" data-bs-toggle="modal" data-bs-target="#print-receipt"><i class="ti ti-printer me-1"></i>Print Receipt</button>
-                        <button type="button" class="btn btn-md btn-teal flex-fill"><i class="ti ti-gift me-1"></i>Gift Receipt</button>			
-                        <a href="#" class="btn btn-md btn-dark flex-fill"><i class="ti ti-shopping-cart me-1"></i>Next Order</a>								
+                        <button type="button" class="btn btn-md btn-teal flex-fill"><i class="ti ti-gift me-1"></i>Gift Receipt</button>
+                        <a href="#" class="btn btn-md btn-dark flex-fill"><i class="ti ti-shopping-cart me-1"></i>Next Order</a>
                     </div>
                 </div>
             </div>
@@ -8313,8 +8313,8 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-center gap-2 flex-wrap">
                         <button type="button" class="btn btn-md btn-light flex-fill" data-bs-toggle="modal" data-bs-target="#print-receipt"><i class="ti ti-printer me-1"></i>Print Receipt</button>
-                        <button type="button" class="btn btn-md btn-teal flex-fill"><i class="ti ti-gift me-1"></i>Gift Receipt</button>			
-                        <a href="#" class="btn btn-md btn-dark flex-fill"><i class="ti ti-shopping-cart me-1"></i>Next Order</a>								
+                        <button type="button" class="btn btn-md btn-teal flex-fill"><i class="ti ti-gift me-1"></i>Gift Receipt</button>
+                        <a href="#" class="btn btn-md btn-dark flex-fill"><i class="ti ti-shopping-cart me-1"></i>Next Order</a>
                     </div>
                 </div>
             </div>
@@ -8654,7 +8654,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -8789,7 +8789,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -8924,7 +8924,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -9059,7 +9059,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -9194,7 +9194,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -9218,7 +9218,7 @@
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
-                        </div>							
+                        </div>
                         <div>
                             <input class="input" type="text" placeholder="0" readonly>
                         </div>
@@ -9236,23 +9236,23 @@
                             <button class="btn btn-number" onclick="dis('8')">8</button>
                             <button class="btn btn-number" onclick="dis('5')">5</button>
                             <button class="btn btn-number" onclick="dis('2')">2</button>
-                            <button class="btn btn-number" onclick="dis('00')">00</button>									
+                            <button class="btn btn-number" onclick="dis('00')">00</button>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-expression" onclick="dis('%')">%</button>
                             <button class="btn btn-number" onclick="dis('9')">9</button>
                             <button class="btn btn-number" onclick="dis('6')">6</button>
                             <button class="btn btn-number" onclick="dis('3')">3</button>
-                            <button class="btn btn-number" onclick="dis('.')">.</button>									
+                            <button class="btn btn-number" onclick="dis('.')">.</button>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-clear" onclick="back()"><i class="ti ti-backspace"></i></button>
                             <button class="btn btn-expression" onclick="dis('*')">x</button>
                             <button class="btn btn-expression" onclick="dis('-')">-</button>
                             <button class="btn btn-expression" onclick="dis('+')">+</button>
-                            <button class="btn btn-clear" onclick="solve()">=</button>									
+                            <button class="btn btn-clear" onclick="solve()">=</button>
                         </div>
-                    </div>							
+                    </div>
                 </div>
             </div>
         </div>
@@ -9536,12 +9536,12 @@
 										<input type="text" class="form-control">
 										<span class="unlimited-text fs-12">Enter 0 for Unlimited</span>
 									</div>
-									
+
 								</div>
 								<div class="col-lg-6">
 									<div class="mb-3">
 										<label class="form-label">Start Date<span class="text-danger ms-1">*</span></label>
-										
+
 										<div class="input-groupicon calender-input">
 											<i data-feather="calendar" class="info-img"></i>
 											<input type="text" class="datetimepicker form-control p-2" placeholder="dd/mm/yyy" >
@@ -9551,7 +9551,7 @@
 								<div class="col-lg-6">
 									<div class="mb-3">
 										<label class="form-label">End Date<span class="text-danger ms-1">*</span></label>
-										
+
 										<div class="input-groupicon calender-input">
 											<i data-feather="calendar" class="info-img"></i>
 											<input type="text" class="datetimepicker form-control p-2" placeholder="dd/mm/yyy" >
@@ -9564,7 +9564,7 @@
 										<div class="d-flex align-items-center">
 											<input type="checkbox" id="user4" class="check">
 											<label for="user4" class="checktoggle mb-0 me-1"></label>
-											<span class="customer-toggle">Once Per Customer</span>	
+											<span class="customer-toggle">Once Per Customer</span>
 										</div>
 									</div>
 									<select class="select">
@@ -9573,14 +9573,14 @@
 										<option>Amazon Echo Dot</option>
 									</select>
 								</div>
-							
+
 								<div class="mb-3 summer-description-box">
 									<label class="form-label">Description</label>
 									<div id="summernote2"></div>
 									<p>Maximum 60 Words</p>
 								</div>
-								
-							
+
+
 								<div class="m-0">
 									<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
 										<span class="status-label">Status</span>
@@ -9588,7 +9588,7 @@
 										<label for="user2" class="checktoggle">	</label>
 									</div>
 								</div>
-							</div>								
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -9635,7 +9635,7 @@
 												<select class="select">
 													<option>Percentage</option>
 													<option>Fixed</option>
-										
+
 												</select>
 											</div>
 										</div>
@@ -9651,12 +9651,12 @@
 												<input type="text" class="form-control" value="01">
 												<span class="unlimited-text fs-12">Enter 0 for Unlimited</span>
 											</div>
-											
+
 										</div>
 										<div class="col-lg-6">
 											<div class="mb-3">
 												<label class="form-label">Start Date<span class="text-danger ms-1">*</span></label>
-												
+
 												<div class="input-groupicon calender-input">
 													<i data-feather="calendar" class="info-img"></i>
 													<input type="text" class="datetimepicker form-control p-2" placeholder="31 Dec 2024" >
@@ -9666,7 +9666,7 @@
 										<div class="col-lg-6">
 											<div class="mb-3">
 												<label class="form-label">End Date<span class="text-danger ms-1">*</span></label>
-												
+
 												<div class="input-groupicon calender-input">
 													<i data-feather="calendar" class="info-img"></i>
 													<input type="text" class="datetimepicker form-control p-2" placeholder="04 Jan 2025" >
@@ -9679,7 +9679,7 @@
 												<div class="d-flex align-items-center">
 													<input type="checkbox" id="user5" class="check">
 													<label for="user5" class="checktoggle mb-0 me-1"></label>
-													<span class="customer-toggle">Once Per Customer</span>	
+													<span class="customer-toggle">Once Per Customer</span>
 												</div>
 											</div>
 											<select class="select">
@@ -9688,15 +9688,15 @@
 												<option>Amazon Echo Dot</option>
 											</select>
 										</div>
-									
+
 										<div class="mb-3 summer-description-box">
 											<label class="form-label">Description</label>
 											<div id="summernote">30% off on New Year</div>
 											<p>Maximum 60 Words</p>
 										</div>
-										
-                                        
-									
+
+
+
 										<div class="m-0">
 											<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
 												<span class="status-label">Status</span>
@@ -9730,7 +9730,7 @@
 											<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 												<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 												<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-											</div>						
+											</div>
 									</div>
 								</div>
 							</div>
@@ -9772,54 +9772,54 @@
                         <div class="row">
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control"> 
+                                <input type="text" class="form-control">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control"> 
+                                <input type="text" class="form-control">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                <input type="email" class="form-control"> 
+                                <input type="email" class="form-control">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-                                <input type="tel" class="form-control"> 
+                                <input type="tel" class="form-control">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Address<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control"> 
+                                <input type="text" class="form-control">
                             </div>
-                            <div class="col-lg-6 mb-3">		
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">City<span class="text-danger ms-1">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option>Los Angles</option>
                                     <option>New York City</option>
                                     <option>Houston</option>
-                                </select>											
+                                </select>
                             </div>
-                            <div class="col-lg-6 mb-3">		
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">State<span class="text-danger ms-1">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option>California</option>
                                     <option>New York</option>
                                     <option>Texas</option>
-                                </select>											
+                                </select>
                             </div>
-                            <div class="col-lg-6 mb-3">		
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">Country<span class="text-danger ms-1">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option>United States</option>
                                     <option>Canada</option>
                                     <option>Germany</option>
-                                </select>											
+                                </select>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">Postal Code<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control"> 
+                                <input type="text" class="form-control">
                             </div>
                             <div class="col-lg-12">
                                 <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
@@ -9827,8 +9827,8 @@
                                     <input type="checkbox" id="user1" class="check" checked="">
                                     <label for="user1" class="checktoggle">	</label>
                                 </div>
-                            </div>				
-                        </div>	
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -9878,54 +9878,54 @@
                                 <div class="row">
                                     <div class="col-lg-6 mb-3">
                                         <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control" value="Carl"> 
+                                        <input type="text" class="form-control" value="Carl">
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control" value="Evans"> 
+                                        <input type="text" class="form-control" value="Evans">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                        <input type="email" class="form-control" value="carlevans@example.com"> 
+                                        <input type="email" class="form-control" value="carlevans@example.com">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-                                        <input type="tel" class="form-control" value="+12163547758 "> 
+                                        <input type="tel" class="form-control" value="+12163547758 ">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Address<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control" value="87 Griffin Street"> 
+                                        <input type="text" class="form-control" value="87 Griffin Street">
                                     </div>
-                                    <div class="col-lg-6 mb-3">		
+                                    <div class="col-lg-6 mb-3">
                                         <label class="form-label">City<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Select</option>
                                             <option selected>Los Angles</option>
                                             <option>New York City</option>
                                             <option>Houston</option>
-                                        </select>											
+                                        </select>
                                     </div>
-                                    <div class="col-lg-6 mb-3">		
+                                    <div class="col-lg-6 mb-3">
                                         <label class="form-label">State<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Select</option>
                                             <option selected>California</option>
                                             <option>New York</option>
                                             <option>Texas</option>
-                                        </select>											
+                                        </select>
                                     </div>
-                                    <div class="col-lg-6 mb-3">		
+                                    <div class="col-lg-6 mb-3">
                                         <label class="form-label">Country<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Select</option>
                                             <option selected>United States</option>
                                             <option>Canada</option>
                                             <option>Germany</option>
-                                        </select>											
+                                        </select>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label class="form-label">Postal Code<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control" value="90001"> 
+                                        <input type="text" class="form-control" value="90001">
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
@@ -9934,7 +9934,7 @@
                                             <label for="user2" class="checktoggle">	</label>
                                         </div>
                                     </div>
-                                                            
+
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -9961,7 +9961,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -10014,19 +10014,19 @@
 										<label class="form-label">Last Name <span class="text-danger">*</span></label>
 										<input type="text" class="form-control">
 									</div>
-								</div>	
+								</div>
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Email <span class="text-danger">*</span></label>
 										<input type="email" class="form-control">
 									</div>
-								</div>								
+								</div>
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Phone <span class="text-danger">*</span></label>
 										<input type="text" class="form-control">
 									</div>
-								</div>									
+								</div>
 								<div class="col-lg-12">
 									<div class="mb-3">
 										<label class="form-label">Address <span class="text-danger">*</span></label>
@@ -10040,7 +10040,7 @@
 											<option>Select</option>
 											<option>Varrel</option>
 											<option>Los Angels</option>
-											<option>Munich</option>											
+											<option>Munich</option>
 										</select>
 									</div>
 								</div>
@@ -10051,7 +10051,7 @@
 											<option>Select</option>
 											<option>Bavaria</option>
 											<option>New York City</option>
-											<option>California</option>											
+											<option>California</option>
 										</select>
 									</div>
 								</div>
@@ -10062,7 +10062,7 @@
 											<option>Select</option>
 											<option>Germany</option>
 											<option>Mexico</option>
-											<option>United States</option>											
+											<option>United States</option>
 										</select>
 									</div>
 								</div>
@@ -10079,7 +10079,7 @@
 											<input type="checkbox" id="users5" class="check" checked>
 											<label for="users5" class="checktoggle mb-0"></label>
 										</div>
-									</div>	
+									</div>
 								</div>
 							</div>
 						</div>
@@ -10146,13 +10146,13 @@
 											<label class="form-label">Email <span class="text-danger">*</span></label>
 											<input type="email" class="form-control" value="carlevans@example.com">
 										</div>
-									</div>								
+									</div>
 									<div class="col-lg-12">
 										<div class="mb-3">
 											<label class="form-label">Phone <span class="text-danger">*</span></label>
 											<input type="text" class="form-control" value="+15964712634">
 										</div>
-									</div>									
+									</div>
 									<div class="col-lg-12">
 										<div class="mb-3">
 											<label class="form-label">Address <span class="text-danger">*</span></label>
@@ -10166,7 +10166,7 @@
 												<option>Select</option>
 												<option>Varrel</option>
 												<option selected>Los Angels</option>
-												<option>Munich</option>												
+												<option>Munich</option>
 											</select>
 										</div>
 									</div>
@@ -10177,7 +10177,7 @@
 												<option>Select</option>
 												<option>Bavaria</option>
 												<option>New York City</option>
-												<option selected>California</option>												
+												<option selected>California</option>
 											</select>
 										</div>
 									</div>
@@ -10188,7 +10188,7 @@
 												<option>Select</option>
 												<option>Germany</option>
 												<option>Mexico</option>
-												<option selected>United States</option>												
+												<option selected>United States</option>
 											</select>
 										</div>
 									</div>
@@ -10205,9 +10205,9 @@
 												<input type="checkbox" id="users6" class="check" checked>
 												<label for="users6" class="checktoggle mb-0"></label>
 											</div>
-										</div>	
+										</div>
 									</div>
-								</div>																
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -10219,7 +10219,7 @@
 			</div>
 		</div>
 		<!-- /Edit Supplier -->
-		  
+
 		<!-- Delete Modal -->
 		<div class="modal fade" id="delete-modal">
             <div class="modal-dialog modal-dialog-centered">
@@ -10227,12 +10227,12 @@
                     <div class="modal-body text-center p-0">
 						<span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
 						<h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Supplier</h4>
-						<p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete supplier?</p>	
+						<p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete supplier?</p>
 						<div class="d-flex justify-content-center mt-3">
 							<a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
 							<a href="{{url('suppliers')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-						</div>											
-					</div>					
+						</div>
+					</div>
                 </div>
             </div>
         </div>
@@ -10283,7 +10283,7 @@
                                 <input type="checkbox" id="user2" class="check" checked>
                                 <label for="user2" class="checktoggle"></label>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -10338,7 +10338,7 @@
                                 <input type="checkbox" id="user1" class="check" checked>
                                 <label for="user1" class="checktoggle"></label>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -10357,12 +10357,12 @@
                 <div class="modal-body text-center p-0">
                     <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                     <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Store</h4>
-                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete store?</p>	
+                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete store?</p>
                     <div class="d-flex justify-content-center mt-3">
                         <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                         <a href="{{url('store-list')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                    </div>											
-                </div>					
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -10400,25 +10400,25 @@
                                         <option>Gravely</option>
                                     </select>
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Email <span class="text-danger">*</span></label>
                                     <input type="email" class="form-control">
                                 </div>
-                            </div>								
+                            </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Phone <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control">
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Phone(Work)</label>
                                     <input type="text" class="form-control">
                                 </div>
-                            </div>								
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Address <span class="text-danger">*</span></label>
@@ -10432,7 +10432,7 @@
                                         <option>Select</option>
                                         <option>Varrel</option>
                                         <option>Los Angels</option>
-                                        <option>Munich</option>											
+                                        <option>Munich</option>
                                     </select>
                                 </div>
                             </div>
@@ -10443,7 +10443,7 @@
                                         <option>Select</option>
                                         <option>Bavaria</option>
                                         <option>New York City</option>
-                                        <option>California</option>											
+                                        <option>California</option>
                                     </select>
                                 </div>
                             </div>
@@ -10454,7 +10454,7 @@
                                         <option>Select</option>
                                         <option>Germany</option>
                                         <option>Mexico</option>
-                                        <option>United States</option>											
+                                        <option>United States</option>
                                     </select>
                                 </div>
                             </div>
@@ -10471,7 +10471,7 @@
                                         <input type="checkbox" id="users5" class="check" checked>
                                         <label for="users5" class="checktoggle mb-0"></label>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -10515,25 +10515,25 @@
                                         <option>Gravely</option>
                                     </select>
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Email <span class="text-danger">*</span></label>
                                     <input type="email" class="form-control" value="electromart@example.com">
                                 </div>
-                            </div>								
+                            </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Phone <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" value="+12498345785">
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="form-label">Phone(Work)</label>
                                     <input type="text" class="form-control" value="+17538647943">
                                 </div>
-                            </div>								
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Address <span class="text-danger">*</span></label>
@@ -10547,7 +10547,7 @@
                                         <option>Select</option>
                                         <option selected>Varrel</option>
                                         <option>Los Angels</option>
-                                        <option>Munich</option>											
+                                        <option>Munich</option>
                                     </select>
                                 </div>
                             </div>
@@ -10558,7 +10558,7 @@
                                         <option>Select</option>
                                         <option selected>Bavaria</option>
                                         <option>New York City</option>
-                                        <option>California</option>											
+                                        <option>California</option>
                                     </select>
                                 </div>
                             </div>
@@ -10569,7 +10569,7 @@
                                         <option>Select</option>
                                         <option selected>Germany</option>
                                         <option>Mexico</option>
-                                        <option>United States</option>											
+                                        <option>United States</option>
                                     </select>
                                 </div>
                             </div>
@@ -10586,7 +10586,7 @@
                                         <input type="checkbox" id="users6" class="check" checked>
                                         <label for="users6" class="checktoggle mb-0"></label>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -10607,12 +10607,12 @@
                 <div class="modal-body text-center p-0">
                     <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                     <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Warehouse</h4>
-                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete warehouse?</p>	
+                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete warehouse?</p>
                     <div class="d-flex justify-content-center mt-3">
                         <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                         <a href="{{url('warehouse')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                    </div>											
-                </div>					
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -10666,7 +10666,7 @@
 												</div>
 											</div>
 										</div>
-									</div>					
+									</div>
 									<div class="modal-footer-btn">
 										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-submit">Submit</button>
@@ -10725,7 +10725,7 @@
 												</div>
 											</div>
 										</div>
-									</div>					
+									</div>
 									<div class="modal-footer-btn">
 										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-submit">Save Changes</button>
@@ -10808,7 +10808,7 @@
 											</div>
 										</div>
 									</div>
-								</div>					
+								</div>
 								<div class="modal-footer-btn">
 									<a href="javascript:void(0);" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</a>
 									<a href="{{url('warehouse')}}" class="btn btn-submit">Submit</a>
@@ -10865,7 +10865,7 @@
 											</div>
 										</div>
 									</div>
-								</div>					
+								</div>
 								<div class="modal-footer-btn">
 									<a href="javascript:void(0);" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</a>
 									<a href="{{url('warehouse')}}" class="btn btn-submit">Save Changes</a>
@@ -10981,7 +10981,7 @@
 								<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 									<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 									<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-								</div>						
+								</div>
 						</div>
 					</div>
 				</div>
@@ -11152,7 +11152,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 						</div>
 					</div>
 				</div>
@@ -11447,7 +11447,7 @@
 												<input type="text" class="form-control">
 											</div>
 										</div>
-										
+
 										<div class="row">
 											<!-- Editor -->
 											<div class="col-md-12">
@@ -11464,7 +11464,7 @@
 											<!-- /Editor -->
 										</div>
 									</div>
-									
+
 									<div class="modal-footer-btn">
 										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-submit">Submit</button>
@@ -11507,14 +11507,14 @@
 												<input type="text" class="form-control" placeholder="Beijing">
 											</div>
 										</div>
-										
+
 										<div class="row">
 											<!-- Editor -->
 											<div class="col-md-12">
 												<div class="edit-add card">
 													<div class="edit-add">
 														<label class="form-label">Description</label>
-				
+
 													</div>
 													<div class="card-body-list">
 														<div id="summernote5">Type your message</div>
@@ -11525,7 +11525,7 @@
 											<!-- /Editor -->
 										</div>
 									</div>
-									
+
 									<div class="modal-footer-btn">
 										<button type="button" class="btn btn-cancel me-2" data-bs-dismiss="modal">Cancel</button>
 										<button type="submit" class="btn btn-submit">Submit</button>
@@ -11673,7 +11673,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </div>
@@ -11857,7 +11857,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </div>
@@ -11892,7 +11892,7 @@
                                             <input type="text" class="form-control" name="name" required>
                                         </div>
                                     </div>
-                     
+
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label for="hod" class="form-label">HOD</label>
@@ -11903,13 +11903,13 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>	
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3 summer-description-box">
                                             <label class="form-label">Description</label>
                                             <textarea name="description" class="form-control"></textarea>
                                         </div>
-                                    </div>			
+                                    </div>
                                     <div class="input-blocks m-0">
                                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                             <span class="status-label">Status</span>
@@ -11966,13 +11966,13 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                    </div>	
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3 summer-description-box">
                                             <label class="form-label">Description</label>
                                             <textarea name="description" id="summernote2"></textarea>
                                         </div>
-                                    </div>			
+                                    </div>
                                     <div class="input-blocks m-0">
                                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                             <span class="status-label">Status</span>
@@ -12011,7 +12011,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 bg-secondary-gradient fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -12022,7 +12022,7 @@
 @endif
 
 @if(Route::is(['designation']))
-	
+
 <!-- Add Designation -->
 <div class="modal fade" id="add-department">
     <div class="modal-dialog modal-dialog-centered">
@@ -12046,7 +12046,7 @@
                                         <label class="form-label">Designation <span class="text-danger"> *</span></label>
                                         <input type="text" name="designation" class="form-control">
                                     </div>
-                                </div>		
+                                </div>
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <label class="form-label">Department <span class="text-danger"> *</span></label>
@@ -12056,7 +12056,7 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                </div>			
+                                </div>
                                 <div class="input-blocks m-0">
                                     <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                         <span class="status-label">Status</span>
@@ -12094,7 +12094,7 @@
                     </div>
                     <form action="{{url('designation/update')}}" method="POST">
                         @csrf
-                        
+
                         <div class="modal-body">
                         <input type="hidden" id="edit-id" name="id"> <!-- Hidden ID -->
                         <div class="row">
@@ -12103,7 +12103,7 @@
                                     <label class="form-label">Designation <span class="text-danger"> *</span></label>
                                     <input type="text" id="edit-designation" name="designation" class="form-control">
                                 </div>
-                            </div>		
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Department <span class="text-danger"> *</span></label>
@@ -12113,7 +12113,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>		
+                            </div>
                             <div class="input-blocks m-0">
                                 <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                     <span class="status-label">Status</span>
@@ -12153,7 +12153,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 bg-secondary-gradient fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </form>
@@ -12162,7 +12162,7 @@
 </div>
 
 <!-- /delete modal -->
- 
+
 @endif
 
 @if(Route::is(['email-settings']))
@@ -12318,8 +12318,8 @@
                                         <div class="mb-3">
                                             <label class="form-label">Category<span class="text-danger ms-1">*</span></label>
                                             <input type="text" class="form-control">
-                                        </div>												
-                                    </div>								
+                                        </div>
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3 summer-description-box">
                                             <label class="form-label">Description</label>
@@ -12333,7 +12333,7 @@
                                             <label for="user1" class="checktoggle">	</label>
                                         </div>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -12368,8 +12368,8 @@
                                         <div class="mb-3">
                                             <label class="form-label">Category<span class="text-danger ms-1">*</span></label>
                                             <input type="text" class="form-control" value="Utilities">
-                                        </div>												
-                                    </div>								
+                                        </div>
+                                    </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3 summer-description-box">
                                             <label class="form-label">Description</label>
@@ -12410,12 +12410,12 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>	
+    </div>
 
 @endif
 
@@ -12484,8 +12484,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                
-                                    </div>	
+
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -12538,7 +12538,7 @@
 								</div>
 								<div class="col-lg-6">
 									<label class="form-label">Date<span class="text-danger ms-1">*</span></label>
-									<div class="mb-3 date-group mt-0">											
+									<div class="mb-3 date-group mt-0">
 										<div class="input-groupicon calender-input">
 											<i data-feather="calendar" class="info-img"></i>
 											<input type="text" class="datetimepicker form-control p-2" placeholder="24 Dec 2024" >
@@ -12560,7 +12560,7 @@
 										</select>
 									</div>
 								</div>
-							</div>	
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -12584,14 +12584,14 @@
 								<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 									<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 									<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-								</div>						
+								</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<!-- /delete modal -->
-		  		
+
 @endif
 
 
@@ -12602,7 +12602,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="page-title">							
+                    <div class="page-title">
                         <h4>Add Holiday</h4>
                     </div>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -12636,13 +12636,13 @@
                                         <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                     </div>
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">No of Days</label>
                                     <input type="text" name="days_count" class="form-control">
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-3">
                                     <label class="form-label">Description <span class="text-danger"> *</span></label>
@@ -12655,8 +12655,8 @@
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" name="status" id="user5" class="check" checked>
                                 <label for="user5" class="checktoggle">	</label>
-                            </div>								
-                        </div>							
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -12673,7 +12673,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="page-title">							
+                    <div class="page-title">
                         <h4>Edit Holiday</h4>
                     </div>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
@@ -12683,7 +12683,7 @@
                 <form action="{{url('holidays/update')}}" method="POST">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" id="edit-id" name="id"> 
+                    <input type="hidden" id="edit-id" name="id">
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-lg-12">
@@ -12709,13 +12709,13 @@
                                         <span class="cus-icon"><i data-feather="calendar" class="feather-clock"></i></span>
                                     </div>
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">No of Days</label>
                                     <input type="text" name="days_count" id="days_count" class="form-control">
                                 </div>
-                            </div>	
+                            </div>
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-3">
                                     <label class="form-label">Description <span class="text-danger"> *</span></label>
@@ -12728,8 +12728,8 @@
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="edit-status" name="status" class="check" checked>
                                 <label for="user6" class="checktoggle">	</label>
-                            </div>								
-                        </div>							
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -12747,17 +12747,17 @@
             <div class="modal-content p-5">
                 <form method="POST" action="{{ route('holidays.delete') }}">
                     @csrf
-                    <input type="hidden" id="delete-id" name="id"> 
+                    <input type="hidden" id="delete-id" name="id">
                     <div class="modal-body text-center p-0">
                         <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                         <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Holiday</h4>
-                        <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete holiday?</p>	
+                        <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete holiday?</p>
                         <div class="d-flex justify-content-center mt-3">
                             <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                             <button type="submit" name="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                        </div>											
+                        </div>
                     </div>
-                </form>					
+                </form>
             </div>
         </div>
     </div>
@@ -12827,7 +12827,7 @@
 					<form action="{{url('leave-types/update')}}" method="POST">
                         @csrf
                         @method('PUT')
-                        <input type="hidden" id="edit-id" name="id"> 
+                        <input type="hidden" id="edit-id" name="id">
 						<div class="modal-body">
 							<div class="row">
 								<div class="col-lg-12">
@@ -12867,7 +12867,7 @@
 				<div class="modal-content">
                     <form method="POST" action="{{ route('leave-types.delete') }}">
                         @csrf
-                        <input type="hidden" id="delete-id" name="id"> 
+                        <input type="hidden" id="delete-id" name="id">
                         <div class="page-wrapper-new p-0">
                             <div class="content p-5 px-3 text-center">
                                 <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
@@ -12876,7 +12876,7 @@
                                 <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                     <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                                </div>						
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -12903,7 +12903,7 @@
                     @csrf
                     <div class="modal-body">
                         <div class="row">
-                           
+
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Leave Type <span class="text-danger">*</span></label>
@@ -12945,7 +12945,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-lg-12">
                                 <div class="summer-description-box mb-0">
                                     <label class="form-label">Reason</label>
@@ -12982,7 +12982,7 @@
                     <input type="hidden" name="id" id="edit-id">
                     <div class="modal-body">
                         <div class="row">
-                          
+
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Leave Type <span class="text-danger">*</span></label>
@@ -13013,7 +13013,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
+
                                     <div class="col-lg-6">
                                         <div class="mb-3">
                                             <select class="select" name="leave_mode" id="leave_mode">
@@ -13070,14 +13070,14 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    <!-- /delete modal -->	
+    <!-- /delete modal -->
 @endif
 
 @if(Route::is(['manage-stocks']))
@@ -13228,7 +13228,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Nike Jordan</a>
-															</div>												
+															</div>
 														</td>
 														<td>PT002</td>
 														<td>Nike</td>
@@ -13245,7 +13245,7 @@
 																	<i data-feather="trash-2" class="feather-trash-2"></i>
 																</a>
 															</div>
-															
+
 														</td>
 													</tr>
 												</tbody>
@@ -13457,7 +13457,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </div>
@@ -13626,12 +13626,12 @@
 						<div>
 							<label class="form-label">Supplier<span class="text-danger">*</span></label>
 							<input type="text" class="form-control">
-						</div>												
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 						<button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Supplier</button>
-					</div>						
+					</div>
 				</form>
 			</div>
 		</div>
@@ -13711,7 +13711,7 @@
 												<th class="bg-secondary-transparent p-3">Tax Amount($)</th>
 												<th class="text-end bg-secondary-transparent p-3">Unit Cost($)</th>
 												<th class="text-end bg-secondary-transparent p-3">Total Cost ($) </th>
-												
+
 											</tr>
 										</thead>
 										<tbody>
@@ -13735,7 +13735,7 @@
 												<td class="p-4">0.00</td>
 												<td class="p-4">300</td>
 												<td class="p-4">600</td>
-									
+
 											</tr>
 										</tbody>
 									</table>
@@ -13798,12 +13798,12 @@
 							</div>
 						</div>
 						<div class="row">
-							
+
 						<div class="col-lg-12">
 							<div class="mb-3 summer-description-box">
 								<label class="form-label">Description</label>
 								<div id="summernote2">
-									
+
 								</div>
 								<p class="mt-1">Maximum 60 Words</p>
 							</div>
@@ -13911,7 +13911,7 @@
 										<div id="summernote3">
 										</div>
 										<p>Maximum 60 Characters</p>
-									</div>	
+									</div>
 								</div>
 							</div>
 							<div class="modal-footer">
@@ -13937,7 +13937,7 @@
 								<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 									<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 									<button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-								</div>						
+								</div>
 						</div>
 					</div>
 				</div>
@@ -14024,11 +14024,11 @@
                                         <th>Payment Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>							
+                                <tbody>
                                 </tbody>
                             </table>
                         </div>
-                        </div>	
+                        </div>
                         <div class="row">
                             <div class="col-lg-3 col-sm-6 col-12">
                                 <div class="mb-3">
@@ -14036,7 +14036,7 @@
                                     <div class="input-groupicon select-code">
                                         <input type="text" value="0" class="form-control p-2">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
@@ -14071,7 +14071,7 @@
                                     <div id="summernote">Type your message</div>
                                     <p class="mt-1">Maximum 60 Words</p>
                                 </div>
-                            </div>								
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -14101,12 +14101,12 @@
                         <div>
                             <label class="form-label">Supplier<span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
-                        </div>												
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                         <button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Supplier</button>
-                    </div>						
+                    </div>
                 </form>
             </div>
         </div>
@@ -14210,7 +14210,7 @@
                                             <td>$600</td>
                                             <td><span class="p-1 pe-2 rounded-1 text-success bg-success-transparent fs-10"><i class="ti ti-point-filled me-1 fs-11"></i>Paid</span></td>
                                         </tr>
-                    
+
                                     </tbody>
                                 </table>
                             </div>
@@ -14246,7 +14246,7 @@
                                     <div class="input-groupicon select-code">
                                         <input type="text" value="0" class="form-control p-2">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-6 col-12">
@@ -14306,7 +14306,7 @@
                                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                             <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                                        </div>						
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -14419,7 +14419,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="page-wrapper-new p-0">
-                    <div class="content">						
+                    <div class="content">
                         <form method="POST" action="{{ route('shift.store') }}">
                             @csrf
                             <div class="modal-body">
@@ -14494,7 +14494,7 @@
                                                                 </td>
                                                                 </tr>
                                                                 <!-- Repeat for other days -->
-                                                                    
+
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
@@ -14505,7 +14505,7 @@
                                                                 </td>
                                                                 </tr>
                                                                 <!-- Repeat for other days -->
-                                                                                                                                                                        
+
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
@@ -14686,7 +14686,7 @@
                         <form method="POST" action="{{ route('shift.update') }}">
                             @csrf
                             @method('PUT')
-                            <input type="hidden" id="edit-id" name="id"> 
+                            <input type="hidden" id="edit-id" name="id">
                             <div class="modal-body">
                                 <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
                                     <li class="nav-item" role="presentation">
@@ -14758,7 +14758,7 @@
                                                                 </td>
                                                                 </tr>
                                                                 <!-- Repeat for other days -->
-                                                                    
+
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
@@ -14769,7 +14769,7 @@
                                                                 </td>
                                                                 </tr>
                                                                 <!-- Repeat for other days -->
-                                                                                                                                                                        
+
                                                                 <tr>
                                                                 <td>
                                                                     <div class="status-toggle modal-status d-flex align-items-center">
@@ -14950,7 +14950,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -14958,7 +14958,7 @@
         </div>
     </div>
     <!-- /delete modal -->
-     
+
 @endif
 
 
@@ -15081,11 +15081,11 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label fw-medium mb-1">Client Secret Key <span> *</span></label>
-                                            <input type="text" class="form-control">											
+                                            <input type="text" class="form-control">
                                         </div>
                                         <div class="mb-0">
                                             <label class="form-label fw-medium mb-1">Login Redirect URL <span> *</span></label>
-                                            <input type="text" class="form-control">											
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -15126,11 +15126,11 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label fw-medium mb-1">Client Secret Key <span> *</span></label>
-                                            <input type="text" class="form-control">											
+                                            <input type="text" class="form-control">
                                         </div>
                                         <div class="mb-0">
                                             <label class="form-label fw-medium mb-1">Login Redirect URL <span> *</span></label>
-                                            <input type="text" class="form-control">											
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -15163,25 +15163,25 @@
                 </div>
                 <form action="{{url('states')}}">
                     <div class="modal-body">
-                        <div class="row">										
+                        <div class="row">
                             <div class="mb-3">
                                 <label class="form-label">State Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
-                            </div>																			
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Country Name <span class="text-danger"> *</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option>United States</option>
                                     <option>Canada</option>
-                                    <option>United Kingdom</option>										
+                                    <option>United Kingdom</option>
                                 </select>
-                            </div>	
+                            </div>
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="users5" class="check" checked>
                                 <label for="users5" class="checktoggle mb-0"></label>
-                            </div>																		
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -15208,26 +15208,26 @@
                 </div>
                 <form action="{{url('states')}}">
                     <div class="modal-body">
-                        <div class="row">										
+                        <div class="row">
                             <div class="mb-3">
                                 <label class="form-label">State Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="Los Angels">
-                            </div>																			
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Country Name <span class="text-danger">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option selected>United States</option>
                                     <option>Canada</option>
-                                    <option>United Kingdom</option>										
+                                    <option>United Kingdom</option>
                                 </select>
-                            </div>	
+                            </div>
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="users6" class="check" checked>
                                 <label for="users6" class="checktoggle mb-0"></label>
-                            </div>																		
-                        </div>														
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -15238,7 +15238,7 @@
         </div>
     </div>
     <!-- /Edit State -->
-        
+
     <!-- Delete Modal -->
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered">
@@ -15246,12 +15246,12 @@
                 <div class="modal-body text-center p-0">
                     <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                     <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete State</h4>
-                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete state?</p>	
+                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete state?</p>
                     <div class="d-flex justify-content-center mt-3">
                         <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                         <a href="{{url('states')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                    </div>											
-                </div>					
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -15324,7 +15324,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="col-lg-12">
 								<div>
 									<label class="form-label">Notes<span class="text-danger ms-1">*</span></label>
@@ -15404,7 +15404,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Nike Jordan</a>
-														</div>												
+														</div>
 													</td>
 													<td>PT002</td>
 													<td>Nike</td>
@@ -15428,7 +15428,7 @@
 																<i data-feather="trash-2" class="feather-trash-2"></i>
 															</a>
 														</div>
-														
+
 													</td>
 												</tr>
 											</tbody>
@@ -15661,7 +15661,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Nike Jordan</a>
-															</div>												
+															</div>
 														</td>
 														<td>PT002</td>
 														<td>Nike</td>
@@ -16040,7 +16040,7 @@
             </div>
         </div>
     </div>
-    <!-- /Google Map -->	
+    <!-- /Google Map -->
 @endif
 
 @if(Route::is(['tax-rates']))
@@ -16138,7 +16138,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </div>
@@ -16419,21 +16419,21 @@
                 </div>
                 <form action="{{url('pages')}}">
                     <div class="modal-body">
-                        <div class="row">										
+                        <div class="row">
                             <div class="mb-3">
                                 <label class="form-label">Country Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
-                            </div>																			
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Country Code <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
-                            </div>	
+                            </div>
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="users6" class="check" checked>
                                 <label for="users6" class="checktoggle mb-0"></label>
-                            </div>																		
-                        </div>														
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -16459,21 +16459,21 @@
                 </div>
                 <form action="{{url('pages')}}">
                     <div class="modal-body">
-                        <div class="row">										
+                        <div class="row">
                             <div class="mb-3">
                                 <label class="form-label">Country Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="United States">
-                            </div>																			
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Country Code <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="US">
-                            </div>	
+                            </div>
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="users5" class="check" checked>
                                 <label for="users5" class="checktoggle mb-0"></label>
-                            </div>																		
-                        </div>														
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -16484,7 +16484,7 @@
         </div>
     </div>
     <!-- /Edit Country -->
-        
+
     <!-- Delete Modal -->
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered">
@@ -16492,12 +16492,12 @@
                 <div class="modal-body text-center p-0">
                     <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                     <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Country</h4>
-                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete country?</p>	
+                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete country?</p>
                     <div class="d-flex justify-content-center mt-3">
                         <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                         <a href="{{url('pages')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                    </div>											
-                </div>					
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -16520,10 +16520,10 @@
                 <div class="modal-body pb-0">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
+                            <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
                                 <div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
                                     <i class="ti ti-photo"></i>
-                                </div>                                              
+                                </div>
                                 <div class="profile-upload">
                                     <div class="mb-2">
                                         <h6 class="mb-1">Upload Profile Image</h6>
@@ -16536,7 +16536,7 @@
                                         </div>
                                         <a href="javascript:void(0);" class="btn btn-secondary btn-sm">Cancel</a>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -16544,31 +16544,31 @@
                             <div class="mb-3">
                                 <label class="form-label">Name <span class="text-danger"> *</span></label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Account URL</label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Website</label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
@@ -16592,7 +16592,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
@@ -16671,10 +16671,10 @@
                 <div class="modal-body pb-0">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
+                            <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
                                 <div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
                                     <img src="{{URL::asset('build/img/profiles/avatar-30.jpg')}}" alt="img" class="rounded-circle">
-                                </div>                                              
+                                </div>
                                 <div class="profile-upload">
                                     <div class="mb-2">
                                         <h6 class="mb-1">Upload Profile Image</h6>
@@ -16687,7 +16687,7 @@
                                         </div>
                                         <a href="javascript:void(0);" class="btn btn-secondary btn-sm">Cancel</a>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -16695,31 +16695,31 @@
                             <div class="mb-3">
                                 <label class="form-label">Name <span class="text-danger"> *</span></label>
                                 <input type="text" class="form-control" value="Stellar Dynamics">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Email Address</label>
                                 <input type="email" class="form-control" value="sophie@example.com">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="form-label">Account URL</label>
                                 <input type="text" class="form-control" value="sd.example.com">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Phone Number <span class="text-danger"> *</span></label>
                                 <input type="text" class="form-control" value="+1 895455450">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Website</label>
                                 <input type="text" class="form-control" value="Admin Website">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
@@ -16743,7 +16743,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3 ">
@@ -16819,8 +16819,8 @@
                 </button>
             </div>
             <div class="p-3 mb-1">
-                <div class="rounded bg-light p-3">                                                
-                    <h5 class="mb-3">Current Plan Details</h5>                                              
+                <div class="rounded bg-light p-3">
+                    <h5 class="mb-3">Current Plan Details</h5>
                     <div class="row align-items-center">
                         <div class="col-md-4">
                             <div class="mb-3">
@@ -16863,7 +16863,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <form action="{{url('companies')}}">
                 <div class="modal-body pb-0">
                     <h5 class="mb-4">Change Plan</h5>
@@ -16893,7 +16893,7 @@
                             <div class="mb-3">
                                 <label class="form-label">Ammount<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
-                            </div>									
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -16927,7 +16927,7 @@
                                     </span>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -16952,21 +16952,21 @@
             </div>
             <div class="moday-body">
                 <div class="p-3">
-                    <div class="d-flex justify-content-between align-items-center rounded bg-light p-3">                                                
+                    <div class="d-flex justify-content-between align-items-center rounded bg-light p-3">
                         <div class="file-name-icon d-flex align-items-center">
                             <a href="#" class="avatar avatar-md border rounded-circle flex-shrink-0 me-2">
                                 <img src="{{URL::asset('build/img/company/company-01.svg')}}" class="img-fluid" alt="img">
-                            </a> 
+                            </a>
                             <div>
                                 <p class="text-gray-9 fw-medium mb-0">BrightWave Innovations</p>
                                 <p>michael@example.com</p>
                             </div>
-                        </div>                                        
+                        </div>
                         <span class="badge badge-success"><i class="ti ti-point-filled"></i>Active</span>
                     </div>
                 </div>
-                <div class="p-3">                                                
-                    <p class="text-gray-9 fw-medium">Basic Info</p>                                            
+                <div class="p-3">
+                    <p class="text-gray-9 fw-medium">Basic Info</p>
                     <div class="pb-1 border-bottom mb-4">
                         <div class="row align-items-center">
                             <div class="col-md-4">
@@ -17009,7 +17009,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="text-gray-9 fw-medium">Plan Details</p>                                            
+                    <p class="text-gray-9 fw-medium">Plan Details</p>
                     <div>
                         <div class="row align-items-center">
                             <div class="col-md-4">
@@ -17071,7 +17071,7 @@
         </div>
     </div>
 </div>
-<!-- /Delete Modal -->  
+<!-- /Delete Modal -->
 
 @endif
 
@@ -17101,7 +17101,7 @@
 								<p class="text-dark mb-2 fw-medium fs-16">Invoice From :</p>
 								<div>
 									<p class="mb-1">Dreamspos</p>
-									<p class="mb-1">367 Hillcrest Lane, Irvine, California, 
+									<p class="mb-1">367 Hillcrest Lane, Irvine, California,
 										United States</p>
 									<p class="mb-1">dreamspos@example.com</p>
 								</div>
@@ -17110,7 +17110,7 @@
 								<p class="text-dark mb-2 fw-medium fs-16">Invoice To :</p>
 								<div>
 									<p class="mb-1">BrightWave Innovations</p>
-									<p class="mb-1">367 Hillcrest Lane, Irvine, California, 
+									<p class="mb-1">367 Hillcrest Lane, Irvine, California,
 										United States</p>
 									<p class="mb-1">michael@example.com</p>
 								</div>
@@ -17321,7 +17321,7 @@
 										</div>
 									</div>
 								</div>
-								
+
 								<div class="row">
 									<div class="col-lg-3 col-sm-6 col-12">
 										<div class="mb-3">
@@ -17329,7 +17329,7 @@
 											<div class="input-groupicon select-code">
 												<input type="text" value="0" class="form-control p-2">
 											</div>
-											
+
 										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6 col-12">
@@ -17388,12 +17388,12 @@
 							<div>
 								<label class="form-label">Customer <span class="text-danger">*</span></label>
 								<input type="text" class="form-control">
-							</div>												
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 							<button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Customer</button>
-						</div>						
+						</div>
 					</form>
 				</div>
 			</div>
@@ -17422,7 +17422,7 @@
 							<a href="{{url('online-orders')}}" class="btn btn-secondary"><i data-feather="arrow-left" class="me-2"></i> Back to Sales</a>
 						</div>
 					</div>
-							
+
 					<form action="{{url('online-orders')}}">
 						<div class="card border-0">
 							<div class="card-body pb-0">
@@ -17472,7 +17472,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Nike Jordan</a>
-														</div>												
+														</div>
 													</td>
 													<td>2000</td>
 													<td>500</td>
@@ -17490,7 +17490,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-03.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Apple Series 5 Watch</a>
-														</div>												
+														</div>
 													</td>
 													<td>3000</td>
 													<td>400</td>
@@ -17508,7 +17508,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-05.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Lobar Handy</a>
-														</div>												
+														</div>
 													</td>
 													<td>2500</td>
 													<td>500</td>
@@ -17523,9 +17523,9 @@
 										</table>
 									</div>
 								</div>
-									
+
 								<div class="row">
-									
+
 									<div class="row">
 										<div class="col-lg-6 ms-auto">
 											<div class="total-order w-100 max-widthauto m-auto mb-4">
@@ -17608,7 +17608,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Nike Jordan</a>
-															</div>												
+															</div>
 														</td>
 														<td>
 															<div class="product-quantity bg-gray-transparent border-0">
@@ -17633,7 +17633,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-03.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Apple Series 5 Watch</a>
-															</div>												
+															</div>
 														</td>
 														<td>
 															<div class="product-quantity bg-gray-transparent border-0">
@@ -17658,7 +17658,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-05.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Lobar Handy</a>
-															</div>												
+															</div>
 														</td>
 														<td>
 															<div class="product-quantity bg-gray-transparent border-0">
@@ -17757,7 +17757,7 @@
 												</div>
 											</div>
 										</div>
-										
+
 										<div class="row">
 											<div class="col-lg-3 col-sm-6 col-12">
 												<div class="mb-3">
@@ -17765,7 +17765,7 @@
 													<div class="input-groupicon select-code">
 														<input type="text" class="form-control" placeholder="0">
 													</div>
-													
+
 												</div>
 											</div>
 											<div class="col-lg-3 col-sm-6 col-12">
@@ -17840,7 +17840,7 @@
 													<th>Amount</th>
 													<th>Paid By</th>
 													<th class="no-sort"></th>
-													
+
 												</tr>
 											</thead>
 											<tbody>
@@ -17861,7 +17861,7 @@
 																<i data-feather="trash-2" class="feather-trash-2"></i>
 															</a>
 														</div>
-														
+
 													</td>
 												</tr>
 											</tbody>
@@ -18033,7 +18033,7 @@
 			</div>
 		</div>
 		<!-- edit payment Modal -->
-		  
+
 		<!-- Delete -->
 		<div class="modal fade modal-default" id="delete">
 			<div class="modal-dialog modal-dialog-centered">
@@ -18180,7 +18180,7 @@
 										</div>
 									</div>
 								</div>
-								
+
 								<div class="row">
 									<div class="col-lg-3 col-sm-6 col-12">
 										<div class="mb-3">
@@ -18188,7 +18188,7 @@
 											<div class="input-groupicon select-code">
 												<input type="text" value="0" class="form-control p-2">
 											</div>
-											
+
 										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6 col-12">
@@ -18247,12 +18247,12 @@
 							<div>
 								<label class="form-label">Customer <span class="text-danger">*</span></label>
 								<input type="text" class="form-control">
-							</div>												
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 							<button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Customer</button>
-						</div>						
+						</div>
 					</form>
 				</div>
 			</div>
@@ -18281,7 +18281,7 @@
 							<a href="{{url('online-orders')}}" class="btn btn-secondary"><i data-feather="arrow-left" class="me-2"></i> Back to Sales</a>
 						</div>
 					</div>
-							
+
 					<form action="{{url('pos-orders')}}">
 						<div class="card border-0">
 							<div class="card-body pb-0">
@@ -18331,7 +18331,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Nike Jordan</a>
-														</div>												
+														</div>
 													</td>
 													<td>2000</td>
 													<td>500</td>
@@ -18349,7 +18349,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-03.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Apple Series 5 Watch</a>
-														</div>												
+														</div>
 													</td>
 													<td>3000</td>
 													<td>400</td>
@@ -18367,7 +18367,7 @@
 																<img src="{{URL::asset('build/img/products/stock-img-05.png')}}" alt="product">
 															</a>
 															<a href="javascript:void(0);">Lobar Handy</a>
-														</div>												
+														</div>
 													</td>
 													<td>2500</td>
 													<td>500</td>
@@ -18382,9 +18382,9 @@
 										</table>
 									</div>
 								</div>
-									
+
 								<div class="row">
-									
+
 									<div class="row">
 										<div class="col-lg-6 ms-auto">
 											<div class="total-order w-100 max-widthauto m-auto mb-4">
@@ -18467,7 +18467,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-02.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Nike Jordan</a>
-															</div>												
+															</div>
 														</td>
 														<td>
 															<div class="product-quantity bg-gray-transparent border-0">
@@ -18492,7 +18492,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-03.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Apple Series 5 Watch</a>
-															</div>												
+															</div>
 														</td>
 														<td>
 															<div class="product-quantity bg-gray-transparent border-0">
@@ -18517,7 +18517,7 @@
 																	<img src="{{URL::asset('build/img/products/stock-img-05.png')}}" alt="product">
 																</a>
 																<a href="javascript:void(0);">Lobar Handy</a>
-															</div>												
+															</div>
 														</td>
 														<td>
 															<div class="product-quantity bg-gray-transparent border-0">
@@ -18616,7 +18616,7 @@
 												</div>
 											</div>
 										</div>
-										
+
 										<div class="row">
 											<div class="col-lg-3 col-sm-6 col-12">
 												<div class="mb-3">
@@ -18624,7 +18624,7 @@
 													<div class="input-groupicon select-code">
 														<input type="text" class="form-control" placeholder="0">
 													</div>
-													
+
 												</div>
 											</div>
 											<div class="col-lg-3 col-sm-6 col-12">
@@ -18699,7 +18699,7 @@
 													<th>Amount</th>
 													<th>Paid By</th>
 													<th class="no-sort"></th>
-													
+
 												</tr>
 											</thead>
 											<tbody>
@@ -18720,7 +18720,7 @@
 																<i data-feather="trash-2" class="feather-trash-2"></i>
 															</a>
 														</div>
-														
+
 													</td>
 												</tr>
 											</tbody>
@@ -18892,7 +18892,7 @@
 			</div>
 		</div>
 		<!-- edit payment Modal -->
-		  
+
 		<!-- Delete -->
 		<div class="modal fade modal-default" id="delete">
 			<div class="modal-dialog modal-dialog-centered">
@@ -18940,8 +18940,8 @@
                                     <label class="form-label">Gift Card<span class="text-danger ms-1">*</span></label>
                                     <input type="text" class="form-control">
                                 </div>
-                                
-                                
+
+
                                     <div class="mb-3 add-product">
                                         <div class="add-newplus">
                                             <label class="form-label">Customer<span class="text-danger ms-1">*</span></label>
@@ -18955,13 +18955,13 @@
                                             <option>Robert Lamon</option>
                                         </select>
                                     </div>
-                            
+
 
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="mb-3">
                                             <label class="form-label">Issued Date<span class="text-danger ms-1">*</span></label>
-    
+
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
                                                 <input type="text" class="datetimepicker form-control p-2" placeholder="dd/mm/yyyy">
@@ -18971,7 +18971,7 @@
                                     <div class="col-md-6 col-12">
                                         <div class="mb-3">
                                             <label class="form-label">Expiry Date<span class="text-danger ms-1">*</span></label>
-    
+
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
                                                 <input type="text" class="datetimepicker form-control p-2" placeholder="dd/mm/yyyy">
@@ -19035,8 +19035,8 @@
                                     <label class="form-label">Gift Card<span class="text-danger ms-1">*</span></label>
                                     <input type="text" class="form-control" value="GFT1110">
                                 </div>
-                                
-                                
+
+
                                     <div class="mb-3 add-product">
                                         <div class="add-newplus">
                                             <label class="form-label">Customer<span class="text-danger ms-1">*</span></label>
@@ -19050,13 +19050,13 @@
                                             <option>Robert Lamon</option>
                                         </select>
                                     </div>
-                            
+
 
                                 <div class="row">
                                     <div class="col-md-6 col-12">
                                         <div class="mb-3">
                                             <label class="form-label">Issued Date<span class="text-danger ms-1">*</span></label>
-    
+
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
                                                 <input type="text" class="datetimepicker form-control p-2" placeholder="24 Dec 2024">
@@ -19066,7 +19066,7 @@
                                     <div class="col-md-6 col-12">
                                         <div class="mb-3">
                                             <label class="form-label">Expiry Date<span class="text-danger ms-1">*</span></label>
-    
+
                                             <div class="input-groupicon calender-input">
                                                 <i data-feather="calendar" class="info-img"></i>
                                                 <input type="text" class="datetimepicker form-control p-2" placeholder="24 Jan 2025">
@@ -19127,12 +19127,12 @@
                         <div>
                             <label class="form-label">Customer <span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
-                        </div>												
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                         <button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Customer</button>
-                    </div>						
+                    </div>
                 </form>
             </div>
         </div>
@@ -19202,7 +19202,7 @@
                                 <div class="table-responsive no-pagination mt-2">
                                     <table class="table datatable border">
                                         <thead class="thead-light">
-                                            <tr>													
+                                            <tr>
                                                 <th>Date</th>
                                                 <th>Transaction Type</th>
                                                 <th>Store</th>
@@ -19212,26 +19212,26 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="p-3">16 Jan 2025</td>										
+                                                <td class="p-3">16 Jan 2025</td>
                                                 <td class="p-3">Purchase</td>
                                                 <td class="p-3">Electro Mart</td>
                                                 <td class="p-3">$75</td>
                                                 <td class="p-3">$100</td>
-                                            </tr>						
+                                            </tr>
                                             <tr>
-                                                <td class="p-3">04 Jan 2025</td>										
+                                                <td class="p-3">04 Jan 2025</td>
                                                 <td class="p-3">Refund</td>
                                                 <td class="p-3">Online</td>
                                                 <td class="p-3">$25</td>
                                                 <td class="p-3">$175</td>
                                             </tr>
                                             <tr>
-                                                <td class="p-3">26 Dec 2024</td>										
+                                                <td class="p-3">26 Dec 2024</td>
                                                 <td class="p-3">Purchase</td>
                                                 <td class="p-3">Gadget World</td>
                                                 <td class="p-3">$50</td>
                                                 <td class="p-3">$150</td>
-                                            </tr>	
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -19256,12 +19256,12 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>	
+    </div>
 
 @endif
 
@@ -19350,7 +19350,7 @@
                                     <option>Select</option>
                                     <option selected>All Customers</option>
                                     <option>Members Only</option>
-                                    <option>High-Spending Customers</option>								
+                                    <option>High-Spending Customers</option>
                                 </select>
                             </div>
                             <div class="mb-0">
@@ -19390,12 +19390,12 @@
                     <div>
                         <label class="form-label">Customer <span class="text-danger">*</span></label>
                         <input type="text" class="form-control">
-                    </div>												
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                     <button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Customer</button>
-                </div>						
+                </div>
             </form>
         </div>
     </div>
@@ -19414,7 +19414,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                 </div>
             </div>
         </div>
@@ -19497,8 +19497,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>	
-                    </div>										
+                        </div>
+                    </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -19658,8 +19658,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>	
-                    </div>										
+                        </div>
+                    </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -19839,7 +19839,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Author <i class="text-danger ms-1">*</i></label>
                                     <input type="text" class="form-control">
-                                </div>					
+                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Product <i class="text-danger ms-1">*</i></label>
                                     <input type="text" class="form-control">
@@ -19853,12 +19853,12 @@
                                         <span><i class="ti ti-star-filled text-light-transparent"></i></span>
                                         <span><i class="ti ti-star-filled text-light-transparent"></i></span>
                                     </div>
-                                </div>				
+                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Review <i class="text-danger ms-1">*</i></label>
                                     <textarea class="form-control"></textarea>
                                 </div>
-                                
+
                                 <div class="d-flex align-items-center justify-content-between">
                                     <label class="form-label">Status</label>
                                     <label class="switch">
@@ -19894,9 +19894,9 @@
                     <div class="modal-body">
                         <div class="new-employee-field">
                             <div class="profile-pic-upload">
-                                <div class="profile-pic edit-review people-profile-pic p-2 border rounded">                                                
+                                <div class="profile-pic edit-review people-profile-pic p-2 border rounded">
                                     <img src="{{URL::asset('build/img/users/user-08.jpg')}}" alt="Img">
-                                    <a href="javascript:void(0);"><i data-feather="x-square" class="x-square-add"></i></a>                                          
+                                    <a href="javascript:void(0);"><i data-feather="x-square" class="x-square-add"></i></a>
                                 </div>
                                 <div class="mb-3">
                                     <div class="image-upload mb-0">
@@ -19911,7 +19911,7 @@
                         <div class="mb-3">
                             <label class="form-label">Author <i class="text-danger ms-1">*</i></label>
                             <input type="text" class="form-control" value="Carl Evans">
-                        </div>					
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Product <i class="text-danger ms-1">*</i></label>
                             <input type="text" class="form-control" value="Lenovo IdeaPad 3">
@@ -19925,12 +19925,12 @@
                                 <span><i class="ti ti-star-filled text-warning me-1"></i></span>
                                 <span><i class="ti ti-star-filled text-warning me-1"></i></span>
                             </div>
-                        </div>				
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Review <i class="text-danger ms-1">*</i></label>
                             <textarea class="form-control">Sleek design and excellent battery life</textarea>
                         </div>
-                        
+
                         <div class="d-flex align-items-center justify-content-between">
                             <label class="form-label">Status</label>
                             <label class="switch">
@@ -19938,8 +19938,8 @@
                                 <span class="slider round"></span>
                             </label>
                         </div>
-                    </div>	
-            
+                    </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -19997,21 +19997,21 @@
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <label class="form-label">Date<span class="text-danger ms-1">*</span></label>
-                                        
+
                                         <div class="input-groupicon calender-input">
                                             <i data-feather="calendar" class="info-img"></i>
                                             <input type="text" class="datetimepicker form-control p-2" placeholder="24 Dec 2024" >
                                         </div>
                                     </div>
-                                </div>	
+                                </div>
                                 <div class="col-lg-12 mb-3">
                                     <label class="form-label">Category<span class="text-danger ms-1">*</span></label>
                                     <select class="select">
                                         <option>select</option>
                                         <option>Foreign investment</option>
                                         <option>Product Export</option>
-                                    </select>                                                
-                                </div>	
+                                    </select>
+                                </div>
                                 <div class="col-lg-12 mb-3">
                                     <label class="form-label">Store<span class="text-danger ms-1">*</span></label>
                                     <select class="select">
@@ -20019,28 +20019,28 @@
                                         <option>Distribution center</option>
                                         <option>Intelligent warehouse</option>
                                         <option>Mahin Logistics</option>
-                                    </select>                                                
-                                </div>	
-                                <div class="col-lg-6 mb-3">                                      
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 mb-3">
                                     <label class="form-label">Amount<span class="text-danger ms-1">*</span></label>
-                                    <input type="text" class="form-control" value="$200">                                     
-                                </div>	
+                                    <input type="text" class="form-control" value="$200">
+                                </div>
                                 <div class="col-lg-6 mb-3">
                                     <label class="form-label">Account<span class="text-danger ms-1">*</span></label>
                                     <select class="select">
                                         <option>select</option>
                                         <option>Zephyr Indira (3298784309485)</option>
-                                        <option>Quillon Elysia (5475878970090)</option>                                    
-                                    </select>                                                
-                                </div>			
+                                        <option>Quillon Elysia (5475878970090)</option>
+                                    </select>
+                                </div>
                                 <div class="col-lg-12">
                                     <div class="summer-description-box">
                                         <label class="form-label">Description</label>
                                         <div id="summernote">Electricity Bill</div>
                                         <p class="mt-1">Maximum 60 Words</p>
                                     </div>
-                                </div>								
-                            </div>							
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -20052,7 +20052,7 @@
         </div>
     </div>
 </div>
-<!-- /Add income-->  
+<!-- /Add income-->
 
 
 		<!-- Edit income-->
@@ -20075,51 +20075,51 @@
 										<div class="col-lg-12">
 											<div class="mb-3">
 												<label class="form-label">Date<span class="text-danger ms-1">*</span></label>
-												
+
 												<div class="input-groupicon calender-input">
 													<i data-feather="calendar" class="info-img"></i>
 													<input type="text" class="datetimepicker form-control p-2" placeholder="24 Dec 2024" >
 												</div>
 											</div>
-										</div>	
+										</div>
 										<div class="col-lg-12 mb-3">
 												<label class="form-label">Category<span class="text-danger ms-1">*</span></label>
 												<select class="select">
 													<option>select</option>
 													<option>Foreign investment</option>
 													<option>Product Export</option>
-										
-												</select>                                                
-										</div>	
+
+												</select>
+										</div>
 										<div class="col-lg-12 mb-3">
 											<label class="form-label">Store<span class="text-danger ms-1">*</span></label>
 											<select class="select">
 												<option>select</option>
 												<option>Distribution center</option>
 												<option>Intelligent warehouse</option>
-									
-											</select>                                                
-										</div>	
-										<div class="col-lg-6 mb-3">                                      
+
+											</select>
+										</div>
+										<div class="col-lg-6 mb-3">
 												<label class="form-label">Amount<span class="text-danger ms-1">*</span></label>
-												<input type="text" class="form-control" value="$200">                                     
-										</div>	
+												<input type="text" class="form-control" value="$200">
+										</div>
 										<div class="col-lg-6 mb-3">
 											<label class="form-label">Account<span class="text-danger ms-1">*</span></label>
 											<select class="select">
 												<option>select</option>
 												<option selected>Zephyr Indira (3298784309485)</option>
-												<option>Quillon Elysia (5475878970090)</option>                                    
-											</select>                                                
-											</div>			
+												<option>Quillon Elysia (5475878970090)</option>
+											</select>
+											</div>
 										<div class="col-lg-12">
 											<div class="summer-description-box">
 												<label class="form-label">Description</label>
 												<div id="summernote2">Electricity Bill</div>
 												<p class="mt-1">Maximum 60 Words</p>
 											</div>
-										</div>								
-									</div>	
+										</div>
+									</div>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -20145,7 +20145,7 @@
 								<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 									<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 									<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-								</div>						
+								</div>
 						</div>
 					</div>
 				</div>
@@ -20180,18 +20180,18 @@
                                         </button>
                                     </div>
                                 </div>
-                            <div class="col-lg-12">                                      
+                            <div class="col-lg-12">
                                 <label class="form-label">Enter Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="Investment">                                     
-                            </div>					
-                            </div>						
+                                <input type="text" class="form-control" value="Investment">
+                            </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary">Add Category</button>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
@@ -20224,10 +20224,10 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="col-lg-12">                                      
+                                <div class="col-lg-12">
                                     <label class="form-label">Enter Name<span class="text-danger ms-1">*</span></label>
-                                    <input type="text" class="form-control" value="Investment">                                     
-                                </div>					
+                                    <input type="text" class="form-control" value="Investment">
+                                </div>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -20235,7 +20235,7 @@
                             <button type="submit" class="btn btn-primary">Save Changes</button>
                         </div>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
@@ -20255,7 +20255,7 @@
                                     <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                         <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                                    </div>						
+                                    </div>
                             </div>
                         </div>
                     </div>
@@ -20284,13 +20284,13 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Account Holder Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">												
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Account Number<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">												
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
@@ -20299,33 +20299,33 @@
                                             <select class="select">
                                                 <option>Select</option>
                                                 <option>Savings Account</option>
-                                                <option>Current Account</option>											
+                                                <option>Current Account</option>
                                             </select>
-                                        </div>											
+                                        </div>
                                     </div>
-                                <div class="col-lg-12">  
-                                    <div class="mb-3">                                   
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
                                         <label class="form-label">Opening Balance<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control" value="$200">   
-                                    </div>                                   
-                                </div>	
-                                <div class="col-lg-12">  
-                                    <div class="mb-3">                                   
+                                        <input type="text" class="form-control" value="$200">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
                                     <label class="form-label">Description</label>
-                                    <textarea class="form-control"></textarea>  
-                                    <p class="fs-14 mt-1">Maximum 60 Words</p>   
-                                </div>                              
-                            </div>	
+                                    <textarea class="form-control"></textarea>
+                                    <p class="fs-14 mt-1">Maximum 60 Words</p>
+                                </div>
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                 <label class="form-label">Account Status<span class="text-danger ms-1">*</span></label>
                                     <select class="select">
                                         <option>Active</option>
-                                        <option>closed</option>										
+                                        <option>closed</option>
                                     </select>
-                                </div>											
-                            </div>				
-                                </div>	
+                                </div>
+                            </div>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -20358,13 +20358,13 @@
 									<div class="col-lg-12">
 										<div class="mb-3">
 											<label class="form-label">Account Holder Name<span class="text-danger ms-1">*</span></label>
-											<input type="text" class="form-control" value="Zephyr Indira">												
+											<input type="text" class="form-control" value="Zephyr Indira">
 										</div>
 									</div>
 									<div class="col-lg-12">
 										<div class="mb-3">
 											<label class="form-label">Account Number<span class="text-danger ms-1">*</span></label>
-											<input type="text" class="form-control" value="3298784309485">												
+											<input type="text" class="form-control" value="3298784309485">
 										</div>
 									</div>
 									<div class="col-lg-12">
@@ -20373,31 +20373,31 @@
 											<select class="select">
 												<option>Select</option>
 												<option selected>Savings Account</option>
-												<option>Current Account</option>										
+												<option>Current Account</option>
 											</select>
-										</div>											
+										</div>
 									</div>
-									<div class="col-lg-12">  
-										<div class="mb-3">                                    
+									<div class="col-lg-12">
+										<div class="mb-3">
 											<label class="form-label">Opening Balance<span class="text-danger ms-1">*</span></label>
-											<input type="text" class="form-control" value="$200">    
-										</div>                                 
-									</div>	
-									<div class="col-lg-12">     
-										<div class="mb-3">                                
+											<input type="text" class="form-control" value="$200">
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="mb-3">
 											<label class="form-label">Description</label>
-											<textarea class="form-control"></textarea>  
+											<textarea class="form-control"></textarea>
 											<p class="fs-14 mt-1">Maximum 60 Words</p>
-										</div>                                 
-									</div>	
+										</div>
+									</div>
 									<div class="col-lg-12">
 										<label class="form-label">Account Status<span class="text-danger ms-1">*</span></label>
 											<select class="select">
 												<option selected>Active</option>
-												<option>closed</option>										
-											</select>											
-									</div>				
-								</div>									
+												<option>closed</option>
+											</select>
+									</div>
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -20431,17 +20431,17 @@
 									<div class="col-lg-12">
 										<div class="mb-3">
 											<label class="form-label">Account Type Name<span class="text-danger ms-1">*</span></label>
-											<input type="text" class="form-control">												
+											<input type="text" class="form-control">
 										</div>
-									</div>											
+									</div>
 							<div class="col-lg-12">
 								<label class="form-label">Account Status<span class="text-danger ms-1">*</span></label>
 									<select class="select">
 										<option>Active</option>
-										<option>closed</option>										
-									</select>											
-							</div>				
-								</div>						
+										<option>closed</option>
+									</select>
+							</div>
+								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -20467,7 +20467,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 					</div>
 				</div>
 			</div>
@@ -20498,28 +20498,28 @@
                                                 <select class="select">
                                                     <option>Select</option>
                                                     <option>3298784309485</option>
-                                                    <option>5475878970090</option>											
-                                                    <option>3255465758698</option>											
-                                                    <option>4353689870544</option>											
-                                                </select>											
+                                                    <option>5475878970090</option>
+                                                    <option>3255465758698</option>
+                                                    <option>4353689870544</option>
+                                                </select>
                                         </div>
                                         <div class="col-lg-12 mb-3">
                                             <label class="form-label">To Account<span class="text-danger ms-1">*</span></label>
                                                 <select class="select">
                                                     <option>Select</option>
                                                     <option>4598489498498</option>
-                                                    <option>4494048448994</option>											
-                                                    <option>6599481186468</option>											
-                                                    <option>1948948498149</option>											
-                                                </select>											
+                                                    <option>4494048448994</option>
+                                                    <option>6599481186468</option>
+                                                    <option>1948948498149</option>
+                                                </select>
                                         </div>
-                                        <div class="col-lg-12"> 
-                                            <div class="mb-2 amount position-relative">                                   
+                                        <div class="col-lg-12">
+                                            <div class="mb-2 amount position-relative">
                                                 <label class="form-label">Amount<span class="text-danger ms-1">*</span></label>
-                                                <input type="text" class="form-control" value="1800">    
-                                                <i class="ti ti-currency-dollar"></i> 
-                                            </div>                                 
-                                        </div>					
+                                                <input type="text" class="form-control" value="1800">
+                                                <i class="ti ti-currency-dollar"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -20556,29 +20556,29 @@
 												<select class="select">
 													<option>Select</option>
 													<option>3298784309485</option>
-													<option>5475878970090</option>											
-													<option>3255465758698</option>											
-													<option>4353689870544</option>											
-												</select>											
+													<option>5475878970090</option>
+													<option>3255465758698</option>
+													<option>4353689870544</option>
+												</select>
 										</div>
 										<div class="col-lg-12 mb-3">
 											<label class="form-label">To Account<span class="text-danger ms-1">*</span></label>
 												<select class="select">
 													<option>Select</option>
 													<option>4598489498498</option>
-													<option>4494048448994</option>											
-													<option>6599481186468</option>											
-													<option>1948948498149</option>											
-												</select>											
+													<option>4494048448994</option>
+													<option>6599481186468</option>
+													<option>1948948498149</option>
+												</select>
 										</div>
-										<div class="col-lg-12"> 
-											<div class="mb-2 amount position-relative">                                   
+										<div class="col-lg-12">
+											<div class="mb-2 amount position-relative">
 												<label class="form-label">Amount<span class="text-danger ms-1">*</span></label>
-												<input type="text" class="form-control" value="1800">    
-												<i class="ti ti-currency-dollar"></i> 
-											</div>                                 
-										</div>					
-									</div>								
+												<input type="text" class="form-control" value="1800">
+												<i class="ti ti-currency-dollar"></i>
+											</div>
+										</div>
+									</div>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -20604,7 +20604,7 @@
 											<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 												<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 												<button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-											</div>						
+											</div>
 									</div>
 								</div>
 							</div>
@@ -20757,7 +20757,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                     </div>
                 </div>
             </div>
@@ -20802,58 +20802,58 @@
                                 <div class="row">
                                     <div class="col-lg-6 mb-3">
                                         <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control"> 
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control"> 
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Company Name<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control"> 
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                        <input type="email" class="form-control"> 
+                                        <input type="email" class="form-control">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-                                        <input type="tel" class="form-control"> 
+                                        <input type="tel" class="form-control">
                                     </div>
                                     <div class="col-lg-12 mb-3">
                                         <label class="form-label">Address<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control"> 
+                                        <input type="text" class="form-control">
                                     </div>
-                                    <div class="col-lg-6 mb-3">		
+                                    <div class="col-lg-6 mb-3">
                                         <label class="form-label">City<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Select</option>
                                             <option>Los Angles</option>
                                             <option>New York City</option>
                                             <option>Houston</option>
-                                        </select>											
+                                        </select>
                                     </div>
-                                    <div class="col-lg-6 mb-3">		
+                                    <div class="col-lg-6 mb-3">
                                         <label class="form-label">State<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Select</option>
                                             <option>California</option>
                                             <option>New York</option>
                                             <option>Texas</option>
-                                        </select>											
+                                        </select>
                                     </div>
-                                    <div class="col-lg-6 mb-3">		
+                                    <div class="col-lg-6 mb-3">
                                         <label class="form-label">Country<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Select</option>
                                             <option>United States</option>
                                             <option>Canada</option>
                                             <option>Germany</option>
-                                        </select>											
+                                        </select>
                                     </div>
                                     <div class="col-lg-6 mb-3">
                                         <label class="form-label">Postal Code<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control"> 
+                                        <input type="text" class="form-control">
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
@@ -20862,10 +20862,10 @@
                                             <label for="user1" class="checktoggle">	</label>
                                         </div>
                                     </div>
-                                                            
-                                </div>								
-                                
-                            
+
+                                </div>
+
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -20873,7 +20873,7 @@
                             </div>
                         </form>
 
-                        
+
                     </div>
                 </div>
             </div>
@@ -20917,58 +20917,58 @@
                         <div class="row">
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="Shaun"> 
+                                <input type="text" class="form-control" value="Shaun">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="Farley"> 
+                                <input type="text" class="form-control" value="Farley">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Company Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="GreenTech Industries"> 
+                                <input type="text" class="form-control" value="GreenTech Industries">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                <input type="email" class="form-control" value="shaun@example.com"> 
+                                <input type="email" class="form-control" value="shaun@example.com">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-                                <input type="tel" class="form-control" value="+18647961254"> 
+                                <input type="tel" class="form-control" value="+18647961254">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Address<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="87 Griffin Street"> 
+                                <input type="text" class="form-control" value="87 Griffin Street">
                             </div>
-                            <div class="col-lg-6 mb-3">		
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">City<span class="text-danger ms-1">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option selected>Los Angles</option>
                                     <option>New York City</option>
                                     <option>Houston</option>
-                                </select>											
+                                </select>
                             </div>
-                            <div class="col-lg-6 mb-3">		
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">State<span class="text-danger ms-1">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option selected>California</option>
                                     <option>New York</option>
                                     <option>Texas</option>
-                                </select>											
+                                </select>
                             </div>
-                            <div class="col-lg-6 mb-3">		
+                            <div class="col-lg-6 mb-3">
                                 <label class="form-label">Country<span class="text-danger ms-1">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
                                     <option selected>United States</option>
                                     <option>Canada</option>
                                     <option>Germany</option>
-                                </select>											
+                                </select>
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">Postal Code<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="90001"> 
+                                <input type="text" class="form-control" value="90001">
                             </div>
                             <div class="col-lg-12">
                                 <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
@@ -20977,7 +20977,7 @@
                                     <label for="user2" class="checktoggle">	</label>
                                 </div>
                             </div>
-                                                    
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -21002,7 +21002,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -21254,7 +21254,7 @@
 												<input class="form-check-input" type="checkbox">
 												Employees
 											</label>
-										</div>										
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21262,23 +21262,23 @@
 												<input class="form-check-input" type="checkbox">
 												Invoices
 											</label>
-										</div>										
+										</div>
 									</div>
-									<div class="col-lg-3 col-sm-6">	
+									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
 											<label class="form-check-label mt-0 text-dark fw-medium">
 												<input class="form-check-input" type="checkbox">
 												Reports
 											</label>
-										</div>										
+										</div>
 									</div>
-									<div class="col-lg-3 col-sm-6">	
+									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
 											<label class="form-check-label mt-0 text-dark fw-medium">
 												<input class="form-check-input" type="checkbox">
 												Contacts
 											</label>
-										</div>									
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21286,7 +21286,7 @@
 												<input class="form-check-input" type="checkbox">
 												Clients
 											</label>
-										</div>								
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21294,7 +21294,7 @@
 												<input class="form-check-input" type="checkbox">
 												Estimates
 											</label>
-										</div>										
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21302,7 +21302,7 @@
 												<input class="form-check-input" type="checkbox">
 												Goals
 											</label>
-										</div>										
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21310,7 +21310,7 @@
 												<input class="form-check-input" type="checkbox">
 												Deals
 											</label>
-										</div>									
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21318,7 +21318,7 @@
 												<input class="form-check-input" type="checkbox">
 												Projects
 											</label>
-										</div>										
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21326,7 +21326,7 @@
 												<input class="form-check-input" type="checkbox">
 												Payments
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21334,7 +21334,7 @@
 												<input class="form-check-input" type="checkbox">
 												Assets
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21342,7 +21342,7 @@
 												<input class="form-check-input" type="checkbox">
 												Leads
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21350,7 +21350,7 @@
 												<input class="form-check-input" type="checkbox">
 												Tickets
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21358,7 +21358,7 @@
 												<input class="form-check-input" type="checkbox">
 												Taxes
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21366,7 +21366,7 @@
 												<input class="form-check-input" type="checkbox">
 												Activities
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-lg-3 col-sm-6">
 										<div class="form-check d-flex align-items-center mb-3">
@@ -21374,17 +21374,17 @@
 												<input class="form-check-input" type="checkbox">
 												Pipelines
 											</label>
-										</div>											
+										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="d-flex align-items-center mb-3">
-											<label class="form-check-label mt-0 me-2 text-dark fw-medium">										
+											<label class="form-check-label mt-0 me-2 text-dark fw-medium">
 												Access Trial
 												</label>
 											<div class="form-check form-switch me-2">
 												<input class="form-check-input me-2" type="checkbox" role="switch">
 											</div>
-										</div>									
+										</div>
 									</div>
 								</div>
 								<div class="row align-items-center gx-3">
@@ -21393,13 +21393,13 @@
 											<div class="flex-fill">
 												<label class="form-label">Trial Days</label>
 												<input type="text" class="form-control">
-											</div>	
-												
-										</div>								
+											</div>
+
+										</div>
 									</div>
 									<div class="col-md-3">
 										<div class="d-block align-items-center ms-3">
-											<label class="form-check-label mt-0 me-2 text-dark">										
+											<label class="form-check-label mt-0 me-2 text-dark">
 												Is Recommended
 												</label>
 											<div class="form-check form-switch me-2">
@@ -21417,7 +21417,7 @@
 											</select>
 										</div>
 									</div>
-								</div>								
+								</div>
 								<div class="col-md-12">
 									<div class="mb-3">
 										<label class="form-label">Description</label>
@@ -21435,7 +21435,7 @@
 			</div>
 		</div>
 		<!-- /Add Plan -->
-@endif         
+@endif
 
 @if(Route::is(['orders']))
     <!-- Import Product -->
@@ -21592,13 +21592,13 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Account Holder Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">												
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Account Number<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">												
+                                            <input type="text" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
@@ -21607,33 +21607,33 @@
                                             <select class="select">
                                                 <option>Select</option>
                                                 <option>Current Account</option>
-                                                <option>Salary Account</option>											
+                                                <option>Salary Account</option>
                                             </select>
-                                        </div>											
+                                        </div>
                                     </div>
-                                <div class="col-lg-12">  
-                                    <div class="mb-3">                                   
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
                                         <label class="form-label">Opening Balance<span class="text-danger ms-1">*</span></label>
-                                        <input type="text" class="form-control" value="$200">   
-                                    </div>                                   
-                                </div>	
-                                <div class="col-lg-12">  
-                                    <div class="mb-3">                                   
+                                        <input type="text" class="form-control" value="$200">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
                                     <label class="form-label">Description</label>
-                                    <textarea class="form-control"></textarea>  
-                                    <p class="fs-14 mt-1">Maximum 60 Words</p>   
-                                </div>                              
-                            </div>	
+                                    <textarea class="form-control"></textarea>
+                                    <p class="fs-14 mt-1">Maximum 60 Words</p>
+                                </div>
+                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                 <label class="form-label">Account Status<span class="text-danger ms-1">*</span></label>
                                     <select class="select">
                                         <option>Active</option>
-                                        <option>closed</option>										
+                                        <option>closed</option>
                                     </select>
-                                </div>											
-                            </div>				
-                                </div>	
+                                </div>
+                            </div>
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -21667,13 +21667,13 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Account Holder Name<span class="text-danger ms-1">*</span></label>
-                                                <input type="text" class="form-control">												
+                                                <input type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Account Number<span class="text-danger ms-1">*</span></label>
-                                                <input type="text" class="form-control">												
+                                                <input type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
@@ -21682,31 +21682,31 @@
                                                 <select class="select">
                                                     <option>Select</option>
                                                     <option>Current Account</option>
-                                                    <option>Salary Account</option>											
+                                                    <option>Salary Account</option>
                                                 </select>
-                                            </div>											
+                                            </div>
                                         </div>
-                                    <div class="col-lg-12">  
-                                        <div class="mb-3">                                    
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
                                             <label class="form-label">Opening Balance<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control" value="$200">    
-                                        </div>                                 
-                                    </div>	
-                                    <div class="col-lg-12">     
-                                        <div class="mb-3">                                
+                                            <input type="text" class="form-control" value="$200">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="mb-3">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control"></textarea>  
+                                        <textarea class="form-control"></textarea>
                                         <p class="fs-14 mt-1">Maximum 60 Words</p>
-                                    </div>                                 
-                                </div>	
+                                    </div>
+                                </div>
                                 <div class="col-lg-12">
                                     <label class="form-label">Account Status<span class="text-danger ms-1">*</span></label>
                                         <select class="select">
                                             <option>Active</option>
-                                            <option>closed</option>										
-                                        </select>											
-                                </div>				
-                                    </div>									
+                                            <option>closed</option>
+                                        </select>
+                                </div>
+                                    </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -21740,17 +21740,17 @@
                                     <div class="col-lg-12">
                                         <div class="mb-3">
                                             <label class="form-label">Account Type Name<span class="text-danger ms-1">*</span></label>
-                                            <input type="text" class="form-control">												
+                                            <input type="text" class="form-control">
                                         </div>
-                                    </div>											
+                                    </div>
                             <div class="col-lg-12">
                                 <label class="form-label">Account Status<span class="text-danger ms-1">*</span></label>
                                     <select class="select">
                                         <option>Active</option>
-                                        <option>closed</option>										
-                                    </select>											
-                            </div>				
-                                </div>						
+                                        <option>closed</option>
+                                    </select>
+                            </div>
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -21776,7 +21776,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -21799,10 +21799,10 @@
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
+                                <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
                                         <img src="{{URL::asset('build/img/profiles/avatar-30.jpg')}}" alt="img" class="rounded-circle">
-                                    </div>                                              
+                                    </div>
                                     <div class="profile-upload">
                                         <div class="mb-2">
                                             <h6 class="mb-1">Upload Profile Image</h6>
@@ -21815,7 +21815,7 @@
                                             </div>
                                             <a href="javascript:void(0);" class="btn btn-secondary btn-sm">Cancel</a>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -21936,7 +21936,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Employees
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -21944,23 +21944,23 @@
                                             <input class="form-check-input" type="checkbox">
                                             Invoices
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">	
+                                <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
                                         <label class="form-check-label mt-0 text-dark fw-medium">
                                             <input class="form-check-input" type="checkbox">
                                             Reports
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">	
+                                <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
                                         <label class="form-check-label mt-0 text-dark fw-medium">
                                             <input class="form-check-input" type="checkbox">
                                             Contacts
                                         </label>
-                                    </div>									
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -21968,7 +21968,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Clients
                                         </label>
-                                    </div>								
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -21976,7 +21976,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Estimates
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -21984,7 +21984,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Goals
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -21992,7 +21992,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Deals
                                         </label>
-                                    </div>									
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22000,7 +22000,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Projects
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22008,7 +22008,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Payments
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22016,7 +22016,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Assets
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22024,7 +22024,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Leads
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22032,7 +22032,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Tickets
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22040,7 +22040,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Taxes
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22048,7 +22048,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Activities
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22056,17 +22056,17 @@
                                             <input class="form-check-input" type="checkbox">
                                             Pipelines
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center mb-3">
-                                        <label class="form-check-label mt-0 me-2 text-dark fw-medium">										
+                                        <label class="form-check-label mt-0 me-2 text-dark fw-medium">
                                             Access Trial
                                             </label>
                                         <div class="form-check form-switch me-2">
                                             <input class="form-check-input me-2" type="checkbox" role="switch">
                                         </div>
-                                    </div>									
+                                    </div>
                                 </div>
                             </div>
                             <div class="row align-items-center gx-3">
@@ -22075,13 +22075,13 @@
                                         <div class="flex-fill">
                                             <label class="form-label">Trial Days</label>
                                             <input type="text" class="form-control">
-                                        </div>	
-                                            
-                                    </div>								
+                                        </div>
+
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="d-block align-items-center ms-3">
-                                        <label class="form-check-label mt-0 me-2 text-dark">										
+                                        <label class="form-check-label mt-0 me-2 text-dark">
                                             Is Recommended
                                             </label>
                                         <div class="form-check form-switch me-2">
@@ -22099,7 +22099,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>								
+                            </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
@@ -22132,10 +22132,10 @@
                     <div class="modal-body pb-0">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">                                                
+                                <div class="d-flex align-items-center flex-wrap row-gap-3 bg-light w-100 rounded p-3 mb-4">
                                     <div class="d-flex align-items-center justify-content-center avatar avatar-xxl rounded-circle border border-dashed me-2 flex-shrink-0 text-dark frames">
                                         <img src="{{URL::asset('build/img/profiles/avatar-30.jpg')}}" alt="img" class="rounded-circle">
-                                    </div>                                              
+                                    </div>
                                     <div class="profile-upload">
                                         <div class="mb-2">
                                             <h6 class="mb-1">Upload Profile Image</h6>
@@ -22148,7 +22148,7 @@
                                             </div>
                                             <a href="javascript:void(0);" class="btn btn-secondary btn-sm">Cancel</a>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -22269,7 +22269,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Employees
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22277,23 +22277,23 @@
                                             <input class="form-check-input" type="checkbox">
                                             Invoices
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">	
+                                <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
                                         <label class="form-check-label mt-0 text-dark fw-medium">
                                             <input class="form-check-input" type="checkbox">
                                             Reports
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
-                                <div class="col-lg-3 col-sm-6">	
+                                <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
                                         <label class="form-check-label mt-0 text-dark fw-medium">
                                             <input class="form-check-input" type="checkbox">
                                             Contacts
                                         </label>
-                                    </div>									
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22301,7 +22301,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Clients
                                         </label>
-                                    </div>								
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22309,7 +22309,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Estimates
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22317,7 +22317,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Goals
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22325,7 +22325,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Deals
                                         </label>
-                                    </div>									
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22333,7 +22333,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Projects
                                         </label>
-                                    </div>										
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22341,7 +22341,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Payments
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22349,7 +22349,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Assets
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22357,7 +22357,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Leads
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22365,7 +22365,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Tickets
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22373,7 +22373,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Taxes
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22381,7 +22381,7 @@
                                             <input class="form-check-input" type="checkbox">
                                             Activities
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-lg-3 col-sm-6">
                                     <div class="form-check d-flex align-items-center mb-3">
@@ -22389,17 +22389,17 @@
                                             <input class="form-check-input" type="checkbox">
                                             Pipelines
                                         </label>
-                                    </div>											
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="d-flex align-items-center mb-3">
-                                        <label class="form-check-label mt-0 me-2 text-dark fw-medium">										
+                                        <label class="form-check-label mt-0 me-2 text-dark fw-medium">
                                             Access Trial
                                             </label>
                                         <div class="form-check form-switch me-2">
                                             <input class="form-check-input me-2" type="checkbox" role="switch">
                                         </div>
-                                    </div>									
+                                    </div>
                                 </div>
                             </div>
                             <div class="row align-items-center gx-3">
@@ -22408,13 +22408,13 @@
                                         <div class="flex-fill">
                                             <label class="form-label">Trial Days</label>
                                             <input type="text" class="form-control">
-                                        </div>	
-                                            
-                                    </div>								
+                                        </div>
+
+                                    </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="d-block align-items-center ms-3">
-                                        <label class="form-check-label mt-0 me-2  text-dark">										
+                                        <label class="form-check-label mt-0 me-2  text-dark">
                                             Is Recommended
                                         </label>
                                         <div class="form-check form-switch me-2">
@@ -22432,7 +22432,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>								
+                            </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Description</label>
@@ -22506,7 +22506,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -22551,7 +22551,7 @@
         </div>
     </div>
     <!-- /Domain Details -->
-        
+
     <!-- Domain Details -->
     <div class="modal fade" id="domain_pending">
         <div class="modal-dialog modal-dialog-centered modal-md">
@@ -22580,7 +22580,7 @@
                                                         <img src="{{URL::asset('build/img/company/company-01.svg')}}" class="img-fluid" alt="img">
                                                     </a>
                                                     <div class="ms-2">
-                                                        <h6 class="fw-medium fs-14"><a href="#">BrightWave Innovations</a></h6>															
+                                                        <h6 class="fw-medium fs-14"><a href="#">BrightWave Innovations</a></h6>
                                                     </div>
                                                 </div>
                                             </div>
@@ -22594,7 +22594,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -22639,7 +22639,7 @@
         </div>
     </div>
     <!-- /Domain Details -->
-        
+
     <!-- Domain Details -->
     <div class="modal fade" id="domain_rejected">
         <div class="modal-dialog modal-dialog-centered modal-md">
@@ -22672,7 +22672,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>	
+                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="mb-3">
@@ -22765,7 +22765,7 @@
                             <p class="text-dark mb-2 fw-medium fs-16">Invoice From :</p>
                             <div>
                                 <p class="mb-1">Dreamspos</p>
-                                <p class="mb-1">367 Hillcrest Lane, Irvine, California, 
+                                <p class="mb-1">367 Hillcrest Lane, Irvine, California,
                                     United States</p>
                                 <p class="mb-1">dreamspos@example.com</p>
                             </div>
@@ -22774,7 +22774,7 @@
                             <p class="text-dark mb-2 fw-medium fs-16 text-end">Invoice To :</p>
                             <div>
                                 <p class="mb-1 text-end">BrightWave Innovations</p>
-                                <p class="mb-1 text-end">367 Hillcrest Lane, Irvine, California, 
+                                <p class="mb-1 text-end">367 Hillcrest Lane, Irvine, California,
                                     United States</p>
                                 <p class="mb-1 text-end">michael@example.com</p>
                             </div>
@@ -22898,19 +22898,19 @@
                         <div class="row">
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control"> 
+                                <input type="text" class="form-control">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control"> 
+                                <input type="text" class="form-control">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                <input type="email" class="form-control"> 
+                                <input type="email" class="form-control">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-                                <input type="tel" class="form-control"> 
+                                <input type="tel" class="form-control">
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
@@ -22918,7 +22918,7 @@
                                     <select class="select">
                                         <option>Select</option>
                                         <option>Admin</option>
-                                        <option>Salesman</option>									
+                                        <option>Salesman</option>
                                     </select>
                                 </div>
                             </div>
@@ -22929,7 +22929,7 @@
                                     <label for="user2" class="checktoggle">	</label>
                                 </div>
                             </div>
-                                                    
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -22978,19 +22978,19 @@
                         <div class="row">
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="Carl"> 
+                                <input type="text" class="form-control" value="Carl">
                             </div>
                             <div class="col-lg-6 mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" value="Evans"> 
+                                <input type="text" class="form-control" value="Evans">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                <input type="email" class="form-control" value="carlevans@example.com"> 
+                                <input type="email" class="form-control" value="carlevans@example.com">
                             </div>
                             <div class="col-lg-12 mb-3">
                                 <label class="form-label">Phone<span class="text-danger ms-1">*</span></label>
-                                <input type="tel" class="form-control" value="+12163547758 "> 
+                                <input type="tel" class="form-control" value="+12163547758 ">
                             </div>
                             <div class="col-lg-12">
                                 <div class="mb-3">
@@ -22998,7 +22998,7 @@
                                     <select class="select">
                                         <option>Select</option>
                                         <option selected>Admin</option>
-                                        <option>Salesman</option>									
+                                        <option>Salesman</option>
                                     </select>
                                 </div>
                             </div>
@@ -23009,7 +23009,7 @@
                                     <label for="user1" class="checktoggle">	</label>
                                 </div>
                             </div>
-                                                    
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -23034,7 +23034,7 @@
                             <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                 <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                 <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                            </div>						
+                            </div>
                     </div>
                 </div>
             </div>
@@ -23070,7 +23070,7 @@
                                 <select class="select">
                                     <option>Select</option>
                                     <option>Standard</option>
-                                    <option>Membership</option>									
+                                    <option>Membership</option>
                                 </select>
                             </div>
                         </div>
@@ -23080,7 +23080,7 @@
                                 <select class="select">
                                     <option>Select</option>
                                     <option>All Products</option>
-                                    <option>Specific Products</option>									
+                                    <option>Specific Products</option>
                                 </select>
                             </div>
                         </div>
@@ -23109,8 +23109,8 @@
                                 <label class="form-label">Discount Type <span class="text-danger">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
-                                    <option>Percentage</option>									
-                                    <option>Flat</option>										
+                                    <option>Percentage</option>
+                                    <option>Flat</option>
                                 </select>
                             </div>
                         </div>
@@ -23202,7 +23202,7 @@
                                 <select class="select">
                                     <option>Select</option>
                                     <option>Standard</option>
-                                    <option>Membership</option>									
+                                    <option>Membership</option>
                                 </select>
                             </div>
                         </div>
@@ -23212,7 +23212,7 @@
                                 <select class="select">
                                     <option>Select</option>
                                     <option>All Products</option>
-                                    <option>Specific Products</option>									
+                                    <option>Specific Products</option>
                                 </select>
                             </div>
                         </div>
@@ -23241,8 +23241,8 @@
                                 <label class="form-label">Discount Type <span class="text-danger">*</span></label>
                                 <select class="select">
                                     <option>Select</option>
-                                    <option selected>Percentage</option>									
-                                    <option>Flat</option>									
+                                    <option selected>Percentage</option>
+                                    <option>Flat</option>
                                 </select>
                             </div>
                         </div>
@@ -23319,13 +23319,13 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-   
+
 @endif
 
 @if(Route::is(['email-reply']))
@@ -23533,7 +23533,7 @@
                         <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
                             <span class="badge bg-dark fs-12">Order ID : #45698</span>
                             <p class="fs-16">Number of Products : 02</p>
-                        </div>								
+                        </div>
                         <div class="product-wrap h-auto">
                             <div class="product-list bg-white align-items-center justify-content-between">
                                 <div class="d-flex align-items-center product-info" data-bs-toggle="modal" data-bs-target="#products">
@@ -23560,7 +23560,7 @@
                                 <p class="text-teal fw-bold">$3000</p>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -23622,7 +23622,7 @@
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-md btn-primary">Submit</button>
                 </div>
-            </form>					
+            </form>
         </div>
     </div>
 </div>
@@ -23732,8 +23732,8 @@
                                 </select>
                             </div>
                         </div>
-                    </div>	
-                </div>										
+                    </div>
+                </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                    <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -24498,7 +24498,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -24559,7 +24559,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -24576,7 +24576,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -24609,7 +24609,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -24624,7 +24624,7 @@
                                                 <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 24 Dec 2024 13:39:11</p>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -24657,7 +24657,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -24672,11 +24672,11 @@
                                                 <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 23 Dec 2024 13:39:11</p>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -24828,7 +24828,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -24963,7 +24963,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -24987,7 +24987,7 @@
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
-                        </div>							
+                        </div>
                         <div>
                             <input class="input" type="text" placeholder="0" readonly>
                         </div>
@@ -25005,23 +25005,23 @@
                             <button class="btn btn-number" onclick="dis('8')">8</button>
                             <button class="btn btn-number" onclick="dis('5')">5</button>
                             <button class="btn btn-number" onclick="dis('2')">2</button>
-                            <button class="btn btn-number" onclick="dis('00')">00</button>									
+                            <button class="btn btn-number" onclick="dis('00')">00</button>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-expression" onclick="dis('%')">%</button>
                             <button class="btn btn-number" onclick="dis('9')">9</button>
                             <button class="btn btn-number" onclick="dis('6')">6</button>
                             <button class="btn btn-number" onclick="dis('3')">3</button>
-                            <button class="btn btn-number" onclick="dis('.')">.</button>									
+                            <button class="btn btn-number" onclick="dis('.')">.</button>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-clear" onclick="back()"><i class="ti ti-backspace"></i></button>
                             <button class="btn btn-expression" onclick="dis('*')">x</button>
                             <button class="btn btn-expression" onclick="dis('-')">-</button>
                             <button class="btn btn-expression" onclick="dis('+')">+</button>
-                            <button class="btn btn-clear" onclick="solve()">=</button>									
+                            <button class="btn btn-clear" onclick="solve()">=</button>
                         </div>
-                    </div>							
+                    </div>
                 </div>
             </div>
         </div>
@@ -25406,7 +25406,7 @@
                         <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
                             <span class="badge bg-dark fs-12">Order ID : #45698</span>
                             <p class="fs-16">Number of Products : 02</p>
-                        </div>								
+                        </div>
                         <div class="product-wrap h-auto">
                             <div class="product-list bg-white align-items-center justify-content-between">
                                 <div class="d-flex align-items-center product-info" data-bs-toggle="modal" data-bs-target="#products">
@@ -25433,7 +25433,7 @@
                                 <p class="text-teal fw-bold">$3000</p>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -25495,7 +25495,7 @@
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-md btn-primary">Submit</button>
                 </div>
-            </form>					
+            </form>
         </div>
     </div>
 </div>
@@ -25605,8 +25605,8 @@
                                 </select>
                             </div>
                         </div>
-                    </div>	
-                </div>										
+                    </div>
+                </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                    <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -26371,7 +26371,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
@@ -26432,7 +26432,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -26449,7 +26449,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -26482,7 +26482,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -26497,7 +26497,7 @@
                                                 <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 24 Dec 2024 13:39:11</p>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -26530,7 +26530,7 @@
                                             <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                             <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                                 <div class="card bg-light mb-0">
                                     <div class="card-body">
@@ -26545,17 +26545,17 @@
                                                 <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 23 Dec 2024 13:39:11</p>
                                             </div>
                                         </div>
-                                    </div>	
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>	
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- /Orders -->		
+<!-- /Orders -->
 
 <!-- Scan -->
 <div class="modal fade modal-default" id="scan-payment">
@@ -26701,7 +26701,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -26836,7 +26836,7 @@
                                 <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                             </div>
                         </div>
-                    </div>							
+                    </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                     <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -26860,7 +26860,7 @@
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
-                        </div>							
+                        </div>
                         <div>
                             <input class="input" type="text" placeholder="0" readonly>
                         </div>
@@ -26878,23 +26878,23 @@
                             <button class="btn btn-number" onclick="dis('8')">8</button>
                             <button class="btn btn-number" onclick="dis('5')">5</button>
                             <button class="btn btn-number" onclick="dis('2')">2</button>
-                            <button class="btn btn-number" onclick="dis('00')">00</button>									
+                            <button class="btn btn-number" onclick="dis('00')">00</button>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-expression" onclick="dis('%')">%</button>
                             <button class="btn btn-number" onclick="dis('9')">9</button>
                             <button class="btn btn-number" onclick="dis('6')">6</button>
                             <button class="btn btn-number" onclick="dis('3')">3</button>
-                            <button class="btn btn-number" onclick="dis('.')">.</button>									
+                            <button class="btn btn-number" onclick="dis('.')">.</button>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-clear" onclick="back()"><i class="ti ti-backspace"></i></button>
                             <button class="btn btn-expression" onclick="dis('*')">x</button>
                             <button class="btn btn-expression" onclick="dis('-')">-</button>
                             <button class="btn btn-expression" onclick="dis('+')">+</button>
-                            <button class="btn btn-clear" onclick="solve()">=</button>									
+                            <button class="btn btn-clear" onclick="solve()">=</button>
                         </div>
-                    </div>							
+                    </div>
                 </div>
             </div>
         </div>
@@ -27124,7 +27124,7 @@
         </div>
     </div>
 </div>
-<!-- /Today's Profit -->		  
+<!-- /Today's Profit -->
 
 
 @endif
@@ -27281,7 +27281,7 @@
 								<div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
 									<span class="badge bg-dark fs-12">Order ID : #45698</span>
 									<p class="fs-16">Number of Products : 02</p>
-								</div>								
+								</div>
 								<div class="product-wrap h-auto">
 									<div class="product-list bg-white align-items-center justify-content-between">
 										<div class="d-flex align-items-center product-info" data-bs-toggle="modal" data-bs-target="#products">
@@ -27308,7 +27308,7 @@
 										<p class="text-teal fw-bold">$3000</p>
 									</div>
 								</div>
-							</div>	
+							</div>
 						</div>
 					</div>
 				</div>
@@ -27370,7 +27370,7 @@
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
 							<button type="submit" class="btn btn-md btn-primary">Submit</button>
 						</div>
-					</form>					
+					</form>
 				</div>
 			</div>
 		</div>
@@ -27480,8 +27480,8 @@
 										</select>
 									</div>
 								</div>
-							</div>	
-						</div>										
+							</div>
+						</div>
 						<div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
 						   <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -28246,7 +28246,7 @@
 										</div>
 									</div>
 								</div>
-							</div>	
+							</div>
 						</div>
 					</div>
 				</div>
@@ -28307,7 +28307,7 @@
 													<a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
 													<a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
 												</div>
-											</div>	
+											</div>
 										</div>
 										<div class="card bg-light mb-0">
 											<div class="card-body">
@@ -28324,7 +28324,7 @@
 														</div>
 													</div>
 												</div>
-											</div>	
+											</div>
 										</div>
 									</div>
 								</div>
@@ -28357,7 +28357,7 @@
 													<a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
 													<a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
 												</div>
-											</div>	
+											</div>
 										</div>
 										<div class="card bg-light mb-0">
 											<div class="card-body">
@@ -28372,7 +28372,7 @@
 														<p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 24 Dec 2024 13:39:11</p>
 													</div>
 												</div>
-											</div>	
+											</div>
 										</div>
 									</div>
 								</div>
@@ -28405,7 +28405,7 @@
 													<a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
 													<a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
 												</div>
-											</div>	
+											</div>
 										</div>
 										<div class="card bg-light mb-0">
 											<div class="card-body">
@@ -28420,17 +28420,17 @@
 														<p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 23 Dec 2024 13:39:11</p>
 													</div>
 												</div>
-											</div>	
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>	
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- /Orders -->		
+		<!-- /Orders -->
 
 		<!-- Payment Cash -->
 		<div class="modal fade modal-default" id="payment-cash">
@@ -28555,7 +28555,7 @@
 										<textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
 									</div>
 								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -28690,7 +28690,7 @@
 										<textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
 									</div>
 								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -28825,7 +28825,7 @@
 										<textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
 									</div>
 								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -28960,7 +28960,7 @@
 										<textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
 									</div>
 								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -29095,7 +29095,7 @@
 										<textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
 									</div>
 								</div>
-							</div>							
+							</div>
 						</div>
 						<div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
 							<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -29105,7 +29105,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- /Payment Point -->		
+		<!-- /Payment Point -->
 
 		<!-- Order Tax -->
 		<div class="modal fade modal-default" id="order-tax">
@@ -29215,7 +29215,7 @@
 									<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
 										<span aria-hidden="true">×</span>
 									</button>
-								</div>							
+								</div>
 								<div>
 									<input class="input" type="text" placeholder="0" readonly>
 								</div>
@@ -29233,23 +29233,23 @@
 									<button class="btn btn-number" onclick="dis('8')">8</button>
 									<button class="btn btn-number" onclick="dis('5')">5</button>
 									<button class="btn btn-number" onclick="dis('2')">2</button>
-									<button class="btn btn-number" onclick="dis('00')">00</button>									
+									<button class="btn btn-number" onclick="dis('00')">00</button>
 								</div>
 								<div class="text-center">
 									<button class="btn btn-expression" onclick="dis('%')">%</button>
 									<button class="btn btn-number" onclick="dis('9')">9</button>
 									<button class="btn btn-number" onclick="dis('6')">6</button>
 									<button class="btn btn-number" onclick="dis('3')">3</button>
-									<button class="btn btn-number" onclick="dis('.')">.</button>									
+									<button class="btn btn-number" onclick="dis('.')">.</button>
 								</div>
 								<div class="text-center">
 									<button class="btn btn-clear" onclick="back()"><i class="ti ti-backspace"></i></button>
 									<button class="btn btn-expression" onclick="dis('*')">x</button>
 									<button class="btn btn-expression" onclick="dis('-')">-</button>
 									<button class="btn btn-expression" onclick="dis('+')">+</button>
-									<button class="btn btn-clear" onclick="solve()">=</button>									
+									<button class="btn btn-clear" onclick="solve()">=</button>
 								</div>
-							</div>							
+							</div>
 						</div>
 					</div>
 				</div>
@@ -29480,7 +29480,7 @@
 			</div>
 		</div>
 		<!-- /Today's Profit -->
-		
+
 @endif
 @if(Route::is(['pos-5']))
 	<!-- Payment Completed -->
@@ -29634,7 +29634,7 @@
                             <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
                                 <span class="badge bg-dark fs-12">Order ID : #45698</span>
                                 <p class="fs-16">Number of Products : 02</p>
-                            </div>								
+                            </div>
                             <div class="product-wrap h-auto">
                                 <div class="product-list bg-white align-items-center justify-content-between">
                                     <div class="d-flex align-items-center product-info" data-bs-toggle="modal" data-bs-target="#products">
@@ -29661,7 +29661,7 @@
                                     <p class="text-teal fw-bold">$3000</p>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                     </div>
                 </div>
             </div>
@@ -29723,7 +29723,7 @@
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-md btn-primary">Submit</button>
                     </div>
-                </form>					
+                </form>
             </div>
         </div>
     </div>
@@ -29833,8 +29833,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>	
-                    </div>										
+                        </div>
+                    </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
                        <button type="submit" class="btn btn-md btn-primary">Submit</button>
@@ -30599,7 +30599,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                     </div>
                 </div>
             </div>
@@ -30660,7 +30660,7 @@
                                                 <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                                 <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                     <div class="card bg-light mb-0">
                                         <div class="card-body">
@@ -30677,7 +30677,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -30710,7 +30710,7 @@
                                                 <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                                 <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                     <div class="card bg-light mb-0">
                                         <div class="card-body">
@@ -30725,7 +30725,7 @@
                                                     <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 24 Dec 2024 13:39:11</p>
                                                 </div>
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -30758,7 +30758,7 @@
                                                 <a href="javascript:void(0);" class="btn btn-md btn-teal" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#products">View Products</a>
                                                 <a href="javascript:void(0);" class="btn btn-md btn-indigo">Print</a>
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                     <div class="card bg-light mb-0">
                                         <div class="card-body">
@@ -30773,11 +30773,11 @@
                                                     <p class="fs-15"><span class="fs-14 fw-bold text-gray-9">Date :</span> 23 Dec 2024 13:39:11</p>
                                                 </div>
                                             </div>
-                                        </div>	
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>	
+                        </div>
                     </div>
                 </div>
             </div>
@@ -31037,7 +31037,7 @@
                                     <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                                 </div>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -31172,7 +31172,7 @@
                                     <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                                 </div>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -31307,7 +31307,7 @@
                                     <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                                 </div>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -31442,7 +31442,7 @@
                                     <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                                 </div>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -31577,7 +31577,7 @@
                                     <textarea class="form-control" rows="3" placeholder="Type your message"></textarea>
                                 </div>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end flex-wrap gap-2">
                         <button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -31587,7 +31587,7 @@
             </div>
         </div>
     </div>
-    <!-- /Payment Point -->	
+    <!-- /Payment Point -->
 
      <!-- Calculator -->
     <div class="modal fade pos-modal" id="calculator" tabindex="-1"  aria-hidden="true">
@@ -31601,7 +31601,7 @@
                                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">×</span>
                                 </button>
-                            </div>							
+                            </div>
                             <div>
                                 <input class="input" type="text" placeholder="0" readonly>
                             </div>
@@ -31619,23 +31619,23 @@
                                 <button class="btn btn-number" onclick="dis('8')">8</button>
                                 <button class="btn btn-number" onclick="dis('5')">5</button>
                                 <button class="btn btn-number" onclick="dis('2')">2</button>
-                                <button class="btn btn-number" onclick="dis('00')">00</button>									
+                                <button class="btn btn-number" onclick="dis('00')">00</button>
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-expression" onclick="dis('%')">%</button>
                                 <button class="btn btn-number" onclick="dis('9')">9</button>
                                 <button class="btn btn-number" onclick="dis('6')">6</button>
                                 <button class="btn btn-number" onclick="dis('3')">3</button>
-                                <button class="btn btn-number" onclick="dis('.')">.</button>									
+                                <button class="btn btn-number" onclick="dis('.')">.</button>
                             </div>
                             <div class="text-center">
                                 <button class="btn btn-clear" onclick="back()"><i class="ti ti-backspace"></i></button>
                                 <button class="btn btn-expression" onclick="dis('*')">x</button>
                                 <button class="btn btn-expression" onclick="dis('-')">-</button>
                                 <button class="btn btn-expression" onclick="dis('+')">+</button>
-                                <button class="btn btn-clear" onclick="solve()">=</button>									
+                                <button class="btn btn-clear" onclick="solve()">=</button>
                             </div>
-                        </div>							
+                        </div>
                     </div>
                 </div>
             </div>
@@ -32102,7 +32102,7 @@
                     <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                    </div>						
+                    </div>
                 </div>
             </div>
         </div>
@@ -32174,7 +32174,7 @@
                                 <div class="col-lg-6 col-sm-6 col-12">
                                     <div class="mb-3">
                                         <label class="form-label">Notes / Add. Info<span></span></label>
-                                        <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>									
+                                        <textarea class="form-control" name="notes" id="notes" rows="3"></textarea>
                                     </div>
                                 </div>
                                 <div class="mb-3 pb-3 border-bottom">
@@ -32316,7 +32316,7 @@
                                 <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                                     <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn bg-danger-gradient fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                                </div>						
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -32345,26 +32345,26 @@
 							<div class="row">
 								<div class="col-lg-12 mb-3">
 									<label class="form-label">Title <span class="text-danger">*</span></label>
-									<input type="email" class="form-control"> 
+									<input type="email" class="form-control">
 								</div>
-								<div class="col-lg-12 mb-3">		
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Slug <span class="text-danger">*</span></label>
-									<input type="email" class="form-control"> 										
+									<input type="email" class="form-control">
 								</div>
-								<div class="col-lg-12 mb-3">		
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Keywords <span class="text-danger">*</span></label>
-									<input type="email" class="form-control"> 										
-								</div>		
-								<div class="col-lg-12 mb-3">		
+									<input type="email" class="form-control">
+								</div>
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Description <span class="text-danger">*</span></label>
-									<textarea class="form-control" rows="4"></textarea>									
-								</div>	
+									<textarea class="form-control" rows="4"></textarea>
+								</div>
 								<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
 									<span class="status-label">Status</span>
 									<input type="checkbox" id="users6" class="check" checked>
 									<label for="users6" class="checktoggle mb-0"></label>
-								</div>		
-							</div>	
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -32393,26 +32393,26 @@
 							<div class="row">
 								<div class="col-lg-12 mb-3">
 									<label class="form-label">Title <span class="text-danger">*</span></label>
-									<input type="email" class="form-control" value="Products"> 
+									<input type="email" class="form-control" value="Products">
 								</div>
-								<div class="col-lg-12 mb-3">		
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Slug <span class="text-danger">*</span></label>
-									<input type="email" class="form-control" value="products"> 										
+									<input type="email" class="form-control" value="products">
 								</div>
-								<div class="col-lg-12 mb-3">		
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Keywords <span class="text-danger">*</span></label>
-									<input type="email" class="form-control"> 										
-								</div>		
-								<div class="col-lg-12 mb-3">		
+									<input type="email" class="form-control">
+								</div>
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Description <span class="text-danger">*</span></label>
-									<textarea class="form-control" rows="4"></textarea>									
-								</div>	
+									<textarea class="form-control" rows="4"></textarea>
+								</div>
 								<div class="status-toggle modal-status d-flex justify-content-between align-items-center">
 									<span class="status-label">Status</span>
 									<input type="checkbox" id="users7" class="check" checked>
 									<label for="users7" class="checktoggle mb-0"></label>
-								</div>		
-							</div>	
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -32436,7 +32436,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 						</div>
 					</div>
 				</div>
@@ -32482,7 +32482,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Blog Title<span class="text-danger ms-1">*</span></label>
                                     <input type="text" class="form-control">
-                                </div>                                  
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 ">
@@ -32527,7 +32527,7 @@
         </div>
     </div>
     <!-- /Add Blog -->
-    
+
     <!-- Edit Blog -->
     <div class="modal fade" id="edit_blog">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -32544,9 +32544,9 @@
                             <div class="col-md-12">
                                 <div class="new-employee-field">
                                     <div class="profile-pic-upload">
-                                        <div class="profile-pic edit-review people-profile-pic p-2 border rounded">                                                
+                                        <div class="profile-pic edit-review people-profile-pic p-2 border rounded">
                                             <img src="{{URL::asset('build/img/blogs/blog-02.jpg')}}" alt="Img">
-                                            <a href="javascript:void(0);"><i data-feather="x-square" class="x-square-add"></i></a>                                          
+                                            <a href="javascript:void(0);"><i data-feather="x-square" class="x-square-add"></i></a>
                                         </div>
                                         <div class="mb-3">
                                             <div class="image-upload mb-0">
@@ -32564,7 +32564,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Blog Title <span class="text-danger"> *</span></label>
                                     <input type="text" class="form-control" value="What is a POS System? A Beginner’s Guide">
-                                </div>                                  
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3 ">
@@ -32583,7 +32583,7 @@
                                     <input class="input-tags form-control" placeholder="Add new" type="text" data-role="tagsinput"  name="Label" value="Retail">
                                 </div>
                             </div>
-                            
+
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Description<span class="text-danger"> *</span></label>
@@ -32670,12 +32670,12 @@
                 <form action="{{url('blog-categories')}}">
                     <div class="modal-body pb-0">
                         <div class="row">
-                        
+
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Category<span class="text-danger ms-1">*</span></label>
                                     <input class="form-control" type="text">
-                                </div>									
+                                </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -32684,8 +32684,8 @@
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
-                                </div>								
-                            </div> 
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -32711,12 +32711,12 @@
                 <form action="{{url('blog-categories')}}">
                     <div class="modal-body pb-0">
                         <div class="row">
-                        
+
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label class="form-label">Category<span class="text-danger ms-1">*</span></label>
                                     <input class="form-control"  type="text" value="Innovations">
-                                </div>									
+                                </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -32725,8 +32725,8 @@
                                         <input type="checkbox" checked>
                                         <span class="slider round"></span>
                                     </label>
-                                </div>							
-                            </div> 
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -32773,7 +32773,7 @@
                         <div class="modal-footer-btn mt-3 d-flex justify-content-center">
                             <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                             <button type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</button>
-                        </div>						
+                        </div>
                 </div>
             </div>
         </div>
@@ -32795,40 +32795,40 @@
             </div>
             <form action="{{url('cities')}}">
                 <div class="modal-body">
-                    <div class="row">	
+                    <div class="row">
                         <div class="mb-3">
                             <label class="form-label">City Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
-                        </div>										
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">State Name <span class="text-danger">*</span></label>
                             <select class="select">
                                 <option>Select</option>
                                 <option>California</option>
                                 <option>New York</option>
-                                <option>Texas</option>						
+                                <option>Texas</option>
                             </select>
-                        </div>																				
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Country Name <span class="text-danger">*</span></label>
                             <select class="select">
                                 <option>Select</option>
                                 <option>United States</option>
                                 <option>Canada</option>
-                                <option>United Kingdom</option>										
+                                <option>United Kingdom</option>
                             </select>
-                        </div>	
+                        </div>
                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                             <span class="status-label">Status</span>
                             <input type="checkbox" id="users5" class="check" checked>
                             <label for="users5" class="checktoggle mb-0"></label>
-                        </div>																		
-                    </div>														
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                     <button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add City</button>
-                </div>						
+                </div>
             </form>
         </div>
     </div>
@@ -32849,35 +32849,35 @@
             </div>
             <form action="{{url('cities')}}">
                 <div class="modal-body">
-                    <div class="row">	
+                    <div class="row">
                         <div class="mb-3">
                             <label class="form-label">City Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" value="Los Angels">
-                        </div>									
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">State Name <span class="text-danger">*</span></label>
                             <select class="select">
                                 <option>Select</option>
                                 <option selected>California</option>
                                 <option>New York</option>
-                                <option>Texas</option>										
+                                <option>Texas</option>
                             </select>
-                        </div>																				
+                        </div>
                         <div class="mb-3">
                             <label class="form-label">Country Name <span class="text-danger">*</span></label>
                             <select class="select">
                                 <option>Select</option>
                                 <option selected>United States</option>
                                 <option>Canada</option>
-                                <option>United Kingdom</option>										
+                                <option>United Kingdom</option>
                             </select>
-                        </div>		
+                        </div>
                         <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                             <span class="status-label">Status</span>
                             <input type="checkbox" id="users6" class="check" checked>
                             <label for="users6" class="checktoggle mb-0"></label>
-                        </div>																		
-                    </div>														
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -32888,7 +32888,7 @@
     </div>
 </div>
 <!-- /Edit cities -->
-  
+
 <!-- Delete Modal -->
 <div class="modal fade" id="delete-modal">
     <div class="modal-dialog modal-dialog-centered">
@@ -32896,17 +32896,17 @@
             <div class="modal-body text-center p-0">
                 <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                 <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete City</h4>
-                <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete city?</p>	
+                <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete city?</p>
                 <div class="d-flex justify-content-center mt-3">
                     <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                     <a href="{{url('cities')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                </div>											
-            </div>					
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <!-- /Delete Modal -->
-  
+
 @endif
 @if (Route::is(['testimonials']))
 		<!-- Add Testimonial -->
@@ -32942,25 +32942,25 @@
 							<div class="row">
 								<div class="col-lg-12 mb-3">
 									<label class="form-label">Author <span class="text-danger ms-1">*</span></label>
-									<input type="email" class="form-control"> 
+									<input type="email" class="form-control">
 								</div>
-								<div class="col-lg-12 mb-3">		
+								<div class="col-lg-12 mb-3">
 									<label class="form-label">Role <span class="text-danger ms-1">*</span></label>
 									<select class="select">
 										<option>Select</option>
 										<option>Manager</option>
 										<option>Supervisor</option>
-									</select>											
+									</select>
 								</div>
-								<div class="col-lg-12">		
+								<div class="col-lg-12">
 									<label class="form-label">Ratings <span class="text-danger ms-1">*</span></label>
 									<select class="select">
 										<option>Select</option>
 										<option>5 Star</option>
 										<option>4 Star</option>
-									</select>											
-								</div>		
-							</div>	
+									</select>
+								</div>
+							</div>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -33005,25 +33005,25 @@
 						<div class="row">
 							<div class="col-lg-12 mb-3">
 								<label class="form-label">Author <span class="text-danger ms-1">*</span></label>
-								<input type="email" class="form-control" value="Carl Evans"> 
+								<input type="email" class="form-control" value="Carl Evans">
 							</div>
-							<div class="col-lg-12 mb-3">		
+							<div class="col-lg-12 mb-3">
 								<label class="form-label">Role <span class="text-danger ms-1">*</span></label>
 								<select class="select">
 									<option>Select</option>
 									<option selected>Manager</option>
 									<option>Supervisor</option>
-								</select>											
+								</select>
 							</div>
-							<div class="col-lg-12">		
+							<div class="col-lg-12">
 								<label class="form-label">Ratings <span class="text-danger ms-1">*</span></label>
 								<select class="select">
 									<option>Select</option>
 									<option selected>5 Star</option>
 									<option>4 Star</option>
-								</select>											
-							</div>		
-						</div>	
+								</select>
+							</div>
+						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -33047,7 +33047,7 @@
 							<div class="modal-footer-btn mt-3 d-flex justify-content-center">
 								<button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
 								<button type="submit" class="btn btn-submit fs-13 fw-medium p-2 px-3">Yes Delete</button>
-							</div>						
+							</div>
 						</div>
 					</div>
 				</div>
@@ -33073,25 +33073,25 @@
                 </div>
                 <form action="{{url('faq')}}">
                     <div class="modal-body">
-                        <div class="row">										
+                        <div class="row">
                             <div class="mb-3">
                                 <label class="form-label">Category <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
-                            </div>																			
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Question <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
-                            </div>	
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Answer <span class="text-danger">*</span></label>
                                 <textarea class="form-control" rows="3"></textarea>
-                            </div>	
+                            </div>
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="users6" class="check" checked>
                                 <label for="users6" class="checktoggle mb-0"></label>
-                            </div>																		
-                        </div>														
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -33117,25 +33117,25 @@
                 </div>
                 <form action="{{url('faq')}}">
                     <div class="modal-body">
-                        <div class="row">										
+                        <div class="row">
                             <div class="mb-3">
                                 <label class="form-label">Category <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="General">
-                            </div>																			
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Question <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" value="What is a POS platform?">
-                            </div>	
+                            </div>
                             <div class="mb-3">
                                 <label class="form-label">Answer <span class="text-danger">*</span></label>
                                 <textarea class="form-control" rows="3">A software system that processes sales, manages inventory, and handles transactions.</textarea>
-                            </div>	
+                            </div>
                             <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
                                 <span class="status-label">Status</span>
                                 <input type="checkbox" id="users7" class="check" checked>
                                 <label for="users7" class="checktoggle mb-0"></label>
-                            </div>																		
-                        </div>														
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
@@ -33146,7 +33146,7 @@
         </div>
     </div>
     <!-- /Edit FAQ -->
-        
+
     <!-- Delete Modal -->
     <div class="modal fade" id="delete-modal">
         <div class="modal-dialog modal-dialog-centered">
@@ -33154,12 +33154,12 @@
                 <div class="modal-body text-center p-0">
                     <span class="rounded-circle d-inline-flex p-2 bg-danger-transparent mb-2"><i class="ti ti-trash fs-24 text-danger"></i></span>
                     <h4 class="fs-20 text-gray-9 fw-bold mb-2 mt-1">Delete Faq</h4>
-                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete faq?</p>	
+                    <p class="text-gray-6 mb-0 fs-16">Are you sure you want to delete faq?</p>
                     <div class="d-flex justify-content-center mt-3">
                         <a class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</a>
                         <a href="{{url('faq')}}" class="btn btn-primary fs-13 fw-medium p-2 px-3">Yes Delete</a>
-                    </div>											
-                </div>					
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -33282,7 +33282,7 @@
                         <div class="col-lg-12">
                             <div class="input-blocks">
                                 <p class="fs-14">
-                                    <i class="ti ti-info-circle me-1"></i> New phone number only updated once you verified 
+                                    <i class="ti ti-info-circle me-1"></i> New phone number only updated once you verified
                                 </p>
                             </div>
                         </div>
@@ -33335,7 +33335,7 @@
                         <div class="col-lg-12">
                             <div class="input-blocks">
                                 <p class="fs-14">
-                                    <i class="ti ti-info-circle me-1"></i> New email address only updated once you verified 
+                                    <i class="ti ti-info-circle me-1"></i> New email address only updated once you verified
                                 </p>
                             </div>
                         </div>
@@ -33395,7 +33395,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-trash"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -33406,7 +33406,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-trash"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -33417,7 +33417,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-trash"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -33428,7 +33428,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-trash"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -33479,7 +33479,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-logout"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -33490,7 +33490,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-logout"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -33501,7 +33501,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-logout"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -33512,7 +33512,7 @@
                                                 <td>
                                                     <a href="javascript:void(0);" class="btn">
                                                         <i class="ti ti-logout"></i>
-                                                    </a>	
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -33547,38 +33547,38 @@
                     <div class="form-check d-flex mb-2">
                         <input class="form-check-input" type="radio" name="delete" id="del-acc1">
                         <label class="form-check-label fs-14 ms-2" for="del-acc1">
-                            <span class="text-gray-9 fw-medium">No longer using the service</span> 
+                            <span class="text-gray-9 fw-medium">No longer using the service</span>
                             <span class="d-block text-default">I no longer need this service and won’t be using it in the future.</span>
                         </label>
                     </div>
                     <div class="form-check d-flex mb-2">
                         <input class="form-check-input" type="radio" name="delete" id="del-acc2">
                         <label class="form-check-label fs-14 ms-2" for="del-acc2">
-                            <span class="text-gray-9 fw-medium">Privacy concerns</span> 
+                            <span class="text-gray-9 fw-medium">Privacy concerns</span>
                             <span class="d-block text-default">I am concerned about how my data is handled and want to remove my information.</span>
                         </label>
                     </div>
                     <div class="form-check d-flex mb-2">
                         <input class="form-check-input" type="radio" name="delete" id="del-acc3">
                         <label class="form-check-label fs-14 ms-2" for="del-acc3">
-                            <span class="text-gray-9 fw-medium">Too many notifications/emails</span> 
+                            <span class="text-gray-9 fw-medium">Too many notifications/emails</span>
                             <span class="d-block text-default">I’m overwhelmed by the volume of notifications or emails and would like to reduce them.</span>
                         </label>
                     </div>
                     <div class="form-check d-flex mb-2">
                         <input class="form-check-input" type="radio" name="delete" id="del-acc4">
                         <label class="form-check-label fs-14 ms-2" for="del-acc4">
-                            <span class="text-gray-9 fw-medium">Poor user experience</span> 
+                            <span class="text-gray-9 fw-medium">Poor user experience</span>
                             <span class="d-block text-default">I’ve had difficulty using the platform, and it didn’t meet my expectations.</span>
                         </label>
                     </div>
                     <div class="form-check d-flex mb-2">
                         <input class="form-check-input" type="radio" name="delete" id="del-acc5" checked>
                         <label class="form-check-label fs-14 ms-2" for="del-acc5">
-                            <span class="text-gray-9 fw-medium">Other (Please specify)</span> 
+                            <span class="text-gray-9 fw-medium">Other (Please specify)</span>
                         </label>
                     </div>
-                    <div class="ms-4">                        
+                    <div class="ms-4">
                         <textarea class="form-control" rows="3"></textarea>
                     </div>
                 </div>
@@ -33646,43 +33646,43 @@
                                             <tr>
                                                 <td>Products</td>
                                                 <td><div><input type="text" class="form-control" value="منتجات"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Expired Products</td>
                                                 <td><div><input type="text" class="form-control" value="المنتجات منتهية الصلاحية"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Low Stocks</td>
                                                 <td><div><input type="text" class="form-control" value="مخزونات منخفضة"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Category</td>
                                                 <td><div><input type="text" class="form-control" value="فئة"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Sub Category</td>
                                                 <td><div><input type="text" class="form-control" value="الفئة الفرعية"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Brand</td>
                                                 <td><div><input type="text" class="form-control" value="ماركة"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Unit</td>
                                                 <td><div><input type="text" class="form-control" value="وحدة"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Warranties</td>
                                                 <td><div><input type="text" class="form-control" value="الضمانات"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Print Barcode</td>
                                                 <td><div><input type="text" class="form-control" value="طباعة الباركود"></div></td>
-                                            </tr>																		
+                                            </tr>
                                             <tr>
                                                 <td>Print QR Code</td>
                                                 <td><div><input type="text" class="form-control" value="طباعة رمز الاستجابة السريعة"></div></td>
-                                            </tr>																		
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -33749,43 +33749,43 @@
 												<tr>
 													<td>Products</td>
 													<td><div><input type="text" class="form-control" value="منتجات"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Expired Products</td>
 													<td><div><input type="text" class="form-control" value="المنتجات منتهية الصلاحية"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Low Stocks</td>
 													<td><div><input type="text" class="form-control" value="مخزونات منخفضة"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Category</td>
 													<td><div><input type="text" class="form-control" value="فئة"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Sub Category</td>
 													<td><div><input type="text" class="form-control" value="الفئة الفرعية"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Brand</td>
 													<td><div><input type="text" class="form-control" value="ماركة"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Unit</td>
 													<td><div><input type="text" class="form-control" value="وحدة"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Warranties</td>
 													<td><div><input type="text" class="form-control" value="الضمانات"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Print Barcode</td>
 													<td><div><input type="text" class="form-control" value="طباعة الباركود"></div></td>
-												</tr>																		
+												</tr>
 												<tr>
 													<td>Print QR Code</td>
 													<td><div><input type="text" class="form-control" value="طباعة رمز الاستجابة السريعة"></div></td>
-												</tr>																		
+												</tr>
 											</tbody>
 										</table>
 									</div>
@@ -33953,7 +33953,7 @@
                 <div class="modal-body">
                     <div>
                         <p>
-                            Hi <span class="text-orange">{Customer Name}</span>, thank you for shopping with us at <span class="text-orange">{Store Name}</span>! 
+                            Hi <span class="text-orange">{Customer Name}</span>, thank you for shopping with us at <span class="text-orange">{Store Name}</span>!
                             Your order # <span class="text-orange">{Order ID}</span> has been confirmed. Total: <span class="text-orange">${Amount}</span>. For queries, call <span class="text-orange">{Phone Number}</span>
                         </p>
                     </div>
@@ -34013,12 +34013,12 @@
                         <div>
                             <label class="form-label">Supplier<span class="text-danger">*</span></label>
                             <input type="text" class="form-control">
-                        </div>												
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn me-2 btn-secondary fs-13 fw-medium p-2 px-3 shadow-none" data-bs-dismiss="modal">Cancel</button>
                         <button  type="submit" class="btn btn-primary fs-13 fw-medium p-2 px-3">Add Supplier</button>
-                    </div>						
+                    </div>
                 </form>
             </div>
         </div>
@@ -34194,7 +34194,7 @@
         </div>
     </div>
     <!-- /Edit Todo -->
-    
+
     <!-- Todo Details -->
     <div class="modal fade" id="view_todo">
         <div class="modal-dialog modal-dialog-centered">
@@ -34236,10 +34236,10 @@
                     </div>
                     <div class="mb-3">
                         <h5 class="mb-2">Description</h5>
-                        <p>Hiking is a long, vigorous walk, usually on trails or footpaths in 
-                            the countryside. Walking for pleasure developed in Europe during the eighteenth century. 
-                            Religious pilgrimages have existed much longer but they involve walking long distances for a 
-                            spiritual purpose associated with specific 
+                        <p>Hiking is a long, vigorous walk, usually on trails or footpaths in
+                            the countryside. Walking for pleasure developed in Europe during the eighteenth century.
+                            Religious pilgrimages have existed much longer but they involve walking long distances for a
+                            spiritual purpose associated with specific
                             religions and also we achieve inner peace while we hike at a local park.
                         </p>
                     </div>

@@ -41,7 +41,7 @@
                         </div>
                     </div>
                     <div class="d-flex table-dropdown my-xl-auto right-content align-items-center flex-wrap row-gap-3">
-                                
+
                         <div class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle btn btn-white btn-md d-inline-flex align-items-center" data-bs-toggle="dropdown">
                                 Status
@@ -53,7 +53,7 @@
                                 <li>
                                     <a href="javascript:void(0);" class="dropdown-item rounded-1">Inactive</a>
                                 </li>
-                    
+
                             </ul>
                         </div>
                     </div>
@@ -105,7 +105,7 @@
                                     </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
-                                        <a href="javascript:void(0);" class="edit-btn" 
+                                        <a href="javascript:void(0);" class="edit-btn"
                                             data-id="{{ $user->id }}"
                                             data-name="{{$user->name}}"
                                             data-image="{{ $user->profile_picture ? asset('storage/' . $user->profile_picture) : asset('build/img/users/default.png') }}"
@@ -114,15 +114,15 @@
                                             data-profile_picture="{{ $user->profile_picture }}"
                                             data-role="{{ $user->role }}"
                                             data-status="{{ $user->status }}"
-                                            data-bs-toggle="modal" 
+                                            data-bs-toggle="modal"
                                             data-bs-target="#edit-user">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                         </a>
 
-                                        <a href="javascript:void(0);" 
-                                            class="delete-btn" 
-                                            data-id="{{ $user->id }}" 
-                                            data-bs-toggle="modal" 
+                                        <a href="javascript:void(0);"
+                                            class="delete-btn"
+                                            data-id="{{ $user->id }}"
+                                            data-bs-toggle="modal"
                                             data-bs-target="#delete-modal">
                                                 <i data-feather="trash-2" class="feather-trash"></i>
                                         </a>
@@ -149,7 +149,7 @@
                         const role = this.dataset.role;
                         const status = this.dataset.status;
                         const image = this.dataset.image;
-                        
+
 
                         // Set the form action dynamically
                         const form = document.getElementById('editForm');
@@ -197,6 +197,8 @@
                 });
             });
         </script>
+
+
         <div class="footer d-sm-flex align-items-center justify-content-between border-top bg-white p-3">
             <p class="mb-0 text-gray-9"> &copy; JavaPA. All Right Reserved</p>
             <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p>
