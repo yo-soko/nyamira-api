@@ -330,6 +330,8 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/teachers/{id}', [TeacherController::class, 'destroy'])->name('teachers.destroy');
     Route::get('/teachers/{teacher}/subjects', [TeacherController::class, 'getSubjectClassMap']);
     Route::get('/teachers/{teacher}/subjects', [TeacherController::class, 'getSubjects']);
+    Route::get('/teachers/{id}/subjects', [TeacherController::class, 'getSubjects']);
+    Route::put('/teachers/{teacher}', [TeacherController::class, 'update'])->name('teachers.update');
 
 
 
