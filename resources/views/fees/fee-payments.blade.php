@@ -4,7 +4,7 @@
 @section('content')
 <div class="page-wrapper">
     <div class="content">
-    <!-- @include('layout.toast') -->
+    @include('layout.toast')
         <div class="page-header d-flex justify-content-between align-items-center">
             <div class="page-title">
                 <h4>Fee Payments</h4>
