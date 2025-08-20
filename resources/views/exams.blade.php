@@ -282,26 +282,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // EDIT FORM SUBMIT - dynamically create subject_class_map[] inputs
-  document.querySelector('#edit-exam-form').addEventListener('submit', async function(e) {
-    // Remove old hidden inputs
-    this.querySelectorAll('input[name="subject_class_map[]"]').forEach(i => i.remove());
+// EDIT FORM SUBMIT - dynamically create subject_class_map[] inputs
+document.querySelector('#edit-exam-form').addEventListener('submit', async function(e) {
+  e.preventDefault(); // stop default submission until we’re ready
 
-    const selectedClasses = document.querySelectorAll('#edit-class-checkboxes .class-checkbox:checked');
+  // Remove old hidden inputs
+  this.querySelectorAll('input[name="subject_class_map[]"]').forEach(i => i.remove());
 
-    for(const cb of selectedClasses){
-      const classId = cb.value;
-      const res = await fetch(`/classes/${classId}/subjects`);
-      const subjects = await res.json();
-      subjects.forEach(subject => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'subject_class_map[]';
-        input.value = `${classId}:${subject.id}`;
-        this.appendChild(input);
-      });
-    }
-  });
+  const selectedClasses = document.querySelectorAll('#edit-class-checkboxes .class-checkbox:checked');
+
+  for(const cb of selectedClasses){
+    const classId = cb.value;
+    const res = await fetch(`/classes/${classId}/subjects`);
+    const subjects = await res.json();
+
+    subjects.forEach(subject => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'subject_class_map[]';
+      input.value = `${classId}:${subject.id}`;
+      this.appendChild(input);
+    });
+  }
+
+  // Now safely submit form
+  this.submit();
+});
+
 
 });
 </script>

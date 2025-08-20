@@ -68,6 +68,7 @@ class ExamController extends Controller
 
     public function update(Request $request, $id)
     {
+     
         $request->validate([
             'name'              => 'required|string|max:255',
             'term_id'           => 'required|exists:terms,id',
