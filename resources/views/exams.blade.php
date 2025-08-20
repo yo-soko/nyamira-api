@@ -183,7 +183,7 @@
             </div>
             @foreach($classes as $class)
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" name="class_ids[]" value="{{ $class->id }}">
+              <input class="form-check-input class-checkbox" type="checkbox" value="{{ $class->id }}">
               <label class="form-check-label">
                 {{ $class->level->level_name }} {{ $class->stream->name }}
               </label>
@@ -206,7 +206,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary">Update</button>
+        <button type="submit" class="btn btn-primary">Update</button>
       </div>
     </form>
   </div>
@@ -235,14 +235,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Select All for Add Exam
+  // SELECT ALL - Add Exam
   document.getElementById('select-all-classes').addEventListener('change', function () {
     document.querySelectorAll('#class-checkboxes .class-checkbox').forEach(cb => cb.checked = this.checked);
   });
 
-  // Select All for Edit Exam
+  // SELECT ALL - Edit Exam
   document.getElementById('edit-select-all-classes').addEventListener('change', function () {
-    document.querySelectorAll('#edit-class-checkboxes input[type="checkbox"]:not(#edit-select-all-classes)').forEach(cb => cb.checked = this.checked);
+    document.querySelectorAll('#edit-class-checkboxes .class-checkbox').forEach(cb => cb.checked = this.checked);
   });
 
   // Delete exam modal
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Edit exam modal
+  // Edit exam modal prefill
   document.querySelectorAll('.edit-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       const id = btn.dataset.id;
@@ -265,18 +265,42 @@ document.addEventListener('DOMContentLoaded', function() {
       const isAnalysed = btn.dataset.is_analysed == 1;
       const map = JSON.parse(btn.dataset.map);
 
-      document.querySelector('#edit-exam-form').action = `/exams/${id}`;
-      document.querySelector('#edit-exam-form input[name="name"]').value = name;
-      document.querySelector('#edit-exam-form select[name="term_id"]').value = termId;
-      document.querySelector('#edit-exam-form input[name="status"]').checked = status;
-      document.querySelector('#edit-exam-form input[name="is_analysed"]').checked = isAnalysed;
+      const form = document.querySelector('#edit-exam-form');
+      form.action = `/exams/${id}`;
+      form.querySelector('input[name="name"]').value = name;
+      form.querySelector('select[name="term_id"]').value = termId;
+      form.querySelector('input[name="status"]').checked = status;
+      form.querySelector('input[name="is_analysed"]').checked = isAnalysed;
 
-      document.querySelectorAll('#edit-class-checkboxes input[name="class_ids[]"]').forEach(cb => cb.checked = false);
+      // Clear all checkboxes
+      document.querySelectorAll('#edit-class-checkboxes .class-checkbox').forEach(cb => cb.checked = false);
+      // Check those from map
       map.forEach(item => {
-        const checkbox = document.querySelector(`#edit-class-checkboxes input[value="${item.class_id}"]`);
-        if (checkbox) checkbox.checked = true;
+        const cb = document.querySelector(`#edit-class-checkboxes .class-checkbox[value="${item.class_id}"]`);
+        if(cb) cb.checked = true;
       });
     });
+  });
+
+  // EDIT FORM SUBMIT - dynamically create subject_class_map[] inputs
+  document.querySelector('#edit-exam-form').addEventListener('submit', async function(e) {
+    // Remove old hidden inputs
+    this.querySelectorAll('input[name="subject_class_map[]"]').forEach(i => i.remove());
+
+    const selectedClasses = document.querySelectorAll('#edit-class-checkboxes .class-checkbox:checked');
+
+    for(const cb of selectedClasses){
+      const classId = cb.value;
+      const res = await fetch(`/classes/${classId}/subjects`);
+      const subjects = await res.json();
+      subjects.forEach(subject => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'subject_class_map[]';
+        input.value = `${classId}:${subject.id}`;
+        this.appendChild(input);
+      });
+    }
   });
 
 });
