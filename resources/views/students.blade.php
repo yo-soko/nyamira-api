@@ -25,9 +25,12 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
+            @hasanyrole('admin|developer|manager|director|supervisor')
             <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#promoteStudentsModal">
                 Promote Students
             </button>
+            @endhasanyrole
+
             <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#printReportsModal">
                 Print Bulk Assesments
             </button>
