@@ -225,7 +225,7 @@
         <p>Are you sure you want to delete <strong id="delete-exam-name"></strong>?</p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button> -->
         <button class="btn btn-danger">Delete</button>
       </div>
     </form>
