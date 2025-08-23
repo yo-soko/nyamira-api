@@ -42,10 +42,15 @@ class DashboardController extends Controller
          $totalLevels = ClassLevel::count(); 
          $totalStreams = SchoolClass::count(); 
          $totalSubjects = Subject::count();
-         $currentTerm = Term::where('start_date', '<=', $today)
+        $currentTerm = Term::where('start_date', '<=', $today)
             ->where('end_date', '>=', $today)
             ->where('status', 1)
             ->first();
+
+        // If none found, fallback to latest by end_date
+        if (!$currentTerm) {
+            $currentTerm = Term::orderBy('end_date', 'desc')->first();
+        }
         $examCount = $currentTerm
             ? Exam::where('term_id', $currentTerm->id)->count()
             : 0;

@@ -195,6 +195,7 @@ class StudentController extends Controller
 
         }
     }
+
     public function update(Request $request)
     {
         $validated = $request->validate([
@@ -560,6 +561,99 @@ class StudentController extends Controller
             'balance' => $totalExpected - $totalPaid,
         ]);
     }
+    public function promote(Request $request)
+    {
+        $request->validate([
+            'current_class_id' => 'required|exists:school_classes,id',
+            'next_class_id' => 'required|exists:school_classes,id',
+            'next_term_id' => 'required|exists:terms,id',
+        ]);
 
+        DB::beginTransaction();
+
+        try {
+            $students = Student::where('class_id', $request->current_class_id)->get();
+
+            foreach ($students as $student) {
+                // Move student to next class & term
+                $student->update([
+                    'class_id' => $request->next_class_id,
+                    'term_id'  => $request->next_term_id,
+                ]);
+
+                // 🔥 Call same recalculation logic from update
+                $this->recalculateBalance($student, $request->next_class_id, $request->next_term_id);
+            }
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Students promoted successfully!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Promotion failed: ' . $e->getMessage());
+        }
+    }
+
+    protected function recalculateBalance(Student $student, $classId, $termId)
+    {
+        $currentLevelId = SchoolClass::find($classId)?->level_id;
+
+        if (!$currentLevelId) {
+            $student->update(['current_balance' => 0]);
+            return;
+        }
+
+        // Current term fees
+        $currentTuition = FeeStructure::where('level_id', $currentLevelId)
+            ->where('term_id', $termId)
+            ->sum('amount');
+
+        $currentMeal = StudentMeal::where('student_id', $student->id)
+            ->where('term_id', $termId)
+            ->value('meal_fee') ?? 0;
+
+        $currentTransport = StudentTransport::where('student_id', $student->id)
+            ->where('term_id', $termId)
+            ->value('transport_fee') ?? 0;
+
+        $currentExpected = $currentTuition + $currentMeal + $currentTransport;
+
+        $currentPaid = FeePayment::where('student_id', $student->id)
+            ->where('term_id', $termId)
+            ->sum('amount_paid');
+
+        // Previous terms
+        $previousTerms = Term::where('id', '<', $termId)->pluck('id');
+        $studentClasses = Student::where('id', $student->id)->pluck('class_id');
+        $previousLevels = SchoolClass::whereIn('id', $studentClasses)
+            ->pluck('level_id')
+            ->unique();
+
+        $previousTuition = FeeStructure::whereIn('level_id', $previousLevels)
+            ->whereIn('term_id', $previousTerms)
+            ->sum('amount');
+
+        $previousMeal = StudentMeal::where('student_id', $student->id)
+            ->whereIn('term_id', $previousTerms)
+            ->sum('meal_fee');
+
+        $previousTransport = StudentTransport::where('student_id', $student->id)
+            ->whereIn('term_id', $previousTerms)
+            ->sum('transport_fee');
+
+        $previousExpected = $previousTuition + $previousMeal + $previousTransport;
+
+        $previousPaid = FeePayment::where('student_id', $student->id)
+            ->whereIn('term_id', $previousTerms)
+            ->sum('amount_paid');
+
+        $carryForward = $previousExpected - $previousPaid;
+
+        // Final balance
+        $student->update([
+            'current_balance' => $currentExpected - $currentPaid + $carryForward,
+        ]);
+    }
 
 }

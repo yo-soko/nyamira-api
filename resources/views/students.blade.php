@@ -25,7 +25,10 @@
                     <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                 </li>
             </ul>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#printReportsModal">
+            <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#promoteStudentsModal">
+                Promote Students
+            </button>
+            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#printReportsModal">
                 Print Bulk Assesments
             </button>
 
@@ -671,6 +674,55 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<!-- promotion to next class and term -->
+<div class="modal fade" id="promoteStudentsModal" tabindex="-1" aria-labelledby="promoteStudentsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="promoteStudentsModalLabel">Promote Students</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form method="POST" action="{{ route('students.promote') }}">
+                @csrf
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="current_class">Current Class</label>
+                        <select name="current_class_id" class="form-control" required>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="next_class">Next Class</label>
+                        <select name="next_class_id" class="form-control" required>
+                            @foreach($classes as $class)
+                                <option value="{{ $class->id }}">{{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="next_term">Next Term</label>
+                        <select name="next_term_id" class="form-control" required>
+                            @foreach($terms as $term)
+                              <option value="{{ $term->id }}">{{ $term->term_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Promote Students</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

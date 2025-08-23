@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Result;
 use App\Models\Student;
+use App\Models\SchoolClass;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\FeePayment;
@@ -303,21 +304,19 @@ class SdashboardController extends Controller
         };
 
         $chartData = $marks->map(function ($mark) use ($gradeToScore, $existingAssessments) {
-            $score = null;
+            $row = [
+                'subject' => $mark->subject->subject_name ?? 'Unknown',
+            ];
 
-            foreach (array_reverse($existingAssessments) as $i) {
+            foreach ($existingAssessments as $i) {
                 $val = property_exists($mark, "assessment_$i") ? $mark->{"assessment_$i"} : null;
-                if (!is_null($val)) {
-                    $score = is_numeric($val) ? $val : $gradeToScore($val);
-                    break;
-                }
+                $row["assessment_$i"] = !is_null($val) ? (is_numeric($val) ? $val : $gradeToScore($val)) : 0;
             }
 
-            return [
-                'subject' => $mark->subject->subject_name ?? 'Unknown',
-                'score' => $score ?? 0,
-            ];
+            return $row;
         });
+
+
 
         $facilitatorUserId = \App\Models\Result::where('student_id', $studentId)
             ->where('term_id', $termId)
@@ -568,20 +567,16 @@ class SdashboardController extends Controller
         };
 
         $chartData = $marks->map(function ($mark) use ($gradeToScore, $existingAssessments) {
-            $score = null;
+            $row = [
+                'subject' => $mark->subject->subject_name ?? 'Unknown',
+            ];
 
-            foreach (array_reverse($existingAssessments) as $i) {
+            foreach ($existingAssessments as $i) {
                 $val = property_exists($mark, "assessment_$i") ? $mark->{"assessment_$i"} : null;
-                if (!is_null($val)) {
-                    $score = is_numeric($val) ? $val : $gradeToScore($val);
-                    break;
-                }
+                $row["assessment_$i"] = !is_null($val) ? (is_numeric($val) ? $val : $gradeToScore($val)) : 0;
             }
 
-            return [
-                'subject' => $mark->subject->subject_name ?? 'Unknown',
-                'score' => $score ?? 0,
-            ];
+            return $row;
         });
 
         $facilitatorUserId = \App\Models\Result::where('student_id', $studentId)
@@ -611,6 +606,7 @@ class SdashboardController extends Controller
             'termId'
         );
     }
+    
     public function viewBulkReports(Request $request)
     {
         $classId = $request->input('class_id');

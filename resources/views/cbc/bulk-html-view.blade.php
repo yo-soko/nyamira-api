@@ -118,7 +118,7 @@
 </style>
 
 </head>
-<body onload="window.print()">
+<body >
 
     @foreach ($reports as $report)
         @php
@@ -142,3 +142,87 @@
 
 </body>
 </html>
+<script src="{{ asset('build/plugins/chartjs/chart.min.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    @foreach($reports as $report)
+        (function() {
+            const canvasId = 'performanceChart_{{ $report['student']->id }}';
+            const ctx = document.getElementById(canvasId)?.getContext('2d');
+            if (!ctx) return;
+
+            const chartData = @json($report['chartData']);
+            const gradeToPosition = score => {
+                if (score >= 80) return 4;
+                if (score >= 60) return 3;
+                if (score >= 40) return 2;
+                if (score > 0) return 1;
+                return 0;
+            };
+            const positionToGrade = ['-', 'B.E', 'A.E', 'M.E', 'E.E'];
+            const assessments = ['assessment_1', 'assessment_2', 'assessment_3'];
+            const colors = [
+                'rgba(255, 99, 132, 0.5)',
+                'rgba(54, 162, 235, 0.5)',
+                'rgba(75, 192, 192, 0.5)'
+            ];
+            const borderColors = colors.map(c => c.replace('0.5','1'));
+
+            const datasets = assessments.map((key, idx) => ({
+                label: 'Assessment ' + (idx + 1),
+                data: chartData.map(item => gradeToPosition(item[key])),
+                backgroundColor: colors[idx % colors.length],
+                borderColor: borderColors[idx % borderColors.length],
+                borderWidth: 1
+            }));
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(item => item.subject),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 4,
+                            ticks: {
+                                stepSize: 1,
+                                callback: value => positionToGrade[value]
+                            },
+                            title: { display: true, text: 'Grade' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Subjects' }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const datasetLabel = context.dataset.label;
+                                    const rawScore = chartData[context.dataIndex][assessments[context.datasetIndex]];
+                                    let grade = '-';
+                                    if (rawScore >= 80) grade = 'E.E';
+                                    else if (rawScore >= 60) grade = 'M.E';
+                                    else if (rawScore >= 40) grade = 'A.E';
+                                    else if (rawScore > 0) grade = 'B.E';
+                                    return `${datasetLabel}: (${grade})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+    @endforeach
+});
+</script>
+<script>
+window.addEventListener('load', function() {
+    setTimeout(() => { window.print(); }, 500);
+});
+</script>

@@ -271,44 +271,38 @@
     </div>
 </div>
 
-<script src="{{ URL::asset('build/js/jquery-3.7.1.min.js') }}"></script>
-<script src="{{ URL::asset('build/plugins/chartjs/chart.min.js') }}"></script>
-<script src="{{ URL::asset('build/plugins/chartjs/chart-data.js') }}"></script>
+<script src="{{ asset('build/js/jquery-3.7.1.min.js') }}"></script>
+<script src="{{ asset('build/plugins/chartjs/chart.min.js') }}"></script>
 
 <script>
-    const ctx = document.getElementById('performanceChart').getContext('2d');
+(function() {
+    const ctx = document.getElementById('performanceChart')?.getContext('2d');
+    if (!ctx) return;
 
-    const chart = new Chart(ctx, {
-        type: 'line',
+    const chartData = @json($chartData);
+
+    // Map grades to numeric positions for the chart
+    const gradeToPosition = score => {
+        if (score >= 80) return 4; // E.E
+        if (score >= 60) return 3; // M.E
+        if (score >= 40) return 2; // A.E
+        if (score > 0)  return 1; // B.E
+        return 0;
+    };
+
+    const positionToGrade = [' ', 'B.E', 'A.E', 'M.E', 'E.E'];
+
+    new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels: {!! json_encode($chartData->pluck('subject')) !!},
+            labels: chartData.map(item => item.subject),
             datasets: [
                 {
-                    label: 'Student Score',
-                    data: {!! json_encode($chartData->pluck('score')) !!},
-                    backgroundColor: 'rgba(54, 162, 235, 0.4)',
+                    label: '{{ $summary["exam_name"] ?? "Latest Exam" }}',
+                    data: chartData.map(item => gradeToPosition(item.score)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
                     borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: false
-                },
-                {
-                    label: 'Class Avg',
-                    data: new Array({{ $chartData->count() }}).fill({{ round($classAverage ?? 0, 2) }}),
-                    borderColor: 'rgb(17, 238, 28)',
-                    borderWidth: 2,
-                    borderDash: [10, 5],
-                    pointRadius: 0,
-                    fill: false
-                },
-                {
-                    label: 'Level Avg',
-                    data: new Array({{ $chartData->count() }}).fill({{ round($levelAverage ?? 0, 2) }}),
-                    borderColor: 'rgb(243, 123, 10)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    pointRadius: 0,
-                    fill: false
+                    borderWidth: 1
                 }
             ]
         },
@@ -317,16 +311,12 @@
             scales: {
                 y: {
                     min: 0,
-                    max: 100,
+                    max: 4,
                     ticks: {
-                        callback: function (value) {
-                            if (value >= 80) return 'E.E';
-                            if (value >= 60) return 'M.E';
-                            if (value >= 40) return 'A.E';
-                            if (value > 0) return 'B.E';
-                            return ' ';
-                        },
-                        stepSize: 20
+                        stepSize: 1,
+                        callback: function(value) {
+                            return positionToGrade[value];
+                        }
                     },
                     title: {
                         display: true,
@@ -343,22 +333,21 @@
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function (context) {
-                            let score = context.parsed.y;
-                            let label = context.dataset.label;
+                        label: function(context) {
+                            const score = chartData[context.dataIndex].score;
                             let grade = '-';
                             if (score >= 80) grade = 'E.E';
                             else if (score >= 60) grade = 'M.E';
                             else if (score >= 40) grade = 'A.E';
                             else if (score > 0) grade = 'B.E';
-
-                            return `${label}: ${score} (${grade})`;
+                            return `${context.dataset.label}: ${grade}`;
                         }
                     }
                 }
             }
         }
     });
+})();
 </script>
 
 

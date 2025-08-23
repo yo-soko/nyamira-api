@@ -338,6 +338,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/migrate-teachers', [TeacherController::class, 'migrateTeachersToUsers']);
     Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
+    Route::post('/students/promote', [StudentController::class, 'promote'])
+    ->name('students.promote');
     //library
     Route::middleware(['auth'])->group(function () {
     Route::resource('library', LibraryController::class);

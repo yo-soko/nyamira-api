@@ -19,7 +19,7 @@ class ResultController extends Controller
      */
     public function index()
     {
-        // 
+        //
     }
 
     /**
@@ -134,9 +134,9 @@ class ResultController extends Controller
             ->where('level_id', $levelId)
             ->exists();
 
-        if (!$exists) {
-            return back()->with('error', 'You cannot enter results: The selected exam and subject are not assigned to this class level.');
-        }
+        // if (!$exists) {
+        //     return back()->with('error', 'You cannot enter results: The selected exam and subject are not assigned to this class level.');
+        // }
 
         $students = Student::where('class_id', $classId)
                    ->where('status', 1)
@@ -331,8 +331,6 @@ class ResultController extends Controller
         return view('results-view', compact('studentsWithAverage', 'subjects', 'filters'));
 
     }
-
-
 
 
     /**

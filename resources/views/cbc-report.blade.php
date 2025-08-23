@@ -218,7 +218,7 @@
                             <td class="text-start">{{ $mark->subject->subject_name ?? 'Unknown' }}</td>
                             @for ($i = 1; $i <= 3; $i++)
                                 <td>{{ isset($mark->{"assessment_$i"}) ? $rubricCode($mark->{"assessment_$i"}) : '-' }}</td>
-                                <td>{{ isset($mark->{"comment_$i"}) ? $mark->{"comment_$i"} : '-' }}</td>
+                                <td>{{ isset($mark->{"assessment_$i"}) ? $rubricCode($mark->{"assessment_$i"}) : '-' }}</td>
                             @endfor
                         </tr>
                     @endforeach
@@ -239,7 +239,7 @@
             </div>
            
             <div class="my-4">
-                <canvas id="performanceChart" height="150"></canvas>
+                <canvas id="performanceChart_{{ $student->id }}" height="150"></canvas>
             </div>
 
             <div class="row mt-4">
@@ -258,7 +258,16 @@
                     <p><strong>Parent/Guardian Signature:</strong> _____________ Date: __________</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Term ends on:</strong> {{ \Carbon\Carbon::parse($summary['term_end_date'])->format('d M Y') ?? '-' }} <strong>Next term begins on:</strong> ____________</p>
+                <p>
+                    <strong>Term ends on:</strong> 
+                    {{ $summary['term_end_date'] && $summary['term_end_date'] !== '-' 
+                        ? \Carbon\Carbon::parse($summary['term_end_date'])->format('d M Y') 
+                        : '-' }} 
+                    <strong>Next term begins on:</strong> 
+                    {{ $summary['next_term_begins'] && $summary['next_term_begins'] !== '-' 
+                        ? \Carbon\Carbon::parse($summary['next_term_begins'])->format('d M Y') 
+                        : '-' }}
+                </p>
                 </div>
             </div>
 
@@ -293,58 +302,61 @@
 <script src="{{ asset('build/js/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('build/plugins/chartjs/chart.min.js') }}"></script>
 <script>
-    const ctx = document.getElementById('performanceChart').getContext('2d');
+(function() {
+    const ctx = document.getElementById('performanceChart_{{ $student->id }}')?.getContext('2d');
+    if (!ctx) return;
 
-    const chart = new Chart(ctx, {
-        type: 'line',
+    const chartData = @json($chartData);
+
+    // Map grades to positions for the y-axis
+    const gradeToPosition = score => {
+        if (score >= 80) return 4; // E.E
+        if (score >= 60) return 3; // M.E
+        if (score >= 40) return 2; // A.E
+        if (score > 0)  return 1;   // B.E
+        return 0;
+    };
+
+    const positionToGrade = ['-', 'B.E', 'A.E', 'M.E', 'E.E'];
+
+    // Prepare datasets with positions
+    const datasets = ['assessment_1', 'assessment_2', 'assessment_3'].map((key, idx) => {
+        const colors = [
+            'rgba(255, 99, 132, 0.5)',
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(75, 192, 192, 0.5)',
+            'rgba(255, 159, 64, 0.5)',
+            'rgba(153, 102, 255, 0.5)',
+            'rgba(201, 203, 207, 0.5)'
+        ];
+        const borderColors = colors.map(c => c.replace('0.5', '1'));
+
+        return {
+            label: 'Assessment ' + (idx + 1),
+            data: chartData.map(item => gradeToPosition(item[key])),
+            backgroundColor: colors[idx % colors.length],
+            borderColor: borderColors[idx % colors.length],
+            borderWidth: 1
+        };
+    });
+
+    new Chart(ctx, {
+        type: 'bar',
         data: {
-            labels: {!! json_encode($chartData->pluck('subject')) !!}, // subject names
-            datasets: [
-                {
-                    label: 'Student Score',
-                    data: {!! json_encode($chartData->pluck('score')) !!}, // student marks
-                    backgroundColor: 'rgba(54, 162, 235, 0.4)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: false
-                },
-                {
-                    label: 'Class Avg',
-                    data: new Array({{ $chartData->count() }}).fill({{ round($classAverage ?? 0, 2) }}),
-                    borderColor: 'rgb(17, 238, 28)',
-                    borderWidth: 2,
-                    borderDash: [10, 5],
-                    pointRadius: 0,
-                    fill: false
-                },
-                {
-                    label: 'Level Avg',
-                    data: new Array({{ $chartData->count() }}).fill({{ round($levelAverage ?? 0, 2) }}),
-                    borderColor: 'rgb(243, 123, 10)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    pointRadius: 0,
-                    fill: false
-                }
-            ]
+            labels: chartData.map(item => item.subject),
+            datasets: datasets
         },
         options: {
             responsive: true,
             scales: {
                 y: {
                     min: 0,
-                    max: 100,
+                    max: 4,
                     ticks: {
-                        callback: function (value) {
-                            if (value == 100) return ' ';
-                            if (value >= 80) return 'E.E';
-                            if (value >= 60) return 'M.E';
-                            if (value >= 40) return 'A.E';
-                            if (value > 0) return 'B.E';
-                            return ' ';
-                        },
-                        stepSize: 20
+                        stepSize: 1,
+                        callback: function(value) {
+                            return positionToGrade[value];
+                        }
                     },
                     title: {
                         display: true,
@@ -361,22 +373,23 @@
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function (context) {
-                            let score = context.parsed.y;
-                            let label = context.dataset.label;
+                        label: function(context) {
+                            const datasetLabel = context.dataset.label;
+                            const score = chartData[context.dataIndex][datasetLabel.toLowerCase().replace(' ', '_')];
                             let grade = '-';
                             if (score >= 80) grade = 'E.E';
                             else if (score >= 60) grade = 'M.E';
                             else if (score >= 40) grade = 'A.E';
                             else if (score > 0) grade = 'B.E';
-
-                            return `${label}: ${score} (${grade})`;
+                            return `${datasetLabel}: ${grade} `;
                         }
                     }
                 }
             }
         }
     });
+})();
 </script>
+
 
 @endsection

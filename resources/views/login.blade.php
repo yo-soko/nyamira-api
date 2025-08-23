@@ -29,7 +29,7 @@
                             </div>
                         </div>
 
-                        <div class="mb-3" id="passwordField" style="display: none;">
+                        <div class="mb-3" id="passwordField">
                             <label class="form-label">Password</label>
                             <div class="pass-group">
                                 <input type="password" name="password" id="passwordInput" class="pass-input form-control">
