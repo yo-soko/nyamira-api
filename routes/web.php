@@ -49,7 +49,7 @@ use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\TransportController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FeeDashboardController;
-
+use App\Models\User;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -340,6 +340,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/migrate-students', [StudentController::class, 'migrateStudentsToUsers']);
     Route::post('/students/promote', [StudentController::class, 'promote'])
     ->name('students.promote');
+    Route::get('/under-maintenance', [CustomAuthController::class, 'showUpdateCredentials'])->name('update.credentials');
+    Route::post('/under-maintenance', [CustomAuthController::class, 'updateCredentials'])->name('update.credentials.save');
+
     //library
     Route::middleware(['auth'])->group(function () {
     Route::resource('library', LibraryController::class);
@@ -406,10 +409,14 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::get('/under-maintenance', function () {
+    $userId = session('force_update_user');
 
-Route::get('/delete-account', function () {
-    return view('delete-account');
-})->name('delete-account');
+    $user = $userId ? User::find($userId) : null;
+
+    return view('under-maintenance', compact('user'));
+})->name('under-maintenance');
+Route::post('/under-maintenance', [CustomAuthController::class, 'updateCredentials'])->name('update.credentials');
 
 Route::get('/register-2', function () {
     return view('register-2');

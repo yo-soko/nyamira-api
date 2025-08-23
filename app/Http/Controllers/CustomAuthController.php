@@ -18,6 +18,8 @@ class CustomAuthController extends Controller
         return view('login');   // your Blade file
     }
 
+
+
     public function customSignin(Request $request)
     {
         $request->validate([
@@ -34,59 +36,116 @@ class CustomAuthController extends Controller
             session()->flush();
         }
 
+        // -------------------------------
+        // Determine if login is email or code
+        // -------------------------------
         if (filter_var($loginValue, FILTER_VALIDATE_EMAIL)) {
-            // Email login requires password
+            // Email logins always require password
             if (empty($password)) {
-                return back()
-                    ->withErrors(['password' => 'Please input a password'])
-                    ->withInput($request->only('login'));
+                return redirect()->back()
+                ->with('error', 'password is required')
+                ->withInput($request->only('login'));
+
             }
 
             if (!Auth::attempt(['email' => $loginValue, 'password' => $password], $remember)) {
-                return back()
-                    ->with('error', 'Invalid credentials.')
-                    ->withInput($request->only('login'));
+                  return redirect()->back()
+                ->with('error', 'Invalid credentials')
+                ->withInput($request->only('login'));
             }
 
-            //  Correctly fetch user role after login
             $user = Auth::user();
-            if ($user && $user->role) {
-                $user->syncRoles([$user->role]);
-            }
 
         } else {
-            // login without password
+            // Code login
             $user = User::where('code', $loginValue)->first();
 
             if (!$user) {
-                return back()
-                    ->with('error', 'Invalid credentials.')
-                    ->withInput($request->only('login'));
+                return redirect()->back()
+                ->with('error', 'Invalid credentials')
+                ->withInput($request->only('login'));
+            }
+
+            // If credentials not updated yet, allow login without password
+            if (!$user->credentials_updated) {
+                Auth::login($user, $remember);
+                session(['force_update_user' => $user->id]);
+                return redirect()->route('under-maintenance');
+            }
+
+            // If credentials updated, password is required
+            if (empty($password) || !Hash::check($password, $user->password)) {
+               return redirect()->back()
+                ->with('error', 'Password is required together with the username')
+                ->withInput($request->only('login'));
             }
 
             Auth::login($user, $remember);
+        }
+        
+        if (!$user->credentials_updated) {
+            session(['force_update_user' => $user->id]);
+            return redirect()->route('under-maintenance');
+        }
 
-            if ($user && $user->role) {
-                $user->syncRoles([$user->role]);
-            }
+        // Sync role if available
+        if ($user && $user->role) {
+            $user->syncRoles([$user->role]);
         }
 
         $request->session()->regenerate();
-        // 🔁 Role-based Redirect
-        $user = Auth::user();
+
+        // -------------------------------
+        // Normal role-based redirect
+        // -------------------------------
         if ($user->role === 'class_teacher') {
             return redirect()->intended('tdashboard')->with('success', 'Very nice to have you back!');
         } elseif ($user->role === 'student') {
             return redirect()->intended('sdashboard')->with('success', 'Very nice to have you back!');
-        }
-        elseif ($user->role === 'teacher') {
+        } elseif ($user->role === 'teacher') {
             return redirect()->intended('teacher/dashboard')->with('success', 'Very nice to have you back!');
-        } 
-        else {
+        } else {
             return redirect()->intended('index')->with('success', 'Very nice to have you back!');
         }
-
     }
+
+
+    public function showUpdateCredentials()
+    {
+        $userId = session('force_update_user');
+      
+        $user = User::find($userId);
+
+        return view('under-maintenance', compact('user'));
+    }
+
+    public function updateCredentials(Request $request)
+    {
+        $userId = session('force_update_user');
+        $user = User::findOrFail($userId);
+
+        $request->validate([
+            'code' => 'required|string:users,code,' . $user->id,
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'required|confirmed|min:4',
+        ]);
+
+        // Update user details
+        $user->code = $request->code;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password); 
+        $user->credentials_updated = 1;
+        $user->save();
+
+        // Clear session flag
+        session()->forget('force_update_user');
+
+
+       
+        return redirect()->route('login')->with('success', 'Credentials updated! now sign in');
+        
+    }
+
 
 
 

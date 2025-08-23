@@ -7,11 +7,11 @@
         'reset-password','reset-password-2','reset-password-3',
         'forgot-password','forgot-password-2','forgot-password-3',
         'register','register-2','register-3',
-        'signin','signin-3','login',
+        'signin','signin-3','login','update-credentials',
         'success','success-2','success-3'
     ];
     $errorPages = ['under-maintenance', 'coming-soon', 'error-404', 'error-500'];
-    $posPages = ['pos','pos-2','pos-3','pos-4','pos-5'];
+    $posPages = ['pos','update-credentials','pos-2','pos-3','pos-4','pos-5'];
     $showPwaPopup = !Route::is(array_merge($errorPages, $accountPages, $posPages, [
         'layout-horizontal','layout-hovered','layout-boxed','layout-rtl'
     ]));
@@ -63,7 +63,7 @@
 </head>
 
 {{-- Begin Body Tag --}}
-@if (!Route::is(array_merge($errorPages, $accountPages, ['layout-horizontal','layout-hovered','layout-boxed','layout-rtl','pos','pos-2','pos-3','pos-4','pos-5'])))
+@if (!Route::is(array_merge($errorPages, $accountPages, ['layout-horizontal','layout-hovered','layout-boxed','layout-rtl','pos','update-credentials','pos-2','pos-3','pos-4','pos-5'])))
 <body>
 @endif
 @if (Route::is(['layout-horizontal']))
@@ -94,10 +94,10 @@
 
 @component('components.loader') @endcomponent
 
-@if (!Route::is(['lock-screen','pos','pos-3','pos-4','pos-5']))
+@if (!Route::is(['lock-screen','pos','update-credentials','pos-3','pos-4','pos-5']))
     <div class="main-wrapper">
 @endif
-@if (Route::is(['pos']))
+@if (Route::is(['pos','update-credentials']))
     <div class="main-wrapper pos-five">
 @endif
 @if (Route::is(['pos-3']))
@@ -122,6 +122,9 @@
 
 </div>
 <!-- /Main Wrapper -->
+
+
+
 
 @component('components.modalpopup') @endcomponent
 

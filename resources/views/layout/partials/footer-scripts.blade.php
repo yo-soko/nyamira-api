@@ -24,7 +24,7 @@
     });
 });
 </script>
- @if (Route::is(['admin-dashboard','barcode','calendar','chart-apex','companies','email-reply','dashboard','email','file-manager','form-elements','icon-feather','icon-flag','icon-fontawesome','icon-ionic','icon-material','icon-pe7','icon-remix','icon-simpleline', 'icon-tabler','icon-themify', 'icon-typicon','icon-weather','index','layout-boxed','layout-dark','layout-detached','layout-horizontal','layout-hovered','layout-rtl','layout-two-column','notes','pos','pos-2','pos-3','pos-4','pos-5','qrcode','sales-dashboard','todo-list','todo']))
+ @if (Route::is(['admin-dashboard','barcode','calendar','chart-apex','companies','email-reply','dashboard','email','file-manager','form-elements','icon-feather','icon-flag','icon-fontawesome','icon-ionic','icon-material','icon-pe7','icon-remix','icon-simpleline', 'icon-tabler','icon-themify', 'icon-typicon','icon-weather','index','layout-boxed','layout-dark','layout-detached','layout-horizontal','layout-hovered','layout-rtl','layout-two-column','notes','update-credentials','pos','pos-2','pos-3','pos-4','pos-5','qrcode','sales-dashboard','todo-list','todo']))
     <!-- Chart JS -->
     <script src="{{ URL::asset('build/plugins/apexchart/apexcharts.min.js') }}"></script>
     <script src="{{ URL::asset('build/plugins/apexchart/chart-data.js') }}"></script>

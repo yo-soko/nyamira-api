@@ -1,4 +1,4 @@
-@if (! Route::is(['pos','pos-2','pos-3','pos-4','pos-5']))
+@if (! Route::is(['pos','update-credentials','pos-2','pos-3','pos-4','pos-5']))
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
     <!-- Logo -->
