@@ -340,16 +340,34 @@ class FeePaymentsController extends Controller
     }
 
 
-    public function printBalances()
+    // public function printBalances()
+    // {
+    //     $students = \App\Models\Student::with(['schoolClass.level', 'schoolClass.stream'])
+    //         ->where('current_balance', '>', 0)
+    //         ->get();
+
+    //     return view('fees.partials.print_balances', compact('students'));
+    // }
+
+
+    public function printBalances(Request $request)
     {
-        $students = \App\Models\Student::with(['schoolClass.level', 'schoolClass.stream'])
-            ->where('current_balance', '>', 0)
-            ->get();
+        $query = Student::with(['schoolClass.level', 'schoolClass.stream']);
 
-        return view('fees.partials.print_balances', compact('students'));
+        // If class filter applied
+        if ($request->filled('class_id')) {
+            $query->where('class_id', $request->class_id);
+        }
+
+        // Only show those with balances
+        $students = $query->where('current_balance', '>', 0)->get();
+
+        // Also fetch classes for the modal
+        $classes = SchoolClass::with(['level', 'stream'])->get();
+
+        return view('fees.partials.print_balances', compact('students', 'classes'));
+
     }
-
-
 
 
 

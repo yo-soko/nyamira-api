@@ -405,7 +405,7 @@ document.addEventListener('click', function(e) {
                 <select name="subject_class[${index}][class_id]" class="form-select" required>
                     <option value="" disabled selected>Select Class</option>
                     @foreach($schoolclasses as $class)
-                        <option value="{{ $class->id }}">{{ $class->level->level_name }} {{ $class->stream->name }}</option>
+                        <option value="{{ $class->id }}">{{ $class->level?->level_name }} {{ $class->stream?->name }}</option>
                     @endforeach
                 </select>
             </div>
