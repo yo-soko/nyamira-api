@@ -198,4 +198,19 @@ class FeeStructureController extends Controller
 
         return view('fees.student-payments', compact('student', 'payments'));
     }
+
+    // public function printBalances(Request $request)
+    // {
+    //     $query = Student::with('class', 'stream');
+
+    //     // Apply stream/class filter if selected
+    //     if ($request->has('stream_id') && $request->stream_id != '') {
+    //         $query->where('stream_id', $request->stream_id);
+    //     }
+
+    //     $students = $query->get();
+
+    //     return view('fees.print_balances', compact('students'));
+    // }
+
 }

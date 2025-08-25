@@ -16,9 +16,10 @@
                     <i class="ti ti-circle-plus me-1"></i>Add Fee Payment
                 </a>
 
-                <a href="{{ route('print.fee.balances') }}" target="_blank" class="btn btn-outline-secondary">
+                <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#printBalanceModal">
                     <i class="ti ti-printer me-1"></i> Print Balances
-                </a>
+                </button>
+
             </div>
 
             @endhasanyrole
@@ -268,6 +269,7 @@
 {{-- Add Payment Modal --}}
 @include('fees.partials.payment_modal')
 
+@include('fees.partials.print_balance_modal')
 
 
 @endsection
