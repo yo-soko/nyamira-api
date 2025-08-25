@@ -13,15 +13,13 @@ return new class extends Migration
     {
         Schema::create('timetables', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('class_level_id')->constrained();
-            $table->foreignId('subject_id')->constrained();
-            $table->foreignId('teacher_id')->constrained();
-            $table->foreignId('room_id')->constrained();
-            $table->foreignId('time_slot_id')->constrained();
-            $table->tinyInteger('day_of_week'); // 1-5 for Monday-Friday
+            $table->foreignId('class_id')->constrained('school_classes')->onDelete('cascade');
+            $table->foreignId('subject_id')->constrained('subjects')->onDelete('cascade');
+            $table->foreignId('teacher_id')->constrained('teachers')->onDelete('cascade');
+            $table->enum('day_of_week', ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']);
+            $table->time('start_time');
+            $table->time('end_time');
             $table->timestamps();
-
-            $table->unique(['class_level_id', 'day_of_week', 'time_slot_id']);
         });
     }
 

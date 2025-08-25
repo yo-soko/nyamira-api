@@ -2,64 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SchoolClass;
+use App\Models\Subject;
+use App\Models\Teacher;
 use App\Models\Timetable;
 use Illuminate\Http\Request;
 
 class TimetableController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $classId = $request->get('class_id');
+        $query = Timetable::with(['class','subject','teacher']);
+
+        if ($classId) {
+            $query->where('class_id', $classId);
+        }
+
+        $timetables = $query->get()->groupBy('day_of_week');
+        $classes = SchoolClass::all();
+        $subjects = Subject::all();
+        $teachers = Teacher::all();
+
+        return view('timetable', compact('timetables','classes','subjects','teachers','classId'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'class_id' => 'required|exists:school_classes,id',
+            'subject_id' => 'required|exists:subjects,id',
+            'teacher_id' => 'required|exists:teachers,id',
+            'day_of_week' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Timetable $timetable)
-    {
-        //
-    }
+        // prevent overlap for same class/teacher
+        $exists = Timetable::where('class_id', $request->class_id)
+            ->where('day_of_week', $request->day_of_week)
+            ->where(function($q) use($request) {
+                $q->whereBetween('start_time', [$request->start_time, $request->end_time])
+                  ->orWhereBetween('end_time', [$request->start_time, $request->end_time]);
+            })
+            ->exists();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Timetable $timetable)
-    {
-        //
-    }
+        if ($exists) {
+            return back()->with('error', 'This time slot is already taken.');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Timetable $timetable)
-    {
-        //
-    }
+        Timetable::create($request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Timetable $timetable)
-    {
-        //
+        return back()->with('success','Timetable entry added.');
     }
 }
