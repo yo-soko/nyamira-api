@@ -562,38 +562,73 @@ class StudentController extends Controller
         ]);
     }
     public function promote(Request $request)
-    {
-        $request->validate([
-            'current_class_id' => 'required|exists:school_classes,id',
-            'next_class_id' => 'required|exists:school_classes,id',
-            'next_term_id' => 'required|exists:terms,id',
-        ]);
+{
+    $request->validate([
+        'current_class_id' => 'required|exists:school_classes,id',
+        'next_class_id' => 'required|exists:school_classes,id',
+        'next_term_id' => 'required|exists:terms,id',
+    ]);
 
-        DB::beginTransaction();
+    DB::beginTransaction();
 
-        try {
-            $students = Student::where('class_id', $request->current_class_id)->get();
+    try {
+        $students = Student::where('class_id', $request->current_class_id)->get();
 
-            foreach ($students as $student) {
-                // Move student to next class & term
-                $student->update([
-                    'class_id' => $request->next_class_id,
-                    'term_id'  => $request->next_term_id,
-                ]);
+        foreach ($students as $student) {
+            // Move student to next class & term
+            $student->update([
+                'class_id' => $request->next_class_id,
+                'term_id'  => $request->next_term_id,
+            ]);
 
-                // 🔥 Call same recalculation logic from update
-                $this->recalculateBalance($student, $request->next_class_id, $request->next_term_id);
+            // ✅ Meals
+            if ($student->meal_plan_id) {
+                $mealPlan = MealPlan::where('id', $student->meal_plan_id)
+                    ->where('term_id', $request->next_term_id)
+                    ->first();
+
+                if ($mealPlan) {
+                    StudentMeal::updateOrCreate(
+                        ['student_id' => $student->id, 'term_id' => $request->next_term_id],
+                        [
+                            'class_id'     => $request->next_class_id,
+                            'meal_plan_id' => $mealPlan->id,
+                            'meal_fee'     => $mealPlan->fee,
+                        ]
+                    );
+                }
             }
 
-            DB::commit();
+            // ✅ Transport
+            if ($student->route_id) {
+                $route = TransportRoute::find($student->route_id);
 
-            return redirect()->back()->with('success', 'Students promoted successfully!');
+                if ($route) {
+                    StudentTransport::updateOrCreate(
+                        ['student_id' => $student->id, 'term_id' => $request->next_term_id],
+                        [
+                            'class_id'       => $request->next_class_id,
+                            'route_id'       => $route->id,
+                            'transport_type' => $student->transport_type,
+                            'transport_fee'  => $route->fee,
+                        ]
+                    );
+                }
+            }
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()->with('error', 'Promotion failed: ' . $e->getMessage());
+            // ✅ Recalculate balances (same as update)
+            $this->recalculateBalance($student, $request->next_class_id, $request->next_term_id);
         }
+
+        DB::commit();
+        return redirect()->back()->with('success', 'Students promoted successfully!');
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect()->back()->with('error', 'Promotion failed: ' . $e->getMessage());
     }
+}
+
 
     protected function recalculateBalance(Student $student, $classId, $termId)
     {
