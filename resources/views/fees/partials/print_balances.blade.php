@@ -169,10 +169,15 @@
 @foreach ($list as $student)
     @if ($student)
     <div class="receipt">
+        <div style="text-align: center; margin-bottom: 5px;">
+            <img src="{{ asset('images/school-logo.png') }}" 
+                 alt="School Logo" 
+                 style="width:60px; height:auto; display:block; margin:0 auto 5px;">
+        </div>         
         <h4>JEMMAPP</h4>
         <h2> PREPARATORY SCHOOL</h2>
         <h6>P.O BOX 1984-40200, KISII</h6>
-        <h6>TEL: 0746881491</h6>
+        <h6>TEL: 0746881491 / 0726732322</h6>
         <h3>Finance Department</h3>
         <h6><strong>Date:</strong> {{ now()->format('d M Y, h:i A') }}</h6>
         <hr>
@@ -182,6 +187,16 @@
             {{ $student->schoolClass->level->level_name ?? '' }}
             {{ $student->schoolClass->stream->name ?? '' }}
         </p>
+       
+    <p><strong>Paid Amount(Latest Date):</strong> 
+    @if($student->recent_payment && $student->recent_payment > 0)
+        KSh {{ number_format($student->recent_payment, 2) }}
+    @else
+        No recent payment
+    @endif
+</p>
+
+
         <p><strong>Fee Balance:</strong> <span class="highlight">KSh {{ number_format($student->current_balance, 2) }}</span></p>
         <p><strong>Printed By:</strong> {{ auth()->user()->name ?? 'System' }}</p>
         <div class="footer">

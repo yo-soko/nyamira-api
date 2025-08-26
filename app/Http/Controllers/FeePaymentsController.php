@@ -372,20 +372,56 @@ class FeePaymentsController extends Controller
     return view('fees.partials.print_balances', compact('students', 'classLevels'));
 }
 
+// public function printFeeBalance(Request $request)
+// {
+//     $studentId = $request->student_id;
+
+//     $student = Student::with('schoolClass.level', 'schoolClass.stream')
+//                 ->findOrFail($studentId);
+
+//     return view('fees.partials.print_balances', compact('student'));
+// }
+
+//     public function printFeeBalance(Request $request)
+// {
+//     $studentId = $request->student_id;
+
+//     $student = Student::with('schoolClass.level', 'schoolClass.stream')
+//                 ->findOrFail($studentId);
+
+//     // 👇 Get the most recent payment
+//     $recentPayment = FeePayment::where('student_id', $studentId)
+//         ->orderByDesc('payment_id')   // make sure to use the correct PK
+//         ->first();
+
+
+//     return view('fees.partials.print_balances', compact('student', 'recentPayment'));
+// }
 public function printFeeBalance(Request $request)
 {
-    $studentId = $request->student_id;
+    $studentIds = $request->student_id 
+        ? [$request->student_id] 
+        : Student::pluck('id')->toArray();
 
-    $student = Student::with('schoolClass.level', 'schoolClass.stream')
-                ->findOrFail($studentId);
+    $students = Student::with('schoolClass.level', 'schoolClass.stream')
+                ->whereIn('id', $studentIds)
+                ->get();
 
-    return view('fees.partials.print_balances', compact('student'));
+    // attach recent payment per student
+    foreach ($students as $student) {
+        $latestDate = FeePayment::where('student_id', $student->id)
+                        ->max('created_at');
+
+        $recentPayment = null;
+        if ($latestDate) {
+            $recentPayment = FeePayment::where('student_id', $student->id)
+                                ->whereDate('created_at', \Carbon\Carbon::parse($latestDate)->toDateString())
+                                ->sum('amount_paid');
+        }
+        $student->recent_payment = $recentPayment; // attach directly to model
+    }
+
+    return view('fees.partials.print_balances', compact('students'));
 }
-
-
-
-
-
-
 
 }

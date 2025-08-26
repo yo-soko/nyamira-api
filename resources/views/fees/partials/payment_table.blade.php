@@ -57,6 +57,7 @@
                             class="btn btn-sm btn-secondary">
                             <i class="ti ti-printer"></i> Print
                             </a>
+
                             {{-- Edit Button --}}
                             <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editPaymentModal{{ $payment->id }}">
                                 <i class="fas fa-edit"></i>
