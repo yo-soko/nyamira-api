@@ -372,6 +372,17 @@ class FeePaymentsController extends Controller
     return view('fees.partials.print_balances', compact('students', 'classLevels'));
 }
 
+public function printFeeBalance(Request $request)
+{
+    $studentId = $request->student_id;
+
+    $student = Student::with('schoolClass.level', 'schoolClass.stream')
+                ->findOrFail($studentId);
+
+    return view('fees.partials.print_balances', compact('student'));
+}
+
+
 
 
 

@@ -50,6 +50,13 @@
 
                         @hasanyrole('admin|developer|director|supervisor')
                         <td class="text-end">
+
+                            {{-- ✅ Print Balance Receipt --}}
+                            <a href="{{ route('fees.print', ['student_id' => $payment->student_id]) }}"
+                            target="_blank"
+                            class="btn btn-sm btn-secondary">
+                            <i class="ti ti-printer"></i> Print
+                            </a>
                             {{-- Edit Button --}}
                             <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editPaymentModal{{ $payment->id }}">
                                 <i class="fas fa-edit"></i>

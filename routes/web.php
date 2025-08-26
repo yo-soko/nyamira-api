@@ -406,6 +406,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/get-students', [FeePaymentsController::class, 'fetchStudents'])->name('get.students');
     Route::post('/get-balance', [FeePaymentsController::class, 'fetchBalance'])->name('get.balance');
     Route::get('/fees/print-balances', [FeePaymentsController::class, 'printBalances'])->name('print.fee.balances');
+Route::get('/fees/print', [FeePaymentsController::class, 'printFeeBalance'])->name('fees.print');
 
 
 
