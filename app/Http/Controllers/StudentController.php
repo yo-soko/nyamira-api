@@ -348,32 +348,39 @@ class StudentController extends Controller
                 ->where('term_id', $currentTermId)
                 ->sum('amount_paid');
 
-            // Carry forward from previous terms
             $previousTerms = Term::where('id', '<', $currentTermId)->pluck('id');
-            $studentClasses = Student::where('id', $student->id)->pluck('class_id');
-            $previousLevels = SchoolClass::whereIn('id', $studentClasses)
-                ->pluck('level_id')
-                ->unique();
+            
+            // Only terms where this student has payments or charges
+            $studentTermHistory = collect([
+                StudentMeal::where('student_id', $student->id)->whereIn('term_id', $previousTerms)->pluck('term_id'),
+                StudentTransport::where('student_id', $student->id)->whereIn('term_id', $previousTerms)->pluck('term_id'),
+                FeePayment::where('student_id', $student->id)->whereIn('term_id', $previousTerms)->pluck('term_id'),
+            ])->flatten()->unique();
+            
+            if ($studentTermHistory->isEmpty()) {
+                $carryForward = 0;
+            } else {
+                $previousTuition = FeeStructure::where('level_id', $currentLevelId)
+                    ->whereIn('term_id', $studentTermHistory)
+                    ->sum('amount');
+            
+                $previousMeal = StudentMeal::where('student_id', $student->id)
+                    ->whereIn('term_id', $studentTermHistory)
+                    ->sum('meal_fee');
+            
+                $previousTransport = StudentTransport::where('student_id', $student->id)
+                    ->whereIn('term_id', $studentTermHistory)
+                    ->sum('transport_fee');
+            
+                $previousExpected = $previousTuition + $previousMeal + $previousTransport;
+            
+                $previousPaid = FeePayment::where('student_id', $student->id)
+                    ->whereIn('term_id', $studentTermHistory)
+                    ->sum('amount_paid');
+            
+                $carryForward = $previousExpected - $previousPaid;
+            }
 
-            $previousTuition = FeeStructure::whereIn('level_id', $previousLevels)
-                ->whereIn('term_id', $previousTerms)
-                ->sum('amount');
-
-            $previousMeal = StudentMeal::where('student_id', $student->id)
-                ->whereIn('term_id', $previousTerms)
-                ->sum('meal_fee');
-
-            $previousTransport = StudentTransport::where('student_id', $student->id)
-                ->whereIn('term_id', $previousTerms)
-                ->sum('transport_fee');
-
-            $previousExpected = $previousTuition + $previousMeal + $previousTransport;
-
-            $previousPaid = FeePayment::where('student_id', $student->id)
-                ->whereIn('term_id', $previousTerms)
-                ->sum('amount_paid');
-
-            $carryForward = $previousExpected - $previousPaid;
 
             // Final balance
             $student->current_balance = $currentExpected - $currentPaid + $carryForward;
@@ -562,72 +569,110 @@ class StudentController extends Controller
         ]);
     }
     public function promote(Request $request)
-{
-    $request->validate([
-        'current_class_id' => 'required|exists:school_classes,id',
-        'next_class_id' => 'required|exists:school_classes,id',
-        'next_term_id' => 'required|exists:terms,id',
-    ]);
-
-    DB::beginTransaction();
-
-    try {
-        $students = Student::where('class_id', $request->current_class_id)->get();
-
-        foreach ($students as $student) {
-            // Move student to next class & term
-            $student->update([
-                'class_id' => $request->next_class_id,
-                'term_id'  => $request->next_term_id,
-            ]);
-
-            // ✅ Meals
-            if ($student->meal_plan_id) {
-                $mealPlan = MealPlan::where('id', $student->meal_plan_id)
-                    ->where('term_id', $request->next_term_id)
+    {
+        $request->validate([
+            'current_class_id' => 'required|exists:school_classes,id',
+            'next_class_id'    => 'required|exists:school_classes,id',
+            'next_term_id'     => 'required|exists:terms,id',
+        ]);
+    
+        DB::beginTransaction();
+    
+        try {
+            $nextClassId = (int) $request->next_class_id;
+            $nextTermId  = (int) $request->next_term_id;
+    
+            // Cache all next-term meal plans by name (minimize queries)
+            $nextTermPlans = MealPlan::where('term_id', $nextTermId)->get()
+                ->keyBy(function ($p) { return mb_strtolower($p->plan_name); });
+    
+            // Also cache plan_name for old meal_plan ids to avoid repeated lookups
+            $planNameById = MealPlan::pluck('plan_name', 'id');
+    
+            $students = Student::where('class_id', $request->current_class_id)->get();
+    
+            foreach ($students as $student) {
+                $oldTermId = (int) $student->term_id; // save before updating
+    
+                // Move student to next class & term
+                $student->update([
+                    'class_id' => $nextClassId,
+                    'term_id'  => $nextTermId,
+                ]);
+    
+                /** ---------------------------
+                 * ✅ MEALS (use most recent past record; map by plan_name)
+                 * --------------------------*/
+                $previousMeal = StudentMeal::where('student_id', $student->id)
+                    ->where('term_id', '<', $nextTermId)
+                    ->orderByDesc('term_id')
                     ->first();
-
-                if ($mealPlan) {
-                    StudentMeal::updateOrCreate(
-                        ['student_id' => $student->id, 'term_id' => $request->next_term_id],
-                        [
-                            'class_id'     => $request->next_class_id,
-                            'meal_plan_id' => $mealPlan->id,
-                            'meal_fee'     => $mealPlan->fee,
-                        ]
-                    );
+    
+                if ($previousMeal) {
+                    $prevPlanName = isset($planNameById[$previousMeal->meal_plan_id])
+                        ? mb_strtolower($planNameById[$previousMeal->meal_plan_id])
+                        : null;
+    
+                    if ($prevPlanName && isset($nextTermPlans[$prevPlanName])) {
+                        $plan = $nextTermPlans[$prevPlanName];
+    
+                        StudentMeal::updateOrCreate(
+                            ['student_id' => $student->id, 'term_id' => $nextTermId],
+                            [
+                                'class_id'     => $nextClassId,
+                                'meal_plan_id' => $plan->id,
+                                'meal_fee'     => $plan->fee,
+                                'balance'      => $plan->fee, // start fresh for the term
+                            ]
+                        );
+                    }
                 }
-            }
-
-            // ✅ Transport
-            if ($student->route_id) {
-                $route = TransportRoute::find($student->route_id);
-
-                if ($route) {
-                    StudentTransport::updateOrCreate(
-                        ['student_id' => $student->id, 'term_id' => $request->next_term_id],
-                        [
-                            'class_id'       => $request->next_class_id,
-                            'route_id'       => $route->id,
-                            'transport_type' => $student->transport_type,
-                            'transport_fee'  => $route->fee,
-                        ]
-                    );
+    
+                /** ---------------------------
+                 * ✅ TRANSPORT (use most recent past record)
+                 * --------------------------*/
+                $previousTransport = StudentTransport::where('student_id', $student->id)
+                    ->where('term_id', '<', $nextTermId)
+                    ->orderByDesc('term_id')
+                    ->first();
+    
+                if ($previousTransport) {
+                    $route = TransportRoute::find($previousTransport->route_id);
+    
+                    if ($route) {
+                        $fee = $previousTransport->transport_type === 'one_way'
+                            ? ($route->fee / 2) + 500
+                            : $route->fee;
+    
+                        StudentTransport::updateOrCreate(
+                            ['student_id' => $student->id, 'term_id' => $nextTermId],
+                            [
+                                'class_id'       => $nextClassId,
+                                'route_id'       => $route->id,
+                                'transport_type' => $previousTransport->transport_type,
+                                'transport_fee'  => $fee,
+                                'balance'        => $fee, // start fresh for the term
+                            ]
+                        );
+                    }
                 }
+    
+                /** ---------------------------
+                 * ✅ Recalculate
+                 * --------------------------*/
+                $this->recalculateBalance($student, $nextClassId, $nextTermId);
             }
-
-            // ✅ Recalculate balances (same as update)
-            $this->recalculateBalance($student, $request->next_class_id, $request->next_term_id);
+    
+            DB::commit();
+            return redirect()->back()->with('success', 'Students promoted successfully!');
+    
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Promotion failed: ' . $e->getMessage());
         }
-
-        DB::commit();
-        return redirect()->back()->with('success', 'Students promoted successfully!');
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return redirect()->back()->with('error', 'Promotion failed: ' . $e->getMessage());
     }
-}
+
+
 
 
     protected function recalculateBalance(Student $student, $classId, $termId)
