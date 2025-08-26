@@ -200,7 +200,7 @@
         <p><strong>Fee Balance:</strong> <span class="highlight">KSh {{ number_format($student->current_balance, 2) }}</span></p>
         <p><strong>Printed By:</strong> {{ auth()->user()->name ?? 'System' }}</p>
         <div class="footer">
-            Thank you for keeping your school fees updated.
+            Thank you for choosing JEMMAPP as your preferred school.
         </div>
         <div class="powered">
             Software powered by <strong>JavaPA Limited</strong>
