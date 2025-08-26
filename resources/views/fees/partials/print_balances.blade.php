@@ -189,7 +189,7 @@
             {{ $student->schoolClass->stream->name ?? '' }}
         </p>
        
-    <p><strong>Paid Amount(Latest Date):</strong> 
+    <p><strong>Paid Amount(Latest):</strong> 
     @if($student->recent_payment && $student->recent_payment > 0)
         KSh {{ number_format($student->recent_payment, 2) }}
     @else
