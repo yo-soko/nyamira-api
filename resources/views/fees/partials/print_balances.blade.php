@@ -171,9 +171,10 @@
     <div class="receipt">
         <div style="text-align: center; margin-bottom: 5px;">
             <img src="{{ asset('images/school-logo.png') }}" 
-                 alt="School Logo" 
-                 style="width:60px; height:auto; display:block; margin:0 auto 5px;">
-        </div>         
+                alt="School Logo" 
+                style="width:100px; height:auto; display:block; margin:0 auto 5px;">
+        </div>
+                
         <h4>JEMMAPP</h4>
         <h2> PREPARATORY SCHOOL</h2>
         <h6>P.O BOX 1984-40200, KISII</h6>
