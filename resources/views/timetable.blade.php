@@ -20,7 +20,7 @@
             <option value="">-- Select Class --</option>
             @foreach($classes as $class)
               <option value="{{ $class->id }}" {{ $classId == $class->id ? 'selected' : '' }}>
-                {{ $class->name }}
+                {{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}
               </option>
             @endforeach
           </select>
