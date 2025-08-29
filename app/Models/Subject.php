@@ -51,5 +51,10 @@ class Subject extends Model
         return $this->belongsToMany(ClassLevel::class, 'subject_levels', 'subject_id', 'level_id');
     }
 
+     public function timetables()
+    {
+        return $this->hasMany(Timetable::class, 'subject_id');
+    }
+
 }
 

@@ -1,135 +1,62 @@
 @extends('layout.mainlayout')
 
 @section('content')
-@include('layout.toast')
-
 <div class="page-wrapper">
   <div class="content">
+
     <div class="page-header d-flex justify-content-between align-items-center">
-      <div>
-        <h4>Class Timetable</h4>
-        <h6>Manage timetable schedules</h6>
-      </div>
+      <h4>Class Timetable</h4>
+      <a href="{{ route('timetable.autogenerate') }}" class="btn btn-primary"
+         onclick="return confirm('Are you sure you want to auto-generate the timetable? This will overwrite existing timetable data.')">
+        Auto Generate Timetable
+      </a>
     </div>
 
-    {{-- Filter by Class --}}
-    <form method="GET" action="{{ route('timetable.index') }}" class="mb-3">
-      <div class="row">
-        <div class="col-md-4">
-          <select name="class_id" class="form-control" onchange="this.form.submit()">
-            <option value="">-- Select Class --</option>
-            @foreach($classes as $class)
-              <option value="{{ $class->id }}" {{ $classId == $class->id ? 'selected' : '' }}>
-                {{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}
-              </option>
-            @endforeach
-          </select>
-        </div>
-      </div>
-    </form>
+    {{-- Success / Error Messages --}}
+    @if(session('success'))
+      <div class="alert alert-success mt-2">{{ session('success') }}</div>
+    @endif
+    @if(session('error'))
+      <div class="alert alert-danger mt-2">{{ session('error') }}</div>
+    @endif
 
-    {{-- Create New Timetable Entry --}}
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5>Add Timetable Entry</h5>
-      </div>
-      <div class="card-body">
-        <form method="POST" action="{{ route('timetable.store') }}">
-          @csrf
-          <div class="row mb-3">
-            <div class="col-md-3">
-              <label>Class</label>
-              <select name="class_id" class="form-control" required>
-                <option value="">-- Select Class --</option>
-                @foreach($classes as $class)
-                  <option value="{{ $class->id }}">{{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label>Subject</label>
-              <select name="subject_id" class="form-control" required>
-                <option value="">-- Select Subject --</option>
-                @foreach($subjects as $subject)
-                  <option value="{{ $subject->id }}">{{ $subject->subject_name }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label>Teacher</label>
-              <select name="teacher_id" class="form-control" required>
-                <option value="">-- Select Teacher --</option>
-                @foreach($teachers as $teacher)
-                  <option value="{{ $teacher->id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="col-md-3">
-              <label>Day of Week</label>
-              <select name="day_of_week" class="form-control" required>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-3">
-              <label>Start Time</label>
-              <input type="time" name="start_time" class="form-control" required>
-            </div>
-            <div class="col-md-3">
-              <label>End Time</label>
-              <input type="time" name="end_time" class="form-control" required>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Save Timetable</button>
-        </form>
-      </div>
+    <div class="mt-4">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Subject</th>
+            <th>Teacher</th>
+            <th>Day</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          @forelse($timetables as $timetable)
+          <tr>
+            {{-- Fix column names to match your DB --}}
+            <td>{{ $timetable->schoolClass->class_name ?? 'N/A' }}</td>
+            <td>{{ $timetable->subject->subject_name ?? 'N/A' }}</td>
+            <td>
+              @if($timetable->teacher)
+                {{ $timetable->teacher->first_name }} {{ $timetable->teacher->last_name }}
+              @else
+                N/A
+              @endif
+            </td>
+            <td>{{ ucfirst($timetable->day_of_week) }}</td>
+            <td>{{ $timetable->start_time }}</td>
+            <td>{{ $timetable->end_time }}</td>
+          </tr>
+          @empty
+          <tr>
+            <td colspan="6" class="text-center text-muted">No timetable generated yet.</td>
+          </tr>
+          @endforelse
+        </tbody>
+      </table>
     </div>
-
-    {{-- Display Timetable --}}
-    @foreach($timetables as $day => $entries)
-      <div class="card mb-3">
-        <div class="card-header">
-          <h5>{{ $day }}</h5>
-        </div>
-        <div class="card-body">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Class</th>
-                <th>Subject</th>
-                <th>Teacher</th>
-                <th>Start</th>
-                <th>End</th>
-              </tr>
-            </thead>
-            <tbody>
-              @forelse($entries as $entry)
-                <!-- <tr>{{ $class->level->level_name ?? '' }} - {{ $class->stream->name ?? '' }} -->
-                  <td>{{ $entry->class->level->level_name }} - {{ $entry->class->stream->name }} </td>
-                  <td>{{ $entry->subject->subject_name }}</td>
-                  <td>{{ $entry->teacher->first_name }} {{ $entry->teacher->last_name }}</td>
-                  <td>{{ $entry->start_time }}</td>
-                  <td>{{ $entry->end_time }}</td>
-                </tr>
-              @empty
-                <tr>
-                  <td colspan="5" class="text-center">No entries for this day</td>
-                </tr>
-              @endforelse
-            </tbody>
-          </table>
-        </div>
-      </div>
-    @endforeach
-
   </div>
 </div>
 @endsection

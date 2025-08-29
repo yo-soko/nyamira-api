@@ -59,5 +59,10 @@ class SchoolClass extends Model
     {
         return $this->hasMany(StudentTransport::class);
     }
+
+     public function timetables()
+    {
+        return $this->hasMany(Timetable::class, 'class_id');
+    }
 }
 

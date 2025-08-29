@@ -354,8 +354,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/teacher/dashboard', [App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 
     //timetable
-    Route::get('/timetable', [App\Http\Controllers\TimetableController::class, 'index'])->name('timetable.index');
-    Route::post('/timetable', [App\Http\Controllers\TimetableController::class, 'store'])->name('timetable.store');
+    // Route::get('/timetable', [App\Http\Controllers\TimetableController::class, 'index'])->name('timetable.index');
+    // Route::post('/timetable', [App\Http\Controllers\TimetableController::class, 'store'])->name('timetable.store');
+
+    Route::get('/timetable', [TimetableController::class, 'index'])->name('timetable.index');
+    Route::get('/timetable/autogenerate', [TimetableController::class, 'autoGenerate'])->name('timetable.autogenerate');
 
 
     // Fees
