@@ -89,29 +89,29 @@ Route::middleware(['auth'])->group(function () {
 
     /*===========================Timetable======================================================*/
 
-    Route::prefix('timetable')->group(function () {
-        Route::get('/', [TimetableController::class, 'index'])->name('timetable.index');
-        Route::get('/create', [TimetableController::class, 'create'])->name('timetable.create');
-        Route::post('/', [TimetableController::class, 'store'])->name('timetable.store');
-        Route::get('/{timetable}/edit', [TimetableController::class, 'edit'])->name('timetable.edit');
-        Route::put('/{timetable}', [TimetableController::class, 'update'])->name('timetable.update');
-        Route::delete('/{timetable}', [TimetableController::class, 'destroy'])->name('timetable.destroy');
-        Route::get('/timetable/generate', [TimetableController::class, 'generate'])->name('timetable.generate');
+    // Route::prefix('timetable')->group(function () {
+    //     Route::get('/', [TimetableController::class, 'index'])->name('timetable.index');
+    //     Route::get('/create', [TimetableController::class, 'create'])->name('timetable.create');
+    //     Route::post('/', [TimetableController::class, 'store'])->name('timetable.store');
+    //     Route::get('/{timetable}/edit', [TimetableController::class, 'edit'])->name('timetable.edit');
+    //     Route::put('/{timetable}', [TimetableController::class, 'update'])->name('timetable.update');
+    //     Route::delete('/{timetable}', [TimetableController::class, 'destroy'])->name('timetable.destroy');
+    //     Route::get('/timetable/generate', [TimetableController::class, 'generate'])->name('timetable.generate');
 
-        // Class-specific timetables
-        Route::get('/class/{class}', [TimetableController::class, 'classTimetable'])->name('timetable.class');
+    //     // Class-specific timetables
+    //     Route::get('/class/{class}', [TimetableController::class, 'classTimetable'])->name('timetable.class');
 
-        // Teacher-specific timetables
-        Route::get('/teacher/{teacher}', [TimetableController::class, 'teacherTimetable'])->name('timetable.teacher');
+    //     // Teacher-specific timetables
+    //     Route::get('/teacher/{teacher}', [TimetableController::class, 'teacherTimetable'])->name('timetable.teacher');
 
-        // Room-specific timetables
-        Route::get('/room/{room}', [TimetableController::class, 'roomTimetable'])->name('timetable.room');
+    //     // Room-specific timetables
+    //     Route::get('/room/{room}', [TimetableController::class, 'roomTimetable'])->name('timetable.room');
 
-        // Print timetables
-        Route::get('/print/class/{class}', [TimetableController::class, 'printClassTimetable'])->name('timetable.print.class');
-        Route::get('/print/teacher/{teacher}', [TimetableController::class, 'printTeacherTimetable'])->name('timetable.print.teacher');
-    });
-    /*===========================Timetable======================================================*/
+    //     // Print timetables
+    //     Route::get('/print/class/{class}', [TimetableController::class, 'printClassTimetable'])->name('timetable.print.class');
+    //     Route::get('/print/teacher/{teacher}', [TimetableController::class, 'printTeacherTimetable'])->name('timetable.print.teacher');
+    // });
+    // /*===========================Timetable======================================================*/
 
     /*===========================Transport======================================================*/
 
@@ -358,7 +358,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::post('/timetable', [App\Http\Controllers\TimetableController::class, 'store'])->name('timetable.store');
 
     Route::get('/timetable', [TimetableController::class, 'index'])->name('timetable.index');
-    Route::get('/timetable/autogenerate', [TimetableController::class, 'autoGenerate'])->name('timetable.autogenerate');
+    // Route::get('/timetable/autogenerate', [TimetableController::class, 'autoGenerate'])->name('timetable.autogenerate');
+    Route::post('/timetable/autogenerate', [TimetableController::class, 'autoGenerate'])->name('timetable.autogenerate');
 
 
     // Fees

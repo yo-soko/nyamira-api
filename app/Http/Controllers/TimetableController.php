@@ -2,106 +2,104 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Timetable;
 use App\Models\SchoolClass;
-use App\Models\Subject;
-use App\Models\Teacher;
+use App\Models\TeacherSubject;
+use App\Models\Timetable;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TimetableController extends Controller
 {
-    public function index()
+    /**
+     * Display timetables for a selected class
+     */
+    public function index(Request $request)
     {
-        $timetables = Timetable::with(['schoolClass', 'subject', 'teacher'])
-            ->orderBy('day_of_week')
-            ->orderBy('start_time')
-            ->get();
+        $classId = $request->input('class_id');
 
-        return view('timetable', compact('timetables'));
+        $classes = SchoolClass::with(['level', 'stream'])->get();
+
+        $timetables = collect();
+        $selectedClass = null;
+
+        if ($classId) {
+            $selectedClass = SchoolClass::with(['level', 'stream'])->find($classId);
+
+            $timetables = Timetable::where('class_id', $classId)
+                ->with(['teacher', 'subject'])
+                ->orderBy('day_of_week')
+                ->orderBy('start_time')
+                ->get();
+        }
+
+        return view('timetable', compact('classes', 'timetables', 'selectedClass', 'classId'));
     }
 
-    public function autoGenerate()
+    /**
+     * Auto-generate timetable for a given class
+     */
+    public function autoGenerate(Request $request)
     {
-        $classes  = SchoolClass::with('subjects')->get();
-        $subjects = Subject::with('teachers')->get();
-        $teachers = Teacher::all();
+        $classId = $request->input('class_id');
+        $class = SchoolClass::with(['level', 'stream'])->findOrFail($classId);
 
-        if ($classes->isEmpty() || $subjects->isEmpty() || $teachers->isEmpty()) {
-            return redirect()->route('timetable.index')
-                ->with('error', 'Add at least one Class, Subject and Teacher before auto-generating.');
+        // Get subjects + teacher assignments
+        $assignments = TeacherSubject::where('class_id', $classId)
+            ->with(['teacher', 'subject'])
+            ->get();
+
+        if ($assignments->isEmpty()) {
+            return redirect()->back()->with('error', 'No subjects/teachers linked to this class. Please link them first.');
         }
 
-        $hasAnyLinks = $classes->first(fn($c) => $c->subjects && $c->subjects->isNotEmpty())
-            && $subjects->first(fn($s) => $s->teachers && $s->teachers->isNotEmpty());
-
-        if (! $hasAnyLinks) {
-            return redirect()->route('timetable.index')
-                ->with('error', 'Link subjects to classes and teachers to subjects before auto-generating.');
-        }
-
-        DB::table('timetables')->truncate();
-
+        // Days of week
         $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        $timeSlots = [
-            ['08:00', '09:00'],
-            ['09:00', '10:00'],
-            ['10:00', '11:00'],
-            ['11:00', '12:00'],
-            ['12:00', '13:00'],
-            ['14:00', '15:00'],
-            ['15:00', '16:00'],
-        ];
+        $startTime = "08:00"; // first lesson
+        $lessonDuration = 40; // minutes per lesson
+        $lessonsPerDay = 6;   // adjust to your school system
 
-        foreach ($classes as $class) {
-            $classSubjects = $class->subjects ?? collect();
-            if ($classSubjects->isEmpty()) {
-                continue;
-            }
+        // Clear old timetable
+        Timetable::where('class_id', $classId)->delete();
 
-            foreach ($days as $day) {
-                foreach ($timeSlots as [$start, $end]) {
-                    $subject = $classSubjects->random();
-                    $teacherQuery = $subject->teachers();
-                    $teacher = $teacherQuery->inRandomOrder()->first();
+        $dayIndex = 0;
+        $lessonIndex = 0;
 
-                    if (! $teacher) {
-                        continue;
-                    }
+        foreach ($assignments as $assignment) {
+            // Calculate time slot
+            $currentDay = $days[$dayIndex];
+            $time = Carbon::createFromFormat('H:i', $startTime)->addMinutes($lessonIndex * $lessonDuration);
 
-                    $classBusy = Timetable::where('class_id', $class->id)
-                        ->where('day_of_week', $day)
-                        ->where(function ($q) use ($start, $end) {
-                            $q->where('start_time', '<', $end)
-                              ->where('end_time',   '>', $start);
-                        })
-                        ->exists();
+            Timetable::create([
+                'class_id'   => $classId,
+                'teacher_id' => $assignment->teacher_id,
+                'subject_id' => $assignment->subject_id,
+                'day_of_week'=> $currentDay,
+                'start_time' => $time->format('H:i'),
+                'end_time'   => $time->copy()->addMinutes($lessonDuration)->format('H:i'),
+            ]);
 
-                    if ($classBusy) continue;
-
-                    $teacherBusy = Timetable::where('teacher_id', $teacher->id)
-                        ->where('day_of_week', $day)
-                        ->where(function ($q) use ($start, $end) {
-                            $q->where('start_time', '<', $end)
-                              ->where('end_time',   '>', $start);
-                        })
-                        ->exists();
-
-                    if ($teacherBusy) continue;
-
-                    Timetable::create([
-                        'class_id'    => $class->id,
-                        'subject_id'  => $subject->id,
-                        'teacher_id'  => $teacher->id,
-                        'day_of_week' => $day,
-                        'start_time'  => $start,
-                        'end_time'    => $end,
-                    ]);
+            $lessonIndex++;
+            if ($lessonIndex >= $lessonsPerDay) {
+                $lessonIndex = 0;
+                $dayIndex++;
+                if ($dayIndex >= count($days)) {
+                    break; // timetable full
                 }
             }
         }
 
-        return redirect()->route('timetable.index')
-            ->with('success', 'Timetable auto-generated successfully!');
+        return redirect()->route('timetable.index', ['class_id' => $classId])
+            ->with('success', 'Timetable auto-generated successfully.');
+    }
+
+    /**
+     * Delete timetable entry
+     */
+    public function destroy($id)
+    {
+        $timetable = Timetable::findOrFail($id);
+        $timetable->delete();
+
+        return redirect()->back()->with('success', 'Timetable entry deleted successfully.');
     }
 }
