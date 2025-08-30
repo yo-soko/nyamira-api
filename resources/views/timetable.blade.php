@@ -20,7 +20,7 @@
       <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    {{-- Select Class (GET) --}}
+    {{-- Select Class --}}
     <form method="GET" action="{{ route('timetable.index') }}" class="mb-3">
       <div class="row g-3 align-items-end">
         <div class="col-md-6">
@@ -39,29 +39,27 @@
             @endforeach
           </select>
         </div>
-
-        {{-- Auto-generate (always visible) --}}
-        <div class="col-md-3">
-          <form method="POST" action="{{ route('timetable.autogenerate') }}">
-            @csrf
-            <input type="hidden" name="class_id" value="{{ $classId }}">
-            <button type="submit" class="btn btn-success w-100">
-              Auto Generate Timetable
-            </button>
-          </form>
-          @if(empty($classId))
-            <small class="text-muted">Tip: select a class first.</small>
-          @else
-            @if($selectedClass)
-              <small class="text-muted">
-                Target: {{ $selectedClass->level->level_name ?? '' }}
-                {{ $selectedClass->stream->stream_name ?? $selectedClass->stream->name ?? '' }}
-              </small>
-            @endif
-          @endif
-        </div>
       </div>
     </form>
+
+    {{-- Auto-generate --}}
+    @if($classId)
+      <div class="mb-3">
+        <form method="POST" action="{{ route('timetable.autogenerate') }}">
+          @csrf
+          <input type="hidden" name="class_id" value="{{ $classId }}">
+          <button type="submit" class="btn btn-success">
+            Auto Generate Timetable
+          </button>
+        </form>
+        @if($selectedClass)
+          <small class="text-muted">
+            Target: {{ $selectedClass->level->level_name ?? '' }}
+            {{ $selectedClass->stream->stream_name ?? $selectedClass->stream->name ?? '' }}
+          </small>
+        @endif
+      </div>
+    @endif
 
     {{-- Timetable Table --}}
     @if($selectedClass)
