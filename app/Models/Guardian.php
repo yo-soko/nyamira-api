@@ -20,6 +20,7 @@ class Guardian extends Model
         'id_number',
         'email',
         'guardian_about',
+        'zk_user_id',
     ];
 
     public function student()

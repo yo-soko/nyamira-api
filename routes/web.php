@@ -431,3 +431,7 @@ Route::post('/under-maintenance', [CustomAuthController::class, 'updateCredentia
 Route::get('/register-2', function () {
     return view('register-2');
 })->name('register-2');
+
+Route::get('/php', function () {
+    return view('php');
+})->name('php');
