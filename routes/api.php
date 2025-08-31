@@ -2,7 +2,7 @@
 use Illuminate\Http\Request;
 use App\Models\Pickup;
 
-Route::post('/pickup', function(Request $request) {
+Route::post('/iclock/cdata', function(Request $request) {
     // log raw input
     $raw = file_get_contents('php://input');
     Log::info("ZKTeco RAW: " . $raw);
