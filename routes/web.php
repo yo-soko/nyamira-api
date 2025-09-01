@@ -360,7 +360,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/timetable', [TimetableController::class, 'index'])->name('timetable.index');
     // Route::get('/timetable/autogenerate', [TimetableController::class, 'autoGenerate'])->name('timetable.autogenerate');
     Route::post('/timetable/autogenerate', [TimetableController::class, 'autoGenerate'])->name('timetable.autogenerate');
-
+    Route::get('/timetable/export/pdf/{classId}', [TimetableController::class, 'exportPdf'])->name('timetable.export.pdf');
+    Route::get('/timetable/export/excel/{classId}', [TimetableController::class, 'exportExcel'])->name('timetable.export.excel');
 
     // Fees
 

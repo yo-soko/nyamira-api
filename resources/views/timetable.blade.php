@@ -27,6 +27,7 @@
           <label for="class_id" class="form-label">Select Class</label>
           <select name="class_id" id="class_id" class="form-control" onchange="this.form.submit()">
             <option value="">-- Select Class --</option>
+            <option value="all" {{ $classId === 'all' ? 'selected' : '' }}>All Classes</option>
             @foreach($classes as $class)
               <option
                 value="{{ $class->id }}"
@@ -52,23 +53,52 @@
             Auto Generate Timetable
           </button>
         </form>
-        @if($selectedClass)
+
+        @if($selectedClass && $classId !== 'all')
           <small class="text-muted">
             Target: {{ $selectedClass->level->level_name ?? '' }}
             {{ $selectedClass->stream->stream_name ?? $selectedClass->stream->name ?? '' }}
           </small>
+        @elseif($classId === 'all')
+          <small class="text-muted">Target: All Classes</small>
         @endif
       </div>
     @endif
 
     {{-- Timetable Table --}}
-    @if($selectedClass)
+    @if($classId === 'all')
       <div class="mt-4">
-        <h5 class="mb-3">
-          Timetable —
-          {{ $selectedClass->level->level_name ?? '' }}
-          {{ $selectedClass->stream->stream_name ?? $selectedClass->stream->name ?? '' }}
-        </h5>
+        <h5 class="mb-3">All Classes</h5>
+
+        {{-- Show a list of classes with links instead of one big table --}}
+        <div class="list-group">
+          @foreach($classes as $class)
+            <a href="{{ route('timetable.index', ['class_id' => $class->id]) }}"
+               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+              <span>
+                {{ $class->level->level_name ?? '' }}
+                -
+                {{ $class->stream->stream_name ?? $class->stream->name ?? '' }}
+              </span>
+              <span class="badge bg-primary">View Timetable</span>
+            </a>
+          @endforeach
+        </div>
+      </div>
+
+    @elseif($selectedClass)
+      <div class="mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="mb-0">
+            Timetable —
+            {{ $selectedClass->level->level_name ?? '' }}
+            {{ $selectedClass->stream->stream_name ?? $selectedClass->stream->name ?? '' }}
+          </h5>
+          {{-- Back to all classes --}}
+          <a href="{{ route('timetable.index', ['class_id' => 'all']) }}" class="btn btn-outline-secondary btn-sm">
+            ← Back to All Classes
+          </a>
+        </div>
 
         @if($timetables->isNotEmpty())
           <div class="table-responsive">

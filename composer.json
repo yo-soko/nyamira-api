@@ -7,11 +7,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "barryvdh/laravel-dompdf": "^3.1",
+        "barryvdh/laravel-dompdf": "*",
         "kwn/number-to-words": "^2.11",
         "laravel/framework": "^12.1.1",
         "laravel/tinker": "^2.10.1",
         "laravel/ui": "^4.6",
+        "maatwebsite/excel": "*",
         "smalot/pdfparser": "^2.12",
         "spatie/laravel-permission": "^6.19"
     },

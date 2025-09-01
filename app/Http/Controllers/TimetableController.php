@@ -11,7 +11,7 @@ use Carbon\Carbon;
 class TimetableController extends Controller
 {
     /**
-     * Display timetables for a selected class
+     * Display timetables for a selected class or all classes
      */
     public function index(Request $request)
     {
@@ -22,7 +22,15 @@ class TimetableController extends Controller
         $timetables = collect();
         $selectedClass = null;
 
-        if ($classId) {
+        if ($classId === 'all') {
+            // Load timetable for ALL classes with relationships
+            $timetables = Timetable::with(['teacher', 'subject', 'schoolClass.level', 'schoolClass.stream'])
+                ->orderBy('class_id')
+                ->orderBy('day_of_week')
+                ->orderBy('start_time')
+                ->get();
+        } elseif ($classId) {
+            // Load timetable for ONE class
             $selectedClass = SchoolClass::with(['level', 'stream'])->find($classId);
 
             $timetables = Timetable::where('class_id', $classId)
@@ -36,11 +44,33 @@ class TimetableController extends Controller
     }
 
     /**
-     * Auto-generate timetable for a given class
+     * Auto-generate timetable for a given class or all classes
      */
     public function autoGenerate(Request $request)
     {
         $classId = $request->input('class_id');
+
+        if ($classId === 'all') {
+            $allClasses = SchoolClass::with(['level', 'stream'])->get();
+            foreach ($allClasses as $class) {
+                $this->generateForClass($class->id);
+            }
+
+            return redirect()->route('timetable.index', ['class_id' => 'all'])
+                ->with('success', 'Timetables auto-generated for all classes.');
+        } else {
+            $this->generateForClass($classId);
+
+            return redirect()->route('timetable.index', ['class_id' => $classId])
+                ->with('success', 'Timetable auto-generated successfully.');
+        }
+    }
+
+    /**
+     * Helper: generate timetable for one class
+     */
+    private function generateForClass($classId)
+    {
         $class = SchoolClass::with(['level', 'stream'])->findOrFail($classId);
 
         // Get subjects + teacher assignments
@@ -49,7 +79,7 @@ class TimetableController extends Controller
             ->get();
 
         if ($assignments->isEmpty()) {
-            return redirect()->back()->with('error', 'No subjects/teachers linked to this class. Please link them first.');
+            return; // Skip if no subjects/teachers linked
         }
 
         // Days of week
@@ -65,7 +95,6 @@ class TimetableController extends Controller
         $lessonIndex = 0;
 
         foreach ($assignments as $assignment) {
-            // Calculate time slot
             $currentDay = $days[$dayIndex];
             $time = Carbon::createFromFormat('H:i', $startTime)->addMinutes($lessonIndex * $lessonDuration);
 
@@ -87,9 +116,6 @@ class TimetableController extends Controller
                 }
             }
         }
-
-        return redirect()->route('timetable.index', ['class_id' => $classId])
-            ->with('success', 'Timetable auto-generated successfully.');
     }
 
     /**
