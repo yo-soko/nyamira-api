@@ -327,6 +327,7 @@
                     <ul>
                         <li class="{{ Request::is('users') ? 'active' : '' }}"><a href="{{url('users')}}"><i class="ti ti-shield-up fs-16 me-2"></i><span>Users</span></a></li>
                         <li class="{{ Request::is('roles-permissions') ? 'active' : '' }}"><a href="{{url('roles-permissions')}}"><i class="ti ti-jump-rope fs-16 me-2"></i><span>Roles & Permissions</span></a></li>
+                        <li class="{{ Request::is('zkteco_logs') ? 'active' : '' }}"><a href="{{url('zkteco_logs')}}"><i class="ti ti-jump-rope fs-16 me-2"></i><span>Fingerprint Logs</span></a></li>
                         <li class="{{ Request::is('delete-account') ? 'active' : '' }}"><a href="{{url('delete-account')}}"><i class="ti ti-trash-x fs-16 me-2"></i><span>Delete Account Request</span></a></li>
                     </ul>
                 </li>

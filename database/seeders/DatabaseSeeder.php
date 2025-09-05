@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             ExamSubjectsClasses::class, 
             MealPlanSeeder::class, 
             FeeStructureSeeder::class, 
+            FingerprintLogSeeder::class, 
             
         ]);
     }

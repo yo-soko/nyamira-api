@@ -49,6 +49,7 @@ use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\TransportController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FeeDashboardController;
+use App\Http\Controllers\ZktecoLogsController;
 use App\Models\User;
 
 
@@ -343,6 +344,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/under-maintenance', [CustomAuthController::class, 'showUpdateCredentials'])->name('update.credentials');
     Route::post('/under-maintenance', [CustomAuthController::class, 'updateCredentials'])->name('update.credentials.save');
 
+    Route::get('/zkteco_logs', [ZktecoLogsController::class, 'index'])->name('zkteco_logs.index');
+Route::get('/zkteco-logs/pdf', [ZktecoLogController::class, 'exportPdf'])->name('zkteco_logs.pdf');
+
     //library
     Route::middleware(['auth'])->group(function () {
     Route::resource('library', LibraryController::class);
@@ -411,7 +415,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/get-students', [FeePaymentsController::class, 'fetchStudents'])->name('get.students');
     Route::post('/get-balance', [FeePaymentsController::class, 'fetchBalance'])->name('get.balance');
     Route::get('/fees/print-balances', [FeePaymentsController::class, 'printBalances'])->name('print.fee.balances');
-Route::get('/fees/print', [FeePaymentsController::class, 'printFeeBalance'])->name('fees.print');
+    Route::get('/fees/print', [FeePaymentsController::class, 'printFeeBalance'])->name('fees.print');
 
 
 

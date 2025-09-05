@@ -9,10 +9,10 @@
                 @csrf
                 <!-- Code / Username field -->
                 <div class="mb-3">
-                    <label>Username</label>
+                    <label>User Code</label>
                     <input type="text" name="code" value="{{ $user->code }}" 
                         class="form-control" required 
-                        autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off">
+                        autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="off" readonly>
                 </div>
 
                 <div class="mb-3">
