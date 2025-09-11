@@ -87,4 +87,13 @@ class Student extends Model
     {
         return $this->hasMany(TransportAttendance::class);
     }
+    public function payments()
+    {
+        return $this->hasMany(FeePayment::class);
+    }
+    
+    public function getLatestPaymentAttribute()
+    {
+        return $this->payments()->latest()->first();
+    }
 }

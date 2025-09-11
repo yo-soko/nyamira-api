@@ -387,7 +387,9 @@ class FeePaymentsController extends Controller
 
   public function printBalances(Request $request)
 {
-    $query = Student::with(['schoolClass.level', 'schoolClass.stream']);
+    $query = Student::with(['schoolClass.level', 'schoolClass.stream', 'payments' => function ($q) {
+            $q->latest()->limit(1);
+        }]);
 
     // If a specific student is selected, prioritize that
     if ($request->filled('student_id')) {
@@ -404,7 +406,7 @@ class FeePaymentsController extends Controller
     // For dropdowns
     $classLevels = SchoolClass::with(['level', 'stream'])->get();
 
-    return view('fees.partials.print_balances', compact('students', 'classLevels'));
+    return view('fees.partials.print_balances', compact('students', 'classLevels',));
 }
 
 // public function printFeeBalance(Request $request)
