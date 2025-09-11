@@ -72,8 +72,8 @@
                             <tr>
                                 <td>{{ $log->user_id }}</td>
                                 <td>{{ $log->user->name ?? 'Unknown' }}</td>
-                                <td>{{ $log->pickup_time }}</td>
                                 <td>{{ $log->dropoff_time }}</td>
+                                <td>{{ $log->pickup_time }}</td>
                                 <td>{{ $log->log_date }}</td>
                             </tr>
                         @endforeach

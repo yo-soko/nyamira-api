@@ -180,6 +180,7 @@
         <h6>P.O BOX 1984-40200, KISII</h6>
         <h6>TEL: 0746881491 / 0726732322</h6>
         <h3>Finance Department</h3>
+        <h6><strong>Receipt No:{{ $student->payment->receipt_number ?? ''}} </strong> </h6>
         <h6><strong>Date:</strong> {{ now()->format('d M Y, h:i A') }}</h6>
         <hr>
         <p><strong>Learner's Name:</strong> {{ $student->full_name }}</p>
@@ -189,13 +190,13 @@
             {{ $student->schoolClass->stream->name ?? '' }}
         </p>
        
-    <p><strong>Paid Amount(Latest):</strong> 
-    @if($student->recent_payment && $student->recent_payment > 0)
-        KSh {{ number_format($student->recent_payment, 2) }}
-    @else
-        No recent payment
-    @endif
-</p>
+        <p><strong>Paid Amount(Latest):</strong> 
+            @if($student->recent_payment && $student->recent_payment > 0)
+                KSh {{ number_format($student->recent_payment, 2) }}
+            @else
+                No recent payment
+            @endif
+        </p>
 
 
         <p><strong>Fee Balance:</strong> <span class="highlight">KSh {{ number_format($student->current_balance, 2) }}</span></p>

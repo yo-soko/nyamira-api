@@ -128,12 +128,28 @@ class FeePaymentsController extends Controller
             'payment_mode' => 'required|string',
             'amount_paid' => 'required|numeric|min:1',
             'description' => 'required|string|in:Tuition Fee,Meals,Transport',
-            'receipt_number' => 'required|string|unique:fee_payments,receipt_number',
-
-
         ]);
 
         try {
+            $dayPrefixes = [
+                'Monday'    => 'M',
+                'Tuesday'   => 'TU',
+                'Wednesday' => 'W',
+                'Thursday'  => 'TH',
+                'Friday'    => 'F',
+                'Saturday'  => 'SA',
+                'Sunday'    => 'SU',
+            ];
+
+            $today = now()->format('l'); // Full weekday name (Monday, Tuesday...)
+            $prefix = $dayPrefixes[$today] ?? 'X'; // fallback "X"
+
+            // Get total receipts count so far (continuous sequence)
+            $count = FeePayment::count() + 1;
+
+            // Format as two digits (01, 02, 03...)
+            $receiptNumber = 'RCPT-' . $prefix . str_pad($count, 2, '0', STR_PAD_LEFT);
+
             $payment = FeePayment::create([
                 'class_id' => $validated['class_id'],
                 'term_id' => $validated['term_id'],
@@ -141,7 +157,7 @@ class FeePaymentsController extends Controller
                 'payment_mode' => $validated['payment_mode'],
                 'amount_paid' => $validated['amount_paid'],
                 'description' => $validated['description'],
-                'receipt_number' => $validated['receipt_number'],
+                'receipt_number' =>  $receiptNumber,
                 'user_id' => auth()->id(),
             ])->refresh();
 
@@ -163,13 +179,32 @@ class FeePaymentsController extends Controller
             'class_id' => 'required|exists:school_classes,id',
             'term_id' => 'required|exists:terms,id',
             'student_id' => 'required|exists:students,id',
-            'receipt_number' => 'required|string',
+            
             'description' => 'nullable|string',
             'amount_paid' => 'required|numeric',
             'payment_mode' => 'required|in:Cash,Mpesa,Bank',
             'payment_for' => 'required|in:Tuition Fee,Meals,Transport',
 
         ]);
+
+        $dayPrefixes = [
+            'Monday'    => 'M',
+            'Tuesday'   => 'TU',
+            'Wednesday' => 'W',
+            'Thursday'  => 'TH',
+            'Friday'    => 'F',
+            'Saturday'  => 'SA',
+            'Sunday'    => 'SU',
+        ];
+
+        $today = now()->format('l'); // Full weekday name (Monday, Tuesday...)
+        $prefix = $dayPrefixes[$today] ?? 'X'; // fallback "X"
+
+        // Get total receipts count so far (continuous sequence)
+        $count = FeePayment::count() + 1;
+
+        // Format as two digits (01, 02, 03...)
+        $receiptNumber = 'RCPT-' . $prefix . str_pad($count, 2, '0', STR_PAD_LEFT);
 
         $payment = FeePayment::findOrFail($id);
         $student = Student::findOrFail($request->student_id);
@@ -183,7 +218,7 @@ class FeePaymentsController extends Controller
             'payment_mode' => $request->payment_mode,
             'amount_paid' => $request->amount_paid,
             'description' => $request->description,
-            'receipt_number' => $request->receipt_number,
+            'receipt_number' => $receiptNumber,
         ]);
 
         // Update student balance

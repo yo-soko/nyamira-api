@@ -52,7 +52,8 @@ class AttendanceController extends Controller
 
         $class = SchoolClass::with(['students', 'classTeacher', 'level', 'stream'])->findOrFail($classId);
 
-        $students = $class->students;
+        $students = $class->students->where('status', 1);
+
         $today = Carbon::now()->format('l, jS F Y');
         // Pass to view that marks attendance for that class
         return view('attendance', compact('class', 'students','today'));
