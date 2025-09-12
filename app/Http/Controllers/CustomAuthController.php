@@ -15,6 +15,18 @@ class CustomAuthController extends Controller
 
     public function index()
     {
+        if (Auth::check()) {
+            if ($user->role === 'class_teacher') {
+                return redirect()->intended('tdashboard')->with('success', 'Very nice to have you back!');
+            } elseif ($user->role === 'student') {
+                return redirect()->intended('sdashboard')->with('success', 'Very nice to have you back!');
+            } elseif ($user->role === 'teacher') {
+                return redirect()->intended('teacher/dashboard')->with('success', 'Very nice to have you back!');
+            } else {
+                return redirect()->intended('index')->with('success', 'Very nice to have you back!');
+            }
+          
+        }
         return view('login');   // your Blade file
     }
 

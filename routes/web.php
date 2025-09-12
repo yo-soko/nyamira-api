@@ -65,9 +65,15 @@ Route::get('signout',           [CustomAuthController::class, 'signOut'])->name(
 
 
 Route::get('/', function () {
+     Auth::logout();
+    session()->invalidate();
+    session()->regenerateToken();
     return view('login');
 })->name('login');
 Route::get('/login', function () {
+     Auth::logout();
+    session()->invalidate();
+    session()->regenerateToken();
     return view('login');
 })->name('login');
 
