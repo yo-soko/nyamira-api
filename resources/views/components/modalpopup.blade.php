@@ -12936,7 +12936,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <select class="select" name="leave_mode">
+                                            <select class="form-select select2" name="leave_mode">
                                                 <option>Select</option>
                                                 <option value="Full Day">Full Day</option>
                                                 <option value="Half Day">Half Day</option>
