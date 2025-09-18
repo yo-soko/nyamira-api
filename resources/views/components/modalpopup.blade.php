@@ -12907,7 +12907,7 @@
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <label class="form-label">Leave Type <span class="text-danger">*</span></label>
-                                    <select name="leave_type_id" class="select">
+                                    <select name="leave_type_id" class="form-select select2">
                                         @foreach($leaveTypess as $type)
                                             <option value="{{ $type->id }}">{{ $type->type }}</option>
                                         @endforeach
