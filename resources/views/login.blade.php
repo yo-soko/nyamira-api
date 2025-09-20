@@ -86,7 +86,7 @@
                                 </div>
                             </div>
                             <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
-                                <p>Copyright &copy; JavaPA</p>
+                                <p>Copyright &copy;</p>
                             </div>
                         </div>
                     </div>

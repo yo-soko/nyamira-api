@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('role')->default('User'); // Admin, Manager, Salesman
             $table->string('profile_picture')->nullable();
             $table->string('password');
+            $table->boolean('credentials_updated')->default('0');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

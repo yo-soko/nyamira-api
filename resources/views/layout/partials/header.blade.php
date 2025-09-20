@@ -40,24 +40,9 @@
             </script>
             @endpush
 
-            <li class="nav-item pos-nav">
-                <a href="{{ url('signout') }}" class="btn btn-purple btn-md d-inline-flex align-items-center gap-2">
-                    <i class="ti ti-logout"></i> Logout
-                </a>
-            </li>
+           
             <!-- /Search -->
-            @hasanyrole('developer|class_teacher|teacher')
-            <li class="nav-item pos-nav">
-                <form action="{{ route('attendance-employee') }}" method="POST" style="display: inline;">
-                    @csrf
-                    <input type="hidden" name="employee_id" value="{{ auth()->user()->employee->id ?? '' }}">
-                    <button type="submit" class="btn bg-success btn-lg d-inline-flex align-items-center">
-                        <img src="{{ URL::asset('build/img/icons/clock-icon.svg') }}" alt="img" class="me-2">
-                        Clock-in/Clock-out
-                    </button>
-                </form>
-            </li>
-            @endhasanyrole
+          
 
            <!-- Search -->
 					<!-- <li class="nav-item nav-searchinputs">
@@ -83,23 +68,7 @@
 
 
 
-            <!-- Flag -->
-            <li class="nav-item dropdown has-arrow flag-nav nav-item-box">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0);"
-                    role="button">
-                    <img src="{{URL::asset('build/img/flags/ke.png')}}" alt="Language" class="img-fluid">
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-
-                    <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="{{URL::asset('build/img/flags/ke.png')}}" alt="Img" height="16">Kenya
-                    </a>
-                    <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="{{URL::asset('build/img/flags/english.svg')}}" alt="Img" height="16">English
-                    </a>
-                </div>
-            </li>
-            <!-- /Flag -->
+       
 
             <li class="nav-item nav-item-box">
                 <a href="javascript:void(0);" id="btnFullscreen">
@@ -131,9 +100,7 @@
             </li>
             <!-- /Notifications -->
 
-            <li class="nav-item nav-item-box">
-                <a href="{{url('general-settings')}}"><i class="ti ti-settings"></i></a>
-            </li>
+         
             <li class="nav-item dropdown has-arrow main-drop profile-nav">
                 <a href="javascript:void(0);" class="nav-link userset" data-bs-toggle="dropdown">
                     <span class="user-info p-0">
@@ -153,7 +120,7 @@
                     </div>
                     <a class="dropdown-item" href="{{url('profile')}}"><i class="ti ti-user-circle me-2"></i>MyProfile</a>
                     <a class="dropdown-item" href="#"><i class="ti ti-file-text me-2"></i>Reports</a>
-                    <a class="dropdown-item" href="#"><i class="ti ti-settings-2 me-2"></i>Settings</a>
+                   
                     <hr class="my-2">
                     <a class="dropdown-item logout pb-0" href="{{ route('signout') }}"><i class="ti ti-logout me-2"></i>Logout</a>
                 </div>

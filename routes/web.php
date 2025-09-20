@@ -49,7 +49,8 @@ use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\TransportController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\FeeDashboardController;
-use App\Http\Controllers\ZktecoLogsController;
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\VehicleAssignmentController;
 use App\Models\User;
 
 
@@ -78,6 +79,8 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::middleware(['auth'])->group(function () {
+    Route::resource('vehicles', VehicleController::class);
+    Route::resource('assignments', VehicleAssignmentController::class);
 
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 

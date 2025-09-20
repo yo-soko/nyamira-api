@@ -7,32 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class Vehicle extends Model
 {
     protected $fillable = [
-        'registration_number',
-        'model',
-        'capacity',
-        'insurance_expiry'
+        'name','vin','license_plate','type','fuel_type','year',
+        'make','model','trim','registration_state','status','group',
+        'operator_id','ownership','color','body_type','body_subtype',
+        'msrp','photo','labels','purchase_date','purchase_price',
+        'retirement_date','insurance_policy_number','insurance_expiry',
+        'loan_details',
     ];
 
     protected $casts = [
+        'labels' => 'array',
+        'purchase_date' => 'date',
+        'retirement_date' => 'date',
         'insurance_expiry' => 'date',
     ];
 
-    public function route()
+    public function operator()
     {
-        return $this->hasOne(TransportRoute::class, 'vehicle_id');
-    }
-
-    public function drivers()
-    {
-        return $this->hasMany(DriverAssignment::class);
-    }
-
-    public function currentDriver()
-    {
-        return $this->drivers()
-            ->whereNull('assigned_to')
-            ->orWhere('assigned_to', '>=', now())
-            ->orderBy('assigned_from', 'desc')
-            ->first();
+        return $this->belongsTo(User::class, 'operator_id');
     }
 }

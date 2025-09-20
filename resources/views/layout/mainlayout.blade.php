@@ -18,7 +18,7 @@
 @endphp
 
 @if (!Route::is(['layout-horizontal','layout-detached','layout-modern','layout-two-column','layout-hovered','layout-boxed','layout-rtl','layout-dark']))
-<html lang="en" data-theme="dark">
+<html lang="en" >
 @endif
 @if (Route::is(['layout-horizontal']))
 <html lang="en" data-layout="horizontal">
@@ -56,7 +56,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
 
-    <title>JavaPA</title>
+    <title>NYAMIRA COUNTY</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ URL::asset('/build/img/favicon.ico')}}">
 
     @include('layout.partials.head')

@@ -95,7 +95,7 @@
                             </div>
                         </div>
                         <div class="my-4 d-flex justify-content-center align-items-center copyright-text">
-                            <p>Copyright &copy; 2025 JavaPA</p>
+                            <p>Copyright &copy; 2025</p>
                         </div>
                     </div>
                     </form>

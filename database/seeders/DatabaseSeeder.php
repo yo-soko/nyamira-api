@@ -14,31 +14,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(UserSeeder::class);
-        $this->call(LeaveTypeSeeder::class);
-        \App\Models\Department::factory()->count(2)->create();
-        \App\Models\Designation::factory()->count(2)->create();
-        \App\Models\Shift::factory()->count(2)->create();
-        \App\Models\Employee::factory()->count(2)->create();
+     
         $this->call(RoleSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(RolePermissionSeeder::class);
-        $this->call([
-            ClassLevelsTableSeeder::class,
-            StreamsTableSeeder::class,
-            ClassesTableSeeder::class,
-            SubjectsTableSeeder::class,
-            TermsTableSeeder::class,
-            GuardiansTableSeeder::class,
-            AttendanceTableSeeder::class,
-            TermsTableSeeder::class,
-            StudentsTableSeeder::class,
-            TransportRoutesTableSeeder::class,
-            ExamsTableSeeder::class,
-            ExamSubjectsClasses::class, 
-            MealPlanSeeder::class, 
-            FeeStructureSeeder::class, 
-            FingerprintLogSeeder::class, 
-            
-        ]);
+     
     }
 }
