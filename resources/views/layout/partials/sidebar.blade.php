@@ -80,6 +80,7 @@
                                 <ul>
                                     <li class="{{ Request::is('vehicles') ? 'active' : '' }}"> <a href="{{url('vehicles')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Vehicles List</span></a></li>
                                     <li class="{{ Request::is('assignments') ? 'active' : '' }}"> <a href="{{url('assignments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Vehicles Assignments</span></a></li>
+                                    <li class="{{ Request::is('assignments') ? 'active' : '' }}"> <a href="{{url('assignments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Meter History</span></a></li>
 
                                     <li class="{{ request()->routeIs('attendance-employee') ? 'active' : '' }}">
                                     
