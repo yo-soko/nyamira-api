@@ -76,16 +76,40 @@
                    <li class="submenu-open">
                         <ul>
                             <li class="submenu">
-                                <a href="javascript:void(0);" class="{{ Request::is('vehicles','assignments') ? 'active' : '' }}"><i class="ti ti-calendar fs-16 me-2"></i><span>Vehicles</span><span class="menu-arrow"></span></a>
+                                <a href="javascript:void(0);" class="{{ Request::is('vehicles','expenses','assignments','meter-histories') ? 'active' : '' }}"><i class="ti ti-car fs-16 me-2"></i><span>Vehicles</span><span class="menu-arrow"></span></a>
                                 <ul>
-                                    <li class="{{ Request::is('vehicles') ? 'active' : '' }}"> <a href="{{url('vehicles')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Vehicles List</span></a></li>
-                                    <li class="{{ Request::is('assignments') ? 'active' : '' }}"> <a href="{{url('assignments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Vehicles Assignments</span></a></li>
-                                    <li class="{{ Request::is('assignments') ? 'active' : '' }}"> <a href="{{url('assignments')}}"><i class="ti ti-user-cog fs-16 me-2"></i><span>Meter History</span></a></li>
-
-                                    <li class="{{ request()->routeIs('attendance-employee') ? 'active' : '' }}">
-                                    
-                                    </li>
-
+                                    <li class="{{ Request::is('vehicles') ? 'active' : '' }}"> <a href="{{url('vehicles')}}"><i class="ti ti-car fs-16 me-2"></i><span>Vehicles List</span></a></li>
+                                    <li class="{{ Request::is('assignments') ? 'active' : '' }}"> <a href="{{url('assignments')}}"><i class="ti ti-user-check fs-16 me-2"></i><span>Vehicles Assignments</span></a></li>
+                                    <li class="{{ Request::is('meter-histories') ? 'active' : '' }}"> <a href="{{url('meter-histories')}}"><i class="ti ti-gauge fs-16 me-2"></i><span>Meter History</span></a></li>
+                                    <li class="{{ Request::is('expenses') ? 'active' : '' }}"> <a href="{{url('expenses')}}"><i class="ti ti-receipt-2 fs-16 me-2"></i><span>Expense History</span></a></li>
+                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-refresh fs-16 me-2"></i><span>Replacement Analysis</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="submenu">
+                                <a href="javascript:void(0);" class="{{ Request::is('fuel','charging') ? 'active' : '' }}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel & Energy</span><span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li class="{{ Request::is('fuel') ? 'active' : '' }}"> <a href="{{url('fuel')}}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel History</span></a></li>
+                                    <li class="{{ Request::is('charging') ? 'active' : '' }}"> <a href="{{url('charging')}}"><i class="ti ti-battery-charging fs-16 me-2"></i><span>Charging History</span></a></li>
+          
+                                </ul>
+                            </li>
+                             <li class="submenu">
+                                <a href="javascript:void(0);" class="{{ Request::is('issues','faults','recalls') ? 'active' : '' }}"><i class="ti ti-alert-triangle fs-16 me-2"></i><span>Issues</span><span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li class="{{ Request::is('issues') ? 'active' : '' }}"> <a href="{{url('issues')}}"><i class="ti ti-alert-circle fs-16 me-2"></i><span>issues</span></a></li>
+                                    <li class="{{ Request::is('faults') ? 'active' : '' }}"> <a href="{{url('faults')}}"><i class="ti ti-engine fs-16 me-2"></i><span>Faults</span></a></li>
+                                    <li class="{{ Request::is('recalls') ? 'active' : '' }}"> <a href="{{url('recalls')}}"><i class="ti ti-rotate fs-16 me-2"></i><span>Recalls</span></a></li>
+          
+                                </ul>
+                            </li>
+                              <li class="submenu">
+                                <a href="javascript:void(0);" class="{{ Request::is('issues','faults','recalls') ? 'active' : '' }}"><i class="ti ti-tools fs-16 me-2"></i><span>Service</span><span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li class="{{ Request::is('issues') ? 'active' : '' }}"> <a href="{{url('issues')}}"><i class="ti ti-tools fs-16 me-2"></i><span>Service History</span></a></li>
+                                    <li class="{{ Request::is('faults') ? 'active' : '' }}"> <a href="{{url('faults')}}"><i class="ti ti-briefcase fs-16 me-2"></i><span>Work Orders</span></a></li>
+                                    <li class="{{ Request::is('recalls') ? 'active' : '' }}"> <a href="{{url('recalls')}}"><i class="ti ti-checklist fs-16 me-2"></i><span>Service Tasks</span></a></li>
+                                    <li class="{{ Request::is('recalls') ? 'active' : '' }}"> <a href="{{url('recalls')}}"><i class="ti ti-layout-dashboard fs-16 me-2"></i><span>Service Programs</span></a></li>
+          
                                 </ul>
                             </li>
                         </ul>
