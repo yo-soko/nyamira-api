@@ -86,9 +86,9 @@
                                 </ul>
                             </li>
                             <li class="submenu">
-                                <a href="javascript:void(0);" class="{{ Request::is('fuel','charging') ? 'active' : '' }}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel & Energy</span><span class="menu-arrow"></span></a>
+                                <a href="javascript:void(0);" class="{{ Request::is('fuel_histories','charging') ? 'active' : '' }}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel & Energy</span><span class="menu-arrow"></span></a>
                                 <ul>
-                                    <li class="{{ Request::is('fuel') ? 'active' : '' }}"> <a href="{{url('fuel')}}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel History</span></a></li>
+                                    <li class="{{ Request::is('fuel_histories') ? 'active' : '' }}"> <a href="{{url('fuel_histories')}}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel History</span></a></li>
                                     <li class="{{ Request::is('charging') ? 'active' : '' }}"> <a href="{{url('charging')}}"><i class="ti ti-battery-charging fs-16 me-2"></i><span>Charging History</span></a></li>
           
                                 </ul>

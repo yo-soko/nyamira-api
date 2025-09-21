@@ -53,6 +53,7 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\VehicleAssignmentController;
 use App\Http\Controllers\VehicleMeterHistoryController;
+use App\Http\Controllers\FuelHistoryController;
 use App\Models\User;
 
 
@@ -85,6 +86,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('assignments', VehicleAssignmentController::class);
     Route::resource('meter-histories', VehicleMeterHistoryController::class);
     Route::resource('expenses', ExpensesController::class);
+    Route::resource('fuel_histories', FuelHistoryController::class);
 
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 
