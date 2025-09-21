@@ -11,8 +11,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4 class="fw-bold">Vehicles Meter History</h4>
-                    <h6>Manage your Vehicle meter history</h6>
+                    <h4 class="fw-bold">Vehicles Expense History</h4>
+                    <h6>Manage your Vehicle Expense history</h6>
                 </div>
             </div>
             <ul class="table-top-head">

@@ -11,8 +11,8 @@
         <div class="page-header">
             <div class="add-item d-flex">
                 <div class="page-title">
-                    <h4 class="fw-bold">Vehicles Section</h4>
-                    <h6>Manage your Vehicles</h6>
+                    <h4 class="fw-bold">Vehicles Assignment Section</h4>
+                    <h6>Manage your Vehicles assignments</h6>
                 </div>
             </div>
             <ul class="table-top-head">
