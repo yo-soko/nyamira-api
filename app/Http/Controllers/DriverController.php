@@ -15,7 +15,7 @@ class DriverController extends Controller
     public function index()
     {
         $users = User::whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'developer','admin','employee');
+            $query->where('name', 'developer','admin');
         })->get();
 
         return view('drivers', compact('users'));
