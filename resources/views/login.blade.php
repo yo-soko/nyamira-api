@@ -15,8 +15,9 @@
                         <a href="{{url('index')}}" class="login-logo logo-white">
                             <img src="{{URL::asset('build/img/logo-white.svg')}}"  alt="Img">
                         </a>
+                            <h2 class="text-center">FLEET MANAGEMENT SYSTEM</h3><br>
+
                         <div class="login-userheading">
-                            <h3>Sign In</h3>
                             <h4>Access using your email and password.</h4>
                         </div>
                         <div class="mb-3">
