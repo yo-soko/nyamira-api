@@ -35,11 +35,21 @@ class VehicleAssignmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Vehicle_assignment $vehicle_assignment)
+    {
+        //
+    } public function store(Request $request)
     {
         $data = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
             'operator_id' => 'required|exists:users,id',
+            'assignment_type' => 'required|string|max:255',
+            'assignment_location' => 'nullable|string|max:255',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
         ]);
@@ -55,14 +65,6 @@ class VehicleAssignmentController extends Controller
         return redirect()
             ->route('assignments.index')
             ->with('success', 'Vehicle assigned successfully.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Vehicle_assignment $vehicle_assignment)
-    {
-        //
     }
 
     /**

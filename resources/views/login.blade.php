@@ -96,11 +96,33 @@
                 </div>
             </div>
             <div class="col-lg-6 p-0">
-                <div class="login-img">
-                    <img src="{{URL::asset('build/img/authentication/authentication-01.svg')}}" alt="img">
+                <div class="login-img text-center">
+                    <img id="authImage" style="#authImage {transition: opacity 0.5s ease-in-out;}" src="{{URL::asset('build/img/authentication/authentication-01.jpeg')}}" alt="img" class="img-fluid">
                 </div>
             </div>
+
         </div>
     </div>
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const images = [
+            "{{ URL::asset('build/img/authentication/authentication-01.jpeg') }}",
+            "{{ URL::asset('build/img/authentication/authentication-02.jpeg') }}",
+            "{{ URL::asset('build/img/authentication/authentication-03.jpeg') }}",
+            "{{ URL::asset('build/img/authentication/authentication-04.jpeg') }}",
+            "{{ URL::asset('build/img/authentication/authentication-05.jpeg') }}"
+        ];
+
+        let currentIndex = 0;
+        const authImage = document.getElementById("authImage");
+
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            authImage.src = images[currentIndex];
+        }, 10000); // 30 seconds
+    });
+</script>
+@endpush
 
 @endsection

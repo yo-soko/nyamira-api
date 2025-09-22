@@ -11,6 +11,8 @@ class VehicleAssignment extends Model
         'operator_id',
         'start_at',
         'end_at',
+        'assignment_type',
+        'assignment_location',
     ];
 
     protected $casts = [
