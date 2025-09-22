@@ -76,6 +76,14 @@
                    <li class="submenu-open">
                         <ul>
                             <li class="submenu">
+                                <a href="javascript:void(0);" class="{{ Request::is('drivers') ? 'active' : '' }}"><i class="ti ti-steering-wheel fs-16 me-2"></i><span>Drivers</span><span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li class="{{ Request::is('drivers') ? 'active' : '' }}"> <a href="{{url('drivers')}}"><i class="ti ti-id fs-16 me-2"></i><span>Drivers List</span></a></li>
+                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-history fs-16 me-2"></i><span>Driver History</span></a></li>
+          
+                                </ul>
+                            </li>
+                            <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('vehicles','expenses','assignments','meter-histories') ? 'active' : '' }}"><i class="ti ti-car fs-16 me-2"></i><span>Vehicles</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ Request::is('vehicles') ? 'active' : '' }}"> <a href="{{url('vehicles')}}"><i class="ti ti-car fs-16 me-2"></i><span>Vehicles List</span></a></li>
@@ -85,7 +93,7 @@
                                     <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-refresh fs-16 me-2"></i><span>Replacement Analysis</span></a></li>
                                 </ul>
                             </li>
-
+                           
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('fuel_histories','charging_histories') ? 'active' : '' }}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel & Energy</span><span class="menu-arrow"></span></a>
                                 <ul>

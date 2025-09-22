@@ -56,6 +56,7 @@ use App\Http\Controllers\VehicleMeterHistoryController;
 use App\Http\Controllers\ChargingHistoryController;
 use App\Http\Controllers\FuelHistoryController;
 use App\Http\Controllers\IssuesController;
+use App\Http\Controllers\DriverController;
 use App\Models\User;
 
 
@@ -210,6 +211,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/shift/update', [ShiftController::class, 'update'])->name('shift.update');
     Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
+    Route::get('/drivers', [DriverController::class, 'index'])->name('drivers');
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');

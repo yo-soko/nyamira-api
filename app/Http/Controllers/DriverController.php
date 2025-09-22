@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-class UserController extends Controller
+use App\Models\Driver;
+class DriverController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,10 +15,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'developer','drivers');
+            $query->where('name', 'developer','admin','employee');
         })->get();
 
-        return view('users', compact('users'));
+        return view('drivers', compact('users'));
     }
 
 
