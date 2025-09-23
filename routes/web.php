@@ -62,7 +62,7 @@ use App\Http\Controllers\ServiceEntryController;
 use App\Http\Controllers\WorkOrderController;
 use App\Models\User;
 use App\Http\Controllers\InspectionController;
-
+use App\Http\Controllers\InspectionItemController;
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -105,6 +105,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('services/issues/{vehicleId}', [ServiceEntryController::class, 'getIssues']);
     Route::resource('work_orders', WorkOrderController::class);
     Route::resource('inspections', InspectionController::class);
+    Route::get('/failures', [InspectionItemController::class, 'failures'])
+        ->name('failures');
+    Route::get('/schedules', [InspectionController::class, 'schedules'])
+        ->name('schedules');
 
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 

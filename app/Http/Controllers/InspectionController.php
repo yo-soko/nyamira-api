@@ -35,7 +35,7 @@ class InspectionController extends Controller
         $vehicles = Vehicle::all();
         $checklist = [
             'Engine','Transmission','Clutch','Steering Mechanism','Horn',
-            'Windshield & Wipers','Rear Vision Mirrors','Lighting Devices',
+            'Windshield & Wipers','Rear Vision Mirrors','Lighting Devices','Oil Life Left',
             'Parking Brake','Service Brakes','Tires','Wheels & Rims','Emergency Equipment'
         ];
         return view('inspections.create', compact('vehicles','checklist'));
@@ -46,6 +46,7 @@ class InspectionController extends Controller
      */
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
             'odometer_reading' => 'nullable|integer',
@@ -55,7 +56,6 @@ class InspectionController extends Controller
             'items.*.remark' => 'nullable|string',
             'items.*.attachment' => 'nullable|file|max:2048',
         ]);
-
         $inspection = Inspection::create([
             'vehicle_id' => $request->vehicle_id,
             'inspector_id' => Auth::id(),
@@ -80,6 +80,30 @@ class InspectionController extends Controller
         }
 
         return redirect()->route('inspections.index')->with('success','Inspection saved successfully.');
+    }
+
+    public function schedules()
+    {
+        // Get the latest inspection per vehicle
+        $vehicles = \DB::table('inspections as i')
+            ->select('i.vehicle_id', \DB::raw('MAX(i.inspection_date) as last_inspection_date'))
+            ->groupBy('i.vehicle_id');
+
+        // Join with vehicles table to fetch details
+        $schedules = \DB::table('vehicles as v')
+            ->leftJoinSub($vehicles, 'latest', function($join) {
+                $join->on('v.id', '=', 'latest.vehicle_id');
+            })
+            ->select(
+                'v.id',
+                'v.name',
+                'v.license_plate',
+                \DB::raw("DATE_ADD(latest.last_inspection_date, INTERVAL 3 MONTH) as next_inspection_date")
+            )
+            ->orderBy('next_inspection_date', 'asc')
+            ->get();
+
+        return view('schedules', compact('schedules'));
     }
 
     /**

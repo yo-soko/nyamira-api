@@ -122,12 +122,11 @@
                                 </ul>
                             </li>
                             <li class="submenu">
-                                <a href="javascript:void(0);" class="{{ Request::is('inspections') ? 'active' : '' }}"><i class="ti ti-clipboard-text fs-16 me-2"></i><span>Inspections</span><span class="menu-arrow"></span></a>
+                                <a href="javascript:void(0);" class="{{ Request::is('inspections','failures','schedules') ? 'active' : '' }}"><i class="ti ti-clipboard-text fs-16 me-2"></i><span>Inspections</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ Request::is('inspections') ? 'active' : '' }}"> <a href="{{url('inspections')}}"><i class="ti ti-history fs-16 me-2"></i><span>Inspections History</span></a></li>
-                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-alert-triangle fs-16 me-2"></i><span>Item Failures</span></a></li>
-                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-calendar-time fs-16 me-2"></i><span>Schedules</span></a></li>
-                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-forms fs-16 me-2"></i><span>Forms</span></a></li>
+                                    <li class="{{ Request::is('failures') ? 'active' : '' }}"> <a href="{{url('failures')}}"><i class="ti ti-alert-triangle fs-16 me-2"></i><span>Item Failures</span></a></li>
+                                    <li class="{{ Request::is('schedules') ? 'active' : '' }}"> <a href="{{url('schedules')}}"><i class="ti ti-calendar-time fs-16 me-2"></i><span>Schedules</span></a></li>
                                 </ul>
                             </li>
                             <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-plug-connected fs-16 me-2"></i><span>Integrations</span></a></li>
