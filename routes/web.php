@@ -63,6 +63,8 @@ use App\Http\Controllers\WorkOrderController;
 use App\Models\User;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\InspectionItemController;
+use App\Http\Controllers\ReportController;
+
 
 
 Route::get('signin',            [CustomAuthController::class, 'index'])->name('signin');
@@ -109,6 +111,19 @@ Route::middleware(['auth'])->group(function () {
         ->name('failures');
     Route::get('/schedules', [InspectionController::class, 'schedules'])
         ->name('schedules');
+    Route::prefix('reports')->group(function () {
+        Route::get('/', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/vehicles', [ReportController::class, 'vehicles'])->name('reports.vehicles');
+        Route::get('/drivers', [ReportController::class, 'drivers'])->name('reports.drivers');
+        Route::get('/vehicle-assignments', [ReportController::class, 'vehicleAssignments'])->name('reports.vehicle_assignments');
+        Route::get('/inspections', [ReportController::class, 'inspections'])->name('reports.inspections');
+        Route::get('/inspections/failures', [ReportController::class, 'inspectionsFailures'])->name('reports.inspections_failures');
+        Route::get('/issues', [ReportController::class, 'issues'])->name('reports.issues');
+        Route::get('/service', [ReportController::class, 'service'])->name('reports.service');
+        Route::get('/work-orders', [ReportController::class, 'workOrders'])->name('reports.work_orders');
+        Route::get('/work-orders/vehicle', [ReportController::class, 'workOrdersByVehicle'])->name('reports.work_orders_vehicle');
+        Route::get('/fuel', [ReportController::class, 'fuel'])->name('reports.fuel');
+    });
 
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 
