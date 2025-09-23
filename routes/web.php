@@ -57,6 +57,7 @@ use App\Http\Controllers\ChargingHistoryController;
 use App\Http\Controllers\FuelHistoryController;
 use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\DriverHistoryController;
 use App\Models\User;
 
 
@@ -92,7 +93,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('fuel_histories', FuelHistoryController::class);
     Route::resource('charging_histories', ChargingHistoryController::class);
     Route::resource('issues', IssuesController::class);
-
+    Route::prefix('driver-history')->group(function () {
+        Route::get('/', [DriverHistoryController::class, 'index'])->name('driver-history.index');
+        Route::get('/{driver}', [DriverHistoryController::class, 'show'])->name('driver-history.show');
+    });
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 
     /*===========================calendar======================================================*/

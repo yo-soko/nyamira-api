@@ -76,10 +76,10 @@
                    <li class="submenu-open">
                         <ul>
                             <li class="submenu">
-                                <a href="javascript:void(0);" class="{{ Request::is('drivers') ? 'active' : '' }}"><i class="ti ti-steering-wheel fs-16 me-2"></i><span>Drivers</span><span class="menu-arrow"></span></a>
+                                <a href="javascript:void(0);" class="{{ Request::is('drivers','driver-history') ? 'active' : '' }}"><i class="ti ti-steering-wheel fs-16 me-2"></i><span>Drivers</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ Request::is('drivers') ? 'active' : '' }}"> <a href="{{url('drivers')}}"><i class="ti ti-id fs-16 me-2"></i><span>Drivers List</span></a></li>
-                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-history fs-16 me-2"></i><span>Driver History</span></a></li>
+                                    <li class="{{ Request::is('driver-history') ? 'active' : '' }}"> <a href="{{url('driver-history')}}"><i class="ti ti-history fs-16 me-2"></i><span>Driver History</span></a></li>
           
                                 </ul>
                             </li>
