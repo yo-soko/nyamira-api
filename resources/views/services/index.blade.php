@@ -43,7 +43,7 @@
                   </td>
                   <td>{{ number_format($service->odometer) }} mi</td>
                   <td>{{ $service->completion_date ? $service->completion_date->format('M d, Y h:i A') : '-' }}</td>
-                  <td>{{ $service->vendor->name ?? '-' }}</td>
+                  <td>{{ $service->vendor_id ?? '-' }}</td>
                   <td>
                     @if($service->issues->isEmpty())
                         <span class="text-muted">No Issues</span>

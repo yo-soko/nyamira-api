@@ -112,10 +112,10 @@
                                 </ul>
                             </li>
                             <li class="submenu">
-                                <a href="javascript:void(0);" class="{{ Request::is('services') ? 'active' : '' }}"><i class="ti ti-tools fs-16 me-2"></i><span>Service</span><span class="menu-arrow"></span></a>
+                                <a href="javascript:void(0);" class="{{ Request::is('services','work_orders') ? 'active' : '' }}"><i class="ti ti-tools fs-16 me-2"></i><span>Service</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ Request::is('services') ? 'active' : '' }}"> <a href="{{url('services')}}"><i class="ti ti-tools fs-16 me-2"></i><span>Service History</span></a></li>
-                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-briefcase fs-16 me-2"></i><span>Work Orders</span></a></li>
+                                    <li class="{{ Request::is('work_orders') ? 'active' : '' }}"> <a href="{{url('work_orders')}}"><i class="ti ti-briefcase fs-16 me-2"></i><span>Work Orders</span></a></li>
                                     <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-checklist fs-16 me-2"></i><span>Service Tasks</span></a></li>
                                     <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-layout-dashboard fs-16 me-2"></i><span>Service Programs</span></a></li>
           
