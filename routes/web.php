@@ -58,6 +58,7 @@ use App\Http\Controllers\FuelHistoryController;
 use App\Http\Controllers\IssuesController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\DriverHistoryController;
+use App\Http\Controllers\ServiceEntryController;
 use App\Models\User;
 
 
@@ -97,6 +98,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [DriverHistoryController::class, 'index'])->name('driver-history.index');
         Route::get('/{driver}', [DriverHistoryController::class, 'show'])->name('driver-history.show');
     });
+    Route::resource('services', ServiceEntryController::class);
+    Route::get('services/issues/{vehicleId}', [ServiceEntryController::class, 'getIssues']);
+
     Route::get('index/', [DashboardController::class, 'index'])->name('index.index');
 
     /*===========================calendar======================================================*/

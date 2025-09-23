@@ -35,4 +35,9 @@ class Issues extends Model
     {
         return $this->belongsTo(User::class, 'assigned_to');
     }
+    public function serviceEntries()
+    {
+        return $this->belongsToMany(ServiceEntry::class, 'issue_service_entry', 'issue_id', 'service_entry_id');
+    }
+
 }
