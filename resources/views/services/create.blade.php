@@ -1,6 +1,7 @@
 @extends('layout.mainlayout')
 
 @section('content')
+@include('layout.toast')
 <div class="container">
     <h2>Add Service Entry</h2>
     <form action="{{ route('services.store') }}" method="POST">

@@ -1,6 +1,7 @@
 @extends('layout.mainlayout')
 
 @section('content')
+@include('layout.toast')
 <div class="page-wrapper">
   <div class="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -149,13 +150,8 @@
           </div>
 
           <div class="mb-3">
-            <label>Vendor</label>
-            <select name="vendor_id" class="form-select select2">
-              <option value="">-- Select Vendor --</option>
-              <option value="Shell">Shell</option>
-              <option value="Total">Total</option>
-              <option value="Tosha">Tosha</option>
-            </select>
+            <label>Service Stations</label>       
+            <input type="text" name="vendor_id" class="form-control">
           </div>
 
           <div class="mb-3">
