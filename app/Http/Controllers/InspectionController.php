@@ -46,25 +46,42 @@ class InspectionController extends Controller
      */
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'vehicle_id' => 'required|exists:vehicles,id',
             'odometer_reading' => 'nullable|integer',
             'notes' => 'nullable|string',
+
+            // checklist
             'items' => 'required|array',
             'items.*.status' => 'required|in:Pass,Fail,N/A',
             'items.*.remark' => 'nullable|string',
             'items.*.attachment' => 'nullable|file|max:2048',
+
+            // sign-off
+            'vehicle_condition_ok' => 'nullable|boolean',
+            'condition_remark' => 'nullable|string',
+            'reviewing_driver_signature' => 'required|string|max:255',
+            'driver_remark' => 'nullable|string',
         ]);
+
         $inspection = Inspection::create([
             'vehicle_id' => $request->vehicle_id,
             'inspector_id' => Auth::id(),
             'inspection_date' => now(),
             'odometer_reading' => $request->odometer_reading,
             'notes' => $request->notes,
-            'status' => collect($request->items)->contains('status','Fail') ? 'Fail' : 'Pass',
+
+            // status automatically Pass/Fail depending on checklist
+            'status' => collect($request->items)->contains('status', 'Fail') ? 'Fail' : 'Pass',
+
+            // sign-off
+            'vehicle_condition_ok' => $request->boolean('vehicle_condition_ok'),
+            'condition_remark' => $request->condition_remark,
+            'reviewing_driver_signature' => $request->reviewing_driver_signature,
+            'driver_remark' => $request->driver_remark,
         ]);
 
+        // Save checklist items
         foreach ($request->items as $name => $data) {
             $item = new InspectionItem([
                 'item_name' => $name,
@@ -73,14 +90,17 @@ class InspectionController extends Controller
             ]);
 
             if (isset($data['attachment'])) {
-                $item->attachment = $data['attachment']->store('inspection_items','public');
+                $item->attachment = $data['attachment']->store('inspection_items', 'public');
             }
 
             $inspection->items()->save($item);
         }
 
-        return redirect()->route('inspections.index')->with('success','Inspection saved successfully.');
+        return redirect()
+            ->route('inspections.index')
+            ->with('success', 'Inspection saved successfully.');
     }
+
 
     public function schedules()
     {

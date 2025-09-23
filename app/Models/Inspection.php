@@ -17,11 +17,16 @@ class Inspection extends Model
         'is_void',
         'status',
         'notes',
+        'vehicle_condition_ok',
+        'condition_remark',
+        'reviewing_driver_signature',
+        'driver_remark',
     ];
 
     protected $casts = [
         'inspection_date' => 'datetime',
         'is_void' => 'boolean',
+        'vehicle_condition_ok' => 'boolean',
     ];
 
     public function vehicle()

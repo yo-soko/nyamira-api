@@ -161,6 +161,32 @@
                   </div>
               </div>
           @endforeach
+          <hr>
+            <h6 class="fw-bold">Sign-Off</h6>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="vehicle_condition_ok" id="vehicle_condition_ok" value="1">
+                <label class="form-check-label" for="vehicle_condition_ok">
+                    Vehicle Condition OK <span class="text-danger">*</span> 
+                    <small class="text-muted">(Must be checked if there are no defects)</small>
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Condition Remark</label>
+                <textarea name="condition_remark" class="form-control"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Reviewing Driver's Signature <span class="text-danger">*</span></label>
+                <input type="text" name="reviewing_driver_signature" class="form-control" placeholder="Type your name to sign" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Driver Remark</label>
+                <textarea name="driver_remark" class="form-control"></textarea>
+            </div>
+
 
         </div>
 
