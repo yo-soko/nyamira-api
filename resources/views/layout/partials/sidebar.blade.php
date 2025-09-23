@@ -131,10 +131,10 @@
                             </li>
                             <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-plug-connected fs-16 me-2"></i><span>Integrations</span></a></li>
                             <li class="submenu">
-                                <a href="javascript:void(0);" class="{{ Request::is('#') ? 'active' : '' }}"><i class="ti ti-report-analytics fs-16 me-2"></i><span>Reports</span><span class="menu-arrow"></span></a>
+                                <a href="javascript:void(0);" class="{{ Request::is('reports') ? 'active' : '' }}"><i class="ti ti-report-analytics fs-16 me-2"></i><span>Reports</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-chart-line fs-16 me-2"></i><span>Advanced Analytics</span></a></li>
-                                    <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-file-text fs-16 me-2"></i><span>Standard Reports</span></a></li>
+                                    <li class="{{ Request::is('reports') ? 'active' : '' }}"> <a href="{{url('reports')}}"><i class="ti ti-file-text fs-16 me-2"></i><span>Standard Reports</span></a></li>
                                </ul>
                             </li>
                         </ul>
