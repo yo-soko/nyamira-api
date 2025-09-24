@@ -1,4 +1,4 @@
-@can('view roles & permissions')
+@can('view permission')
 <?php $page = 'permissions'; ?>
 @extends('layout.mainlayout')
 @section('content')
