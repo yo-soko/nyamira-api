@@ -12,14 +12,12 @@ class RoleSeeder extends Seeder
         $roles = [
             'admin',
             'developer',
-            'class_teacher',
-            'teacher',
-            'transport_staff',
-            'librarian',
-            'student',
-            'parent',
-            'accountant',
-            'receptionist',
+            'driver',
+            'chief-officer',
+            'fuel-supervisor',
+            'transport_manager',
+            'mechanical-engineer',
+            
         ];
 
         foreach ($roles as $role) {
