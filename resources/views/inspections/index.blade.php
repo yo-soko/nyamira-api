@@ -1,3 +1,5 @@
+@can('view inspection')
+
 @extends('layout.mainlayout')
 
 @section('content')
@@ -19,12 +21,14 @@
                 <li><a data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a></li>
                 <li><a data-bs-toggle="tooltip" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a></li>
             </ul>
+@can('add inspection')
+
             <div class="page-btn">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#inspectionModal">
                     <i class="ti ti-plus"></i> New Inspection
                 </button>
             </div>
-
+@endcan
         </div>
         <!-- /Page Header -->
 
@@ -204,3 +208,4 @@
 
 
 @endsection
+@endcan

@@ -1,4 +1,4 @@
-@hasanyrole('admin|developer|manager|director|supervisor')
+@can('view fuel & energy')
 <?php $page = 'users'; ?>
 @extends('layout.mainlayout')
 
@@ -21,11 +21,14 @@
                 <li><a data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a></li>
                 <li><a data-bs-toggle="tooltip" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a></li>
             </ul>
+@can('add fuel & energy')
+
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#fuelModal">
                     <i class="ti ti-circle-plus me-1"></i> Add Fuel Entry
                 </a>
             </div>
+            @endcan
         </div>
         <!-- /Page Header -->
 
@@ -155,4 +158,4 @@
   </div>
 </div>
 @endsection
-@endhasanyrole
+@endcan

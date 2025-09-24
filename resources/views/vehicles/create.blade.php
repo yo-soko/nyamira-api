@@ -1,4 +1,4 @@
-@hasanyrole('admin|developer|manager|director|supervisor')
+@can('view vehicle')
 <?php $page = 'users'; ?>
 @extends('layout.mainlayout')
 
@@ -21,11 +21,13 @@
                 <li><a data-bs-toggle="tooltip" title="Refresh"><i class="ti ti-refresh"></i></a></li>
                 <li><a data-bs-toggle="tooltip" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a></li>
             </ul>
+            @can('add vehicle')
             <div class="page-btn">
                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-vehicle">
                     <i class="ti ti-circle-plus me-1"></i>Add Vehicle
                 </a>
             </div>
+            @endcan
         </div>
         <!-- /Page Header -->
 
@@ -125,4 +127,4 @@
 </div>
 
 @endsection
-@endhasanyrole
+@endcan

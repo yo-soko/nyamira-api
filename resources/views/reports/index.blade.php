@@ -1,3 +1,5 @@
+@can('view report')
+
 @extends('layout.mainlayout')
 
 
@@ -39,3 +41,4 @@
 </div>
 
 @endsection
+@endcan

@@ -1,3 +1,4 @@
+@can('view dashboard')
 <?php $page = 'dashboard'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -131,3 +132,4 @@
 @endpush
 
 @endsection
+@endcan

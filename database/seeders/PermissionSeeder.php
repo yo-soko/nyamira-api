@@ -40,6 +40,7 @@ class PermissionSeeder extends Seeder
             'integration',
             'role',
             'permission',       
+            'user',       
         ];
 
         $actions = ['view', 'add', 'edit', 'delete'];

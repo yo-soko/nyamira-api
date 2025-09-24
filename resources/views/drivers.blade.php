@@ -1,4 +1,4 @@
-@hasanyrole('admin|developer|manager|director|supervisor')
+@can('view driver')
 <?php $page = 'users'; ?>
 @extends('layout.mainlayout')
 @section('content')
@@ -26,9 +26,12 @@
                         <a data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse" id="collapse-header"><i class="ti ti-chevron-up"></i></a>
                     </li>
                 </ul>
+                @can('add driver')
+
                 <div class="page-btn">
                     <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-user"><i class="ti ti-circle-plus me-1"></i>Add Driver</a>
                 </div>
+                @endcan
             </div>
 
 
@@ -105,6 +108,8 @@
                                     </td>
                                     <td class="action-table-data">
                                         <div class="edit-delete-action">
+@can('edit driver')
+
                                         <a href="javascript:void(0);" class="edit-btn"
                                             data-id="{{ $user->id }}"
                                             data-name="{{$user->name}}"
@@ -118,6 +123,8 @@
                                             data-bs-target="#edit-user">
                                                 <i data-feather="edit" class="feather-edit"></i>
                                         </a>
+                                        @endcan
+@can('delete driver')
 
                                         <a href="javascript:void(0);"
                                             class="delete-btn"
@@ -126,6 +133,7 @@
                                             data-bs-target="#delete-modal">
                                                 <i data-feather="trash-2" class="feather-trash"></i>
                                         </a>
+                                        @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -205,4 +213,4 @@
         </div>
     </div>
 @endsection
-@endhasanyrole
+@endcan

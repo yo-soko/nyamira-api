@@ -1,3 +1,5 @@
+@can('view service')
+
 @extends('layout.mainlayout')
 
 @section('content')
@@ -6,9 +8,12 @@
   <div class="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="page-title">Service Entries</h4>
+@can('add service')
+
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addServiceModal">
         <i class="ti ti-plus"></i> Add Service Entry
       </button>
+      @endcan
     </div>
 
     <div class="card">
@@ -236,3 +241,4 @@ document.getElementById('vehicle_id').addEventListener('change', function() {
 });
 </script>
 @endsection
+@endcan

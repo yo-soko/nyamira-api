@@ -54,12 +54,13 @@
                         <li class="submenu-open">
                             <ul>
                                 @hasanyrole('admin|developer|manager|director|supervisor')
+                                @can('view dashboard')
                                 <li class="{{ Request::is('index', 'dashboard') ? 'active' : '' }}">
                                     <a href="{{ url('index') }}">
                                         <i class="fas fa-user-shield me-2"></i><span>Dashboard</span>
                                     </a>
                                 </li>
-                             
+                                @endcan
                                 @endhasanyrole
                                
                             </ul>
@@ -75,6 +76,7 @@
                 </li>
                    <li class="submenu-open">
                         <ul>
+                            @can('view driver')                        
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('drivers','driver-history') ? 'active' : '' }}"><i class="ti ti-steering-wheel fs-16 me-2"></i><span>Drivers</span><span class="menu-arrow"></span></a>
                                 <ul>
@@ -83,6 +85,8 @@
           
                                 </ul>
                             </li>
+                            @endcan
+                            @can('view vehicle')
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('vehicles','expenses','assignments','meter-histories') ? 'active' : '' }}"><i class="ti ti-car fs-16 me-2"></i><span>Vehicles</span><span class="menu-arrow"></span></a>
                                 <ul>
@@ -93,7 +97,8 @@
                                     <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-refresh fs-16 me-2"></i><span>Replacement Analysis</span></a></li>
                                 </ul>
                             </li>
-                           
+                            @endcan
+                            @can('view fuel & energy')
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('fuel_histories','charging_histories') ? 'active' : '' }}"><i class="ti ti-gas-station fs-16 me-2"></i><span>Fuel & Energy</span><span class="menu-arrow"></span></a>
                                 <ul>
@@ -102,6 +107,8 @@
           
                                 </ul>
                             </li>
+                            @endcan
+                            @can('view issue')
                              <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('issues','faults','recalls') ? 'active' : '' }}"><i class="ti ti-alert-triangle fs-16 me-2"></i><span>Issues</span><span class="menu-arrow"></span></a>
                                 <ul>
@@ -111,6 +118,8 @@
           
                                 </ul>
                             </li>
+                            @endcan
+                            @can('view service')
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('services','work_orders') ? 'active' : '' }}"><i class="ti ti-tools fs-16 me-2"></i><span>Service</span><span class="menu-arrow"></span></a>
                                 <ul>
@@ -121,6 +130,8 @@
           
                                 </ul>
                             </li>
+                            @endcan
+                            @can('view inspection')
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('inspections','failures','schedules') ? 'active' : '' }}"><i class="ti ti-clipboard-text fs-16 me-2"></i><span>Inspections</span><span class="menu-arrow"></span></a>
                                 <ul>
@@ -129,6 +140,8 @@
                                     <li class="{{ Request::is('schedules') ? 'active' : '' }}"> <a href="{{url('schedules')}}"><i class="ti ti-calendar-time fs-16 me-2"></i><span>Schedules</span></a></li>
                                 </ul>
                             </li>
+                            @endcan
+                            @can('view report')
                             <li class="{{ Request::is('#') ? 'active' : '' }}"> <a href="{{url('#')}}"><i class="ti ti-plug-connected fs-16 me-2"></i><span>Integrations</span></a></li>
                             <li class="submenu">
                                 <a href="javascript:void(0);" class="{{ Request::is('reports') ? 'active' : '' }}"><i class="ti ti-report-analytics fs-16 me-2"></i><span>Reports</span><span class="menu-arrow"></span></a>
@@ -137,10 +150,12 @@
                                     <li class="{{ Request::is('reports') ? 'active' : '' }}"> <a href="{{url('reports')}}"><i class="ti ti-file-text fs-16 me-2"></i><span>Standard Reports</span></a></li>
                                </ul>
                             </li>
+                            @endcan
                         </ul>
                     </li>
              
                 @hasanyrole('admin|developer|manager|director|supervisor')
+                @can('view user')
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">User Management</h6>
                     <ul>
@@ -148,6 +163,7 @@
                         <li class="{{ Request::is('roles-permissions') ? 'active' : '' }}"><a href="{{url('roles-permissions')}}"><i class="ti ti-jump-rope fs-16 me-2"></i><span>Roles & Permissions</span></a></li>
                     </ul>
                 </li>
+                @endcan
                 @endhasanyrole
                 <li class="submenu-open">
                     <h6 class="submenu-hdr">Accounts</h6>
