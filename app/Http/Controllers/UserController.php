@@ -42,7 +42,7 @@ class UserController extends Controller
             'code' => 'required',
 
             'password' => 'required|confirmed',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:32048',
         ]);
 
         $imagePath = null;
