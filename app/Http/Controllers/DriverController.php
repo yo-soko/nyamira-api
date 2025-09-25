@@ -14,7 +14,7 @@ class DriverController extends Controller
 
     public function index()
     {
-        $users = User::whereNotIn('role', ['developer', 'admin', 'superadmin'])->get();
+        $users = User::whereIn('role', ['driver'])->get();
 
         return view('drivers', compact('users'));
     }
