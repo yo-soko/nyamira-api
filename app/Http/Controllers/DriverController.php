@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Driver;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 class DriverController extends Controller
 {
     /**
@@ -14,10 +17,22 @@ class DriverController extends Controller
 
     public function index()
     {
-        $users = User::whereIn('role', ['driver'])->get();
+        // Join drivers with users to get core info
+        $drivers = Driver::join('users', 'drivers.id', '=', 'users.id')
+            ->select(
+                'drivers.*',
+                'users.email',
+                'users.phone',
+                'users.role',
+                'users.profile_picture',
+                'users.status'
+            )
+            ->latest('drivers.created_at')
+            ->get();
 
-        return view('drivers', compact('users'));
+        return view('drivers', compact('drivers'));
     }
+
 
 
     /**
@@ -31,48 +46,94 @@ class DriverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'nullable|string',
-            'role' => 'required',
-            'code' => 'required',
 
-            'password' => 'required|confirmed',
-            'profile_picture' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        $validated = $request->validate([
+            'name'                   => 'required|string|max:255',
+            'identity_card_number'   => 'required|string|unique:drivers,identity_card_number',
+            'driving_licence_number' => 'required|string|unique:drivers,driving_licence_number',
+            'personal_number'        => 'nullable|string|max:255',
+            'licence_date_issue'     => 'nullable|date',
+            'department_id'          => 'nullable',
+            'licence_date_expiry'    => 'nullable|date|after_or_equal:licence_date_issue',
+            'identity_card_file'     => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'driving_licence_file'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
+            'passport_photo_file'    => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
+            'email'                  => 'nullable|email|max:255',
+            'phone'                  => 'nullable|string|max:255',
+            'role'                   => 'nullable|string|max:50',
+            'password'               => 'nullable|string|min:6'
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('profile_picture')) {
-            $imagePath = $request->file('profile_picture')->store('profiles', 'public');
+        Log::info('Validation passed', $validated);
+
+        $driver = new Driver([
+            'name'                   => $validated['name'],
+            'identity_card_number'   => $validated['identity_card_number'],
+            'driving_licence_number' => $validated['driving_licence_number'],
+            'personal_number'        => $validated['personal_number'] ?? null,
+            'licence_date_issue'     => $validated['licence_date_issue'] ?? null,
+            'licence_date_expiry'    => $validated['licence_date_expiry'] ?? null,
+            'department_id'          => $validated['department_id'] ?? null,
+            'verified'               => $request->boolean('verified')
+        ]);
+
+        // Upload files
+        if ($request->hasFile('identity_card_file')) {
+            $driver->identity_card_file = $request->file('identity_card_file')->store('drivers/ids', 'public');
+        }
+        if ($request->hasFile('driving_licence_file')) {
+            $driver->driving_licence_file = $request->file('driving_licence_file')->store('drivers/licences', 'public');
+        }
+        if ($request->hasFile('passport_photo_file')) {
+            $driver->passport_photo_file = $request->file('passport_photo_file')->store('drivers/photos', 'public');
         }
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'code' => $request->code,
-            'role' => $request->role,
+        try {
+            $driver->save();
+            Log::info('Driver saved successfully', ['driver_id' => $driver->id]);
+        } catch (\Exception $e) {
+            Log::error('Driver save failed', ['error' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Driver save failed: ' . $e->getMessage());
+        }
 
-            'status' => $request->has('status'),
-            'profile_picture' => $imagePath,
-            'password' => Hash::make($request->password),
-        ]);
+        // Create User regardless of verification
+        try {
+            $user = User::updateOrCreate(
+                ['email' => $validated['email'] ?? 'driver'.$driver->id.'@example.com'], // fallback email if none provided
+                [
+                    'name'            => $driver->name,
+                    'email'           => $validated['email'] ?? 'driver'.$driver->id.'@example.com',
+                    'phone'           => $validated['phone'] ?? null,
+                    'code'            => $driver->identity_card_number,
+                    'role'            => $validated['role'] ?? 'driver',
+                    'status'          => true,
+                    'profile_picture' => $driver->passport_photo_file ?? null,
+                    'password'        => Hash::make($validated['password'] ?? 'password123'),
+                ]
+            );
 
-        return redirect()->back()->with('success', 'User added successfully!');
+            // Save user_id in drivers table
+            $driver->user_id = $user->id;
+            $driver->save();
+
+            Log::info('User created and linked to driver', ['user_id' => $user->id, 'driver_id' => $driver->id]);
+        } catch (\Exception $e) {
+            Log::error('User creation failed', ['error' => $e->getMessage()]);
+        }
+
+        return redirect()->back()->with('success', 'Driver added successfully.');
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+      public function show(Driver $driver)
     {
-        $user = User::findOrFail($id);
-        return view('users.show', compact('user'));
-
-
+        return view('drivers.show', compact('driver'));
     }
 
 
@@ -167,11 +228,15 @@ class DriverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(Driver $driver)
     {
-        $user = User::findOrFail($request->id);
-        $user->delete();
+        // Delete files
+        if ($driver->identity_card_file) Storage::disk('public')->delete($driver->identity_card_file);
+        if ($driver->driving_licence_file) Storage::disk('public')->delete($driver->driving_licence_file);
+        if ($driver->passport_photo_file) Storage::disk('public')->delete($driver->passport_photo_file);
 
-        return redirect()->back()->with('success', 'User deleted successfully!');
+        $driver->delete();
+
+        return redirect()->back()->with('success', 'Driver deleted successfully.');
     }
 }

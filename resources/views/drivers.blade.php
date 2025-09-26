@@ -29,7 +29,7 @@
                 @can('add driver')
 
                 <div class="page-btn">
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-user"><i class="ti ti-circle-plus me-1"></i>Add Driver</a>
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-driver"><i class="ti ti-circle-plus me-1"></i>Add Driver</a>
                 </div>
                 @endcan
             </div>
@@ -81,7 +81,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($users as $user)
+                                @foreach($drivers as $user)
                                 <tr>
                                     <td>
                                         <label class="checkboxs">
@@ -212,5 +212,141 @@
             <!-- <p>Designed &amp; Developed by <a href="javascript:void(0);" class="text-primary">JavaPA</a></p> -->
         </div>
     </div>
+    <!-- Add Driver -->
+<div class="modal fade" id="add-driver">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="page-wrapper-new p-0">
+                <div class="content">
+                    <div class="modal-header">
+                        <div class="page-title">
+                            <h4>Add Driver</h4>
+                        </div>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ url('drivers') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                                        <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <!-- Identity Card Number -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Identity Card Number <span class="text-danger">*</span></label>
+                                        <input type="text" name="identity_card_number" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <!-- Driving Licence Number -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Driving Licence Number <span class="text-danger">*</span></label>
+                                        <input type="text" name="driving_licence_number" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <!-- Personal Number -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Personal Number</label>
+                                        <input type="text" name="personal_number" class="form-control">
+                                    </div>
+                                </div>
+                              
+                                <!-- Licence Date of Issue -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Licence Date of Issue</label>
+                                        <input type="date" name="licence_date_issue" class="form-control">
+                                    </div>
+                                </div>
+
+                                <!-- Licence Date of Expiry -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Licence Date Expiry</label>
+                                        <input type="date" name="licence_date_expiry" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input type="email" name="email" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Phone</label>
+                                        <input type="text" name="phone" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Department<span class="text-danger ms-1">*</span></label>
+                                        <select class="form-select select2" name="department_id">
+                                            <option value="">select here</option>
+                                            @foreach($departmentss as $department)
+                                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Identity Card File -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Identity Card <span class="text-danger">* <small class="text-blue">10MB MAX</small></span></label>
+                                        <input type="file" name="identity_card_file" class="form-control" accept="image/*,application/pdf" required>
+                                    </div>
+                                </div>
+
+                                <!-- Driving Licence File -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Driving Licence <span class="text-danger">* <small class="text-blue">10MB MAX</small></span></label>
+                                        <input type="file" name="driving_licence_file" class="form-control" accept="image/*,application/pdf" required>
+                                    </div>
+                                </div>
+
+                                <!-- Passport Photo -->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Upload Passport Photo <span class="text-danger">* <small class="text-blue">10MB MAX</small></span></label>
+                                        <input type="file" name="passport_photo_file" class="form-control" accept="image/*" required>
+                                    </div>
+                                </div>
+
+                                <!-- Verification Status -->
+                                <div class="col-lg-2">
+                                    <div class="status-toggle modal-status d-flex justify-content-between align-items-center">
+                                        <span class="status-label">Verified</span>
+                                        <input type="hidden" name="verified" value="0">
+                                        <input type="checkbox" id="verified" name="verified" class="check" value="1" checked>
+                                        <label for="verified" class="checktoggle"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn me-2 btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add Driver</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Add Driver -->
 @endsection
 @endcan

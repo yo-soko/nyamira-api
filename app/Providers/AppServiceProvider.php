@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             });
 
             View::share('roless', \App\Models\Role::all());
+            View::share('departmentss', \App\Models\Department::all());
 
         }
 }

@@ -243,7 +243,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/shift/update', [ShiftController::class, 'update'])->name('shift.update');
     Route::post('/shift/delete', [ShiftController::class, 'destroy'])->name('shift.delete');
 
-    Route::get('/drivers', [DriverController::class, 'index'])->name('drivers');
+    Route::resource('drivers', DriverController::class);
     Route::get('/users', [UserController::class, 'index'])->name('users');
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');

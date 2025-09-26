@@ -16146,8 +16146,11 @@
     </div>
     <!-- /delete modal -->
 @endif
+@if(Route::is(['drivers']))
 
-@if(Route::is(['users','drivers']))
+
+@endif
+@if(Route::is(['users']))
     <!-- Add User -->
     <div class="modal fade" id="add-user">
         <div class="modal-dialog modal-dialog-centered">
