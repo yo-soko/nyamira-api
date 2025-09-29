@@ -18,7 +18,7 @@ class DriverController extends Controller
     public function index()
     {
         // Join drivers with users to get core info
-        $drivers = Driver::join('users', 'drivers.id', '=', 'users.id')
+        $drivers = Driver::join('users', 'drivers.user_id', '=', 'users.id')
             ->select(
                 'drivers.*',
                 'users.email',
