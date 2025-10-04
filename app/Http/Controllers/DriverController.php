@@ -49,6 +49,7 @@ class DriverController extends Controller
 
     public function store(Request $request)
     {
+dd($request->file('identity_card_file')?->getError(), $request->file('identity_card_file')?->getErrorMessage());
 
         $validated = $request->validate([
             'name'                   => 'required|string|max:255',
@@ -58,9 +59,9 @@ class DriverController extends Controller
             'licence_date_issue'     => 'nullable|date',
             'department_id'          => 'nullable',
             'licence_date_expiry'    => 'nullable|date|after_or_equal:licence_date_issue',
-            'identity_card_file'     => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'driving_licence_file'   => 'required|file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'passport_photo_file'    => 'nullable|file|mimes:jpg,jpeg,png|max:10240',
+            'identity_card_file'     => 'required|file|max:20480',
+            'driving_licence_file'   => 'required|file|max:20480',
+            'passport_photo_file'    => 'nullable|file|max:20480',
             'email'                  => 'nullable|email|max:255',
             'phone'                  => 'nullable|string|max:255',
             'role'                   => 'nullable|string|max:50',
