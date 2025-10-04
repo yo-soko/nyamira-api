@@ -49,7 +49,6 @@ class DriverController extends Controller
 
     public function store(Request $request)
     {
-dd($request->file('identity_card_file')?->getError(), $request->file('identity_card_file')?->getErrorMessage());
 
         $validated = $request->validate([
             'name'                   => 'required|string|max:255',
