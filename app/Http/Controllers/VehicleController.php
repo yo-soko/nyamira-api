@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vehicle;
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,9 @@ class VehicleController extends Controller
 
         // Fetch users (for assigning operators in the form)
         $users = User::where('status', true)->get();
+        $departments = Department::all();
 
-        return view('vehicles.create', compact('vehicles', 'users'));
+        return view('vehicles.create', compact('vehicles', 'users','departments'));
     }
 
     /**
@@ -49,7 +51,7 @@ class VehicleController extends Controller
         'registration_state' => 'nullable|string|max:100',
         'status' => 'required|string|max:50',
         'group' => 'nullable|string|max:100',
-        'operator_id' => 'nullable|exists:users,id',
+        'departments_id' => 'nullable|exists:departments,id',
         'ownership' => 'nullable|string|max:50',
         'color' => 'nullable|string|max:50',
         'body_type' => 'nullable|string|max:100',

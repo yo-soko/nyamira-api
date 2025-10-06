@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('registration_state')->nullable();
             $table->enum('status', ['active', 'inactive', 'sold', 'scrapped'])->default('active');
             $table->string('group')->nullable(); // Department, Branch, Project
-            $table->foreignId('operator_id')->nullable()->constrained('users')->nullOnDelete(); // assigned driver/operator
+            $table->foreignId('department_id')->nullable()->constrained('departments')->nullOnDelete(); // assigned department
             $table->enum('ownership', ['owned', 'leased', 'hired'])->default('owned');
 
             // Specifications

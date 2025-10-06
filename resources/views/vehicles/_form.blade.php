@@ -72,6 +72,15 @@
         <input type="text" name="group" class="form-control">
     </div>
     <div class="col-md-6">
+        <label class="form-label">Department</label>
+        <select name="department_id" class="form-select">
+            <option value="">-- Select Department --</option>
+            @foreach($departments as $d)
+                <option value="{{ $d->id }}">{{ $d->name }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-6">
         <label class="form-label">Ownership</label>
         <select name="ownership" class="form-select select2">
             <option value="owned">Owned</option>
