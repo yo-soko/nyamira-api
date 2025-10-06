@@ -66,6 +66,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(\App\Models\SchoolClass::class, 'teacher_school_class', 'teacher_id', 'school_class_id');
     }
-
+    public function driver()
+    {
+        return $this->hasOne(Driver::class);
+    }
+    public function vehicles()
+    {
+        // vehicles.operator_id is user_id of the driver
+        return $this->hasMany(Vehicle::class, 'operator_id', 'id');
+    }
     
 }

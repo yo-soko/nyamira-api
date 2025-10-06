@@ -60,6 +60,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\DriverHistoryController;
 use App\Http\Controllers\ServiceEntryController;
 use App\Http\Controllers\WorkOrderController;
+use App\Http\Controllers\WorkTicketController;
 use App\Models\User;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\InspectionItemController;
@@ -106,6 +107,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('services', ServiceEntryController::class);
     Route::get('services/issues/{vehicleId}', [ServiceEntryController::class, 'getIssues']);
     Route::resource('work_orders', WorkOrderController::class);
+    Route::resource('work_tickets', WorkTicketController::class);
     Route::resource('inspections', InspectionController::class);
     Route::get('/failures', [InspectionItemController::class, 'failures'])
         ->name('failures');

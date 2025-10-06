@@ -29,4 +29,17 @@ class Driver extends Model
         'licence_date_expiry' => 'date',
         'verified' => 'boolean',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+     public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+    public function vehicleAssignments()
+    {
+        return $this->hasMany(VehicleAssignment::class, 'operator_id', 'user_id');
+    }
+
 }

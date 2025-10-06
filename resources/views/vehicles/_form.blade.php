@@ -72,15 +72,6 @@
         <input type="text" name="group" class="form-control">
     </div>
     <div class="col-md-6">
-        <label class="form-label">Operator</label>
-        <select name="operator_id" class="form-select select2">
-            <option value="">-- Select Driver/Operator --</option>
-            @foreach($users as $user)
-                <option value="{{ $user->id }}">{{ $user->name }}</option>
-            @endforeach
-        </select>
-    </div>
-    <div class="col-md-6">
         <label class="form-label">Ownership</label>
         <select name="ownership" class="form-select select2">
             <option value="owned">Owned</option>

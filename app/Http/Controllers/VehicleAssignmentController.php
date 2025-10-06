@@ -17,7 +17,8 @@ class VehicleAssignmentController extends Controller
     {
         $assignments = VehicleAssignment::with(['vehicle', 'operator'])->get();
         $vehicles = Vehicle::all();
-        $operators = User::all();
+        $operators= User::where('role', 'driver')->where('status', 1)->get();
+
 
         return view('assignments.create', compact('assignments', 'vehicles', 'operators'));
     }
