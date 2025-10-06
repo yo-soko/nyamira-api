@@ -111,6 +111,42 @@ class WorkTicketController extends Controller
         return redirect()->back()->with('success', 'Work ticket submitted for approval.');
     }
 
+ 
+    public function approve(Request $request, WorkTicket $ticket)
+    {
+        $request->validate([
+            'approval_remarks' => 'nullable|string|max:500',
+            'authorized_signature' => 'required|string',
+        ]);
+
+        $ticket->update([
+            'status' => 'approved',
+            'approval_remarks' => $request->approval_remarks,
+            'approved_by' => auth()->id(),
+            'authorized_signature' => $request->authorized_signature,
+        ]);
+
+        return back()->with('success', 'Work ticket approved successfully.');
+    }
+
+    public function reject(Request $request, WorkTicket $ticket)
+    {
+        $request->validate([
+            'rejection_remarks' => 'nullable|string|max:500',
+            'authorized_signature' => 'required|string',
+        ]);
+
+        $ticket->update([
+            'status' => 'rejected',
+            'approval_remarks' => $request->rejection_remarks,
+            'approved_by' => auth()->id(),
+            'authorized_signature' => $request->authorized_signature,
+        ]);
+
+        return back()->with('error', 'Work ticket rejected.');
+    }
+
+
 
     /**
      * Display the specified resource.

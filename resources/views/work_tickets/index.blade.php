@@ -1,3 +1,4 @@
+@can('view work-ticket')
 @extends('layout.mainlayout')
 
 @section('content')
@@ -5,9 +6,11 @@
   <div class="content">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h4 class="page-title">Driver Work Tickets</h4>
+      @can('add work-ticket')
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWorkTicketModal">
         <i class="ti ti-plus"></i> New Work Ticket
       </button>
+      @endcan
     </div>
 
     <div class="card">
@@ -37,12 +40,43 @@
                   <td>{{ $ticket->start_point }}</td>
                   <td>{{ $ticket->end_point }}</td>
                   <td>{{ Str::limit($ticket->purpose, 40) }}</td>
-                  <td>
-                    <span class="badge bg-{{ $ticket->status == 'approved' ? 'success' : ($ticket->status == 'pending' ? 'warning' : 'danger') }}">
+                  <td class="text-center">
+                    <span class="badge bg-{{ 
+                        $ticket->status == 'approved' ? 'success' : 
+                        ($ticket->status == 'pending' ? 'warning' : 'danger') 
+                    }}">
                       {{ ucfirst($ticket->status) }}
                     </span>
+
+                    @can('edit work-ticket')
+                      @if($ticket->status === 'pending')
+                        <div class="mt-2 d-flex gap-1 justify-content-center">
+                          <!-- Approve Button -->
+                          <button 
+                            class="btn btn-success btn-sm me-3" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#approveWorkTicketModal" 
+                            data-id="{{ $ticket->id }}"
+                          >
+                            <i class="fa fa-check"></i> Approve
+                          </button>
+
+                          <!-- Reject Button -->
+                          <button 
+                            class="btn btn-danger btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#rejectWorkTicketModal" 
+                            data-id="{{ $ticket->id }}"
+                          >
+                            <i class="fa fa-times"></i> Reject
+                          </button>
+                        </div>
+                      @endif
+                    @endcan
                   </td>
-                  <td>{{ $ticket->authorizing_officer_name ?? '-' }}</td>
+
+
+                  <td>{{ $ticket->approver->name ?? '-' }}</td>
                 </tr>
               @empty
                 <tr>
@@ -193,6 +227,68 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="rejectWorkTicketModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <form id="rejectWorkTicketForm" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">Reject Work Ticket</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="work_ticket_id" id="reject_work_ticket_id">
+
+          <div class="mb-3">
+            <label for="rejection_remarks" class="form-label">Rejection Remarks</label>
+            <textarea name="rejection_remarks" id="rejection_remarks" class="form-control" rows="3" required></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="signature_reject" class="form-label">Signature (Authorizing Officer)</label>
+            <input type="text" name="authorized_signature" id="signature_reject" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-danger">Reject Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="approveWorkTicketModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <form id="approveWorkTicketForm" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Approve Work Ticket</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <input type="hidden" name="work_ticket_id" id="approve_work_ticket_id">
+
+          <div class="mb-3">
+            <label for="approval_remarks" class="form-label">Approval Remarks</label>
+            <textarea name="approval_remarks" id="approval_remarks" class="form-control" rows="3"></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="signature" class="form-label">Signature (Authorizing Officer)</label>
+            <input type="text" name="authorized_signature" id="signature" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Approve Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- JS for dynamic passenger list -->
 <script>
@@ -212,6 +308,28 @@ document.addEventListener('click', function(e) {
     e.target.closest('.passenger-row').remove();
   }
 });
+document.addEventListener('DOMContentLoaded', function() {
+    // Approve Modal
+    const approveModal = document.getElementById('approveWorkTicketModal');
+    approveModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-id');
+        document.getElementById('approve_work_ticket_id').value = id;
+        document.getElementById('approveWorkTicketForm').action = `/work_tickets/${id}/approve`;
+    });
+
+    // Reject Modal
+    const rejectModal = document.getElementById('rejectWorkTicketModal');
+    rejectModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const id = button.getAttribute('data-id');
+        document.getElementById('reject_work_ticket_id').value = id;
+        document.getElementById('rejectWorkTicketForm').action = `/work_tickets/${id}/reject`;
+    });
+});
+
+
 </script>
 
 @endsection
+@endcan

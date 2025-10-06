@@ -108,6 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('services/issues/{vehicleId}', [ServiceEntryController::class, 'getIssues']);
     Route::resource('work_orders', WorkOrderController::class);
     Route::resource('work_tickets', WorkTicketController::class);
+    Route::post('/work_tickets/{ticket}/approve', [WorkTicketController::class, 'approve'])->name('work_tickets.approve');
+    Route::post('/work_tickets/{ticket}/reject', [WorkTicketController::class, 'reject'])->name('work_tickets.reject');
     Route::resource('inspections', InspectionController::class);
     Route::get('/failures', [InspectionItemController::class, 'failures'])
         ->name('failures');
