@@ -10,6 +10,9 @@ use App\Models\VehicleAssignment;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use PhpOffice\PhpWord\TemplateProcessor;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class WorkTicketController extends Controller
 {
@@ -146,6 +149,60 @@ class WorkTicketController extends Controller
         return back()->with('error', 'Work ticket rejected.');
     }
 
+    public function download(WorkTicket $ticket)
+    {
+        if ($ticket->status !== 'approved') {
+            return back()->with('error', 'Only approved work tickets can be downloaded.');
+        }
+
+        // Path setup
+        $templatePath = storage_path('app/public/templates/WORK TICKET.docx');
+        $exportDir = storage_path('app/public/exports');
+        $fileName = 'WorkTicket_' . $ticket->id . '.docx';
+        $filePath = $exportDir . '/' . $fileName;
+
+        // ✅ Ensure directory exists
+        if (!File::exists($exportDir)) {
+            File::makeDirectory($exportDir, 0755, true);
+        }
+
+        // Load and fill the template
+        $template = new TemplateProcessor($templatePath);
+        $template->setValue('DEPARTMENT', strtoupper($ticket->user->driver->department->name ?? ''));
+        $template->setValue('REF', 'NCG/WORK-TICKET/' . now()->format('m') . '/' . str_pad($ticket->id, 3, '0', STR_PAD_LEFT));
+        $template->setValue('DATE', now()->format('d M, Y'));
+        $template->setValue('DRIVER', strtoupper($ticket->user->name ?? ''));
+        $passengersList = '';
+        if (!empty($ticket->passengers)) {
+            $passengers = is_array($ticket->passengers)
+                ? $ticket->passengers
+                : json_decode($ticket->passengers, true);
+
+            $passengersList = collect($passengers)
+                ->map(fn($p) => "{$p['name']} ({$p['number']})")
+                ->implode(', ');
+        }
+
+        $template->setValue('PASSENGERS', $passengersList ?: '-');
+        $template->setValue('VEHICLE', $ticket->vehicle->license_plate ?? '-');
+        $template->setValue('PURPOSE', $ticket->purpose ?? '-');
+        $template->setValue('START_POINT', $ticket->start_point ?? '-');
+        $template->setValue('END_POINT', $ticket->end_point ?? '-');
+        $template->setValue('TRAVEL_DATE', $ticket->travel_date->format('d M, Y'));
+        $template->setValue('START_MILEAGE', $ticket->start_mileage ?? '-');
+        $template->setValue('END_MILEAGE', $ticket->end_mileage ?? '-');
+        $template->setValue('FUEL_SOURCE', $ticket->fuel_source ?? '-');
+        $template->setValue('FUEL_USED', $ticket->fuel_used ?? '-');
+        $template->setValue('APPROVAL_REMARKS', $ticket->approval_remarks ?? '-');
+        $template->setValue('APPROVED_BY', strtoupper($ticket->approved_by ?? auth()->user()->name));
+        $template->setValue('AUTHORIZED_SIGNATURE', $ticket->authorized_signature ? 'Signed' : 'Pending');
+
+        // ✅ Save safely
+        $template->saveAs($filePath);
+
+        // ✅ Return download response
+        return response()->download($filePath)->deleteFileAfterSend(true);
+    }
 
 
     /**

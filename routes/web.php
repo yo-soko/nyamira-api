@@ -110,6 +110,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('work_tickets', WorkTicketController::class);
     Route::post('/work_tickets/{ticket}/approve', [WorkTicketController::class, 'approve'])->name('work_tickets.approve');
     Route::post('/work_tickets/{ticket}/reject', [WorkTicketController::class, 'reject'])->name('work_tickets.reject');
+    Route::get('/work_tickets/{ticket}/download', [WorkTicketController::class, 'download'])
+    ->name('work_tickets.download');
     Route::resource('inspections', InspectionController::class);
     Route::get('/failures', [InspectionItemController::class, 'failures'])
         ->name('failures');

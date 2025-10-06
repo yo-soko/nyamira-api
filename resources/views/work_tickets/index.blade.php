@@ -72,6 +72,12 @@
                           </button>
                         </div>
                       @endif
+                      @if($ticket->status === 'approved')
+                        <a href="{{ route('work_tickets.download', $ticket->id) }}" class="btn btn-outline-primary btn-sm">
+                          <i class="fa fa-download"></i> Download
+                        </a>
+                      @endif
+
                     @endcan
                   </td>
 
