@@ -81,6 +81,7 @@
                                 <a href="javascript:void(0);" class="{{ Request::is('drivers','driver-history') ? 'active' : '' }}"><i class="ti ti-steering-wheel fs-16 me-2"></i><span>Drivers</span><span class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ Request::is('drivers') ? 'active' : '' }}"> <a href="{{url('drivers')}}"><i class="ti ti-id fs-16 me-2"></i><span>Drivers List</span></a></li>
+                                    <li class="{{ Request::is('work_tickets') ? 'active' : '' }}"> <a href="{{url('work_tickets')}}"><i class="ti ti-car fs-16 me-2"></i><span>Work Ticket</span></a></li>
                                     <li class="{{ Request::is('driver-history') ? 'active' : '' }}"> <a href="{{url('driver-history')}}"><i class="ti ti-history fs-16 me-2"></i><span>Driver History</span></a></li>
           
                                 </ul>
