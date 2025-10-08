@@ -114,10 +114,10 @@
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Vehicle A', 'Vehicle B', 'Vehicle C'],
+            labels: @json($utilizationData->pluck('name')),
             datasets: [{
-                label: 'Utilization (%)',
-                data: [70, 55, 85],
+                label: 'Work Tickets This Month',
+                data: @json($utilizationData->pluck('utilization')),
                 backgroundColor: '#4e73df'
             }]
         },
@@ -128,6 +128,7 @@
             }
         }
     });
+
 </script>
 @endpush
 

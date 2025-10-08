@@ -26,4 +26,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(User::class, 'operator_id');
     }
+    public function workTickets()
+    {
+        return $this->hasMany(WorkTicket::class);
+    }
+
 }

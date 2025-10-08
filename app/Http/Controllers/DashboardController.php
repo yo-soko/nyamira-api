@@ -3,20 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Attendancies;
-use App\Models\Employee;
-use App\Models\Holiday;
-use App\Models\leaves;
-use App\Models\Shift;
-use App\Models\Subject;
-use App\Models\SchoolClass;
-use App\Models\Term;
-use App\Models\Exam;
-use App\Models\ClassLevel;
-use App\Models\Student;
-use App\Models\Teacher;
-use App\Models\User;
-use App\Models\Result;
+use App\Models\Vehicle;
+use App\Models\Driver;
+use App\Models\Issues;
+use App\Models\ServiceEntry;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -33,8 +23,25 @@ class DashboardController extends Controller
             $greeting = 'Good Evening';
         }
         $today = Carbon::today();
-
+        $vehiclesCount = Vehicle::count();
+        $driversCount = Driver::count();
+        $issuesCount = Issues::where('status', 'open')->count();
+        $servicesCount = ServiceEntry::whereDate('created_at', '>=', Carbon::today())->count();
+       
+        $utilizationData = Vehicle::select('name')
+            ->withCount(['workTickets as utilization' => function ($q) {
+                $q->whereMonth('created_at', Carbon::now()->month);
+            }])
+            ->take(5)
+            ->get();
         
-        return view('index');
+        return view('index', compact(
+            'greeting',
+            'vehiclesCount',
+            'driversCount',
+            'issuesCount',
+            'servicesCount',
+            'utilizationData'
+        ));
     }
 }
