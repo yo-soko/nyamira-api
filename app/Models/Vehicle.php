@@ -30,5 +30,8 @@ class Vehicle extends Model
     {
         return $this->hasMany(WorkTicket::class);
     }
-
+   public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

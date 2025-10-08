@@ -71,33 +71,102 @@
 </div>
 
 <div class="row">
-    
-    <!-- Stats Cards -->
+    <!-- Summary Cards -->
     <div class="col-md-3 col-sm-6 mb-4">
         <div class="card text-center shadow-sm border-0 p-3">
             <h5>Total Vehicles</h5>
-            <h2 class="text-primary">{{ $vehiclesCount ?? 0 }}</h2>
+            <h2 class="text-primary">{{ $vehiclesCount }}</h2>
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-4">
         <div class="card text-center shadow-sm border-0 p-3">
             <h5>Active Drivers</h5>
-            <h2 class="text-success">{{ $driversCount ?? 0 }}</h2>
+            <h2 class="text-success">{{ $driversCount }}</h2>
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-4">
         <div class="card text-center shadow-sm border-0 p-3">
-            <h5>Open Issues</h5>
-            <h2 class="text-danger">{{ $issuesCount ?? 0 }}</h2>
+            <h5>Vehicles In Use Today</h5>
+            <h2 class="text-info">{{ $vehiclesInUse }}</h2>
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-4">
         <div class="card text-center shadow-sm border-0 p-3">
-            <h5>Upcoming Services</h5>
-            <h2 class="text-warning">{{ $servicesCount ?? 0 }}</h2>
+            <h5>Under Maintenance</h5>
+            <h2 class="text-danger">{{ $underMaintenance }}</h2>
         </div>
     </div>
 </div>
+
+<div class="row">
+    <!-- Utilization Chart -->
+    <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h4 class="mb-3">Vehicle Utilization (This Month)</h4>
+                <canvas id="utilizationChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fuel Trend Chart -->
+    <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h4 class="mb-3">Fuel Usage Trend</h4>
+                <canvas id="fuelTrendChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Department Fleet Distribution -->
+    <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h4 class="mb-3">Fleet by Department</h4>
+                <canvas id="departmentFleetChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Work Tickets -->
+    <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h4 class="mb-3">Recent Work Tickets</h4>
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Vehicle</th>
+                            <th>Driver</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($recentTickets as $t)
+                            <tr>
+                                <td>{{ $t->id }}</td>
+                                <td>{{ $t->vehicle->license_plate ?? '-' }}</td>
+                                <td>{{ $t->user->name ?? '-' }}</td>
+                                <td>{{ $t->travel_date?->format('d M Y') }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $t->status == 'approved' ? 'success' : ($t->status == 'pending' ? 'warning' : 'danger') }}">
+                                        {{ ucfirst($t->status) }}
+                                    </span>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     </div>
             
@@ -110,27 +179,51 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('utilizationChart').getContext('2d');
-    new Chart(ctx, {
+    // Utilization Bar Chart
+    new Chart(document.getElementById('utilizationChart'), {
         type: 'bar',
         data: {
             labels: @json($utilizationData->pluck('license_plate')),
             datasets: [{
-                label: 'Work Tickets This Month',
+                label: 'Trips This Month',
                 data: @json($utilizationData->pluck('utilization')),
                 backgroundColor: '#4e73df'
             }]
         },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            }
-        }
+        options: { responsive: true, plugins: { legend: { display: false } } }
     });
 
+    // Fuel Trend Line Chart
+    new Chart(document.getElementById('fuelTrendChart'), {
+        type: 'line',
+        data: {
+            labels: @json($fuelTrend->pluck('month_name')),
+            datasets: [{
+                label: 'Fuel Used (Litres)',
+                data: @json($fuelTrend->pluck('total_fuel')),
+                borderColor: '#f6c23e',
+                fill: false,
+                tension: 0.3
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    // Department Fleet Pie Chart
+    new Chart(document.getElementById('departmentFleetChart'), {
+        type: 'pie',
+        data: {
+            labels: @json($departmentFleet->pluck('department.name')),
+            datasets: [{
+                data: @json($departmentFleet->pluck('total')),
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#f6c23e', '#e74a3b']
+            }]
+        },
+        options: { responsive: true }
+    });
 </script>
 @endpush
+
 
 @endsection
 @endcan
