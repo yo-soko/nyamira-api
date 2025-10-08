@@ -28,7 +28,7 @@ class DashboardController extends Controller
         $issuesCount = Issues::where('status', 'open')->count();
         $servicesCount = ServiceEntry::whereDate('created_at', '>=', Carbon::today())->count();
        
-        $utilizationData = Vehicle::select('name')
+        $utilizationData = Vehicle::select('license_plate')
             ->withCount(['workTickets as utilization' => function ($q) {
                 $q->whereMonth('created_at', Carbon::now()->month);
             }])

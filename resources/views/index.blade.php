@@ -114,7 +114,7 @@
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: @json($utilizationData->pluck('name')),
+            labels: @json($utilizationData->pluck('license_plate')),
             datasets: [{
                 label: 'Work Tickets This Month',
                 data: @json($utilizationData->pluck('utilization')),
