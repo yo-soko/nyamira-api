@@ -15,7 +15,7 @@ class VehicleController extends Controller
     public function index()
      {
         // Fetch vehicles with their assigned operator (user)
-        $vehicles = Vehicle::with('operator')->latest()->paginate(10);
+        $vehicles = Vehicle::with('operator')->latest()->paginate(100);
 
         // Fetch users (for assigning operators in the form)
         $users = User::where('status', true)->get();

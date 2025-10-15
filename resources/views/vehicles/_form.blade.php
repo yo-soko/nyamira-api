@@ -19,10 +19,12 @@
         <label class="form-label">Type</label>
         <select name="type" class="form-select select2">
             <option value="">-- Select Type --</option>
-            <option>Car</option>
-            <option>Truck</option>
-            <option>Bus</option>
-            <option>Motorcycle</option>
+            <option>Grader</option>
+            <option>Excavator</option>
+            <option>Tiber</option>
+            <option>Prime Mover</option>
+            <option>Dozer</option>
+            <option>Shovel</option>
         </select>
     </div>
     <div class="col-md-6">
