@@ -67,7 +67,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <a href="{{ route('vehicles.show', $vehicle->id) }}" class="avatar avatar-md me-2">
-                                            <img src="{{ $vehicle->photo ? asset('storage/'.$vehicle->photo) : asset('build/img/cars/default.png') }}" alt="vehicle">
+                                            <img src="{{ $vehicle->photo ? asset('storage/'.$vehicle->photo) : asset('build/img/cars/default.png') }}">
                                         </a>
                                         <a href="{{ route('vehicles.show', $vehicle->id) }}">{{ $vehicle->name }}</a>
                                     </div>
